@@ -40,6 +40,6 @@ public class Player : MonoBehaviour
         GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
 
         // ’e‚É•ûŒü‚ð“n‚·
-        bullet.GetComponent<Bullet>().SetDirection(direction);
+        bullet.GetComponent<Bullet1>().SetDirection(direction);
     }
 }

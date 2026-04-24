@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class Bullet1 : MonoBehaviour
 {
     [SerializeField] private float speed = 8f;
     private int damage = 20; // ƒ_ƒ[ƒW—Ê
