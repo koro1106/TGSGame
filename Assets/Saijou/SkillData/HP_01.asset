@@ -16,5 +16,5 @@ MonoBehaviour:
   description: "HP\u306E\u4E0A\u9650\u30A2\u30C3\u30D7"
   level: 1
   maxLevel: 5
-  currentExp: 300
+  currentExp: 400
   needExp: 100

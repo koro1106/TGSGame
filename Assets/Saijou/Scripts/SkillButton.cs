@@ -23,7 +23,7 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // レベルアップボタンの処理
     public void OnLevelUpButtonClick()
     {
-        // 経験値を追加してレベルアップ(まだ)
-        data.AddExp(); 
+        // 経験値を消費してレベルアップを試みる
+        data.TryLevelUp();
     }
 }

@@ -14,13 +14,14 @@ public class SkillData : ScriptableObject
     public int currentExp = 400;   // 現在経験値
     public int needExp = 100;    // 必要経験値
 
-    public void AddExp()
+    // 経験値を消費してレベルアップを試みる
+    public void TryLevelUp()
     {
         // 新しく経験値を加算
         //currentExp += amount;
 
-        // 経験値が必要な経験値を超え、レベルが最大でない限り繰り返しレベルアップ
-        while (currentExp >= needExp && level < maxLevel)
+        // 現在のレベルが最大レベルでないことを確認
+        while (level < maxLevel && currentExp >= needExp)
         {
             // 必要な経験値を引き、レベルアップ処理を実行
             currentExp -= needExp;
