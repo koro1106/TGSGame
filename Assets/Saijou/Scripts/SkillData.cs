@@ -14,18 +14,21 @@ public class SkillData : ScriptableObject
     public int currentExp = 400;   // 現在経験値
     public int needExp = 100;    // 必要経験値
 
+    public bool isUnlocked = false; //　解放状態
     // 経験値を消費してレベルアップを試みる
     public void TryLevelUp()
     {
-        // 新しく経験値を加算
-        //currentExp += amount;
-
-        // 現在のレベルが最大レベルでないことを確認
-        while (level < maxLevel && currentExp >= needExp)
+        // レベル上限＆経験値チェック
+        if (level < maxLevel && currentExp >= needExp)
         {
             // 必要な経験値を引き、レベルアップ処理を実行
             currentExp -= needExp;
             LevelUp();
+
+            // 一回でも強化したら解放扱い
+            isUnlocked = true;
+            // ツールチップ更新
+            TooltipUI.instance?.Show(this);
         }
     }
 
