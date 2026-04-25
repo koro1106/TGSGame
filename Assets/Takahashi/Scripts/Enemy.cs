@@ -107,7 +107,7 @@ public class Enemy : MonoBehaviour
 
         targetScale = baseScale * ratio;
     }
-    void Die()
+        void Die()
     {
         Destroy(gameObject); // 敵を消す
     }

@@ -277,48 +277,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &494039237 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 285269543843597987, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
-  m_PrefabInstance: {fileID: 1408206877}
-  m_PrefabAsset: {fileID: 0}
---- !u!70 &494039241
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 494039237}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
-  m_Direction: 0
 --- !u!1 &497528186
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,10 +306,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1692a2f3ce186664a8443249e4ad8134, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  SquareRedInwardPrefab: {fileID: 1718400914167481640, guid: eee19a05ae768be4cba98d75df64643d, type: 3}
-  SquareRedWanderPrefab: {fileID: 362116863470253419, guid: e3beb9627218b804a95da9ed960e24c2, type: 3}
+  enemyPrefab: {fileID: 7173860325025810464, guid: fd82647a7b72c544e89b53d67c4a63b9, type: 3}
   spawnInterval: 2
-  wanderRate: 0.3
 --- !u!4 &497528188
 Transform:
   m_ObjectHideFlags: 0
@@ -528,7 +484,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 550
+  orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -854,20 +810,8 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 98.189995
-      objectReference: {fileID: 0}
-    - target: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.9931
+      value: -0.08998978
       objectReference: {fileID: 0}
     - target: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
       propertyPath: m_LocalPosition.y
@@ -905,10 +849,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 9207942283685484300, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
       propertyPath: bulletPrefab
       value: 
@@ -916,10 +856,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 285269543843597987, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 494039241}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
 --- !u!4 &1828623762 stripped
 Transform:
