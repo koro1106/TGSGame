@@ -116,6 +116,8 @@ public class GunController : MonoBehaviour
 
             currentAmmo--;
 
+            PlayerHP.Instance.TakeDamage(1);
+
             Image img = ammoUI[currentAmmo];
 
             if (img != null)
