@@ -16,6 +16,6 @@ MonoBehaviour:
   description: "HP\u306E\u4E0A\u9650\u30A2\u30C3\u30D7"
   level: 0
   maxLevel: 5
-  currentExp: 5
+  currentExp: 3
   needExp: 1
   isUnlocked: 0

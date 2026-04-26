@@ -22,6 +22,8 @@ public class SkillNodeUI : MonoBehaviour
     public SkillNodeUI[] nextButtons; // 次に解放されるスキルボタン
     public SkillLineUI[] nextLines;   // 次に解放されるスキルライン
 
+    [SerializeField] GameObject unlockEffectPrefab; // 解放エフェクト
+
     private SkillState state = SkillState.Locked; // 現在の状態（初期は未解放）
     public bool isStartNode = false; // 最初から表示するノード
     void Start()
@@ -46,8 +48,6 @@ public class SkillNodeUI : MonoBehaviour
             state = SkillState.Locked;
         }
 
-        UpdateVisual();
-
         // ラインも状態に応じて復元
         foreach (var line in nextLines)
         {
@@ -56,9 +56,11 @@ public class SkillNodeUI : MonoBehaviour
             else
                 line.SetState(SkillState.Locked);
         }
+
+        UpdateVisual();
     }
 
-    // スキル解放
+   // スキル解放
    public void Unlock()
    {
         // すでに解放済みなら何もしない
@@ -74,10 +76,11 @@ public class SkillNodeUI : MonoBehaviour
        foreach (var node in nextButtons) // ボタン
        {
            node.SetButtonAvailable();
+           SpawnEffect(node.transform); // パーティクル生成
        }
        foreach (var line in nextLines) // ライン
        {
-            line.SetState(SkillState.Available);
+           line.SetState(SkillState.Available);
        }
    }
 
@@ -127,5 +130,34 @@ public class SkillNodeUI : MonoBehaviour
             Unlock();
             UpdateVisual();
         }
+    }
+
+    void SpawnEffect(Transform target)
+    {
+        if (unlockEffectPrefab == null) return;
+
+        RectTransform targetRt = target.GetComponent<RectTransform>();
+        Canvas canvas = GetComponentInParent<Canvas>();
+
+        Vector3 worldPos;
+
+        // Canvasの種類で処理変える
+        if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
+        {
+            // カメラなしなのでそのままスクリーン→ワールド変換
+            worldPos = Camera.main.ScreenToWorldPoint(targetRt.position);
+        }
+        else
+        {
+            // Camera or WorldSpace
+            worldPos = Camera.main.ScreenToWorldPoint(
+                RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, targetRt.position)
+            );
+        }
+
+        // ★ Zをちゃんと前に出す（重要）
+        worldPos.z = 0f;
+
+        Instantiate(unlockEffectPrefab, worldPos, Quaternion.identity);
     }
 }
