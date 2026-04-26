@@ -3,7 +3,7 @@ using UnityEngine;
 public class Bullet1 : MonoBehaviour
 {
     [SerializeField] private float speed = 8f;
-    private int damage = 20; // ダメージ量
+    private int damage = 10; // ダメージ量
     private Vector2 direction;
 
     // Playerから呼ばれる
@@ -18,7 +18,7 @@ public class Bullet1 : MonoBehaviour
         transform.Translate(direction * speed * Time.deltaTime, Space.World);
 
         // 画面外で削除
-        if (Mathf.Abs(transform.position.x) > 12f || Mathf.Abs(transform.position.y) > 8f)
+        if (Mathf.Abs(transform.position.x) > 1100f || Mathf.Abs(transform.position.y) > 600f)
         {
             Destroy(gameObject);
         }
