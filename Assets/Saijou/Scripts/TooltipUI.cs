@@ -22,7 +22,7 @@ public class TooltipUI : MonoBehaviour
     {
         panel.SetActive(true);
         text.text = data.skillName + "\n" + data.description + "\n" + data.level + "/" + data.maxLevel 
-                    + "\n" + data.currentExp + "/" + data.needExp;
+                    + "\n" + "取得経験値:" + data.currentExp + "\n" + "必要経験値：" + data.needExp;
     }
 
     // 非表示にする
