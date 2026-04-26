@@ -207,6 +207,7 @@ GameObject:
   - component: {fileID: 54753369}
   - component: {fileID: 54753371}
   - component: {fileID: 54753370}
+  - component: {fileID: 54753372}
   m_Layer: 5
   m_Name: Line_2
   m_TagString: Untagged
@@ -271,6 +272,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 54753368}
   m_CullTransparentMesh: 1
+--- !u!114 &54753372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 54753368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cb1813a0ff3f5449b87371d819cb807, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkillLineUI
+  image: {fileID: 54753370}
 --- !u!1 &323660647
 GameObject:
   m_ObjectHideFlags: 0
@@ -522,6 +536,7 @@ GameObject:
   - component: {fileID: 895054604}
   - component: {fileID: 895054606}
   - component: {fileID: 895054605}
+  - component: {fileID: 895054607}
   m_Layer: 5
   m_Name: Line_1
   m_TagString: Untagged
@@ -586,6 +601,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 895054603}
   m_CullTransparentMesh: 1
+--- !u!114 &895054607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895054603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cb1813a0ff3f5449b87371d819cb807, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkillLineUI
+  image: {fileID: 895054605}
 --- !u!1 &1008782214
 GameObject:
   m_ObjectHideFlags: 0
@@ -826,7 +854,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillNodeUI
   data: {fileID: 11400000, guid: af585b58ecf0b764fbfa39e774eee30a, type: 2}
   icon: {fileID: 1220820722}
-  nextNodes: []
+  nextButtons: []
+  nextLines: []
   isStartNode: 0
 --- !u!1 &1251753488
 GameObject:
@@ -1026,9 +1055,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillNodeUI
   data: {fileID: 11400000, guid: 785f5d61b47df93428799a5ef869d4e4, type: 2}
   icon: {fileID: 1252081148}
-  nextNodes:
+  nextButtons:
   - {fileID: 1220820724}
   - {fileID: 1806012793}
+  nextLines:
+  - {fileID: 895054607}
+  - {fileID: 54753372}
   isStartNode: 1
 --- !u!1 &1514463175
 GameObject:
@@ -1377,7 +1409,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillNodeUI
   data: {fileID: 11400000, guid: 4fb5dc84d3329984d8253262d2125ac7, type: 2}
   icon: {fileID: 1806012791}
-  nextNodes: []
+  nextButtons: []
+  nextLines: []
   isStartNode: 0
 --- !u!1 &1833050174
 GameObject:
