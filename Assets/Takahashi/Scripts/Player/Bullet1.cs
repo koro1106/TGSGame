@@ -29,7 +29,7 @@ public class Bullet1 : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             // Enemyスクリプト取得
-            Enemy enemy = other.GetComponent<Enemy>();
+            EnemyHP enemy = other.GetComponent<EnemyHP>();
 
             if (enemy != null)
             {
