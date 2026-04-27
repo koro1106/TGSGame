@@ -732,6 +732,7 @@ GameObject:
   - component: {fileID: 1220820722}
   - component: {fileID: 1220820721}
   - component: {fileID: 1220820724}
+  - component: {fileID: 1220820725}
   m_Layer: 5
   m_Name: Button_02
   m_TagString: Untagged
@@ -858,6 +859,19 @@ MonoBehaviour:
   nextLines: []
   unlockEffectPrefab: {fileID: 0}
   isStartNode: 0
+--- !u!114 &1220820725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1220820719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f6bda17ed9f3e44b05e6aa191240dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkillButton
+  data: {fileID: 11400000, guid: af585b58ecf0b764fbfa39e774eee30a, type: 2}
 --- !u!1 &1251753488
 GameObject:
   m_ObjectHideFlags: 0
@@ -1289,6 +1303,7 @@ GameObject:
   - component: {fileID: 1806012791}
   - component: {fileID: 1806012790}
   - component: {fileID: 1806012793}
+  - component: {fileID: 1806012794}
   m_Layer: 5
   m_Name: Button_03
   m_TagString: Untagged
@@ -1415,6 +1430,19 @@ MonoBehaviour:
   nextLines: []
   unlockEffectPrefab: {fileID: 0}
   isStartNode: 0
+--- !u!114 &1806012794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1806012788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f6bda17ed9f3e44b05e6aa191240dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkillButton
+  data: {fileID: 11400000, guid: 4fb5dc84d3329984d8253262d2125ac7, type: 2}
 --- !u!1 &1833050174
 GameObject:
   m_ObjectHideFlags: 0
