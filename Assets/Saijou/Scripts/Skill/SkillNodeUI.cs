@@ -124,7 +124,7 @@ public class SkillNodeUI : MonoBehaviour
     // Click処理
     public void OnClick()
     {
-        if (data.currentExp >= data.needExp)
+        if (data.playerData.currentExp >= data.needExp)
         {
             data.TryLevelUp(); // レベルアップ
             Unlock();
