@@ -116,6 +116,8 @@ public class GunController : MonoBehaviour
 
             currentAmmo--;
 
+            CameraShake.Instance.Shake();
+
             PlayerHP.Instance.TakeDamage(1);
 
             Image img = ammoUI[currentAmmo];
@@ -170,4 +172,10 @@ public class GunController : MonoBehaviour
     {
         ammoText.text = currentAmmo + " / " + maxAmmo;
     }
+
+    void LateUpdate()
+    {
+        crosshair.position = Input.mousePosition;
+    }
+
 }
