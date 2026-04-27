@@ -17,10 +17,8 @@ public class EnemyHP : MonoBehaviour
 
     void Start()
     {
-        // HP初期化
         currentHP = maxHP;
 
-        // 元のサイズを保存
         baseScale = transform.localScale;
         targetScale = baseScale;
     }
@@ -35,56 +33,36 @@ public class EnemyHP : MonoBehaviour
         );
     }
 
-    // ダメージを受ける
+    // 外から呼ぶダメージ関数
     public void TakeDamage(int damage)
     {
         currentHP -= damage;
 
         if (currentHP <= 0)
         {
-            Die(); // 死亡
+            Die();
         }
         else
         {
-            UpdateScale(); // HPに応じてサイズ変更
+            UpdateScale();
         }
     }
 
     void UpdateScale()
     {
-        // HP割合でサイズを変える
         float ratio = (float)currentHP / maxHP;
         targetScale = baseScale * ratio;
     }
 
     void Die()
     {
-        // ドロップ生成
+        //  死んだ位置に生成
         if (dropPrefab != null)
         {
-            GameObject drop = Instantiate(dropPrefab, transform.position, Quaternion.identity);
-
-            // Rigidbody2D取得
-            Rigidbody2D rb = drop.GetComponent<Rigidbody2D>();
-
-            if (rb != null)
-            {
-                // 重力なしにする（宇宙用）
-                rb.gravityScale = 0f;
-
-                // 減速をほぼなくす（漂う感じ）
-                rb.linearDamping = 0.5f;
-
-                // ランダムな方向に軽く飛ばす
-                Vector2 force = Random.insideUnitCircle.normalized * Random.Range(50f, 150f);
-                rb.AddForce(force, ForceMode2D.Impulse);
-
-                // ゆっくり回転させる
-                rb.AddTorque(Random.Range(-2f, 2f), ForceMode2D.Impulse);
-            }
+            Instantiate(dropPrefab, transform.position, Quaternion.identity);
         }
 
-        // 敵を削除
         Destroy(gameObject);
+ 
     }
 }
