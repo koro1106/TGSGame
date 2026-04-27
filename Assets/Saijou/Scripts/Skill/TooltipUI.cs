@@ -10,6 +10,7 @@ public class TooltipUI : MonoBehaviour
     public GameObject panel;     // 表示するパネル
     public TextMeshProUGUI text; // テキスト
 
+    public PlayerData playerData;
     void Awake()
     {
         instance = this;
@@ -21,8 +22,15 @@ public class TooltipUI : MonoBehaviour
     public void Show(SkillData data)
     {
         panel.SetActive(true);
+
+        int exp = 0;
+        if (data.playerData != null)
+        {
+            exp = data.playerData.currentExp;
+        }
+
         text.text = data.skillName + "\n" + data.description + "\n" + data.level + "/" + data.maxLevel 
-                    + "\n" + "取得経験値:" + data.currentExp + "\n" + "必要経験値：" + data.needExp;
+                    + "\n" + "所持Exp:" + exp + "\n" + "必要Exp:" + data.needExp;
     }
 
     // 非表示にする
