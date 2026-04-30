@@ -1,14 +1,9 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SquareRedMove : MonoBehaviour
 {
-    public float moveSpeed = 2f;
-    public float rotateSpeed = 3f;
-    public float wanderStrength = 0.5f;
-
-    private float limitX = 11f;
-    private float limitY = 7f;
-    private float returnForce = 1.5f;
+    public float moveSpeed = 5f;
+    public float rotateSpeed = 180f;
 
     private Vector2 moveDirection;
 
@@ -19,21 +14,7 @@ public class SquareRedMove : MonoBehaviour
 
     void Update()
     {
-        // ��炬
-        moveDirection += Random.insideUnitCircle * wanderStrength * Time.deltaTime;
-
-        Vector2 pos = transform.position;
-
-        // �͈͓��ɖ߂�
-        if (pos.x > limitX) moveDirection += Vector2.left * returnForce;
-        if (pos.x < -limitX) moveDirection += Vector2.right * returnForce;
-        if (pos.y > limitY) moveDirection += Vector2.down * returnForce;
-        if (pos.y < -limitY) moveDirection += Vector2.up * returnForce;
-
-        moveDirection = moveDirection.normalized;
-
         transform.Translate(moveDirection * moveSpeed * Time.deltaTime, Space.World);
-
         transform.Rotate(0, 0, rotateSpeed * Time.deltaTime);
     }
 
@@ -45,31 +26,37 @@ public class SquareRedMove : MonoBehaviour
         float width = height * cam.aspect;
 
         int side = Random.Range(0, 4);
+        Vector2 spawnPos = Vector2.zero;
 
+        // 画面外にスポーン
         switch (side)
         {
-            case 0:
-                transform.position = new Vector2(width + 1, Random.Range(-height, height));
-                moveDirection = Vector2.left;
+            case 0: // 右
+                spawnPos = new Vector2(width + 1, Random.Range(-height, height));
                 break;
 
-            case 1:
-                transform.position = new Vector2(-width - 1, Random.Range(-height, height));
-                moveDirection = Vector2.right;
+            case 1: // 左
+                spawnPos = new Vector2(-width - 1, Random.Range(-height, height));
                 break;
 
-            case 2:
-                transform.position = new Vector2(Random.Range(-width, width), height + 1);
-                moveDirection = Vector2.down;
+            case 2: // 上
+                spawnPos = new Vector2(Random.Range(-width, width), height + 1);
                 break;
 
-            case 3:
-                transform.position = new Vector2(Random.Range(-width, width), -height - 1);
-                moveDirection = Vector2.up;
+            case 3: // 下
+                spawnPos = new Vector2(Random.Range(-width, width), -height - 1);
                 break;
         }
 
-        moveDirection += Random.insideUnitCircle * 0.3f;
-        moveDirection = moveDirection.normalized;
+        transform.position = spawnPos;
+
+        // 画面内のランダムな場所をターゲットにする
+        Vector2 target = new Vector2(
+            Random.Range(-width, width),
+            Random.Range(-height, height)
+        );
+
+        // ターゲットに向かう方向
+        moveDirection = (target - spawnPos).normalized;
     }
 }
