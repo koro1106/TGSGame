@@ -62,26 +62,7 @@ public class EnemyHP : MonoBehaviour
         // ドロップ生成
         if (dropPrefab != null)
         {
-            GameObject drop = Instantiate(dropPrefab, transform.position, Quaternion.identity);
-
-            // Rigidbody2D取得
-            Rigidbody2D rb = drop.GetComponent<Rigidbody2D>();
-
-            if (rb != null)
-            {
-                // 重力なしにする（宇宙用）
-                rb.gravityScale = 0f;
-
-                // 減速をほぼなくす（漂う感じ）
-                rb.linearDamping = 0.1f;
-
-                // ランダムな方向に軽く飛ばす
-                Vector2 force = Random.insideUnitCircle.normalized * Random.Range(50f, 150f);
-                rb.AddForce(force, ForceMode2D.Impulse);
-
-                // ゆっくり回転させる
-                rb.AddTorque(Random.Range(-2f, 2f), ForceMode2D.Impulse);
-            }
+            Instantiate(dropPrefab, transform.position, Quaternion.identity);
         }
 
         // 敵を削除
