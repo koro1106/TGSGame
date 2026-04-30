@@ -15,6 +15,7 @@ public class SkillData : ScriptableObject
 
     public bool isUnlocked = false; //　解放状態
 
+    public bool isLevelUp = false; // レベルアップした
     public PlayerData playerData;
     // 経験値を消費してレベルアップを試みる
     public void TryLevelUp()
@@ -37,6 +38,7 @@ public class SkillData : ScriptableObject
     void LevelUp()
     {
         level++;
+        isLevelUp = true;
 
         // レベルアップ後の必要経験値を増やす（例：1.3倍）
         needExp = Mathf.RoundToInt(needExp * 1.3f);

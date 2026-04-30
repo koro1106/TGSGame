@@ -18,4 +18,5 @@ MonoBehaviour:
   maxLevel: 1
   needExp: 1
   isUnlocked: 0
+  isLevelUp: 0
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
