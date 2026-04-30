@@ -11,9 +11,20 @@ public class ChainBullet : MonoBehaviour
     public float chainRadius = 5f;
 
     public GameObject lightningPrefab;
+    public GameObject hitEffectPrefab; // ←追加
 
     public AudioClip hitSound;
+    private LineRenderer lr;
 
+    void Awake()
+    {
+        lr = GetComponent<LineRenderer>();
+
+        if (lr == null)
+        {
+            Debug.LogError("LineRendererが付いてない！");
+        }
+    }
     void Start()
     {
         Destroy(gameObject, lifeTime);
@@ -77,17 +88,18 @@ public class ChainBullet : MonoBehaviour
     {
         if (lightningPrefab == null) return;
 
+        // 雷本体
         GameObject obj = Instantiate(lightningPrefab);
-
-        LightningDotEffect le = obj.GetComponentInChildren<LightningDotEffect>();
-
+        LightningLineEffect le = obj.GetComponent<LightningLineEffect>();
         if (le != null)
         {
             le.Setup(start, end);
         }
-        else
+
+        // ★着弾エフェクト
+        if (hitEffectPrefab != null)
         {
-            Debug.LogWarning("LightningDotEffectが見つからない");
+            Instantiate(hitEffectPrefab, end, Quaternion.identity);
         }
     }
 }

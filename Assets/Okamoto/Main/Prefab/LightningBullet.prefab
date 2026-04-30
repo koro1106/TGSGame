@@ -53,7 +53,8 @@ MonoBehaviour:
   damage: 20
   chainCount: 2
   chainRadius: 2000
-  lightningPrefab: {fileID: 870530360658594862, guid: 6d0b3be23393d304ba054dfbe254b568, type: 3}
+  lightningPrefab: {fileID: 4514482655411187178, guid: 70492705cbd050b45b3492ec316dddbd, type: 3}
+  hitEffectPrefab: {fileID: 6792142387433316357, guid: ed91730f85068c248a3b10450adefcb5, type: 3}
   hitSound: {fileID: 8300000, guid: 92202c2a4fa23c445820a27fcf2f61f4, type: 3}
 --- !u!212 &298442216506815025
 SpriteRenderer:
@@ -81,7 +82,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 2100000, guid: a1aee9581ea33f849b66341009f08f0a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
