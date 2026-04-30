@@ -1,80 +1,100 @@
 using UnityEngine;
-using System.Collections.Generic;
 
-public class LightningDotEffect : MonoBehaviour
+[RequireComponent(typeof(LineRenderer))]
+public class LightningLineEffect : MonoBehaviour
 {
-    public GameObject dotPrefab;
-
     public int segments = 12;
     public float amplitude = 0.5f;
-    public float duration = 0.1f;
-    public float flickerSpeed = 0.02f;
+    public float duration = 0.08f;
+    public float flickerSpeed = 0.015f;
 
+    private LineRenderer lr;
     private Vector3 startPos;
     private Vector3 endPos;
 
-    private List<GameObject> dots = new List<GameObject>();
+    [Header("太さ")]
+    public float startWidth = 0.6f;
+    public float endWidth = 0.1f;
 
+    private float timer;
+    private float nextFlicker;
+
+
+    void Awake()
+    {
+        lr = GetComponentInChildren<LineRenderer>();
+
+        if (lr == null)
+        {
+            Debug.LogError("LineRendererが見つからない（子も含めて）");
+        }
+    }
     public void Setup(Vector3 start, Vector3 end)
     {
-        if (dotPrefab == null)
-        {
-            Debug.LogError("dotPrefabが未設定");
-            return;
-        }
+        lr = GetComponent<LineRenderer>();
 
         startPos = start;
         endPos = end;
 
-        // ★向きを着弾方向に合わせる
-        Vector3 dir = (endPos - startPos).normalized;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, angle);
+        lr.positionCount = segments;
+        nextFlicker = 0f;
 
-        // ドット生成
-        for (int i = 0; i < segments; i++)
-        {
-            GameObject dot = Instantiate(dotPrefab, transform);
-            dots.Add(dot);
-        }
-
-        InvokeRepeating(nameof(UpdateDots), 0f, flickerSpeed);
-        Destroy(gameObject, duration);
+        UpdateLine();
     }
 
-    void UpdateDots()
+    void Update()
     {
-        if (dots.Count == 0) return;
+        timer += Time.deltaTime;
 
-        // ★進行方向
+        if (timer >= duration)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        // フリッカー
+        if (Time.time >= nextFlicker)
+        {
+            UpdateLine();
+            nextFlicker = Time.time + flickerSpeed;
+        }
+
+        // 太さ＆フェード
+        float t = timer / duration;
+        float width = Mathf.Lerp(startWidth, endWidth, t);
+        lr.startWidth = width;
+        lr.endWidth = width;
+
+        Color c = lr.startColor;
+        c.a = 1f - t;
+        lr.startColor = c;
+        lr.endColor = c;
+    }
+
+    void UpdateLine()
+    {
+        if (lr == null) return;
+
+        if (lr.positionCount != segments)
+        {
+            lr.positionCount = segments;
+        }
+
         Vector3 dir = (endPos - startPos).normalized;
-
-        // ★横方向（これが超重要）
         Vector3 perpendicular = new Vector3(-dir.y, dir.x, 0);
 
-        for (int i = 0; i < dots.Count; i++)
+        for (int i = 0; i < lr.positionCount; i++)
         {
-            float t = i / (float)(segments - 1);
+            float t = i / (float)(lr.positionCount - 1);
 
-            // 直線上の位置
             Vector3 basePos = Vector3.Lerp(startPos, endPos, t);
 
-            // 真ん中ほど強くブレる
             float strength = Mathf.Sin(t * Mathf.PI);
-
-            // ★横方向だけにブレる
             float offset = Random.Range(-amplitude, amplitude) * strength;
 
-            Vector3 finalPos = basePos + perpendicular * offset;
+            Vector3 pos = basePos + perpendicular * offset;
 
-            dots[i].transform.position = finalPos;
-
-            // ★ドットの向きも揃える（任意だけどおすすめ）
-            dots[i].transform.rotation = transform.rotation;
-
-            // ★太さ変化（雷っぽさUP）
-            float scale = Mathf.Lerp(0.5f, 1.5f, strength);
-            dots[i].transform.localScale = Vector3.one * scale;
+            lr.SetPosition(i, pos);
         }
     }
 }
