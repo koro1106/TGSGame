@@ -170,3 +170,4 @@ MonoBehaviour:
   maxHP: 40
   currentHP: 0
   scaleSmooth: 12
+  dropPrefab: {fileID: 3403791600263971821, guid: d50cc6341d2b6484180a91712ab46caf, type: 3}
