@@ -214,7 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dc7c0146586f4547b7ce6f26d0142b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIAnimation
-  speed: 2
+  speed: 4
 --- !u!1 &54753368
 GameObject:
   m_ObjectHideFlags: 0

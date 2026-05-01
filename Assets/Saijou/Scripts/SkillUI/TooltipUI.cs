@@ -24,13 +24,18 @@ public class TooltipUI : MonoBehaviour
     {
         instance = this;
         panel.SetActive(false); // 最初非表示
-        
     }
 
     // 表示する
-    public void Show(SkillData data)
+    public void Show(SkillData data, bool playPanelAnim = true)
     {
         panel.SetActive(true);
+
+        // パネルアニメーション
+        if (playPanelAnim)
+        {
+            UIanim.PlayBounce(panel.GetComponent<RectTransform>());
+        }
 
         // PlayerExp取得
         int exp = 0;
