@@ -155,7 +155,7 @@ public class SkillNodeUI : MonoBehaviour
             );
         }
 
-        // ★ Zをちゃんと前に出す（重要）
+        // Zを前に出す
         worldPos.z = 0f;
 
         Instantiate(unlockEffectPrefab, worldPos, Quaternion.identity);

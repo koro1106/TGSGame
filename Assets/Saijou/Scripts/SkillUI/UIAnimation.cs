@@ -1,7 +1,5 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 /// <summary>
 /// UI‚Ì‰‰oê—pƒXƒNƒŠƒvƒg
@@ -24,23 +22,23 @@ public class UIAnimation : MonoBehaviour
         Vector3 original = Vector3.one;
 
         // ­‚µk‚ŞƒTƒCƒY
-        Vector3 small = original * 0.9f;
+        Vector3 small = original * 0.8f;
 
         // ‘å‚«‚­‚È‚éƒTƒCƒY
-        Vector3 big = original * 1.2f;
+        Vector3 big = original * 0.9f;
 
         // ‰ñ“]iŠp“xj
         Quaternion rot0 = Quaternion.identity;         // Œ³
-        Quaternion rot1 = Quaternion.Euler(0, 0, 10f); // ‰E‚ÉŒX‚­
-        Quaternion rot2 = Quaternion.Euler(0, 0, -8f); // ¶‚ÉŒX‚­
+        Quaternion rot1 = Quaternion.Euler(0, 0, 6f); // ‰E‚ÉŒX‚­
+        Quaternion rot2 = Quaternion.Euler(0, 0, -5f); // ¶‚ÉŒX‚­
 
         float t = 0;
 
         // ‡@ˆêu¬‚³‚­{‰E‚ÉŒX‚­
-        while(t < 0.08f)
+        while(t < 0.05f)
         {
             t += Time.unscaledDeltaTime * speed; // timeScale–³‹(’â~’†‚Å‚à“®‚­)
-            float p = t / 0.08f;
+            float p = t / 0.05f;
 
             rt.localScale = Vector3.Lerp(original, small, p);
             rt.rotation = Quaternion.Lerp(rot0, rot1, p);
@@ -51,10 +49,10 @@ public class UIAnimation : MonoBehaviour
         t = 0;
 
         // ‡Aˆê‹C‚É‘å‚«‚­{”½‘Î‚ÉŒX‚­
-        while(t < 0.12f)
+        while(t < 0.1f)
         {
             t += Time.unscaledDeltaTime * speed;
-            float p = t / 0.12f;
+            float p = t / 0.1f;
 
             rt.localScale = Vector3.Lerp(small, big, p);
             rt.rotation = Quaternion.Lerp(rot1, rot2, p);
@@ -65,10 +63,10 @@ public class UIAnimation : MonoBehaviour
         t = 0;
 
         // ‡BŒ³‚É–ß‚é
-        while (t < 0.15f)
+        while (t < 0.12f)
         {
             t += Time.unscaledDeltaTime * speed;
-            float p = t / 0.15f;
+            float p = t / 0.12f;
 
             rt.localScale = Vector3.Lerp(big, original, p);
             rt.rotation = Quaternion.Lerp(rot2, rot0, p);

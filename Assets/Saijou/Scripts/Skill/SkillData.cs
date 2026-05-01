@@ -30,7 +30,7 @@ public class SkillData : ScriptableObject
             // 一回でも強化したら解放扱い
             isUnlocked = true;
             // ツールチップ更新
-            TooltipUI.instance?.Show(this);
+            TooltipUI.instance?.Show(this,false);
         }
     }
 
