@@ -29,8 +29,8 @@ public class UIAnimation : MonoBehaviour
 
         // ‰ñ“]iŠp“xj
         Quaternion rot0 = Quaternion.identity;         // Œ³
-        Quaternion rot1 = Quaternion.Euler(0, 0, 6f); // ‰E‚ÉŒX‚­
-        Quaternion rot2 = Quaternion.Euler(0, 0, -5f); // ¶‚ÉŒX‚­
+        Quaternion rot1 = Quaternion.Euler(0, 0, 8f); // ‰E‚ÉŒX‚­
+        Quaternion rot2 = Quaternion.Euler(0, 0, -9f); // ¶‚ÉŒX‚­
 
         float t = 0;
 
