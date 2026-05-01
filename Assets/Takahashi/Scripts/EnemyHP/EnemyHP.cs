@@ -12,6 +12,8 @@ public class EnemyHP : MonoBehaviour
     [Header("ドロップ")]
     public GameObject dropPrefab;
 
+    [Header("ダメージ表示")]
+    public GameObject damageText;
     private Vector3 baseScale;
     private Vector3 targetScale;
 
@@ -40,6 +42,8 @@ public class EnemyHP : MonoBehaviour
     {
         currentHP -= damage;
 
+        //ダメージ表示生成
+        ShowDamage(damage);
         if (currentHP <= 0)
         {
             Die(); // 死亡
@@ -67,5 +71,21 @@ public class EnemyHP : MonoBehaviour
 
         // 敵を削除
         Destroy(gameObject);
+    }
+    void ShowDamage(int damage)
+    {
+        if (damageText == null) return;
+
+        GameObject obj = Instantiate(
+            damageText,
+            transform.position,
+            Quaternion.identity
+        );
+
+        DamageText dmg = obj.GetComponent<DamageText>();
+        if (dmg != null)
+        {
+            dmg.SetDamage(damage);
+        }
     }
 }
