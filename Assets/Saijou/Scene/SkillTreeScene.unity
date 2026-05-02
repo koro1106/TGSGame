@@ -931,6 +931,9 @@ MonoBehaviour:
   - {fileID: 1253994520}
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 0
+  redSprite: {fileID: 8231975388350944144, guid: 078b4b9a1e221a34892861e7004d31aa, type: 3}
+  greenSprite: {fileID: 1516268718464375844, guid: e46a40c1d3d60664faebd33c911d5ef4, type: 3}
+  yellowSprite: {fileID: -2563561379437210377, guid: 97c684b202d3bd3429da85752eab6bd3, type: 3}
 --- !u!114 &1220820725
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1151,6 +1154,9 @@ MonoBehaviour:
   - {fileID: 54753372}
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 1
+  redSprite: {fileID: 8231975388350944144, guid: 078b4b9a1e221a34892861e7004d31aa, type: 3}
+  greenSprite: {fileID: 1516268718464375844, guid: e46a40c1d3d60664faebd33c911d5ef4, type: 3}
+  yellowSprite: {fileID: -2563561379437210377, guid: 97c684b202d3bd3429da85752eab6bd3, type: 3}
 --- !u!1 &1253994519
 GameObject:
   m_ObjectHideFlags: 0
@@ -1585,6 +1591,9 @@ MonoBehaviour:
   nextLines: []
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 0
+  redSprite: {fileID: 8231975388350944144, guid: 078b4b9a1e221a34892861e7004d31aa, type: 3}
+  greenSprite: {fileID: 1516268718464375844, guid: e46a40c1d3d60664faebd33c911d5ef4, type: 3}
+  yellowSprite: {fileID: -2563561379437210377, guid: 97c684b202d3bd3429da85752eab6bd3, type: 3}
 --- !u!114 &1709242296
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1906,6 +1915,9 @@ MonoBehaviour:
   nextLines: []
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 0
+  redSprite: {fileID: 8231975388350944144, guid: 078b4b9a1e221a34892861e7004d31aa, type: 3}
+  greenSprite: {fileID: 1516268718464375844, guid: e46a40c1d3d60664faebd33c911d5ef4, type: 3}
+  yellowSprite: {fileID: -2563561379437210377, guid: 97c684b202d3bd3429da85752eab6bd3, type: 3}
 --- !u!114 &1806012794
 MonoBehaviour:
   m_ObjectHideFlags: 0

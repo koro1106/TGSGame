@@ -26,6 +26,10 @@ public class SkillNodeUI : MonoBehaviour
 
     private SkillState state = SkillState.Locked; // 現在の状態（初期は未解放）
     public bool isStartNode = false; // 最初から表示するノード
+
+    [SerializeField] Sprite redSprite;     // 経験値不足：赤
+    [SerializeField] Sprite greenSprite;   // 解放済み：緑
+    [SerializeField] Sprite yellowSprite;  // 最大レベル：黄
     void Start()
     {
         // 最初のノードなら「解放可能状態」にする
@@ -99,22 +103,50 @@ public class SkillNodeUI : MonoBehaviour
     {
         Color c = icon.color;
 
+        bool hasExp = data.playerData.currentExp >= data.needExp;
+        bool isMax = data.IsMaxLevel(); // MAXレベルかどうか
+
         if (data.isUnlocked)
         {
             state = SkillState.Unlocked; // 解放済みに
         }
         switch (state)
         {
-            case SkillState.Locked:
-                c.a = 0f; // 完全非表示
+            case SkillState.Locked:// 完全非表示
+                icon.enabled = false; 
                 break;
 
             case SkillState.Available:
-                c.a = 30f / 255f; // うっすら表示
+                icon.enabled = true; // 解放可能状態
+
+                icon.sprite = greenSprite;
+
+                if (hasExp)
+                {
+                    // 経験値足りてる → 薄緑
+                    c.a = 30f / 255f;
+                }
+                else
+                {
+                    // 経験値足りない → 赤画像にする
+                    icon.sprite = redSprite;
+                    c.a = 30f / 255f;
+                }
                 break;
-        
+
             case SkillState.Unlocked:
+                icon.enabled = true;
                 c.a = 1f; // 完全表示
+                if (isMax)
+                {
+                    // 最大レベル → 黄色
+                    icon.sprite = yellowSprite;
+                }
+                else
+                {
+                    // 通常解放 → 緑
+                    icon.sprite = greenSprite;
+                }
                 break;
         }
 
