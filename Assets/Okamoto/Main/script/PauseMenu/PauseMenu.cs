@@ -3,15 +3,21 @@ using System.Collections;
 
 public class PauseMenu : MonoBehaviour
 {
-    public GameObject settingsPanel;
+    public GameObject[] panels;
+    public GameObject startPanel; // ← 最初に出すUI
     public float animTime = 0.2f;
 
+    private GameObject currentPanel;
+    private Coroutine currentAnim;
     private bool isOpen = false;
 
     void Start()
     {
-        settingsPanel.transform.localScale = Vector3.zero;
-        settingsPanel.SetActive(false);
+        foreach (var panel in panels)
+        {
+            panel.SetActive(false);
+            panel.transform.localScale = Vector3.zero;
+        }
     }
 
     void Update()
@@ -19,34 +25,54 @@ public class PauseMenu : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (isOpen)
-                Close();
+                CloseAll();
             else
-                Open();
+                OpenMenu();
         }
     }
 
-    public void Open()
+    // ESCで開く
+    public void OpenMenu()
     {
-        settingsPanel.SetActive(true);
-        StartCoroutine(ScaleAnim(Vector3.zero, Vector3.one));
-        Time.timeScale = 0f; // ゲーム停止
+        Time.timeScale = 0f;
         isOpen = true;
+
+        ShowPanel(startPanel); // ← 最初のUIを表示
     }
 
-    public void Close()
+    // ESCで閉じる
+    public void CloseAll()
     {
-        StartCoroutine(CloseAnim());
+        if (currentAnim != null) StopCoroutine(currentAnim);
+
+        if (currentPanel != null)
+        {
+            currentPanel.SetActive(false);
+            currentPanel = null;
+        }
+
         Time.timeScale = 1f;
         isOpen = false;
     }
 
-    IEnumerator CloseAnim()
+    // ボタン用（今まで通り）
+    public void ShowPanel(GameObject panel)
     {
-        yield return ScaleAnim(settingsPanel.transform.localScale, Vector3.zero);
-        settingsPanel.SetActive(false);
+        if (currentAnim != null) StopCoroutine(currentAnim);
+
+        if (currentPanel != null)
+        {
+            currentPanel.SetActive(false);
+        }
+
+        currentPanel = panel;
+        currentPanel.SetActive(true);
+        currentPanel.transform.localScale = Vector3.zero;
+
+        currentAnim = StartCoroutine(ScaleAnim(currentPanel, Vector3.zero, Vector3.one));
     }
 
-    IEnumerator ScaleAnim(Vector3 start, Vector3 end)
+    IEnumerator ScaleAnim(GameObject panel, Vector3 start, Vector3 end)
     {
         float time = 0f;
 
@@ -54,15 +80,14 @@ public class PauseMenu : MonoBehaviour
         {
             time += Time.unscaledDeltaTime;
             float t = time / animTime;
-
-            // イージング（ちょっと気持ちよくする）
             t = 1f - Mathf.Pow(1f - t, 3f);
 
-            settingsPanel.transform.localScale = Vector3.Lerp(start, end, t);
+            panel.transform.localScale = Vector3.Lerp(start, end, t);
 
             yield return null;
         }
 
-        settingsPanel.transform.localScale = end;
+        panel.transform.localScale = end;
+        currentAnim = null;
     }
 }
