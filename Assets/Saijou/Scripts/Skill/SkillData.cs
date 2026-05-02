@@ -49,4 +49,10 @@ public class SkillData : ScriptableObject
             level = maxLevel;
         }
     }
+
+    // 最大レベル判定
+    public bool IsMaxLevel()
+    {
+        return level >= maxLevel;
+    }
 }
