@@ -21,6 +21,20 @@ public class DamageText : MonoBehaviour
     public void SetDamage(int damage)
     {
         text.text = damage.ToString();
+
+        // ダメージごとに色変更
+        if (damage < 11)
+        {
+            text.color = Color.white; // 小ダメージ
+        }
+        else if (damage < 30)
+        {
+            text.color = Color.yellow; // 中ダメージ
+        }
+        else
+        {
+            text.color = Color.red; // 大ダメージ
+        }
     }
 
     void Start()
