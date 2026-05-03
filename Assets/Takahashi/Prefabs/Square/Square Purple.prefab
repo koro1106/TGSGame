@@ -171,3 +171,4 @@ MonoBehaviour:
   currentHP: 0
   scaleSmooth: 12
   dropPrefab: {fileID: 3403791600263971821, guid: d50cc6341d2b6484180a91712ab46caf, type: 3}
+  damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
