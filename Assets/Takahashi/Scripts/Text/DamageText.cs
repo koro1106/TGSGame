@@ -5,8 +5,13 @@ public class DamageText : MonoBehaviour
 {
     private TextMeshPro text;
 
-    public float moveSpeed = 2f;
     public float lifeTime = 1f;
+
+    [Header("ƒWƒƒƒ“ƒvİ’è")]
+    public float jumpForce = 600f;   // ã‚É”ò‚Ô—Í
+    public float gravity = -150f;   // —‚¿‚é—Í
+
+    private float velocityY;
 
     void Awake()
     {
@@ -18,10 +23,19 @@ public class DamageText : MonoBehaviour
         text.text = damage.ToString();
     }
 
+    void Start()
+    {
+        // ã•ûŒü‚É‰‘¬‚ğ—^‚¦‚é
+        velocityY = jumpForce;
+    }
+
     void Update()
     {
-        // ã‚É•‚‚­
-        transform.position += Vector3.up * moveSpeed * Time.deltaTime;
+        // d—Í‚ÅŒ¸‘¬ ¨ —‰º
+        velocityY += gravity * Time.deltaTime;
+
+        // ã‰ºˆÚ“®
+        transform.position += new Vector3(0, velocityY * Time.deltaTime, 0);
 
         // ŠÔ‚ÅÁ‚¦‚é
         lifeTime -= Time.deltaTime;

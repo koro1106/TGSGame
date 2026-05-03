@@ -194,5 +194,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5066de39fcf6cc6418d2ad6b9709754e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DamageText
-  moveSpeed: 1.5
   lifeTime: 1
+  jumpForce: 250
+  gravity: -900
