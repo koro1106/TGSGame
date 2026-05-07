@@ -24,6 +24,13 @@ public class GunController : MonoBehaviour
     public Transform gunImage;
     Vector3 defaultLocalPos;
 
+    public TMP_Text sensitivityText;
+
+    private Vector3 crosshairPos;
+
+    [Range(0.1f, 10f)]
+    public float sensitivity = 1f;
+
     public Image[] ammoUI;
     public TMP_Text ammoText;
 
@@ -33,6 +40,13 @@ public class GunController : MonoBehaviour
     private Camera cam;
 
     public GameObject ammoDropPrefab;
+
+    void Start()
+    {
+        crosshairPos = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
+
+        crosshair.position = crosshairPos;
+    }
 
     void Awake()
     {
@@ -51,10 +65,14 @@ public class GunController : MonoBehaviour
             ammoUI[i].enabled = true;
         }
         UpdateAmmoUI();
+
+        sensitivityText.text = "Š´“x : " + sensitivity.ToString("F1");
     }
 
     void Update()
     {
+        if (PauseMenu.IsPaused) return;
+
         Aim();
 
         if (!isReloading)
@@ -175,7 +193,24 @@ public class GunController : MonoBehaviour
 
     void LateUpdate()
     {
-        crosshair.position = Input.mousePosition;
+        if (PauseMenu.IsPaused) return;
+
+        float mouseX = Input.GetAxisRaw("Mouse X");
+        float mouseY = Input.GetAxisRaw("Mouse Y");
+
+        crosshairPos += new Vector3(mouseX, mouseY, 0f) * sensitivity * 25f;
+
+        crosshairPos.x = Mathf.Clamp(crosshairPos.x, 0, Screen.width);
+        crosshairPos.y = Mathf.Clamp(crosshairPos.y, 0, Screen.height);
+
+        crosshair.position = crosshairPos;
+    }
+
+    public void SetSensitivity(float value)
+    {
+        sensitivity = value;
+
+        sensitivityText.text = "Š´“x : " + sensitivity.ToString("F1");
     }
 
 }

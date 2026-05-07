@@ -19,6 +19,12 @@ public class CameraShake : MonoBehaviour
 
     void LateUpdate()
     {
+        if (PauseMenu.IsPaused)
+        {
+            transform.localPosition = originalPos;
+            return;
+        }
+
         if (timer > 0)
         {
             float damper = timer / duration;
