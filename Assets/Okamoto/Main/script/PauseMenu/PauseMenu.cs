@@ -11,6 +11,10 @@ public class PauseMenu : MonoBehaviour
     private Coroutine currentAnim;
     private bool isOpen = false;
 
+    private bool playOpenAnim = false;
+
+    public static bool IsPaused;
+
     void Start()
     {
         foreach (var panel in panels)
@@ -36,23 +40,34 @@ public class PauseMenu : MonoBehaviour
     {
         Time.timeScale = 0f;
         isOpen = true;
+        IsPaused = true;
 
-        ShowPanel(startPanel); // ← 最初のUIを表示
+        playOpenAnim = true;
+        ShowPanel(startPanel);
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
     }
 
-    // ESCで閉じる
     public void CloseAll()
     {
         if (currentAnim != null) StopCoroutine(currentAnim);
 
-        if (currentPanel != null)
+        foreach (var panel in panels)
         {
-            currentPanel.SetActive(false);
-            currentPanel = null;
+            panel.SetActive(false);
+            panel.transform.localScale = Vector3.zero;
         }
+
+        currentPanel = null;
 
         Time.timeScale = 1f;
         isOpen = false;
+        IsPaused = false;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // ボタン用（今まで通り）
@@ -67,9 +82,19 @@ public class PauseMenu : MonoBehaviour
 
         currentPanel = panel;
         currentPanel.SetActive(true);
-        currentPanel.transform.localScale = Vector3.zero;
 
-        currentAnim = StartCoroutine(ScaleAnim(currentPanel, Vector3.zero, Vector3.one));
+        // ESCで開いた直後のstartPanelだけアニメ
+        if (panel == startPanel && playOpenAnim)
+        {
+            currentPanel.transform.localScale = Vector3.zero;
+            currentAnim = StartCoroutine(ScaleAnim(currentPanel, Vector3.zero, Vector3.one));
+
+            playOpenAnim = false; //一回だけにする
+        }
+        else
+        {
+            currentPanel.transform.localScale = Vector3.one;
+        }
     }
 
     IEnumerator ScaleAnim(GameObject panel, Vector3 start, Vector3 end)
@@ -90,4 +115,10 @@ public class PauseMenu : MonoBehaviour
         panel.transform.localScale = end;
         currentAnim = null;
     }
+
+    public void BackToMenu()
+    {
+        ShowPanel(startPanel);
+    }
+
 }
