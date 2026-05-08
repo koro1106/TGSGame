@@ -26,12 +26,17 @@ public class EnemyHP : MonoBehaviour
 
     private bool isDying = false;
 
+    private Collider2D col;
+
+
     void Start()
     {
         currentHP = maxHP;
 
         baseScale = transform.localScale;
         targetScale = baseScale;
+
+        col = GetComponent<Collider2D>();
     }
 
     void Update()
@@ -104,6 +109,12 @@ public class EnemyHP : MonoBehaviour
     IEnumerator DeathSpiral()
     {
         isDying = true;
+
+        // 当たり判定OFF
+        if (col != null)
+        {
+            col.enabled = false;
+        }
 
         // ドロップ生成
         if (dropPrefab != null)
