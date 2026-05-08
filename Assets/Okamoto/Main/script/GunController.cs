@@ -94,25 +94,30 @@ public class GunController : MonoBehaviour
 
         Vector3 dir = worldPos - gunPivot.position;
 
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        float angle =
+            Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
         bool isLeft = dir.x < 0;
 
-        // šŠp“x‚Í‚¢‚¶‚ç‚È‚¢
-        gunPivot.rotation = Quaternion.Euler(0, 0, angle);
+        // Šp“x‚Í‚¢‚¶‚ç‚È‚¢
+        gunPivot.rotation =
+            Quaternion.Euler(0, 0, angle);
 
-        // šŒ©‚½–Ú‚¾‚¯”½“]
+        // Œ©‚½–Ú‚¾‚¯”½“]
         if (isLeft)
         {
-            gunImage.localScale = new Vector3(1, -1, 1);
+            gunImage.localScale =
+                new Vector3(1, -1, 1);
         }
         else
         {
-            gunImage.localScale = new Vector3(1, 1, 1);
+            gunImage.localScale =
+                new Vector3(1, 1, 1);
         }
 
         // ˆÊ’u‚Íí‚ÉŒÅ’è
-        gunImage.localPosition = defaultLocalPos;
+        gunImage.localPosition =
+            defaultLocalPos;
     }
 
     void Shoot()
