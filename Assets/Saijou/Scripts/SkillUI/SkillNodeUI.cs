@@ -103,7 +103,7 @@ public class SkillNodeUI : MonoBehaviour
     {
         Color c = icon.color;
 
-        bool hasExp = data.playerData.currentExp >= data.needExp;
+        bool hasExp = GetCurrentExp() >= data.needExp;
         bool isMax = data.IsMaxLevel(); // MAXレベルかどうか
 
         if (data.isUnlocked)
@@ -156,7 +156,7 @@ public class SkillNodeUI : MonoBehaviour
     // Click処理
     public void OnClick()
     {
-        if (data.playerData.currentExp >= data.needExp)
+        if (GetCurrentExp() >= data.needExp)
         {
             data.TryLevelUp(); // レベルアップ
             Unlock();
@@ -191,5 +191,24 @@ public class SkillNodeUI : MonoBehaviour
         worldPos.z = 0f;
 
         Instantiate(unlockEffectPrefab, worldPos, Quaternion.identity);
+    }
+
+
+    // 経験値取得関数
+    int GetCurrentExp()
+    {
+        switch (data.expType)
+        {
+            case ExpType.Exp1:
+                return data.playerData.currentExp_1;
+
+            case ExpType.Exp2:
+                return data.playerData.currentExp_2;
+
+            case ExpType.Exp3:
+                return data.playerData.currentExp_3;
+        }
+
+        return 0;
     }
 }

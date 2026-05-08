@@ -17,40 +17,93 @@ public class SkillData : ScriptableObject
 
     public bool isLevelUp = false; // レベルアップした
     public PlayerData playerData;
-    // 経験値を消費してレベルアップを試みる
-    public void TryLevelUp()
-    {
-        // レベル上限＆経験値チェック
-        if (level < maxLevel && playerData.currentExp >= needExp)
-        {
-            // 必要な経験値を引き、レベルアップ処理を実行
-            playerData.currentExp -= needExp;
-            LevelUp();
+    public ExpType expType;
 
-            // 一回でも強化したら解放扱い
-            isUnlocked = true;
-            // ツールチップ更新
-            TooltipUI.instance?.Show(this,false);
+    /// <summary>
+    /// 現在の経験値取得
+    /// </summary>
+    public int GetCurrentExp()
+    {
+        switch (expType)
+        {
+            case ExpType.Exp1:
+                return playerData.currentExp_1;
+
+            case ExpType.Exp2:
+                return playerData.currentExp_2;
+
+            case ExpType.Exp3:
+                return playerData.currentExp_3;
+        }
+
+        return 0;
+    }
+
+    /// <summary>
+    /// 経験値消費
+    /// </summary>
+    void ConsumeExp(int value)
+    {
+        switch (expType)
+        {
+            case ExpType.Exp1:
+                playerData.currentExp_1 -= value;
+                break;
+
+            case ExpType.Exp2:
+                playerData.currentExp_2 -= value;
+                break;
+
+            case ExpType.Exp3:
+                playerData.currentExp_3 -= value;
+                break;
         }
     }
 
-    // レベルアップ
+    /// <summary>
+    /// 経験値を消費してレベルアップ
+    /// </summary>
+    public void TryLevelUp()
+    {
+        // レベル上限＆経験値チェック
+        if (level < maxLevel &&
+            GetCurrentExp() >= needExp)
+        {
+            // 経験値消費
+            ConsumeExp(needExp);
+
+            // レベルアップ
+            LevelUp();
+
+            // 解放状態
+            isUnlocked = true;
+
+            // ツールチップ更新
+            TooltipUI.instance?.Show(this, false);
+        }
+    }
+
+    /// <summary>
+    /// レベルアップ
+    /// </summary>
     void LevelUp()
     {
         level++;
         isLevelUp = true;
 
-        // レベルアップ後の必要経験値を増やす（例：1.3倍）
+        // 必要経験値増加
         needExp = Mathf.RoundToInt(needExp * 1.3f);
 
-        // 最大レベルに到達した場合、レベルアップを停止
+        // 最大レベル制限
         if (level >= maxLevel)
         {
             level = maxLevel;
         }
     }
 
-    // 最大レベル判定
+    /// <summary>
+    /// 最大レベル判定
+    /// </summary>
     public bool IsMaxLevel()
     {
         return level >= maxLevel;
