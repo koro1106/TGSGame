@@ -3,7 +3,7 @@ using UnityEngine;
 public class Bullet1 : MonoBehaviour
 {
     [SerializeField] private float speed = 8f;
-    private int damage = 20; // ダメージ量
+    private int damage = 10; // ダメージ量
     private Vector2 direction;
 
     // Playerから呼ばれる

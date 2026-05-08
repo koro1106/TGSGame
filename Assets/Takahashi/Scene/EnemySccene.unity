@@ -306,7 +306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1692a2f3ce186664a8443249e4ad8134, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  enemyPrefab: {fileID: 1564874167361477582, guid: b212dd7b66d26d741950153427aa1ff8, type: 3}
+  enemyPrefab: {fileID: 3672385843094609883, guid: 395f7599b11b5514cb4c8c91107c9c7c, type: 3}
   spawnInterval: 2
 --- !u!4 &497528188
 Transform:
@@ -320,7 +320,8 @@ Transform:
   m_LocalPosition: {x: -1.8912, y: -3.91139, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1327639385}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &749495099
@@ -797,13 +798,18 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!4 &1327639385 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
+  m_PrefabInstance: {fileID: 1408206877}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1408206877
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 497528188}
     m_Modifications:
     - target: {fileID: 285269543843597987, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
       propertyPath: m_Name
@@ -823,11 +829,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.08998978
+      value: 1.8012102
       objectReference: {fileID: 0}
     - target: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.044795334
+      value: 3.8665948
       objectReference: {fileID: 0}
     - target: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
       propertyPath: m_LocalPosition.z
@@ -839,15 +845,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1743,5 +1749,4 @@ SceneRoots:
   - {fileID: 228673484}
   - {fileID: 1220538946}
   - {fileID: 497528188}
-  - {fileID: 1408206877}
   - {fileID: 2043214438}

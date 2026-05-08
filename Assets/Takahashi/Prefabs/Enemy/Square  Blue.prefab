@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1564874167361477582
+--- !u!1 &3672385843094609883
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,41 +8,42 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1612576856897035549}
-  - component: {fileID: 2424424518433909968}
-  - component: {fileID: 7745701146341639476}
-  - component: {fileID: 1442300552459440358}
-  - component: {fileID: -4898356081957499612}
+  - component: {fileID: 4909119946807905130}
+  - component: {fileID: 8704841128893610791}
+  - component: {fileID: 1727193730544153591}
+  - component: {fileID: 7261910868932857247}
+  - component: {fileID: -5801891301068646234}
+  - component: {fileID: -3917417884829048199}
   m_Layer: 0
-  m_Name: Square Red Move
+  m_Name: Square  Blue
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1612576856897035549
+--- !u!4 &4909119946807905130
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1564874167361477582}
+  m_GameObject: {fileID: 3672385843094609883}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -8, y: 3.01, z: 0}
-  m_LocalScale: {x: 150, y: 150, z: 150}
+  m_LocalPosition: {x: -8, y: 0, z: 0}
+  m_LocalScale: {x: 125, y: 125, z: 125}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &2424424518433909968
+--- !u!212 &8704841128893610791
 SpriteRenderer:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1564874167361477582}
+  m_GameObject: {fileID: 3672385843094609883}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -84,7 +85,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 9b7abc43430eb2341a10c9e2f13b5371, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 299d0704344ed324794e8e9db76984c6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -94,13 +95,78 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!61 &7745701146341639476
+--- !u!114 &1727193730544153591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3672385843094609883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8323312fab40ced4cbe7c89ea91bcfbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BounceEnemy
+  moveSpeed: 200
+  angryMoveSpeed: 250
+  bounceHeight: 1
+  bounceSpeed: 10
+  normalSprite: {fileID: 21300000, guid: 299d0704344ed324794e8e9db76984c6, type: 3}
+  angrySprite: {fileID: 21300000, guid: 24be66e91ad63544c8910f038cff1eb2, type: 3}
+--- !u!114 &7261910868932857247
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3672385843094609883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5f51142236e4fe41a458647ffb58bc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHP
+  maxHP: 50
+  currentHP: 0
+  scaleSmooth: 12
+  deathDuration: 1.2
+  spiralSpeed: 20
+  rotationSpeed: 1080
+  dropPrefab: {fileID: 3403791600263971821, guid: d50cc6341d2b6484180a91712ab46caf, type: 3}
+  damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
+--- !u!50 &-5801891301068646234
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3672385843094609883}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7
+--- !u!61 &-3917417884829048199
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1564874167361477582}
+  m_GameObject: {fileID: 3672385843094609883}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -132,45 +198,11 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.5, y: 0.87}
+    oldSize: {x: 1.82, y: 1.92}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.82, y: 1.92}
   m_EdgeRadius: 0
---- !u!114 &1442300552459440358
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1564874167361477582}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5f51142236e4fe41a458647ffb58bc3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyHP
-  maxHP: 100
-  currentHP: 0
-  scaleSmooth: 15
-  deathDuration: 1.2
-  spiralSpeed: 20
-  rotationSpeed: 1080
-  dropPrefab: {fileID: 3403791600263971821, guid: d50cc6341d2b6484180a91712ab46caf, type: 3}
-  damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
---- !u!114 &-4898356081957499612
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1564874167361477582}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 363e3bab2cc46c2439a0cc5218077bf2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SquareRedMove
-  moveSpeed: 130
-  rotateSpeed: 0
