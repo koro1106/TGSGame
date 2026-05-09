@@ -207,6 +207,9 @@ public class SkillNodeUI : MonoBehaviour
 
             case ExpType.Exp3:
                 return data.playerData.currentExp_3;
+
+            case ExpType.PreExp:
+                return data.preStageData.prestageExp;
         }
 
         return 0;
