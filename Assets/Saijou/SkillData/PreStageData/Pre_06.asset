@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 273875e9515bae4469b58e69f7b82692, type: 3}
-  m_Name: HP_05
+  m_Name: Pre_06
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillName: "\u3066\u3059\u3068"
   description: "\u3066\u3059\u3068"
@@ -19,6 +19,6 @@ MonoBehaviour:
   needExp: 1
   isUnlocked: 0
   isLevelUp: 0
-  playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
-  preStageData: {fileID: 0}
-  expType: 0
+  playerData: {fileID: 0}
+  preStageData: {fileID: 11400000, guid: d23ced359bfdc164dbe41405efc9c157, type: 2}
+  expType: 3

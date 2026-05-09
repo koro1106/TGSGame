@@ -7,5 +7,6 @@ public enum ExpType
 {
     Exp1,
     Exp2,
-    Exp3
+    Exp3,
+    PreExp
 }

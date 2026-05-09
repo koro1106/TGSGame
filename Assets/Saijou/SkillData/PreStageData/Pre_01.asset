@@ -19,4 +19,6 @@ MonoBehaviour:
   needExp: 1
   isUnlocked: 0
   isLevelUp: 0
-  playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
+  playerData: {fileID: 0}
+  preStageData: {fileID: 11400000, guid: d23ced359bfdc164dbe41405efc9c157, type: 2}
+  expType: 3

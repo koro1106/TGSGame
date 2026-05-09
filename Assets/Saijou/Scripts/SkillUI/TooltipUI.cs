@@ -26,6 +26,7 @@ public class TooltipUI : MonoBehaviour
     [SerializeField] Sprite exp1Sprite;
     [SerializeField] Sprite exp2Sprite;
     [SerializeField] Sprite exp3Sprite;
+    [SerializeField] Sprite preExpSprite;
     void Awake()
     {
         instance = this;
@@ -47,7 +48,7 @@ public class TooltipUI : MonoBehaviour
         int exp = GetCurrentExp(data);
         
         // 経験値アイコン切替
-        expIcon.sprite = GetExpSprite(data.expType); 
+        expIcon.sprite = GetExpSprite(data.expType);
 
         // テキスト更新
         nameText.text = data.skillName;
@@ -76,10 +77,7 @@ public class TooltipUI : MonoBehaviour
     /// </summary>
     int GetCurrentExp(SkillData data)
     {
-        if (data.playerData == null)
-            return 0;
-
-        switch (data.expType)
+               switch (data.expType)
         {
             case ExpType.Exp1:
                 return data.playerData.currentExp_1;
@@ -89,6 +87,9 @@ public class TooltipUI : MonoBehaviour
 
             case ExpType.Exp3:
                 return data.playerData.currentExp_3;
+
+            case ExpType.PreExp:
+                return data.preStageData.prestageExp;
         }
 
         return 0;
@@ -109,6 +110,9 @@ public class TooltipUI : MonoBehaviour
 
             case ExpType.Exp3:
                 return exp3Sprite;
+
+            case ExpType.PreExp:
+                return preExpSprite;
         }
 
         return null;
