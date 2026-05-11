@@ -24,6 +24,7 @@
 //    }
 //}
 using UnityEngine;
+using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
@@ -41,6 +42,14 @@ public class Enemy : MonoBehaviour
     private Vector3 baseScale;   // 初期サイズ
     private Vector3 targetScale; // 目標サイズ
 
+    //拘束時
+    private Coroutine bindCoroutine; // 現在の拘束処理
+    private bool isBind = false; // 拘束中か
+
+
+
+
+
     void Start()
     {
         currentHP = maxHP; // 初期化
@@ -56,6 +65,14 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
+
+        // 拘束中なら完全停止
+        if (isBind)
+        {
+            return;
+        }
+
+
         //ランダムなゆらぎを加える
         moveDirection += Random.insideUnitCircle * wanderStrength * Time.deltaTime;
 
@@ -71,8 +88,18 @@ public class Enemy : MonoBehaviour
         // 方向ベクトルを正規化（速度が一定になる）
         moveDirection = moveDirection.normalized;
 
-        // 移動 
-        transform.Translate(moveDirection * moveSpeed * Time.deltaTime, Space.World);
+
+
+        // 拘束中じゃない時だけ移動
+        if (!isBind)
+        {
+            transform.Translate(
+                moveDirection * moveSpeed * Time.deltaTime,
+                Space.World
+            );
+        }
+
+
 
         // 回転（見た目用） 
         transform.Rotate(0, 0, rotateSpeed * Time.deltaTime);
@@ -107,7 +134,7 @@ public class Enemy : MonoBehaviour
 
         targetScale = baseScale * ratio;
     }
-        void Die()
+    void Die()
     {
         Destroy(gameObject); // 敵を消す
     }
@@ -148,4 +175,36 @@ public class Enemy : MonoBehaviour
         moveDirection += Random.insideUnitCircle * 0.3f;
         moveDirection = moveDirection.normalized;
     }
+
+    // 拘束ON/OFF
+    public void SetBind(bool bind)
+    {
+        isBind = bind;
+    }
+
+
+    // 拘束開始
+    public void StartBind(float time)
+    {
+        // 既に拘束中なら更新
+        if (bindCoroutine != null)
+        {
+            StopCoroutine(bindCoroutine);
+        }
+
+        bindCoroutine = StartCoroutine(BindCoroutine(time));
+    }
+
+    // 拘束処理
+    IEnumerator BindCoroutine(float time)
+    {
+        isBind = true;
+
+        yield return new WaitForSeconds(time);
+
+        isBind = false;
+
+        bindCoroutine = null;
+    }
+
 }
