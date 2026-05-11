@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class BindBullet : MonoBehaviour
 {
+
+    private Vector3 shootStartPos;
+
     //==============================
     // 弾設定
     //==============================
@@ -40,10 +43,23 @@ public class BindBullet : MonoBehaviour
     // 最低間隔
     public float minChainSpacing = 0.01f;
 
+
+
+    // 鎖をどこまで伸ばすか
+    public float chainExtendLength = 20f;
+    // 最初の鎖の長さ
+    public float firstChainLength = 30f;
+
     //==============================
     // Enemyに当たった
     //==============================
 
+
+    void Start()
+    {
+        shootStartPos =
+            transform.position;
+    }
     void OnTriggerEnter2D(Collider2D other)
     {
         // Enemy以外無視
@@ -224,6 +240,25 @@ public class BindBullet : MonoBehaviour
         {
             timer += Time.deltaTime;
 
+
+            //==============================
+            // 最初の鎖
+            //==============================
+
+            Vector3 firstDir =
+                (firstEnemy.transform.position - shootStartPos)
+                .normalized;
+
+            Vector3 firstEnd =
+                firstEnemy.transform.position +
+                firstDir * firstChainLength;
+
+            Debug.DrawLine(
+                shootStartPos,
+                firstEnd,
+                Color.cyan
+            );
+
             //==============================
             // 各Enemy
             //==============================
@@ -250,22 +285,27 @@ public class BindBullet : MonoBehaviour
                 // 終了位置
                 //==============================
 
-                Vector3 end =
+                // 本当の敵位置
+                Vector3 realEnd =
                     targetEnemy.transform.position;
 
-                //==============================
                 // 方向
-                //==============================
-
                 Vector3 dir =
-                    (end - start).normalized;
+                    (realEnd - start).normalized;
+
+                //// 見た目用終点
+                //Vector3 end =
+                //    realEnd +
+                //    dir * chainExtendLength;
+
+
 
                 //==============================
                 // 敵内部にめり込まない
                 //==============================
 
-                start += dir * enemyOffset;
-                end -= dir * enemyOffset;
+                start -= dir * chainExtendLength;
+                realEnd += dir * chainExtendLength;
 
                 //==============================
                 // 距離
@@ -273,8 +313,8 @@ public class BindBullet : MonoBehaviour
 
                 float distance =
                     Vector3.Distance(
-                        start,
-                        end
+                    start,
+                    realEnd
                     );
 
                 //==============================
@@ -331,11 +371,10 @@ public class BindBullet : MonoBehaviour
                          j++)
                 {
                     Vector3 pos;
-
-                    // 最後だけ終点に合わせる
+                    // 最後だけ延長先に合わせる
                     if (j == chainCount - 1)
                     {
-                        pos = end;
+                        pos = realEnd;
                     }
                     else
                     {
