@@ -20,6 +20,8 @@ public class SkillData : ScriptableObject
     public PreStagePlayerData preStageData;
     public ExpType expType;
 
+    public SkillEffectType effectType; // スキル効果タイプ
+    public float effectValue = 1;
     /// <summary>
     /// 現在の経験値取得
     /// </summary>
