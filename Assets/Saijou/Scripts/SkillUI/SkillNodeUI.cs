@@ -30,6 +30,8 @@ public class SkillNodeUI : MonoBehaviour
     [SerializeField] Sprite redSprite;     // 経験値不足：赤
     [SerializeField] Sprite greenSprite;   // 解放済み：緑
     [SerializeField] Sprite yellowSprite;  // 最大レベル：黄
+
+    [SerializeField] SkillEffectManager effectManager;
     void Start()
     {
         // 最初のノードなら「解放可能状態」にする
@@ -156,12 +158,16 @@ public class SkillNodeUI : MonoBehaviour
     // Click処理
     public void OnClick()
     {
-        if (GetCurrentExp() >= data.needExp)
-        {
-            data.TryLevelUp(); // レベルアップ
-            Unlock();
-            UpdateVisual();
-        }
+        // 最大レベルなら何もしない
+        if (data.IsMaxLevel()) return;
+
+        // 経験値足りないなら何もしない
+        if (GetCurrentExp() < data.needExp) return;
+        
+        data.TryLevelUp();             // レベルアップ
+        effectManager.ApplySkill(data);// スキル効果適用
+        Unlock();                      // 解放
+        UpdateVisual();                // 見た目更新
     }
 
     void SpawnEffect(Transform target)

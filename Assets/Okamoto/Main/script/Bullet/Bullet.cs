@@ -3,7 +3,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float lifeTime = 3f;
-    private int damage = 20; // ダメージ量
+    [SerializeField]private int damage; // ダメージ量☆
     private Vector2 direction;
 
 
@@ -17,8 +17,6 @@ public class Bullet : MonoBehaviour
     {
         direction = dir;
     }
-
-    
 
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -34,5 +32,12 @@ public class Bullet : MonoBehaviour
 
             Destroy(gameObject); // 弾は消える
         }
+    }
+
+    //ダメージ設定
+    public void SetDamage(int value)
+    {
+        damage = value;
+        Debug.Log("ダメージ数" + damage);
     }
 }

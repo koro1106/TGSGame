@@ -11,7 +11,7 @@ public class GunController : MonoBehaviour
     public float fireRate = 0.1f;
     public float bulletSpeed = 15f;
 
-    public int maxAmmo = 15;
+    public int maxAmmo = 15; // 弾数
     public float reloadTime = 1.5f;
 
     private int currentAmmo;
@@ -41,6 +41,8 @@ public class GunController : MonoBehaviour
 
     public GameObject ammoDropPrefab;
 
+    public PlayerStats stats; // プレイヤーステータス☆
+
     void Start()
     {
         crosshairPos = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
@@ -52,6 +54,9 @@ public class GunController : MonoBehaviour
     {
         cam = Camera.main;
         sr = GetComponent<SpriteRenderer>();
+
+        // 最大弾数反映☆
+        maxAmmo = stats.maxAmmo;
         currentAmmo = maxAmmo;
 
         Cursor.visible = false;
@@ -129,6 +134,14 @@ public class GunController : MonoBehaviour
             if (currentAmmo <= 0) return;
 
             GameObject bullet = Instantiate(bulletPrefab, muzzle.position, muzzle.rotation);
+
+            // ダメージ設定☆
+            Bullet bulletScript = bullet.GetComponent<Bullet>();
+            if (bulletScript != null)
+            {
+                bulletScript.SetDamage(stats.bulletDamage);
+                Debug.Log("現在ダメージ : " + stats.bulletDamage);
+            }
 
             Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
 
@@ -217,5 +230,4 @@ public class GunController : MonoBehaviour
 
         sensitivityText.text = "感度 : " + sensitivity.ToString("F1");
     }
-
 }
