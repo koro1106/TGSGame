@@ -8,7 +8,7 @@ public class EnemyHP : MonoBehaviour
     public int currentHP;
 
     [Header("見た目")]
-    public float scaleSmooth = 12f;
+    public float scaleSmooth = 12f; //変化量
 
     [Header("死亡演出")]
     public float deathDuration = 1.2f;
@@ -105,7 +105,7 @@ public class EnemyHP : MonoBehaviour
         targetScale = baseScale * ratio;
     }
 
-    // 渦巻きながら消滅
+    // 渦巻きながら消滅(死亡演出)
     IEnumerator DeathSpiral()
     {
         isDying = true;
@@ -120,6 +120,12 @@ public class EnemyHP : MonoBehaviour
         if (dropPrefab != null)
         {
             Instantiate(dropPrefab, transform.position, Quaternion.identity);
+        }
+
+        //コンボ追加
+        if (ComboManager.instance != null)
+        {
+            ComboManager.instance.AddCombo();
         }
 
         Vector3 startScale = transform.localScale;

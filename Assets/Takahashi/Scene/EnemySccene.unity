@@ -129,6 +129,52 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2974095749908668070, guid: ac0443339b24c2d4a95e51a2a393fb24, type: 3}
   m_PrefabInstance: {fileID: 8780479315562638150}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &194867985
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 194867987}
+  - component: {fileID: 194867986}
+  m_Layer: 0
+  m_Name: ComboManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &194867986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 194867985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 300290d2e280cb14f8cd843531bffa6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ComboManager
+  player: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
+  comboPopupPrefab: {fileID: 6182524599874962511, guid: 0f446f0784dc77a4ab926136e45ad5c8, type: 3}
+--- !u!4 &194867987
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 194867985}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 207.34712, y: -139.43933, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &212938121
 GameObject:
   m_ObjectHideFlags: 0
@@ -1750,3 +1796,4 @@ SceneRoots:
   - {fileID: 1220538946}
   - {fileID: 497528188}
   - {fileID: 2043214438}
+  - {fileID: 194867987}
