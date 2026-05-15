@@ -133,36 +133,33 @@ public class GunController : MonoBehaviour
         {
             if (currentAmmo <= 0) return;
 
-            //GameObject normalBullet = bulletPrefab; // 通常弾
+            GameObject normalBullet = bulletPrefab; // 通常弾
 
             // 属性弾が解放されてる場合、30%の確率で置き換える☆
-            //if (stats.unlockedElementalBullets != null &&
-            //    stats.unlockedElementalBullets.Length > 0 &&
-            //    Random.value < stats.elementalBulletChance)
-            //{
-            //    int index = Random.Range(0, stats.unlockedElementalBullets.Length);
-            //    normalBullet = stats.unlockedElementalBullets[index]; // 解放された属性弾の中からランダムで一つ選ぶ
-            //    Debug.Log("属性弾開放");
-            //}
+            if (stats.unlockedElementalBullets != null &&
+                stats.unlockedElementalBullets.Length > 0 &&
+                Random.value < stats.elementalBulletChance)
+            {
+                int index = Random.Range(0, stats.unlockedElementalBullets.Length);
+                normalBullet = stats.unlockedElementalBullets[index]; // 解放された属性弾の中からランダムで一つ選ぶ
+                Debug.Log("属性弾開放");
+            }
 
             // Instantiate するのはここで☆
-           // GameObject bulletInstance = Instantiate(normalBullet, muzzle.position, muzzle.rotation);
-
-            GameObject normalBullet = Instantiate(bulletPrefab, muzzle.position, muzzle.rotation);
+            GameObject bulletInstance = Instantiate(normalBullet, muzzle.position, muzzle.rotation);
 
             // ダメージ設定☆
-            Bullet bulletScript = normalBullet.GetComponent<Bullet>();
+            Bullet bulletScript = bulletInstance.GetComponent<Bullet>();
             if (bulletScript != null)
             {
                 bulletScript.SetDamage(stats.bulletDamage);
                 Debug.Log("現在ダメージ : " + stats.bulletDamage);
             }
 
-            Rigidbody2D rb = normalBullet.GetComponent<Rigidbody2D>();
+            Rigidbody2D rb = bulletInstance.GetComponent<Rigidbody2D>();
 
             // ★ muzzleの向きに飛ばす
             Vector2 dir = muzzle.right;
-
             rb.linearVelocity = dir * bulletSpeed;
 
             currentAmmo--;
