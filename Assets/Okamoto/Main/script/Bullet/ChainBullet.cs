@@ -16,6 +16,9 @@ public class ChainBullet : MonoBehaviour
     public AudioClip hitSound;
     private LineRenderer lr;
 
+    public GameObject ammoDropPrefab; // この弾に対応するUIのプレハブ☆
+    public Sprite ammoUISprite; // 弾UI用画像☆
+
     void Awake()
     {
         lr = GetComponent<LineRenderer>();

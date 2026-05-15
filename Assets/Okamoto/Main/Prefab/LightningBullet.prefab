@@ -56,6 +56,8 @@ MonoBehaviour:
   lightningPrefab: {fileID: 4514482655411187178, guid: 70492705cbd050b45b3492ec316dddbd, type: 3}
   hitEffectPrefab: {fileID: 6792142387433316357, guid: ed91730f85068c248a3b10450adefcb5, type: 3}
   hitSound: {fileID: 8300000, guid: 92202c2a4fa23c445820a27fcf2f61f4, type: 3}
+  ammoDropPrefab: {fileID: 5431272660784949491, guid: 59c1a1cf82a32ed419e3dafc1bfda765, type: 3}
+  ammoUISprite: {fileID: 8450537012972342862, guid: bcdad1804b565a0489879a3791651db1, type: 3}
 --- !u!212 &298442216506815025
 SpriteRenderer:
   serializedVersion: 2

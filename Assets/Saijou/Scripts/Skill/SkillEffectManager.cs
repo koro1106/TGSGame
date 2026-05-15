@@ -8,6 +8,7 @@ public class SkillEffectManager : MonoBehaviour
 {
     [SerializeField]　PlayerStats playerStats;
 
+   // public GunController gunController;
     /// <summary>
     /// スキル効果適用
     /// </summary>
@@ -50,6 +51,13 @@ public class SkillEffectManager : MonoBehaviour
             playerStats.unlockedElementalBullets = list.ToArray();
 
             Debug.Log("解放された属性弾: " + bulletPrefab.name);
+
+            // ここでGunControllerに追加
+            //if (gunController != null)
+            //{
+            //    gunController.AddElementalBullet(bulletPrefab);
+            //}
+
         }
     }
 

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3302720655613419686}
   - component: {fileID: 2447125007672265321}
   m_Layer: 5
-  m_Name: Image
+  m_Name: LightningBulletImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -89,7 +89,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8445716477887776210, guid: f3a2950e95b2b1b45801d3f30d58d261, type: 3}
+  m_Sprite: {fileID: 8450537012972342862, guid: bcdad1804b565a0489879a3791651db1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
