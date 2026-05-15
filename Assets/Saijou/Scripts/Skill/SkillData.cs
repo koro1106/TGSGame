@@ -22,6 +22,9 @@ public class SkillData : ScriptableObject
 
     public SkillEffectType effectType; // スキル効果タイプ
     public float effectValue = 1;
+
+    // 属性弾解放用
+    public GameObject elementalBulletPrefab; // UnlockElementalBullet用
     /// <summary>
     /// 現在の経験値取得
     /// </summary>
