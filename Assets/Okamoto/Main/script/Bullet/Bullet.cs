@@ -7,6 +7,8 @@ public class Bullet : MonoBehaviour
 
     private Vector2 direction;
 
+    public GameObject ammoDropPrefab; // この弾に対応するUIのプレハブ☆
+    public Sprite ammoUISprite; // 弾UI用画像☆
     void Start()
     {
         Destroy(gameObject, lifeTime);
