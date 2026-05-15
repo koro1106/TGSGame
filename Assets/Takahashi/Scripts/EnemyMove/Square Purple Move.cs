@@ -4,17 +4,17 @@ public class EnemyMove : MonoBehaviour
 {
     enum State
     {
-        Enter, // 画面に入るまで
+        Enter, // 画面外から侵入
         Float  // 画面内で漂う
     }
 
     State state = State.Enter;
 
-    Vector2 direction;
+    Vector2 direction;   // 移動方向
     float changeTime = 2f;
     float timer;
 
-    Vector2 target;
+    Vector2 target;       // 中央ターゲット
 
     [Header("速度")]
     public float enterSpeed = 4f;
@@ -23,16 +23,21 @@ public class EnemyMove : MonoBehaviour
     [Header("スポーン位置の外側距離")]
     public float spawnOffset = 2f;
 
+    private SpriteRenderer sr; // ★向き反転用
+
     void Start()
     {
-        // ① 画面外にスポーン
+        // 画面外にスポーン
         transform.position = GetSpawnPosition();
 
-        // ② 中央へ向かう（侵入用）
+        // 中央へ向かう
         target = Vector2.zero;
 
-        // ③ 漂い初期方向
+        // ランダム方向初期化
         SetRandomDirection();
+
+        // SpriteRenderer取得（向き反転用）
+        sr = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -45,18 +50,21 @@ public class EnemyMove : MonoBehaviour
         {
             FloatMove();
         }
+
+        // ★移動方向に応じて向きを変える
+        FlipSprite();
     }
 
     //========================
-    // 外から画面に入る
+    // 画面外→画面内へ侵入
     //========================
     void MoveToScreen()
     {
-        // 強制的に中央方向へ（壁や方向無視）
         Vector2 dir = (target - (Vector2)transform.position).normalized;
+
         transform.Translate(dir * enterSpeed * Time.deltaTime);
 
-        // 画面内に入ったら漂いへ
+        // 画面に入ったら状態変更
         if (IsInsideScreen())
         {
             state = State.Float;
@@ -64,12 +72,13 @@ public class EnemyMove : MonoBehaviour
     }
 
     //========================
-    // 漂い移動
+    // 画面内で漂う
     //========================
     void FloatMove()
     {
         timer += Time.deltaTime;
 
+        // 一定時間ごとに方向変更
         if (timer > changeTime)
         {
             SetRandomDirection();
@@ -78,6 +87,7 @@ public class EnemyMove : MonoBehaviour
 
         transform.Translate(direction * floatSpeed * Time.deltaTime);
 
+        // 画面外に出ないよう反射
         StayInScreen();
     }
 
@@ -87,6 +97,22 @@ public class EnemyMove : MonoBehaviour
     void SetRandomDirection()
     {
         direction = Random.insideUnitCircle.normalized;
+    }
+
+    //========================
+    // スプライト反転処理
+    //========================
+    void FlipSprite()
+    {
+        if (sr == null) return;
+
+        // 右に動く → 左向き（反対）
+        if (direction.x > 0)
+            sr.flipX = true;
+
+        // 左に動く → 右向き（反対）
+        else if (direction.x < 0)
+            sr.flipX = false;
     }
 
     //========================
@@ -105,10 +131,13 @@ public class EnemyMove : MonoBehaviour
         {
             case 0: // 上
                 return new Vector2(Random.Range(-width / 2, width / 2), height / 2 + spawnOffset);
+
             case 1: // 下
                 return new Vector2(Random.Range(-width / 2, width / 2), -height / 2 - spawnOffset);
+
             case 2: // 右
                 return new Vector2(width / 2 + spawnOffset, Random.Range(-height / 2, height / 2));
+
             default: // 左
                 return new Vector2(-width / 2 - spawnOffset, Random.Range(-height / 2, height / 2));
         }
@@ -129,7 +158,7 @@ public class EnemyMove : MonoBehaviour
     }
 
     //========================
-    // 画面内に留める（反射）
+    // 画面内反射移動
     //========================
     void StayInScreen()
     {
