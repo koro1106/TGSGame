@@ -6,7 +6,14 @@ public class GunController : MonoBehaviour
 {
     public Transform gunPivot;
     public Transform muzzle;
-    public GameObject bulletPrefab;
+
+    // ▼追加
+    // 複数の弾PrefabをInspectorに入れる
+    public GameObject[] bulletPrefabs;
+
+    // ▼追加
+    // 現在使っている弾番号
+    private int currentBulletIndex = 0;
 
     public float fireRate = 0.1f;
     public float bulletSpeed = 15f;
@@ -69,6 +76,7 @@ public class GunController : MonoBehaviour
         {
             ammoUI[i].enabled = true;
         }
+
         UpdateAmmoUI();
 
         sensitivityText.text = "感度 : " + sensitivity.ToString("F1");
@@ -88,6 +96,41 @@ public class GunController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             StartReload();
+        }
+
+        // ▼追加
+        // 数字キーで弾を切り替える
+        ChangeBullet();
+    }
+
+    // ▼追加
+    // 弾切り替え処理
+    void ChangeBullet()
+    {
+        // 1キーで1番目の弾
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            currentBulletIndex = 0;
+        }
+
+        // 2キーで2番目の弾
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            // 配列に2個以上ある時だけ
+            if (bulletPrefabs.Length > 1)
+            {
+                currentBulletIndex = 1;
+            }
+        }
+
+        // 3キーで3番目の弾
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            // 配列に3個以上ある時だけ
+            if (bulletPrefabs.Length > 2)
+            {
+                currentBulletIndex = 2;
+            }
         }
     }
 
@@ -133,7 +176,10 @@ public class GunController : MonoBehaviour
         {
             if (currentAmmo <= 0) return;
 
-            GameObject normalBullet = bulletPrefab; // 通常弾
+            // ▼変更
+            // 現在選択中の弾を取得
+            GameObject normalBullet =
+                bulletPrefabs[currentBulletIndex];
 
             // 属性弾が解放されてる場合、30%の確率で置き換える☆
             if (stats.unlockedElementalBullets != null &&
@@ -141,15 +187,22 @@ public class GunController : MonoBehaviour
                 Random.value < stats.elementalBulletChance)
             {
                 int index = Random.Range(0, stats.unlockedElementalBullets.Length);
-                normalBullet = stats.unlockedElementalBullets[index]; // 解放された属性弾の中からランダムで一つ選ぶ
+
+                normalBullet = stats.unlockedElementalBullets[index];
+
+                // 解放された属性弾の中からランダムで一つ選ぶ
                 Debug.Log("属性弾開放");
             }
 
             // Instantiate するのはここで☆
-            GameObject bulletInstance = Instantiate(normalBullet, muzzle.position, muzzle.rotation);
+            GameObject bulletInstance =
+                Instantiate(normalBullet,
+                muzzle.position,
+                muzzle.rotation);
 
             // ダメージ設定☆
             Bullet bulletScript = bulletInstance.GetComponent<Bullet>();
+
             if (bulletScript != null)
             {
                 bulletScript.SetDamage(stats.bulletDamage);
@@ -162,6 +215,8 @@ public class GunController : MonoBehaviour
             Vector2 dir = muzzle.right;
             rb.linearVelocity = dir * bulletSpeed;
 
+            // ▼ここは共通弾数
+            // どの弾でもMAXAMMO分だけ撃てる
             currentAmmo--;
 
             CameraShake.Instance.Shake();
@@ -170,6 +225,7 @@ public class GunController : MonoBehaviour
 
             // UI処理
             Image img = ammoUI[currentAmmo];
+
             if (img != null)
             {
                 // ★ 落ちるUIを生成
