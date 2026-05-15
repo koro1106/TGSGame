@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class penetratingbullet : MonoBehaviour
 {
     public float lifeTime = 5f; // 5ïbå„Ç…è¡Ç¶ÇÈ
     [SerializeField] private int damage;
