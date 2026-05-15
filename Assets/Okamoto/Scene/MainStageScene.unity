@@ -1092,7 +1092,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GunController
   gunPivot: {fileID: 1328722430}
   muzzle: {fileID: 1936952536}
-  bulletPrefab: {fileID: 2218497407943198192, guid: 2943e97c84661314baf0a600180bff0d, type: 3}
+  bulletPrefabs:
+  - {fileID: 2218497407943198192, guid: 2943e97c84661314baf0a600180bff0d, type: 3}
+  - {fileID: 6812141048282945842, guid: 422d710f4cfeb084d880cf1fcecc60f9, type: 3}
+  - {fileID: 2218497407943198192, guid: 7eccedd1dfe352d4fa83bfbac0fde328, type: 3}
   fireRate: 0.1
   bulletSpeed: 2000
   maxAmmo: 10
