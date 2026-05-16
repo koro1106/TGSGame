@@ -1087,7 +1087,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GunController
   gunPivot: {fileID: 1328722430}
   muzzle: {fileID: 1936952536}
-  bulletPrefabs: []
+  bulletPrefabs:
+  - {fileID: 0}
   fireRate: 0.1
   bulletSpeed: 2000
   maxAmmo: 10
@@ -6272,7 +6273,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemyPrefab: {fileID: 7173860325025810464, guid: fd82647a7b72c544e89b53d67c4a63b9, type: 3}
+  player: {fileID: 0}
   spawnInterval: 2
+  baseHP: 10
 --- !u!4 &1683393130
 Transform:
   m_ObjectHideFlags: 0
