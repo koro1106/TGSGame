@@ -5,6 +5,7 @@ public class DamageText : MonoBehaviour
 {
     private TextMeshPro text;
 
+    [Header("表示時間")]
     public float lifeTime = 1f;
 
     [Header("ジャンプ設定")]
@@ -22,7 +23,11 @@ public class DamageText : MonoBehaviour
     {
         text.text = damage.ToString();
 
-        // ダメージごとに色変更
+        // 通常色
+        text.color = Color.white;
+        text.fontSize = 100;
+        text.fontStyle = FontStyles.Normal;
+        /* ダメージごとに色変更
         if (damage < 11)
         {
             text.color = Color.white; // 小ダメージ
@@ -34,9 +39,21 @@ public class DamageText : MonoBehaviour
         else
         {
             text.color = Color.red; // 大ダメージ
-        }
+        }*/
     }
 
+    //クリティカル表示
+    public void SetCritical()
+    {
+        //色変更
+        text.color = new Color(1f, 0.5f, 0f);
+
+        //サイズ大きく
+        text.fontSize *= 1.5f;
+
+        //太字
+        text.fontStyle = FontStyles.Bold;
+    }
     void Start()
     {
         // 上方向に初速を与える
