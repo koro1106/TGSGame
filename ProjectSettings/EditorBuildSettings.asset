@@ -14,5 +14,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Saijou/Scene/PrestageSkillTreeScene.unity
     guid: f56b03d8ee728ab4886cb549f23c5472
+  - enabled: 1
+    path: Assets/ICHIKWASAIKYOUFILE/Scene/TitleScene.unity
+    guid: 6800216a3fea5ae4dad3e632439190dd
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
