@@ -9,13 +9,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 698859006654042122}
-  - component: {fileID: 312254605513926487}
+  - component: {fileID: -7608345171791579652}
   - component: {fileID: 6253829430372542568}
   - component: {fileID: -1994986234973849187}
   - component: {fileID: -4717636454762612078}
   m_Layer: 0
-  m_Name: Bullet
-  m_TagString: Enemy
+  m_Name: GravityBullet
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -35,7 +35,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &312254605513926487
+--- !u!114 &-7608345171791579652
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,13 +44,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 2218497407943198192}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 552e94e4e771db44e9184794f3daf854, type: 3}
+  m_Script: {fileID: 11500000, guid: 4899de47e0995d94f8dbbf3db36b11d1, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::GravityBullet
   lifeTime: 5
-  damage: 10
-  ammoDropPrefab: {fileID: 5431272660784949491, guid: c5b1c4050c4821447bbd84aa65aec6a0, type: 3}
-  ammoUISprite: {fileID: -8445716477887776210, guid: f3a2950e95b2b1b45801d3f30d58d261, type: 3}
+  damage: 0
+  gravityRadius: 1000
+  pullForce: 700
+  gravityDuration: 4
+  gravityEffect: {fileID: 0}
 --- !u!212 &6253829430372542568
 SpriteRenderer:
   serializedVersion: 2
@@ -101,7 +103,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.54801834, g: 0.28462088, b: 0.735849, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -160,8 +162,8 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_AngularDamping: 0
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -171,5 +173,5 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
+  m_CollisionDetection: 1
+  m_Constraints: 4
