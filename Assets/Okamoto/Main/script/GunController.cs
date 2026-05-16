@@ -336,7 +336,7 @@ public class GunController : MonoBehaviour
                 bulletScript.SetDamage(stats.bulletDamage);
 
             Rigidbody2D rb = bulletInstance.GetComponent<Rigidbody2D>();
-            rb.velocity = muzzle.right * bulletSpeed;
+            rb.linearVelocity = muzzle.right * bulletSpeed;
 
             currentAmmo--;
 
