@@ -61,14 +61,14 @@ public class EnemyHP : MonoBehaviour
     }
 
     // ダメージ処理
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, bool isCritical = false )
     {
         if (isDying) return;
 
         currentHP -= damage;              // HP減少
         currentHP = Mathf.Max(currentHP, 0); // 0以下防止
 
-        ShowDamage(damage); // ダメージ表示
+        ShowDamage(damage,isCritical); // ダメージ表示
         UpdateScale();      // 見た目更新
 
         if (currentHP <= 0)
@@ -151,7 +151,7 @@ public class EnemyHP : MonoBehaviour
     }
 
     // ダメージUI表示
-    void ShowDamage(int damage)
+    void ShowDamage(int damage , bool isCritical)
     {
         if (damageText == null) return;
 
@@ -164,6 +164,14 @@ public class EnemyHP : MonoBehaviour
         DamageText dmg = obj.GetComponent<DamageText>();
 
         if (dmg != null)
+        {
             dmg.SetDamage(damage);
+            //クリティカルなら特別表示
+            if(isCritical)
+            {
+                dmg.SetCritical();
+            }
+        }
+           
     }
 }
