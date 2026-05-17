@@ -39,7 +39,11 @@ public class GunController : MonoBehaviour
     [Range(0.1f, 10f)]
     public float sensitivity = 1f;
 
-    public Image[] ammoUI;
+    [Header("弾UI画像")]
+    public Sprite normalAmmoSprite;
+    public Sprite lightningAmmoSprite;
+
+    public AmmoSlot[] ammoSlots;
     public TMP_Text ammoText;
 
     public RectTransform crosshair; // UIのクロスヘア
@@ -82,14 +86,11 @@ public class GunController : MonoBehaviour
         gunImage.localPosition = new Vector3(0.5f, 0, 0);
         defaultLocalPos = gunImage.localPosition; // ★ 初期位置保存
 
-        for (int i = 0; i < ammoUI.Length; i++)
-        {
-            ammoUI[i].enabled = true;
-        }
-
         UpdateAmmoUI();
 
         sensitivityText.text = "感度 : " + sensitivity.ToString("F1");
+
+        GenerateAmmo();
     }
 
     void Update()
@@ -106,41 +107,6 @@ public class GunController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             StartReload();
-        }
-
-        // ▼追加
-        // 数字キーで弾を切り替える
-        ChangeBullet();
-    }
-
-    // ▼追加
-    // 弾切り替え処理
-    void ChangeBullet()
-    {
-        // 1キーで1番目の弾
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            currentBulletIndex = 0;
-        }
-
-        // 2キーで2番目の弾
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            // 配列に2個以上ある時だけ
-            if (bulletPrefabs.Length > 1)
-            {
-                currentBulletIndex = 1;
-            }
-        }
-
-        // 3キーで3番目の弾
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            // 配列に3個以上ある時だけ
-            if (bulletPrefabs.Length > 2)
-            {
-                currentBulletIndex = 2;
-            }
         }
     }
 
@@ -180,178 +146,108 @@ public class GunController : MonoBehaviour
 
     void Shoot()
     {
-        //fireTimer += Time.deltaTime;
-
-        //if (Input.GetMouseButton(0) && fireTimer >= fireRate)
-        //{
-        //    if (currentAmmo <= 0) return;
-
-        //    // ▼変更
-        //    // 現在選択中の弾を取得
-        //    GameObject normalBullet =
-        //        bulletPrefabs[currentBulletIndex];
-
-        //    // 属性弾が解放されてる場合、30%の確率で置き換える☆
-        //    if (stats.unlockedElementalBullets != null &&
-        //        stats.unlockedElementalBullets.Length > 0 &&
-        //        Random.value < stats.elementalBulletChance)
-        //    {
-        //        int index = Random.Range(0, stats.unlockedElementalBullets.Length);
-
-        //        normalBullet = stats.unlockedElementalBullets[index];
-
-        //        // 解放された属性弾の中からランダムで一つ選ぶ
-        //        Debug.Log("属性弾開放");
-        //    }
-
-        //    // Instantiate するのはここで☆
-        //    GameObject bulletInstance =
-        //        Instantiate(normalBullet,
-        //        muzzle.position,
-        //        muzzle.rotation);
-
-        //    // ダメージ設定☆
-        //    Bullet bulletScript = bulletInstance.GetComponent<Bullet>();
-        //    ChainBullet chainScript = bulletInstance.GetComponent<ChainBullet>();
-
-        //    if (bulletScript != null)
-        //    {
-        //        bulletScript.SetDamage(stats.bulletDamage);
-        //        Debug.Log("現在ダメージ : " + stats.bulletDamage);
-        //    }
-
-
-        //    Rigidbody2D rb = bulletInstance.GetComponent<Rigidbody2D>();
-
-        //    // ★ muzzleの向きに飛ばす
-        //    Vector2 dir = muzzle.right;
-        //    rb.linearVelocity = dir * bulletSpeed;
-
-        //    // ▼ここは共通弾数
-        //    // どの弾でもMAXAMMO分だけ撃てる
-        //    currentAmmo--;
-
-        //    CameraShake.Instance.Shake();
-        //    PlayerHP.Instance.TakeDamage(1);
-
-        //    // UI用プレハブ決定
-        //    GameObject dropPrefab = ammoDropPrefab; // デフォルトは通常弾
-        //    if (bulletScript != null && bulletScript.ammoDropPrefab != null)
-        //    {
-        //        dropPrefab = bulletScript.ammoDropPrefab;
-        //    }
-        //    else if (chainScript != null && chainScript.ammoDropPrefab != null)
-        //    {
-        //        dropPrefab = chainScript.ammoDropPrefab; // 雷属性弾
-        //    }
-
-        //    // UI処理
-        //    Image img = ammoUI[currentAmmo]; // ここでUIの右端を取得
-
-        //    if (img != null)
-        //    {
-        //        // 弾の種類に応じて Image を差し替え
-        //        Sprite uiSprite = null;
-        //        if (bulletScript != null && bulletScript.ammoUISprite != null)
-        //            uiSprite = bulletScript.ammoUISprite;
-        //        else if (chainScript != null && chainScript.ammoUISprite != null)
-        //            uiSprite = chainScript.ammoUISprite;
-
-        //        if (uiSprite != null)
-        //            img.sprite = uiSprite;
-
-        //        // 弾を落とす演出
-        //        GameObject drop = Instantiate(dropPrefab, img.transform.position, Quaternion.identity, img.transform.parent);
-        //        drop.transform.localScale = img.transform.localScale;
-
-        //        img.enabled = false; // 元UIは非表示
-        //    }
-
-        //    UpdateAmmoUI();
-        //    fireTimer = 0;
-        //}
         fireTimer += Time.deltaTime;
 
         if (Input.GetMouseButton(0) && fireTimer >= fireRate)
         {
+            // 弾切れ
             if (currentAmmo <= 0) return;
 
-            // UIの右端インデックスを取得
+            // =========================
+            // 右端の弾UI取得
+            // =========================
             int uiIndex = currentAmmo - 1;
-            if (uiIndex < 0 || uiIndex >= ammoUI.Length) uiIndex = 0;
 
-            Image img = ammoUI[uiIndex];
+            // 念のため範囲チェック
+            if (uiIndex < 0 || uiIndex >= ammoSlots.Length)
+                return;
 
-            // 発射する弾をUIに合わせて決定
-            GameObject bulletToShoot = bulletPrefabs[currentBulletIndex]; // デフォルト
-            Bullet bulletScript = bulletToShoot.GetComponent<Bullet>();
-            ChainBullet chainScript = bulletToShoot.GetComponent<ChainBullet>();
-            GameObject dropPrefab = null;
+            // 現在使う弾スロット
+            AmmoSlot slot = ammoSlots[uiIndex];
 
-            // 属性弾が解放されている場合、ランダムで置き換え
-            if (stats.unlockedElementalBullets != null &&
-                stats.unlockedElementalBullets.Length > 0 &&
-                Random.value < stats.elementalBulletChance)
+            // UI画像
+            Image img = slot.image;
+
+            // =========================
+            // 発射する弾を決定
+            // =========================
+
+            // デフォルトは通常弾
+            GameObject bulletToShoot = bulletPrefabs[0];
+
+            // 弾タイプで変更
+            switch (slot.ammoType)
             {
-                int index = Random.Range(0, stats.unlockedElementalBullets.Length);
-                bulletToShoot = stats.unlockedElementalBullets[index];
+                // 通常弾
+                case AmmoType.Normal:
+                    bulletToShoot = bulletPrefabs[0];
+                    break;
 
-                bulletScript = bulletToShoot.GetComponent<Bullet>();
-                chainScript = bulletToShoot.GetComponent<ChainBullet>();
-
-                // 属性弾の落下Prefabを優先
-                if (bulletScript != null && bulletScript.ammoDropPrefab != null)
-                    dropPrefab = bulletScript.ammoDropPrefab;
-                else if (chainScript != null && chainScript.ammoDropPrefab != null)
-                    dropPrefab = chainScript.ammoDropPrefab;
-
-                Debug.Log("属性弾開放");
-            }
-            else
-            {
-                // 通常弾の場合は配列 ammoDropPrefabs から取得
-                if (ammoDropPrefabs != null &&
-                    currentBulletIndex >= 0 &&
-                    currentBulletIndex < ammoDropPrefabs.Length)
-                {
-                    dropPrefab = ammoDropPrefabs[currentBulletIndex];
-                }
+                // 雷属性弾
+                case AmmoType.Lightning:
+                    bulletToShoot = bulletPrefabs[1];
+                    break;
             }
 
-            // UIのスプライトを弾に合わせる
-            if (img != null)
-            {
-                Sprite uiSprite = null;
-                if (bulletScript != null) uiSprite = bulletScript.ammoUISprite;
-                else if (chainScript != null) uiSprite = chainScript.ammoUISprite;
+            // =========================
+            // 弾スクリプト取得
+            // =========================
+            Bullet bulletScript =
+                bulletToShoot.GetComponent<Bullet>();
 
-                if (uiSprite != null)
-                    img.sprite = uiSprite;
-            }
+            ChainBullet chainScript =
+                bulletToShoot.GetComponent<ChainBullet>();
 
-            // 弾発射
-            GameObject bulletInstance = Instantiate(bulletToShoot, muzzle.position, muzzle.rotation);
+            // =========================
+            // 弾生成
+            // =========================
+            GameObject bulletInstance =
+                Instantiate(
+                    bulletToShoot,
+                    muzzle.position,
+                    muzzle.rotation);
 
+            // =========================
+            // ダメージ設定
+            // =========================
             if (bulletScript != null)
+            {
                 bulletScript.SetDamage(stats.bulletDamage);
+            }
 
-            Rigidbody2D rb = bulletInstance.GetComponent<Rigidbody2D>();
-            rb.linearVelocity = muzzle.right * bulletSpeed;
+            // =========================
+            // 発射方向
+            // =========================
+            Rigidbody2D rb =
+                bulletInstance.GetComponent<Rigidbody2D>();
 
+            rb.linearVelocity =
+                muzzle.right * bulletSpeed;
+
+            // =========================
+            // 弾消費
+            // =========================
             currentAmmo--;
 
-            CameraShake.Instance.Shake();
-            PlayerHP.Instance.TakeDamage(1);
-
-            // UIの落下演出
-            if (img != null && dropPrefab != null)
+            // UIを消す
+            if (img != null)
             {
-                GameObject drop = Instantiate(dropPrefab, img.transform.position, Quaternion.identity, img.transform.parent);
-                drop.transform.localScale = img.transform.localScale;
                 img.enabled = false;
             }
 
+            // =========================
+            // 演出
+            // =========================
+            CameraShake.Instance.Shake();
+
+            PlayerHP.Instance.TakeDamage(1);
+
+            // =========================
+            // UI更新
+            // =========================
             UpdateAmmoUI();
+
+            // 発射間隔リセット
             fireTimer = 0;
         }
     }
@@ -366,11 +262,6 @@ public class GunController : MonoBehaviour
         // ★UIだけ即満タン表示
         ammoText.text = maxAmmo + " / " + maxAmmo;
 
-        for (int i = 0; i < ammoUI.Length; i++)
-        {
-            ammoUI[i].enabled = true;
-        }
-
         StartCoroutine(Reload());
     }
 
@@ -381,9 +272,36 @@ public class GunController : MonoBehaviour
         yield return new WaitForSeconds(reloadTime);
 
         currentAmmo = maxAmmo;
+        GenerateAmmo(); // 弾の内容決める
         isReloading = false;
     }
 
+    // 弾内容決める
+    void GenerateAmmo()
+    {
+        for(int i = 0; i < ammoSlots.Length; i++)
+        {
+            AmmoSlot slot = ammoSlots[i];
+
+            // デフォルト通常弾
+            slot.ammoType = AmmoType.Normal;
+            slot.image.sprite = normalAmmoSprite;
+
+            // 属性弾抽選
+            bool canElement =
+                stats.unlockedElementalBullets != null &&
+                stats.unlockedElementalBullets.Length > 0;
+
+            if (canElement &&
+           Random.value < stats.elementalBulletChance)
+            {
+                slot.ammoType = AmmoType.Lightning;
+                slot.image.sprite = lightningAmmoSprite;
+            }
+
+            slot.image.enabled = true;
+        }
+    }
     void UpdateAmmoUI()
     {
         ammoText.text = currentAmmo + " / " + maxAmmo;

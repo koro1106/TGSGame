@@ -1432,7 +1432,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillTreeChange
   uiAnimation: {fileID: 26492057}
   targetButton: {fileID: 1182972330}
-  sceneName: MainStageScene
+  sceneName: MainStageScene 1
   animationTime: 0.3
 --- !u!1 &1220820719
 GameObject:
