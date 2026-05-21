@@ -172,4 +172,4 @@ MonoBehaviour:
   speed: 500
   damage: 10
   criticalChance: 50
-  criticalMultiplier: 9800
+  criticalMultiplier: 10

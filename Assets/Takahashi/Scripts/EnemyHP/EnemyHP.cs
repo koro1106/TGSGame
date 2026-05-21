@@ -22,7 +22,8 @@ public class EnemyHP : MonoBehaviour
     public float rotationSpeed = 1080f;  // 回転速度
 
     [Header("ドロップ")]
-    public GameObject dropPrefab; // ドロップアイテム
+    public GameObject dropPrefab;
+    public int dropCount = 1; 
 
     [Header("ダメージ表示")]
     public GameObject damageText; // ダメージUI
@@ -116,8 +117,23 @@ public class EnemyHP : MonoBehaviour
 
         // ドロップ生成
         if (dropPrefab != null)
-            Instantiate(dropPrefab, transform.position, Quaternion.identity);
+        {
+            for (int i = 0; i < dropCount; i++)
+            {
+                // 少しバラけて出す
+                Vector3 offset = new Vector3(
+                    Random.Range(-50f, 50f),
+                    Random.Range(-50f, 50f),
+                    0
+                );
 
+                Instantiate(
+                    dropPrefab,
+                    transform.position + offset,
+                    Quaternion.identity
+                );
+            }
+        }
         Vector3 startScale = transform.localScale;
         float timer = 0f;
 
