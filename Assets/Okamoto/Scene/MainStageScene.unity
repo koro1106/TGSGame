@@ -1087,8 +1087,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GunController
   gunPivot: {fileID: 1328722430}
   muzzle: {fileID: 1936952536}
-  bulletPrefabs:
-  - {fileID: 0}
+  bulletPrefabs: []
   fireRate: 0.1
   bulletSpeed: 2000
   maxAmmo: 10
@@ -1099,17 +1098,29 @@ MonoBehaviour:
   gunImage: {fileID: 173762202}
   sensitivityText: {fileID: 104283591}
   sensitivity: 1
-  ammoUI:
-  - {fileID: 31427388}
-  - {fileID: 696019186}
-  - {fileID: 197047195}
-  - {fileID: 825680858}
-  - {fileID: 359120282}
-  - {fileID: 783387190}
-  - {fileID: 165047445}
-  - {fileID: 1493139783}
-  - {fileID: 475326263}
-  - {fileID: 1752819500}
+  normalAmmoSprite: {fileID: -8445716477887776210, guid: f3a2950e95b2b1b45801d3f30d58d261, type: 3}
+  lightningAmmoSprite: {fileID: 8450537012972342862, guid: bcdad1804b565a0489879a3791651db1, type: 3}
+  ammoSlots:
+  - ammoType: 0
+    image: {fileID: 31427388}
+  - ammoType: 0
+    image: {fileID: 696019186}
+  - ammoType: 0
+    image: {fileID: 197047195}
+  - ammoType: 0
+    image: {fileID: 825680858}
+  - ammoType: 0
+    image: {fileID: 359120282}
+  - ammoType: 0
+    image: {fileID: 783387190}
+  - ammoType: 0
+    image: {fileID: 165047445}
+  - ammoType: 0
+    image: {fileID: 1493139783}
+  - ammoType: 0
+    image: {fileID: 475326263}
+  - ammoType: 0
+    image: {fileID: 1752819500}
   ammoText: {fileID: 1212407996}
   crosshair: {fileID: 360144202}
   ammoDropPrefabs:
