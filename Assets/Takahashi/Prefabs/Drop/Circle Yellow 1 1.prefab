@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3403791600263971821
+--- !u!1 &5214269435395224199
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6860620927307723645}
-  - component: {fileID: 1489791059200301632}
-  - component: {fileID: 5684001227176045637}
+  - component: {fileID: 8836491075074479158}
+  - component: {fileID: 592435709731812905}
+  - component: {fileID: 7542314578787393249}
   m_Layer: 0
-  m_Name: Circle Yellow
+  m_Name: Circle Yellow 1 1
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6860620927307723645
+--- !u!4 &8836491075074479158
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3403791600263971821}
+  m_GameObject: {fileID: 5214269435395224199}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5, y: -3, z: 0}
-  m_LocalScale: {x: 125, y: 125, z: 125}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 519.1137, y: 19.67869, z: 0}
+  m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &1489791059200301632
+--- !u!212 &592435709731812905
 SpriteRenderer:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3403791600263971821}
+  m_GameObject: {fileID: 5214269435395224199}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -82,8 +82,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 1f93124787a465c4eacbae6684c6370f, type: 3}
-  m_Color: {r: 1, g: 0.9243319, b: 0, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 1e9ddb04e251e8541a5c177cebf03680, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -92,19 +92,22 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &5684001227176045637
+--- !u!114 &7542314578787393249
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3403791600263971821}
+  m_GameObject: {fileID: 5214269435395224199}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 756a3aa13f4b19f4f9cb35d3c7fb2e99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DropBounce
   moveSpeed: 40
-  bounceHeight: 60
+  bounceHeight: 80
   duration: 0.5
-  bounceCount: 3
+  bounceCount: 2
+  minRotateSpeed: 90
+  maxRotateSpeed: 360
+  shadow: {fileID: 636683900075794164, guid: 536db39859af53a47928bcbe00400608, type: 3}

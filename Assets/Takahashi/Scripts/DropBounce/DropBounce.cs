@@ -2,70 +2,87 @@
 
 public class DropBounce : MonoBehaviour
 {
-    [Header("移動設定")]
-    public float moveSpeed = 2f;      // 横方向の移動スピード
-    public float bounceHeight = 1.5f; // 最初のバウンドの高さ
-    public float duration = 0.6f;     // 1回のバウンドにかかる時間
+    [Header("移動")]
+    public float moveSpeed = 2f;
+    public float bounceHeight = 1.5f;
+    public float duration = 0.6f;
+    public int bounceCount = 2;
 
-    [Header("バウンド設定")]
-    public int bounceCount = 2;       // バウンド回数（2回くらいが自然）
+    [Header("回転")]
+    public float minRotateSpeed = 90f;
+    public float maxRotateSpeed = 360f;
 
-    private Vector3 startPos;         // バウンド開始時の基準位置
-    private Vector2 moveDir;          // 横移動の方向
-    private float timer;              // 経過時間
-    private int currentBounce;        // 現在のバウンド回数
+    [Header("影（Quad + テクスチャ）")]
+    [SerializeField] Transform shadow;
 
-    private Vector3 baseScale;        // 元のサイズ
+    private Vector3 startPos;
+    private Vector2 moveDir;
+    private Vector3 baseScale;
+
+    private float timer;
+    private int bounceIndex;
+
+    private float rotateSpeed;
+    private float rotateDir;
+
+    private bool finished;
 
     void Start()
     {
-        // 初期位置を保存（Yの基準になる）
         startPos = transform.position;
-
-        // 元のスケール保存
         baseScale = transform.localScale;
 
-        // ランダムな方向に少し広がる（Xメイン）
         moveDir = Random.insideUnitCircle.normalized;
-
-        // 下に行かないようにYは上方向に補正
         moveDir.y = Mathf.Abs(moveDir.y);
+
+        rotateSpeed = Random.Range(minRotateSpeed, maxRotateSpeed);
+        rotateDir = Random.value < 0.5f ? -1f : 1f;
     }
 
     void Update()
     {
-        // 時間経過
-        timer += Time.deltaTime;
+        if (finished)
+        {
+            FixShadow();
+            return;
+        }
 
-        // 0〜1に正規化（バウンド1回分の進行度）
+        timer += Time.deltaTime;
         float t = timer / duration;
 
-        // 1回のバウンドが終わったら
+        // =====================
+        // バウンド切り替え
+        // =====================
         if (t > 1f)
         {
-            currentBounce++;
+            bounceIndex++;
             timer = 0f;
 
-            // バウンドするたびに高さを半分に（減衰）
             bounceHeight *= 0.5f;
 
-            // 指定回数バウンドしたら停止
-            if (currentBounce >= bounceCount)
+            if (bounceIndex >= bounceCount)
             {
-                enabled = false; // Update止める
+                transform.position = new Vector3(
+                    transform.position.x,
+                    startPos.y,
+                    transform.position.z
+                );
+
+                transform.localScale = baseScale;
+
+                finished = true;
                 return;
             }
         }
 
-        // =========================
-        // 横方向の移動
-        // =========================
+        // =====================
+        // 横移動
+        // =====================
         transform.position += (Vector3)(moveDir * moveSpeed * Time.deltaTime);
 
-        // =========================
-        // 縦のバウンド（超重要）
-        // Sin波で綺麗なジャンプカーブを作る
-        // =========================
+        // =====================
+        // バウンド（上下）
+        // =====================
         float y = Mathf.Sin(t * Mathf.PI) * bounceHeight;
 
         transform.position = new Vector3(
@@ -74,25 +91,46 @@ public class DropBounce : MonoBehaviour
             transform.position.z
         );
 
-        // =========================
-        // スカッシュ＆ストレッチ
-        // =========================
-        // Sinの値を使ってサイズ変化
-        float squash = Mathf.Sin(t * Mathf.PI);
+        // =====================
+        // 回転
+        // =====================
+        transform.Rotate(0, 0, rotateSpeed * rotateDir * Time.deltaTime);
 
-        // 空中で縦に伸びる・横に縮む
-        float scaleY = 1 + squash * 0.2f;
-        float scaleX = 1 - squash * 0.2f;
+        // =====================
+        // 影（テクスチャQuad）
+        // =====================
+        UpdateShadow(y);
+    }
 
-        transform.localScale = new Vector3(
-            baseScale.x * scaleX,
-            baseScale.y * scaleY,
-            1
+    void UpdateShadow(float height)
+    {
+        if (shadow == null) return;
+
+        float t = Mathf.Clamp01(height / bounceHeight);
+
+        // 高いほど小さく＆薄く見える
+        float scale = Mathf.Lerp(1f, 0.4f, t);
+
+        shadow.position = new Vector3(
+            transform.position.x,
+            startPos.y,
+            transform.position.z
         );
 
-        // =========================
-        // 回転（ちょっとだけ付けると自然）
-        // =========================
-        transform.Rotate(0, 0, 180f * Time.deltaTime);
+        // QuadなのでXYじゃなくXZで潰す
+        shadow.localScale = new Vector3(scale, 1f, scale);
+    }
+
+    void FixShadow()
+    {
+        if (shadow == null) return;
+
+        shadow.position = new Vector3(
+            transform.position.x,
+            startPos.y,
+            transform.position.z
+        );
+
+        shadow.localScale = new Vector3(0.7f, 1f, 0.7f);
     }
 }
