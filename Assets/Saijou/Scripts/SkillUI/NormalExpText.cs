@@ -16,7 +16,7 @@ public class NormalExpText : MonoBehaviour
         UpdateExpText();
     }
 
-    void UpdateExpText()
+    public void UpdateExpText()
     {
         expText_1.text = playerData.currentExp_1.ToString();
         expText_2.text = playerData.currentExp_2.ToString();
