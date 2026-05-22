@@ -4,8 +4,10 @@ using System.Collections.Generic;
 
 public class BindBullet : MonoBehaviour
 {
-
     private Vector3 shootStartPos;
+
+    // ‘½dƒqƒbƒg–h~
+    private bool hasHit = false;
 
     //==============================
     // ’eİ’è
@@ -30,85 +32,115 @@ public class BindBullet : MonoBehaviour
     [Header("½İ’è")]
     public GameObject chainPrefab;
 
-    // ½ƒTƒCƒY
     public float chainScale = 1f;
 
-    // ½“¯m‚ÌŠÔŠu’²®
     [Range(0.1f, 3f)]
     public float spacingMultiplier = 0.20f;
 
-    // “G‚Ö‚Ì‚ß‚è‚İ–h~
     public float enemyOffset = 0.5f;
 
-    // Å’áŠÔŠu
     public float minChainSpacing = 0.01f;
 
-
-
-    // ½‚ğ‚Ç‚±‚Ü‚ÅL‚Î‚·‚©
     public float chainExtendLength = 20f;
-    // Å‰‚Ì½‚Ì’·‚³
+
     public float firstChainLength = 30f;
+
+    //==============================
+    // ŠJn
+    //==============================
+
+    void Start()
+    {
+        shootStartPos = transform.position;
+
+        // “G‚É“–‚½‚ç‚È‚©‚Á‚½‚çÁ‚¦‚é
+        StartCoroutine(AutoDestroy());
+    }
+
+    IEnumerator AutoDestroy()
+    {
+        yield return new WaitForSeconds(lifeTime);
+
+        if (!hasHit)
+        {
+            Destroy(gameObject);
+        }
+    }
 
     //==============================
     // Enemy‚É“–‚½‚Á‚½
     //==============================
 
-
-    void Start()
-    {
-        shootStartPos =
-            transform.position;
-    }
     void OnTriggerEnter2D(Collider2D other)
     {
+        // ‘½dƒqƒbƒg–h~
+        if (hasHit)
+            return;
+
         // EnemyˆÈŠO–³‹
         if (!other.CompareTag("Enemy"))
             return;
 
-        // Enemyæ“¾
-        Enemy firstEnemy =
-            other.GetComponent<Enemy>();
+        hasHit = true;
 
-        // –³‚¯‚ê‚ÎI—¹
+        // SlimeEnemyæ“¾
+        SlimeEnemy firstEnemy =
+            other.GetComponent<SlimeEnemy>();
+
         if (firstEnemy == null)
             return;
+
+        // Collider’â~
+        Collider2D col =
+            GetComponent<Collider2D>();
+
+        if (col != null)
+        {
+            col.enabled = false;
+        }
+
+        // Œ©‚½–ÚÁ‚·
+        SpriteRenderer sr =
+            GetComponent<SpriteRenderer>();
+
+        if (sr != null)
+        {
+            sr.enabled = false;
+        }
 
         // S‘©ŠJn
         StartCoroutine(
             BindEnemies(firstEnemy)
         );
-
-        // ’e”ñ•\¦
-        GetComponent<SpriteRenderer>().enabled =
-            false;
-
-        GetComponent<Collider2D>().enabled =
-            false;
     }
 
     //==============================
     // S‘©ˆ—
     //==============================
 
-    IEnumerator BindEnemies(Enemy firstEnemy)
+    IEnumerator BindEnemies(
+        SlimeEnemy firstEnemy
+    )
     {
-        // ’…’eˆÊ’u
+        GameObject chainRoot =
+            new GameObject("ChainRoot");
+
         Vector3 hitPoint =
             firstEnemy.transform.position;
 
-        // ”ÍˆÍ“àæ“¾
         Collider2D[] hits =
             Physics2D.OverlapCircleAll(
                 hitPoint,
                 searchRadius
             );
 
+        //==============================
         // ‘ÎÛEnemy
-        List<Enemy> targets =
-            new List<Enemy>();
+        //==============================
 
-        // Å‰‚Ì“G’Ç‰Á
+        List<SlimeEnemy> targets =
+            new List<SlimeEnemy>();
+
         targets.Add(firstEnemy);
 
         //==============================
@@ -117,51 +149,41 @@ public class BindBullet : MonoBehaviour
 
         while (targets.Count < bindCount)
         {
-            Enemy nearestEnemy = null;
+            SlimeEnemy nearestEnemy = null;
 
             float nearestDistance =
                 Mathf.Infinity;
 
             foreach (Collider2D hit in hits)
             {
-                // EnemyˆÈŠO–³‹
                 if (!hit.CompareTag("Enemy"))
                     continue;
 
-                Enemy enemy =
-                    hit.GetComponent<Enemy>();
+                SlimeEnemy enemy =
+                    hit.GetComponent<SlimeEnemy>();
 
-                // Enemy–³‚¢
                 if (enemy == null)
                     continue;
 
-                // ’Ç‰ÁÏ‚İ
                 if (targets.Contains(enemy))
                     continue;
 
-                // ‹——£
                 float distance =
                     Vector2.Distance(
                         hitPoint,
                         enemy.transform.position
                     );
 
-                // Å‚à‹ß‚¢EnemyXV
                 if (distance < nearestDistance)
                 {
-                    nearestDistance =
-                        distance;
-
-                    nearestEnemy =
-                        enemy;
+                    nearestDistance = distance;
+                    nearestEnemy = enemy;
                 }
             }
 
-            // Œ©‚Â‚©‚ç‚È‚¢
             if (nearestEnemy == null)
                 break;
 
-            // ’Ç‰Á
             targets.Add(nearestEnemy);
         }
 
@@ -169,8 +191,8 @@ public class BindBullet : MonoBehaviour
         // Ú‘±Enemy
         //==============================
 
-        List<Enemy> connectedEnemies =
-            new List<Enemy>();
+        List<SlimeEnemy> connectedEnemies =
+            new List<SlimeEnemy>();
 
         //==============================
         // ½•Û‘¶
@@ -183,18 +205,15 @@ public class BindBullet : MonoBehaviour
         // S‘©ŠJn
         //==============================
 
-        foreach (Enemy enemy in targets)
+        foreach (SlimeEnemy enemy in targets)
         {
-            // S‘©
             enemy.StartBind(bindTime);
 
-            // Å‰‚Ì“G‚Í”ò‚Î‚·
             if (enemy == firstEnemy)
                 continue;
 
             connectedEnemies.Add(enemy);
 
-            // ½ƒŠƒXƒgì¬
             List<GameObject> chains =
                 new List<GameObject>();
 
@@ -211,24 +230,20 @@ public class BindBullet : MonoBehaviour
         Sprite sprite =
             spriteRenderer.sprite;
 
-        // Sprite‰¡•
         float spriteWidth =
             sprite.rect.width /
             sprite.pixelsPerUnit;
 
-        // Scale‚İ
         float spacing =
             spriteWidth *
             chainScale *
             spacingMultiplier;
 
-        // Å’áŠÔŠu
         spacing =
             Mathf.Max(
                 spacing,
                 minChainSpacing
             );
-
 
         //==============================
         // S‘©’†
@@ -240,39 +255,37 @@ public class BindBullet : MonoBehaviour
         {
             timer += Time.deltaTime;
 
+            // EnemyÁ–Å‘Îô
+            if (firstEnemy == null)
+                break;
 
-            //==============================
-            // Å‰‚Ì½
-            //==============================
-
-            Vector3 firstDir =
-                (firstEnemy.transform.position - shootStartPos)
-                .normalized;
-
-            Vector3 firstEnd =
-                firstEnemy.transform.position +
-                firstDir * firstChainLength;
-
-            Debug.DrawLine(
-                shootStartPos,
-                firstEnd,
-                Color.cyan
-            );
-
-            //==============================
-            // ŠeEnemy
-            //==============================
-
-            for (int i = 0;
+            for (
+                int i = 0;
                 i < connectedEnemies.Count;
-                i++)
+                i++
+            )
             {
-                Enemy targetEnemy =
+                SlimeEnemy targetEnemy =
                     connectedEnemies[i];
 
-                // EnemyÁ‚¦‚½
+                List<GameObject> chains =
+                    allChains[i];
+
+                // “GÁ‚¦‚½
                 if (targetEnemy == null)
+                {
+                    foreach (GameObject chain in chains)
+                    {
+                        if (chain != null)
+                        {
+                            Destroy(chain);
+                        }
+                    }
+
+                    chains.Clear();
+
                     continue;
+                }
 
                 //==============================
                 // ŠJnˆÊ’u
@@ -285,27 +298,20 @@ public class BindBullet : MonoBehaviour
                 // I—¹ˆÊ’u
                 //==============================
 
-                // –{“–‚Ì“GˆÊ’u
                 Vector3 realEnd =
                     targetEnemy.transform.position;
 
-                // •ûŒü
                 Vector3 dir =
-                    (realEnd - start).normalized;
+                    (realEnd - start)
+                    .normalized;
 
-                //// Œ©‚½–Ú—pI“_
-                //Vector3 end =
-                //    realEnd +
-                //    dir * chainExtendLength;
+                start -=
+                    dir *
+                    chainExtendLength;
 
-
-
-                //==============================
-                // “G“à•”‚É‚ß‚è‚Ü‚È‚¢
-                //==============================
-
-                start -= dir * chainExtendLength;
-                realEnd += dir * chainExtendLength;
+                realEnd +=
+                    dir *
+                    chainExtendLength;
 
                 //==============================
                 // ‹——£
@@ -313,15 +319,14 @@ public class BindBullet : MonoBehaviour
 
                 float distance =
                     Vector3.Distance(
-                    start,
-                    realEnd
+                        start,
+                        realEnd
                     );
 
                 //==============================
                 // •K—v½”
                 //==============================
 
-                // +1‚µ‚ÄÅŒã‚ÌŒ„ŠÔ–h~
                 int chainCount =
                     Mathf.Max(
                         2,
@@ -331,22 +336,21 @@ public class BindBullet : MonoBehaviour
                     );
 
                 //==============================
-                // ½ƒŠƒXƒg
-                //==============================
-
-                List<GameObject> chains =
-                    allChains[i];
-
-                //==============================
                 // ‘«‚è‚È‚¢½¶¬
                 //==============================
 
-                while (chains.Count < chainCount)
+                while (
+                    chains.Count <
+                    chainCount
+                )
                 {
                     GameObject chain =
-                        Instantiate(
-                            chainPrefab
-                        );
+                        Instantiate(chainPrefab);
+
+                    chain.transform.SetParent(
+                        chainRoot.transform,
+                        true
+                    );
 
                     chains.Add(chain);
                 }
@@ -355,7 +359,10 @@ public class BindBullet : MonoBehaviour
                 // ‘½‚¢½íœ
                 //==============================
 
-                while (chains.Count > chainCount)
+                while (
+                    chains.Count >
+                    chainCount
+                )
                 {
                     Destroy(chains[0]);
 
@@ -366,12 +373,14 @@ public class BindBullet : MonoBehaviour
                 // ½”z’u
                 //==============================
 
-                for (int j = 0;
-                         j < chainCount;
-                         j++)
+                for (
+                    int j = 0;
+                    j < chainCount;
+                    j++
+                )
                 {
                     Vector3 pos;
-                    // ÅŒã‚¾‚¯‰„’·æ‚É‡‚í‚¹‚é
+
                     if (j == chainCount - 1)
                     {
                         pos = realEnd;
@@ -384,12 +393,10 @@ public class BindBullet : MonoBehaviour
                             (j * spacing);
                     }
 
-                    // ˆÊ’u
                     chains[j]
                         .transform.position =
                         pos;
 
-                    // ‰ñ“]
                     float angle =
                         Mathf.Atan2(
                             dir.y,
@@ -404,7 +411,6 @@ public class BindBullet : MonoBehaviour
                             angle
                         );
 
-                    // ƒTƒCƒY
                     chains[j]
                         .transform.localScale =
                         Vector3.one *
@@ -419,21 +425,28 @@ public class BindBullet : MonoBehaviour
         // ½íœ
         //==============================
 
-        foreach (var chains in allChains)
+        for (int i = 0; i < allChains.Count; i++)
         {
-            foreach (var chain in chains)
+            for (int j = 0; j < allChains[i].Count; j++)
             {
-                if (chain != null)
+                if (allChains[i][j] != null)
                 {
-                    Destroy(chain);
+                    Destroy(allChains[i][j]);
                 }
             }
+
+            allChains[i].Clear();
         }
 
-        //==============================
-        // ’eíœ
-        //==============================
+        allChains.Clear();
 
+        // Rootíœ
+        if (chainRoot != null)
+        {
+            Destroy(chainRoot);
+        }
+
+        // ’eíœ
         Destroy(gameObject);
     }
 
