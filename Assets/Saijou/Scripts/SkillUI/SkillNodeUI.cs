@@ -32,6 +32,10 @@ public class SkillNodeUI : MonoBehaviour
     [SerializeField] Sprite yellowSprite;  // 最大レベル：黄
 
     [SerializeField] SkillEffectManager effectManager;
+    [SerializeField] NormalExpText normalExpText;
+    [SerializeField] NormalExpUIAnimation normalExpUIAnimation;
+    [SerializeField] UIAnimation uiAnimation;
+
     void Start()
     {
         // 最初のノードなら「解放可能状態」にする
@@ -168,6 +172,28 @@ public class SkillNodeUI : MonoBehaviour
         effectManager.ApplySkill(data);// スキル効果適用
         Unlock();                      // 解放
         UpdateVisual();                // 見た目更新
+
+        normalExpText.UpdateExpText(); // 経験値UIアップデート
+        PlayExpAnimation(); // 経験値UIアニメーション
+    }
+
+    // 経験値UIアニメーション
+    public void PlayExpAnimation()
+    {
+        switch (data.expType)
+        {
+            case ExpType.Exp1:
+                uiAnimation.PlayBounce(normalExpUIAnimation.exp_1);
+                break;
+
+            case ExpType.Exp2:
+                uiAnimation.PlayBounce(normalExpUIAnimation.exp_2);
+                break;
+
+            case ExpType.Exp3:
+                uiAnimation.PlayBounce(normalExpUIAnimation.exp_3);
+                break;
+        }
     }
 
     void SpawnEffect(Transform target)
