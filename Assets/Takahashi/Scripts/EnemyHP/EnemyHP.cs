@@ -3,6 +3,16 @@ using System.Collections;
 
 public class EnemyHP : MonoBehaviour
 {
+    // ドロップアイテム設定用クラス
+    [System.Serializable]
+    public class DropItem
+    {
+        public GameObject prefab; // ドロップするPrefab
+
+        [Range(0f, 100f)]
+        public float chance; // ドロップ確率
+    }
+
     [Header("HP")]
     public int maxHP = 100;      // 最大HP
     public int currentHP;        // 現在HP
@@ -22,7 +32,7 @@ public class EnemyHP : MonoBehaviour
     public float rotationSpeed = 1080f;  // 回転速度
 
     [Header("ドロップ")]
-    public GameObject dropPrefab;
+    public DropItem[] dropItems;
     public int dropCount = 1; 
 
     [Header("ダメージ表示")]
@@ -106,21 +116,49 @@ public class EnemyHP : MonoBehaviour
         UpdateScale(); // 見た目更新
     }
 
+    // ランダムドロップ抽選
+    GameObject GetRandomDrop()
+    {
+        float rand = Random.Range(0f, 100f);
+        float total = 0f;
+
+        foreach (DropItem item in dropItems)
+        {
+            total += item.chance;
+
+            if (rand <= total)
+            {
+                return item.prefab;
+            }
+        }
+
+        return null;
+    }
     // 死亡演出
+    // =========================================
     IEnumerator DeathSpiral()
     {
+        // 死亡フラグON
         isDying = true;
 
         // 当たり判定OFF
         if (col != null)
-            col.enabled = false;
-
-        // ドロップ生成
-        if (dropPrefab != null)
         {
-            for (int i = 0; i < dropCount; i++)
+            col.enabled = false;
+        }
+
+        // =========================
+        // ドロップ生成
+        // =========================
+        for (int i = 0; i < dropCount; i++)
+        {
+            // 抽選
+            GameObject drop = GetRandomDrop();
+
+            // nullじゃなければ生成
+            if (drop != null)
             {
-                // 少しバラけて出す
+                // 少しバラける
                 Vector3 offset = new Vector3(
                     Random.Range(-50f, 50f),
                     Random.Range(-50f, 50f),
@@ -128,24 +166,34 @@ public class EnemyHP : MonoBehaviour
                 );
 
                 Instantiate(
-                    dropPrefab,
+                    drop,
                     transform.position + offset,
                     Quaternion.identity
                 );
             }
         }
+
+        // =========================
+        // 死亡アニメーション
+        // =========================
         Vector3 startScale = transform.localScale;
+
         float timer = 0f;
 
         while (timer < deathDuration)
         {
             timer += Time.deltaTime;
+
             float t = timer / deathDuration;
 
             // 回転
-            transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
+            transform.Rotate(
+                0,
+                0,
+                rotationSpeed * Time.deltaTime
+            );
 
-            // 渦巻き移動
+            // 渦移動
             float radius = Mathf.Lerp(0.5f, 0f, t);
 
             Vector3 spiral = new Vector3(
@@ -158,14 +206,16 @@ public class EnemyHP : MonoBehaviour
 
             // 縮小
             float scale = Mathf.Lerp(1f, 0f, t);
-            transform.localScale = startScale * (scale * scale);
+
+            transform.localScale =
+                startScale * (scale * scale);
 
             yield return null;
         }
 
+        // 完全消滅
         Destroy(gameObject);
     }
-
     // ダメージUI表示
     void ShowDamage(int damage , bool isCritical)
     {
