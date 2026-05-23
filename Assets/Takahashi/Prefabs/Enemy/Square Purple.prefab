@@ -176,7 +176,7 @@ MonoBehaviour:
   spiralSpeed: 20
   rotationSpeed: 1080
   dropItems:
-  - prefab: {fileID: 8368776313054989139, guid: a94428740bd2992468d2c089100d0fb4, type: 3}
+  - prefab: {fileID: 5214269435395224199, guid: 804cf549acb99c949910006ff076e73f, type: 3}
     chance: 80
   - prefab: {fileID: 4694620910833782341, guid: 46de89cdb13085c408ca2d94137493c2, type: 3}
     chance: 20

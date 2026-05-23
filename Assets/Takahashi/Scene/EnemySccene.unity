@@ -380,7 +380,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1692a2f3ce186664a8443249e4ad8134, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  enemyPrefab: {fileID: 8321376853146568099, guid: 568ade19d92a2cd40a3379b53519f00b, type: 3}
+  enemies:
+  - prefab: {fileID: 3672385843094609883, guid: 395f7599b11b5514cb4c8c91107c9c7c, type: 3}
+    weight: 10
+  - prefab: {fileID: 8321376853146568099, guid: 568ade19d92a2cd40a3379b53519f00b, type: 3}
+    weight: 80
+  - prefab: {fileID: 2931965587420321019, guid: 3ad3c589ec744814c944ed6ed827ac86, type: 3}
+    weight: 10
   player: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
   spawnInterval: 2
   baseHP: 10
@@ -751,7 +757,7 @@ MonoBehaviour:
   bounceCount: 2
   minRotateSpeed: 90
   maxRotateSpeed: 360
-  shadow: {fileID: 0}
+  shadowPrefab: {fileID: 0}
 --- !u!1 &1220538945
 GameObject:
   m_ObjectHideFlags: 0
@@ -1080,7 +1086,7 @@ MonoBehaviour:
   bounceCount: 2
   minRotateSpeed: 90
   maxRotateSpeed: 360
-  shadow: {fileID: 0}
+  shadowPrefab: {fileID: 0}
 --- !u!1001 &1408206877
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1269,7 +1275,7 @@ MonoBehaviour:
   bounceCount: 2
   minRotateSpeed: 90
   maxRotateSpeed: 360
-  shadow: {fileID: 0}
+  shadowPrefab: {fileID: 0}
 --- !u!212 &2099353091
 SpriteRenderer:
   serializedVersion: 2

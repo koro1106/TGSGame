@@ -27,16 +27,8 @@ public class EnemyMove : MonoBehaviour
 
     void Start()
     {
-        // 画面外にスポーン
-        transform.position = GetSpawnPosition();
-
-        // 中央へ向かう
         target = Vector2.zero;
-
-        // ランダム方向初期化
         SetRandomDirection();
-
-        // SpriteRenderer取得（向き反転用）
         sr = GetComponent<SpriteRenderer>();
     }
 
@@ -115,33 +107,33 @@ public class EnemyMove : MonoBehaviour
             sr.flipX = false;
     }
 
-    //========================
-    // 画面外スポーン
-    //========================
-    Vector2 GetSpawnPosition()
+    /*Vector2 GetSpawnPosition()
     {
         Camera cam = Camera.main;
 
         float height = 2f * cam.orthographicSize;
         float width = height * cam.aspect;
 
-        int side = Random.Range(0, 4);
+        float halfW = width / 2f;
 
+        int side = Random.Range(0, 2);
+
+        // 0 = 左 / 1 = 右
         switch (side)
         {
-            case 0: // 上
-                return new Vector2(Random.Range(-width / 2, width / 2), height / 2 + spawnOffset);
+            case 0: // 左から出る
+                return new Vector2(
+                    -halfW - spawnOffset,
+                    Random.Range(-height / 2f, height / 2f)
+                );
 
-            case 1: // 下
-                return new Vector2(Random.Range(-width / 2, width / 2), -height / 2 - spawnOffset);
-
-            case 2: // 右
-                return new Vector2(width / 2 + spawnOffset, Random.Range(-height / 2, height / 2));
-
-            default: // 左
-                return new Vector2(-width / 2 - spawnOffset, Random.Range(-height / 2, height / 2));
+            default: // 右から出る
+                return new Vector2(
+                    halfW + spawnOffset,
+                    Random.Range(-height / 2f, height / 2f)
+                );
         }
-    }
+    }*/
 
     //========================
     // 画面内判定
