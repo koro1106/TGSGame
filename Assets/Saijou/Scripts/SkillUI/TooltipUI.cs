@@ -97,7 +97,6 @@ public class TooltipUI : MonoBehaviour
     /// <summary>
     /// 経験値アイコン取得
     /// </summary>
-
     Sprite GetExpSprite(ExpType type)
     {
         switch (type)

@@ -183,15 +183,15 @@ public class SkillNodeUI : MonoBehaviour
         switch (data.expType)
         {
             case ExpType.Exp1:
-                uiAnimation.PlayBounce(normalExpUIAnimation.exp_1);
+                uiAnimation.PlayBounce(normalExpUIAnimation.exp_1.rectTransform);
                 break;
 
             case ExpType.Exp2:
-                uiAnimation.PlayBounce(normalExpUIAnimation.exp_2);
+                uiAnimation.PlayBounce(normalExpUIAnimation.exp_2.rectTransform);
                 break;
 
             case ExpType.Exp3:
-                uiAnimation.PlayBounce(normalExpUIAnimation.exp_3);
+                uiAnimation.PlayBounce(normalExpUIAnimation.exp_3.rectTransform);
                 break;
         }
     }
