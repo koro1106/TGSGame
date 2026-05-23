@@ -1,29 +1,29 @@
 using UnityEngine;
-using UnityEngine.Audio;
-using UnityEngine.SceneManagement;
+
+
+//タイトル画面管理
 
 public class title : MonoBehaviour
 {
+    [Header("カーテン")]
+    [SerializeField]
+    private CurtainSceneManager curtainManager;
 
-    //　くりっくのやつ
+
+    // スタートボタン
+ 
     public void OnStartButton()
     {
-        SceneManager.LoadScene("MainStageScene");
+        curtainManager.ChangeScene("ichikawa");
     }
 
-    // この関数がボタンをクリックしたときに呼ばれます
-    void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log("スタートボタンが押されました");
-            // 効果音を鳴らす
 
-
-            // シーンをロード
-
-            SceneManager.LoadScene("MainScene");
-
+            curtainManager.ChangeScene("MainScene");
         }
     }
 }
