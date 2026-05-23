@@ -110,4 +110,4 @@ MonoBehaviour:
   bounceCount: 2
   minRotateSpeed: 90
   maxRotateSpeed: 360
-  shadow: {fileID: 636683900075794164, guid: 536db39859af53a47928bcbe00400608, type: 3}
+  shadowPrefab: {fileID: 1354215260935572172, guid: 536db39859af53a47928bcbe00400608, type: 3}

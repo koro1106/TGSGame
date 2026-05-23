@@ -77,26 +77,30 @@ public class EyeEnemy : MonoBehaviour
         float h = cam.orthographicSize;
         float w = h * cam.aspect;
 
-        int side = Random.Range(0, 4);
-        Vector2 spawnPos = Vector2.zero;
+        float halfW = w;
+        float halfH = h;
 
-        // ===== 画面外スポーン =====
+        float offset = 3f; //（画面外距離）
+
+        int side = Random.Range(0, 4);
+        Vector2 spawnPos;
+
         switch (side)
         {
             case 0: // 右
-                spawnPos = new Vector2(w + 1, Random.Range(-h, h));
+                spawnPos = new Vector2(halfW + offset, Random.Range(-halfH, halfH));
                 break;
 
             case 1: // 左
-                spawnPos = new Vector2(-w - 1, Random.Range(-h, h));
+                spawnPos = new Vector2(-halfW - offset, Random.Range(-halfH, halfH));
                 break;
 
             case 2: // 上
-                spawnPos = new Vector2(Random.Range(-w, w), h + 1);
+                spawnPos = new Vector2(Random.Range(-halfW, halfW), halfH + offset);
                 break;
 
-            case 3: // 下
-                spawnPos = new Vector2(Random.Range(-w, w), -h - 1);
+            default: // 下
+                spawnPos = new Vector2(Random.Range(-halfW, halfW), -halfH - offset);
                 break;
         }
 
@@ -104,8 +108,8 @@ public class EyeEnemy : MonoBehaviour
 
         // 画面内ランダム地点へ向かう
         Vector2 target = new Vector2(
-            Random.Range(-w, w),
-            Random.Range(-h, h)
+            Random.Range(-halfW, halfW),
+            Random.Range(-halfH, halfH)
         );
 
         moveDirection = (target - spawnPos).normalized;

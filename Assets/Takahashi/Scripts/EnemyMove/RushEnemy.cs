@@ -29,8 +29,6 @@ public class RushEnemy : MonoBehaviour
         // 初期サイズを保存
         baseScale = transform.localScale;
 
-        // 画面外にスポーン
-        SpawnOutsideScreen();
     }
 
     void Update()
@@ -110,6 +108,7 @@ public class RushEnemy : MonoBehaviour
             new Vector3(scaleX, scaleY, 1f);
     }
 
+    /*
     void SpawnOutsideScreen()
     {
         // メインカメラ取得
@@ -164,5 +163,5 @@ public class RushEnemy : MonoBehaviour
 
         // 位置を設定
         transform.position = spawnPos;
-    }
+    }*/
 }
