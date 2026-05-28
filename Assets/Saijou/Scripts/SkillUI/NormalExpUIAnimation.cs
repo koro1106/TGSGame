@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 /// <summary>
-/// ExpUIアニメーション
+/// NormalExpUIアニメーション
 /// </summary>
 public class NormalExpUIAnimation : MonoBehaviour
 {

@@ -4,17 +4,17 @@ using UnityEngine;
 /// プレステージExpテキスト用
 /// </summary>
 
-public class PrestageExpText : MonoBehaviour
+public class PrestigeExpText : MonoBehaviour
 {
     public PreStagePlayerData prestagePlayerData;
 
     public TextMeshProUGUI expText_Pre; // プレステージExp
     void Start()
     {
-        UpdateExpText();
+        UpdatePrestigeExpText();
     }
 
-    void UpdateExpText()
+    public void UpdatePrestigeExpText()
     {
        expText_Pre.text = prestagePlayerData.prestageExp.ToString();
     }

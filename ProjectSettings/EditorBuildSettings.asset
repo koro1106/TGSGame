@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Saijou/Scene/MainStageSkillTreeScene.unity
     guid: 4d557d759e280af48985782fd7df1f9f
   - enabled: 1
-    path: Assets/Saijou/Scene/PrestageSkillTreeScene.unity
+    path: Assets/Saijou/Scene/PrestigeSkillTreeScene.unity
     guid: f56b03d8ee728ab4886cb549f23c5472
   - enabled: 1
     path: Assets/ICHIKWASAIKYOUFILE/Scene/TitleScene.unity
