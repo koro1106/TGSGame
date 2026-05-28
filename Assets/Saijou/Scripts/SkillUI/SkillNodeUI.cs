@@ -34,6 +34,8 @@ public class SkillNodeUI : MonoBehaviour
     [SerializeField] SkillEffectManager effectManager;
     [SerializeField] NormalExpText normalExpText;
     [SerializeField] NormalExpUIAnimation normalExpUIAnimation;
+    [SerializeField] PrestigeExpText prestigelExpText;
+    [SerializeField] PrestigeExpUIAnimation prestigeExpUIAnimation;
     [SerializeField] UIAnimation uiAnimation;
 
     void Start()
@@ -173,7 +175,17 @@ public class SkillNodeUI : MonoBehaviour
         Unlock();                      // 解放
         UpdateVisual();                // 見た目更新
 
-        normalExpText.UpdateExpText(); // 経験値UIアップデート
+        // 経験値UIアップデート
+        if (normalExpText != null)
+        {
+            normalExpText.UpdateNormalExpText();
+        }
+
+        if (prestigelExpText != null)
+        {
+            prestigelExpText.UpdatePrestigeExpText();
+        }
+
         PlayExpAnimation(); // 経験値UIアニメーション
     }
 

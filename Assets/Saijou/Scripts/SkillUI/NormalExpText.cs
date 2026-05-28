@@ -13,10 +13,10 @@ public class NormalExpText : MonoBehaviour
 
     void Start()
     {
-        UpdateExpText();
+        UpdateNormalExpText();
     }
 
-    public void UpdateExpText()
+    public void UpdateNormalExpText()
     {
         expText_1.text = playerData.currentExp_1.ToString();
         expText_2.text = playerData.currentExp_2.ToString();

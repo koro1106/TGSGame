@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e67af1148a7ef58459c5a4b7bb2b15c3, type: 3}
   m_Name: PreStagePlayerData
   m_EditorClassIdentifier: Assembly-CSharp::PreStagePlayerData
-  prestageExp: 10
+  prestageExp: 30
