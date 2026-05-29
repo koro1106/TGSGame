@@ -19,6 +19,7 @@ public class EnemySpawner : MonoBehaviour
     private float hpTimer;
     private float hpMultiplier = 1f;
 
+    public PlayerStats playerStats; // Playerのステータス
     void Update()
     {
         timer += Time.deltaTime;
@@ -67,7 +68,7 @@ public class EnemySpawner : MonoBehaviour
         int total = 0;
 
         foreach (var e in enemies)
-            total += e.weight;
+            total += e.weight + playerStats.enemySpawnWeightBonus;
 
         int r = Random.Range(0, total);
 
@@ -75,7 +76,7 @@ public class EnemySpawner : MonoBehaviour
 
         foreach (var e in enemies)
         {
-            sum += e.weight;
+            sum += e.weight + playerStats.enemySpawnWeightBonus;
 
             if (r < sum)
                 return e.prefab;

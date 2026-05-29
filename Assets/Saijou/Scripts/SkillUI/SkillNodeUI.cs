@@ -37,7 +37,7 @@ public class SkillNodeUI : MonoBehaviour
     [SerializeField] PrestigeExpText prestigelExpText;
     [SerializeField] PrestigeExpUIAnimation prestigeExpUIAnimation;
     [SerializeField] UIAnimation uiAnimation;
-
+    [SerializeField] PlayerStats playerStats;
     void Start()
     {
         // 最初のノードなら「解放可能状態」にする

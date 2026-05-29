@@ -390,6 +390,7 @@ MonoBehaviour:
   player: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
   spawnInterval: 2
   baseHP: 10
+  playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
 --- !u!4 &497528188
 Transform:
   m_ObjectHideFlags: 0

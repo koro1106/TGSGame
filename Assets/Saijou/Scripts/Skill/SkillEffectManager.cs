@@ -29,6 +29,10 @@ public class SkillEffectManager : MonoBehaviour
             case SkillEffectType.UnlockElementalBullet:
                 UnlockElementalBullet(skill.elementalBulletPrefab);
                 break;
+            // 敵のスポーン率増加
+            case SkillEffectType.EnemySpawnWeightBonus:
+                playerStats.enemySpawnWeightBonus += (int)skill.effectValue;
+                break;
         }
     }
 
@@ -51,13 +55,6 @@ public class SkillEffectManager : MonoBehaviour
             playerStats.unlockedElementalBullets = list.ToArray();
 
             Debug.Log("解放された属性弾: " + bulletPrefab.name);
-
-            // ここでGunControllerに追加
-            //if (gunController != null)
-            //{
-            //    gunController.AddElementalBullet(bulletPrefab);
-            //}
-
         }
     }
 
