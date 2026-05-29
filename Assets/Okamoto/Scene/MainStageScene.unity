@@ -6266,7 +6266,7 @@ GameObject:
   - component: {fileID: 1683393130}
   - component: {fileID: 1683393129}
   m_Layer: 0
-  m_Name: S
+  m_Name: EnemySpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6284,10 +6284,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1692a2f3ce186664a8443249e4ad8134, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  enemyPrefab: {fileID: 1564874167361477582, guid: b212dd7b66d26d741950153427aa1ff8, type: 3}
-  player: {fileID: 0}
+  enemies:
+  - prefab: {fileID: 3672385843094609883, guid: 395f7599b11b5514cb4c8c91107c9c7c, type: 3}
+    weight: 20
+  - prefab: {fileID: 8321376853146568099, guid: 568ade19d92a2cd40a3379b53519f00b, type: 3}
+    weight: 20
+  - prefab: {fileID: 2931965587420321019, guid: 3ad3c589ec744814c944ed6ed827ac86, type: 3}
+    weight: 80
+  player: {fileID: 173762202}
   spawnInterval: 2
   baseHP: 10
+  playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
 --- !u!4 &1683393130
 Transform:
   m_ObjectHideFlags: 0
