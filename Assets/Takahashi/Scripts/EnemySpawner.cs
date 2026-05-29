@@ -20,8 +20,37 @@ public class EnemySpawner : MonoBehaviour
     private float hpMultiplier = 1f;
 
     public PlayerStats playerStats; // Playerのステータス
+
+    public GameObject bossPrefab; //ボス
+
+    public float bossSpawnTime = 10f;
+
+    private float bossTimer;
+
+    private bool bossAlive = false;
+
     void Update()
     {
+        // ===== ボス管理 =====
+
+        if (!bossAlive)
+        {
+            bossTimer += Time.deltaTime;
+
+            if (bossTimer >= bossSpawnTime)
+            {
+                SpawnBoss();
+
+                bossTimer = 0f;
+            }
+        }
+
+        // ===================
+
+        // ボス中は通常敵を止めたいならこれ
+        if (bossAlive)
+            return;
+
         timer += Time.deltaTime;
 
         if (timer >= spawnInterval)
@@ -30,38 +59,68 @@ public class EnemySpawner : MonoBehaviour
             timer = 0f;
         }
 
-        hpTimer += Time.deltaTime;
-
-        if (hpTimer >= 5f)
+        void SpawnEnemy()
         {
-            hpTimer -= 5f;
-            hpMultiplier *= 1.5f;
+            GameObject prefab = GetRandomEnemy();
+            Vector2 spawnPos = GetSpawnPosition();
+
+            GameObject enemy =
+                Instantiate(prefab, spawnPos, Quaternion.identity);
+
+            // HP設定
+            EnemyHP hp = enemy.GetComponent<EnemyHP>();
+            if (hp != null)
+            {
+                hp.maxHP = Mathf.CeilToInt(baseHP * hpMultiplier);
+                hp.currentHP = hp.maxHP;
+            }
+
+            // プレイヤー注入
+            RushEnemy rush = enemy.GetComponent<RushEnemy>();
+            if (rush != null)
+            {
+                rush.player = player;
+            }
+        }
+
+        // ===== ボス生成 =====
+        void SpawnBoss()
+        {
+            Vector2 spawnPos = GetSpawnPosition();
+
+            GameObject boss =
+                Instantiate(bossPrefab, spawnPos, Quaternion.identity);
+
+            bossAlive = true;
+
+            // BossMove取得
+            BossMove move =
+                boss.GetComponent<BossMove>();
+
+            if (move != null)
+            {
+                move.player = player;
+            }
+
+            // BossEnemy取得
+            BossEnemy bossScript =
+                boss.GetComponent<BossEnemy>();
+
+            if (bossScript != null)
+            {
+                bossScript.spawner = this;
+            }
+
+            Debug.Log("ボス出現！");
         }
     }
-
-    void SpawnEnemy()
+    public void BossDefeated()
     {
-        GameObject prefab = GetRandomEnemy();
-        Vector2 spawnPos = GetSpawnPosition();
+        bossAlive = false;
 
-        GameObject enemy =
-            Instantiate(prefab, spawnPos, Quaternion.identity);
-
-        // HP設定
-        EnemyHP hp = enemy.GetComponent<EnemyHP>();
-        if (hp != null)
-        {
-            hp.maxHP = Mathf.CeilToInt(baseHP * hpMultiplier);
-            hp.currentHP = hp.maxHP;
-        }
-
-        // プレイヤー注入
-        RushEnemy rush = enemy.GetComponent<RushEnemy>();
-        if (rush != null)
-        {
-            rush.player = player;
-        }
+        Debug.Log("ボス撃破！");
     }
+
 
     GameObject GetRandomEnemy()
     {
