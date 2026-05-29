@@ -108,6 +108,6 @@ MonoBehaviour:
   bounceHeight: 80
   duration: 0.5
   bounceCount: 2
-  minRotateSpeed: 90
-  maxRotateSpeed: 360
+  minRotateSpeed: 100
+  maxRotateSpeed: 420
   shadowPrefab: {fileID: 1354215260935572172, guid: 536db39859af53a47928bcbe00400608, type: 3}
