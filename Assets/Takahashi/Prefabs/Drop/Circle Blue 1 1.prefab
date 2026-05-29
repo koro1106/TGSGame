@@ -104,7 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 756a3aa13f4b19f4f9cb35d3c7fb2e99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DropBounce
-  moveSpeed: 40
+  moveSpeed: 110
   bounceHeight: 80
   duration: 0.5
   bounceCount: 2

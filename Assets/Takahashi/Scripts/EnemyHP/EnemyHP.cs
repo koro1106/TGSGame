@@ -17,6 +17,8 @@ public class EnemyHP : MonoBehaviour
     public int maxHP = 100;      // 最大HP
     public int currentHP;        // 現在HP
 
+    [Header("レア敵設定")]
+    public bool isRareEnemy = false; //レア敵
     [Header("見た目")]
     public float scaleSmooth = 12f; // スケール補間速度
 
@@ -75,6 +77,12 @@ public class EnemyHP : MonoBehaviour
     public void TakeDamage(int damage, bool isCritical = false )
     {
         if (isDying) return;
+
+        //レア敵は１ダメ
+        if(isRareEnemy)
+        {
+            damage = 1;
+        }
 
         currentHP -= damage;              // HP減少
         currentHP = Mathf.Max(currentHP, 0); // 0以下防止
