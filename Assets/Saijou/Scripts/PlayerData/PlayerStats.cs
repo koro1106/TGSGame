@@ -7,6 +7,7 @@ public class PlayerStats : ScriptableObject
 {
     public int bulletDamage = 10; // 弾のダメージ
     public int maxAmmo = 10;      // 最大弾数
+    public int enemySpawnWeightBonus = 0;   // 敵スポーン率ボーナス
 
     // 解放した属性弾リスト
     public GameObject[] unlockedElementalBullets;
