@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 519.1137, y: 19.67869, z: 0}
-  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_LocalScale: {x: 50, y: 50, z: 50}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -104,10 +104,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 756a3aa13f4b19f4f9cb35d3c7fb2e99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DropBounce
-  moveSpeed: 40
-  bounceHeight: 80
-  duration: 0.5
+  moveSpeed: 115
+  bounceHeight: 70
   bounceCount: 2
-  minRotateSpeed: 90
-  maxRotateSpeed: 360
+  minDuration: 0.25
+  maxDuration: 0.6
+  horizontalSpread: 150
+  minRotateSpeed: 270
+  maxRotateSpeed: 720
+  minRotateTime: 0.5
+  maxRotateTime: 2
   shadowPrefab: {fileID: 1354215260935572172, guid: 536db39859af53a47928bcbe00400608, type: 3}

@@ -382,17 +382,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemies:
   - prefab: {fileID: 3672385843094609883, guid: 395f7599b11b5514cb4c8c91107c9c7c, type: 3}
-    weight: 10
+    weight: 0
   - prefab: {fileID: 8321376853146568099, guid: 568ade19d92a2cd40a3379b53519f00b, type: 3}
-    weight: 80
+    weight: 0
   - prefab: {fileID: 2931965587420321019, guid: 3ad3c589ec744814c944ed6ed827ac86, type: 3}
-    weight: 10
+    weight: 0
+  - prefab: {fileID: 1514281451404711565, guid: b79716df06544bd4c942bc9f6be16c93, type: 3}
+    weight: 100
   player: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
   spawnInterval: 2
-  baseHP: 10
+  baseHP: 1
   playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   bossPrefab: {fileID: 1535677997056505620, guid: 38e0c4e553ed7874584eba5a894cc60f, type: 3}
-  bossSpawnTime: 10
+  bossSpawnTime: 100
 --- !u!4 &497528188
 Transform:
   m_ObjectHideFlags: 0
@@ -754,11 +756,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DropBounce
   moveSpeed: 40
-  bounceHeight: 80
-  duration: 0.5
+  bounceHeight: 0
   bounceCount: 2
+  minDuration: 0.3
+  maxDuration: 1.2
+  horizontalSpread: 0.3
   minRotateSpeed: 90
   maxRotateSpeed: 360
+  minRotateTime: 0.3
+  maxRotateTime: 2
   shadowPrefab: {fileID: 0}
 --- !u!1 &1220538945
 GameObject:
@@ -1088,11 +1094,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DropBounce
   moveSpeed: 40
-  bounceHeight: 80
-  duration: 0.5
+  bounceHeight: 0
   bounceCount: 2
+  minDuration: 0.3
+  maxDuration: 1.2
+  horizontalSpread: 0.3
   minRotateSpeed: 90
   maxRotateSpeed: 360
+  minRotateTime: 0.3
+  maxRotateTime: 2
   shadowPrefab: {fileID: 0}
 --- !u!1001 &1408206877
 PrefabInstance:
@@ -1368,11 +1378,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DropBounce
   moveSpeed: 40
-  bounceHeight: 80
-  duration: 0.5
+  bounceHeight: 0
   bounceCount: 2
+  minDuration: 0.3
+  maxDuration: 1.2
+  horizontalSpread: 0.3
   minRotateSpeed: 90
   maxRotateSpeed: 360
+  minRotateTime: 0.3
+  maxRotateTime: 2
   shadowPrefab: {fileID: 0}
 --- !u!212 &2099353091
 SpriteRenderer:
