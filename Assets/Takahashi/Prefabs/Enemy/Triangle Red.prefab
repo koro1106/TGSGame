@@ -109,7 +109,7 @@ MonoBehaviour:
   enterSpeed: 300
   floatSpeed: 300
   fleeSpeed: 1000
-  hp: 3
+  hp: 0
   detectDistance: 350
   changeTime: 1
 --- !u!114 &2006198941269724450

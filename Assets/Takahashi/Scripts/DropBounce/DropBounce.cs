@@ -27,14 +27,43 @@ public class DropBounce : MonoBehaviour
     public float bounceHeight = 1.5f;
 
     /// <summary>
-    /// 1回のバウンド時間
-    /// </summary>
-    public float duration = 0.6f;
-
-    /// <summary>
     /// バウンド回数
     /// </summary>
     public int bounceCount = 2;
+
+    // =========================================================
+    // 着地時間ランダム
+    // =========================================================
+
+    [Header("着地時間ランダム")]
+
+    /// <summary>
+    /// 最小着地時間
+    /// </summary>
+    public float minDuration = 0.3f;
+
+    /// <summary>
+    /// 最大着地時間
+    /// </summary>
+    public float maxDuration = 1.2f;
+
+    /// <summary>
+    /// 現在の着地時間
+    /// </summary>
+    private float duration;
+
+    // =========================================================
+    // 散らばり
+    // =========================================================
+
+    [Header("散らばり")]
+
+    /// <summary>
+    /// 横方向の散らばり
+    /// 0～150
+    /// </summary>
+    [Range(0f, 150f)]
+    public float horizontalSpread = 30f;
 
     // =========================================================
     // 回転設定
@@ -53,6 +82,22 @@ public class DropBounce : MonoBehaviour
     public float maxRotateSpeed = 360f;
 
     // =========================================================
+    // 回転時間設定
+    // =========================================================
+
+    [Header("回転時間")]
+
+    /// <summary>
+    /// 最小回転時間
+    /// </summary>
+    public float minRotateTime = 0.3f;
+
+    /// <summary>
+    /// 最大回転時間
+    /// </summary>
+    public float maxRotateTime = 2f;
+
+    // =========================================================
     // 影設定
     // =========================================================
 
@@ -60,7 +105,6 @@ public class DropBounce : MonoBehaviour
 
     /// <summary>
     /// 影Prefab
-    /// SpriteRenderer付きの黒丸を設定
     /// </summary>
     [SerializeField]
     private GameObject shadowPrefab;
@@ -72,7 +116,6 @@ public class DropBounce : MonoBehaviour
 
     /// <summary>
     /// 影のSpriteRenderer
-    /// 透明度変更用
     /// </summary>
     private SpriteRenderer shadowRenderer;
 
@@ -112,12 +155,21 @@ public class DropBounce : MonoBehaviour
 
     /// <summary>
     /// 回転方向
-    /// 1 or -1
     /// </summary>
     private float rotateDir;
 
     /// <summary>
-    /// バウンド終了フラグ
+    /// 回転時間
+    /// </summary>
+    private float rotateTime;
+
+    /// <summary>
+    /// 回転タイマー
+    /// </summary>
+    private float rotateTimer;
+
+    /// <summary>
+    /// バウンド終了
     /// </summary>
     private bool finished;
 
@@ -125,9 +177,6 @@ public class DropBounce : MonoBehaviour
     // 初期化
     // =========================================================
 
-    /// <summary>
-    /// 初期化処理
-    /// </summary>
     void Start()
     {
         // 初期位置保存
@@ -136,19 +185,68 @@ public class DropBounce : MonoBehaviour
         // 元Scale保存
         baseScale = transform.localScale;
 
-        // ランダム方向
-        moveDir = Random.insideUnitCircle.normalized;
+        // =====================================================
+        // 散らばり設定
+        // =====================================================
+
+        // 0～150 を 0～1.5 に変換
+        float spread =
+            horizontalSpread / 100f;
+
+        // 横方向ランダム
+        float randomX =
+            UnityEngine.Random.Range(
+                -spread,
+                spread
+            );
 
         // 上方向へ飛ばす
-        moveDir.y = Mathf.Abs(moveDir.y);
+        moveDir =
+            new Vector2(randomX, 1f).normalized;
 
+        // =====================================================
         // ランダム回転速度
-        rotateSpeed =
-            Random.Range(minRotateSpeed, maxRotateSpeed);
+        // =====================================================
 
+        rotateSpeed =
+            UnityEngine.Random.Range(
+                minRotateSpeed,
+                maxRotateSpeed
+            );
+
+        // =====================================================
         // 回転方向ランダム
+        // =====================================================
+
         rotateDir =
-            Random.value < 0.5f ? -1f : 1f;
+            UnityEngine.Random.Range(-2f, 2f);
+
+        // ほぼ停止防止
+        if (Mathf.Abs(rotateDir) < 0.3f)
+        {
+            rotateDir =
+                Mathf.Sign(rotateDir) * 0.3f;
+        }
+
+        // =====================================================
+        // ランダム回転時間
+        // =====================================================
+
+        rotateTime =
+            UnityEngine.Random.Range(
+                minRotateTime,
+                maxRotateTime
+            );
+
+        // =====================================================
+        // ランダム着地時間
+        // =====================================================
+
+        duration =
+            UnityEngine.Random.Range(
+                minDuration,
+                maxDuration
+            );
 
         // =====================================================
         // 影生成
@@ -156,24 +254,20 @@ public class DropBounce : MonoBehaviour
 
         if (shadowPrefab != null)
         {
-            // 影生成
             GameObject s =
                 Instantiate(shadowPrefab);
 
             shadow = s.transform;
 
-            // SpriteRenderer取得
             shadowRenderer =
                 s.GetComponent<SpriteRenderer>();
 
-            // 初期位置
             shadow.position = new Vector3(
                 transform.position.x,
                 startPos.y - 0.1f,
                 0
             );
 
-            // 初期透明度
             if (shadowRenderer != null)
             {
                 Color color =
@@ -190,9 +284,6 @@ public class DropBounce : MonoBehaviour
     // 更新処理
     // =========================================================
 
-    /// <summary>
-    /// 毎フレーム更新
-    /// </summary>
     void Update()
     {
         // バウンド終了後
@@ -271,13 +362,19 @@ public class DropBounce : MonoBehaviour
         // 回転
         // =====================================================
 
-        transform.Rotate(
-            0,
-            0,
-            rotateSpeed *
-            rotateDir *
-            Time.deltaTime
-        );
+        rotateTimer += Time.deltaTime;
+
+        // 回転時間内だけ回す
+        if (rotateTimer < rotateTime)
+        {
+            transform.Rotate(
+                0,
+                0,
+                rotateSpeed *
+                rotateDir *
+                Time.deltaTime
+            );
+        }
 
         // =====================================================
         // 影更新
@@ -290,40 +387,22 @@ public class DropBounce : MonoBehaviour
     // 影更新
     // =========================================================
 
-    /// <summary>
-    /// 影を更新する
-    /// </summary>
-    /// <param name="height">
-    /// 現在のジャンプ高さ
-    /// </param>
     void UpdateShadow(float height)
     {
         if (shadow == null) return;
 
-        // =====================================================
-        // 影位置
-        // =====================================================
-
         shadow.position = new Vector3(
             transform.position.x,
-            startPos.y - 30f,
+            startPos.y - 15f,
             0
         );
-
-        // =====================================================
-        // 高さ割合
-        // =====================================================
 
         float t =
             Mathf.Clamp01(
                 height / bounceHeight
             );
 
-        // =====================================================
-        // 透明度変更
         // 高いほど薄くする
-        // =====================================================
-
         if (shadowRenderer != null)
         {
             Color color =
@@ -340,10 +419,6 @@ public class DropBounce : MonoBehaviour
                 color;
         }
 
-        // =====================================================
-        // 回転固定
-        // =====================================================
-
         shadow.rotation =
             Quaternion.identity;
     }
@@ -352,23 +427,19 @@ public class DropBounce : MonoBehaviour
     // 着地後影固定
     // =========================================================
 
-    /// <summary>
-    /// 着地後の影固定
-    /// </summary>
     void FixShadow()
     {
         if (shadow == null) return;
 
         shadow.position = new Vector3(
             transform.position.x,
-            startPos.y - 30f,
+            startPos.y - 15f,
             0
         );
 
         shadow.rotation =
             Quaternion.identity;
 
-        // 着地後は少し濃く
         if (shadowRenderer != null)
         {
             Color color =
@@ -385,10 +456,6 @@ public class DropBounce : MonoBehaviour
     // 削除時
     // =========================================================
 
-    /// <summary>
-    /// オブジェクト削除時
-    /// 影も一緒に削除
-    /// </summary>
     void OnDestroy()
     {
         if (shadow != null)
