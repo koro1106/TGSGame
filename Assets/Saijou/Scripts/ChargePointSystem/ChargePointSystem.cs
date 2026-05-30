@@ -12,11 +12,13 @@ public class ChargePointSystem : MonoBehaviour
     public TextMeshProUGUI pointText;
     [Header("設定")]
     public float chargeGauge = 20f; // 1秒で増える量
-    [Header("プレイヤーデータ")]
-    public PreStagePlayerData playerData;
+    
+
+    [Header("ポイントレベルシステム")]
+    public PointLevelSystem pointLevelSystem;
 
     private float currentGauge = 0f;
-    private int point = 0;
+    public int point = 0;
 
     public PointGetEffect pointEffectPrefab;
     public Transform pointSpawn;      // スポーン場所
@@ -35,12 +37,6 @@ public class ChargePointSystem : MonoBehaviour
             point++;           // ポイント追加
             pointText.text = "ポイント：" + point;
 
-            // プレイヤーデータに反映
-            if (playerData != null)
-            {
-                playerData.prestageExp += 1;
-            }
-
             // Spawn位置で演出生成
             PointGetEffect effectInstance = Instantiate(
                 pointEffectPrefab,
@@ -51,6 +47,15 @@ public class ChargePointSystem : MonoBehaviour
 
             // ポイント獲得演出再生
             effectInstance.PlayEffect();
+
+            // ポイント獲得
+            point++;
+
+            // レベルシステムへ通知
+            if (pointLevelSystem != null)
+            {
+                pointLevelSystem.AddPoint(1);
+            }
         }
     }
 }
