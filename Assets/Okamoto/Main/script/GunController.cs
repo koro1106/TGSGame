@@ -43,6 +43,11 @@ public class GunController : MonoBehaviour
     public Sprite normalAmmoSprite;
     public Sprite lightningAmmoSprite;
 
+    [Header("マズルフラッシュ")]
+    public GameObject muzzleFlash;
+    public float muzzleFlashTime = 0.05f;
+    private Coroutine flashRoutine;
+
     public AmmoSlot[] ammoSlots;
     public TMP_Text ammoText;
 
@@ -55,11 +60,18 @@ public class GunController : MonoBehaviour
 
     public PlayerStats stats; // プレイヤーステータス☆
 
+    private float crosshairTargetRotation = 0f;
+
     void Start()
     {
         crosshairPos = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
 
         crosshair.position = crosshairPos;
+
+        if (muzzleFlash != null)
+        {
+            muzzleFlash.SetActive(false);
+        }
 
         // stats.unlockedElementalBulletsがnullじゃないならコピー☆
         if (stats.unlockedElementalBullets != null && stats.unlockedElementalBullets.Length > 0)
@@ -206,6 +218,9 @@ public class GunController : MonoBehaviour
                     bulletToShoot,
                     muzzle.position,
                     muzzle.rotation);
+            PlayMuzzleFlash();
+            crosshairTargetRotation += 90f;
+
 
             // =========================
             // ダメージ設定
@@ -320,6 +335,16 @@ public class GunController : MonoBehaviour
         crosshairPos.y = Mathf.Clamp(crosshairPos.y, 0, Screen.height);
 
         crosshair.position = crosshairPos;
+
+        // 追加
+        Quaternion targetRot =
+            Quaternion.Euler(0, 0, crosshairTargetRotation);
+
+        crosshair.rotation =
+            Quaternion.Lerp(
+                crosshair.rotation,
+                targetRot,
+                Time.deltaTime * 30f);
     }
 
     public void SetSensitivity(float value)
@@ -347,4 +372,33 @@ public class GunController : MonoBehaviour
             Debug.Log("GunController に属性弾追加: " + bulletPrefab.name);
         }
     }
+    void PlayMuzzleFlash()
+    {
+        if (muzzleFlash == null) return;
+
+        if (flashRoutine != null)
+        {
+            StopCoroutine(flashRoutine);
+        }
+
+        flashRoutine = StartCoroutine(MuzzleFlashRoutine());
+    }
+
+    System.Collections.IEnumerator MuzzleFlashRoutine()
+    {
+        // 毎回少しランダムにする
+        muzzleFlash.transform.localRotation =
+            Quaternion.Euler(0, 0, Random.Range(0f, 360f));
+
+        float size = Random.Range(0.8f, 1.2f);
+        muzzleFlash.transform.localScale =
+            Vector3.one * size;
+
+        muzzleFlash.SetActive(true);
+
+        yield return new WaitForSeconds(muzzleFlashTime);
+
+        muzzleFlash.SetActive(false);
+    }
+
 }
