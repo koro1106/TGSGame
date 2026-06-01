@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273875e9515bae4469b58e69f7b82692, type: 3}
   m_Name: Bullet_09
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "\u3066\u3059\u3068"
-  description: "\u3066\u3059\u3068"
+  skillName: "\u30DE\u30EB\u30C1\u30B7\u30E7\u30C3\u30C8_\u89E3\u653E"
+  description: "\u30DE\u30EB\u30C1\u30B7\u30E7\u30C3\u30C8_\u89E3\u653E"
   level: 0
-  maxLevel: 5
+  maxLevel: 1
   needExp: 1
   isUnlocked: 0
   isLevelUp: 0
