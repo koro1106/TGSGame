@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 273875e9515bae4469b58e69f7b82692, type: 3}
-  m_Name: OthersAbility_06
+  m_Name: OthersAbility_14
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "\u7D20\u6750\u30C9\u30ED\u30C3\u30D7\u7387UP"
-  description: "\u7D20\u6750\u30C9\u30ED\u30C3\u30D7\u7387UP"
+  skillName: "\u6575\u306E\u51FA\u73FE\u7387UP"
+  description: "\u6575\u306E\u51FA\u73FE\u7387UP"
   level: 0
   maxLevel: 5
   needExp: 1
