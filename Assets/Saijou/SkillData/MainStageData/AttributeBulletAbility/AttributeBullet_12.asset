@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 273875e9515bae4469b58e69f7b82692, type: 3}
-  m_Name: AttributeBullet_06
+  m_Name: AttributeBullet_12
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "\u5C5E\u6027\u5F3E\u306E\u30C0\u30E1\u30FC\u30B8UP"
-  description: "\u5C5E\u6027\u5F3E\u306E\u30C0\u30E1\u30FC\u30B8UP"
+  skillName: "\u5C5E\u6027\u5F3E\u306E\u6027\u80FDUP"
+  description: "(\u96F7\u306E\u5F3E\u3067\u611F\u96FB\u3059\u308B\u6575\uFF0B1\u3084\u9396\u306E\u5F3E\u3067\u62D8\u675F\u3059\u308B\u6575\uFF0B1\u306A\u3069)"
   level: 0
-  maxLevel: 5
+  maxLevel: 1
   needExp: 1
   isUnlocked: 0
   isLevelUp: 0
