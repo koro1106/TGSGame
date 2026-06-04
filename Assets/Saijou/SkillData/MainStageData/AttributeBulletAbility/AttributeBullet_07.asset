@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273875e9515bae4469b58e69f7b82692, type: 3}
   m_Name: AttributeBullet_07
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "\u5C5E\u6027\u5F3E"
-  description: "\u3066\u3059\u3068"
+  skillName: "\u6BD2\u306E\u5F3E_\u89E3\u653E"
+  description: "\u6BD2\u306E\u5F3E_\u89E3\u653E"
   level: 0
-  maxLevel: 5
+  maxLevel: 1
   needExp: 1
   isUnlocked: 0
   isLevelUp: 0
@@ -24,4 +24,4 @@ MonoBehaviour:
   expType: 0
   effectType: 0
   effectValue: 1
-  elementalBulletPrefab: {fileID: 0}
+  elementalBulletPrefab: {fileID: 2218497407943198192, guid: 182642bc087fe684ba133f2131c0527e, type: 3}

@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273875e9515bae4469b58e69f7b82692, type: 3}
   m_Name: AttributeBullet_01
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "\u5C5E\u6027\u5F3E"
-  description: "\u3066\u3059\u3068"
+  skillName: "\u96F7\u306E\u5F3E_\u89E3\u653E"
+  description: "\u96F7\u306E\u5F3E_\u89E3\u653E"
   level: 0
-  maxLevel: 5
+  maxLevel: 1
   needExp: 1
   isUnlocked: 0
   isLevelUp: 0
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   preStageData: {fileID: 0}
   expType: 0
-  effectType: 0
+  effectType: 2
   effectValue: 1
-  elementalBulletPrefab: {fileID: 0}
+  elementalBulletPrefab: {fileID: 6812141048282945842, guid: 422d710f4cfeb084d880cf1fcecc60f9, type: 3}
