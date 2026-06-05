@@ -13,7 +13,7 @@ public class EnemySpawner : MonoBehaviour
     public Transform player;
 
     public float spawnInterval = 2f;
-    public int baseHP = 10;
+    //public int baseHP = 10;
 
     private float timer;
     private float hpTimer;
@@ -71,7 +71,7 @@ public class EnemySpawner : MonoBehaviour
             EnemyHP hp = enemy.GetComponent<EnemyHP>();
             if (hp != null)
             {
-                hp.maxHP = Mathf.CeilToInt(baseHP * hpMultiplier);
+                //hp.maxHP = Mathf.CeilToInt(baseHP * hpMultiplier);
                 hp.currentHP = hp.maxHP;
             }
 
