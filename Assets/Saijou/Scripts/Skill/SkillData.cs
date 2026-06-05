@@ -6,7 +6,6 @@ using UnityEngine;
 public class SkillData : ScriptableObject
 {
     public string skillName;        // スキル名
-    public string description;      // 説明文
 
     public int level = 1;        // 現在レベル
     public int maxLevel = 5;    // 最大レベル

@@ -24,4 +24,4 @@ MonoBehaviour:
   expType: 0
   effectType: 3
   effectValue: 1
-  elementalBulletPrefab: {fileID: 0}
+  elementalBulletPrefab: {fileID: 2334733960502601127, guid: 95ce52de3d71dd34baede0ac44a9a068, type: 3}

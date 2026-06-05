@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Bullet_09
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillName: "\u30DE\u30EB\u30C1\u30B7\u30E7\u30C3\u30C8_\u89E3\u653E"
-  description: "\u30DE\u30EB\u30C1\u30B7\u30E7\u30C3\u30C8_\u89E3\u653E"
   level: 0
   maxLevel: 1
   needExp: 1
@@ -22,6 +21,6 @@ MonoBehaviour:
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   preStageData: {fileID: 0}
   expType: 0
-  effectType: 0
+  effectType: 3
   effectValue: 1
   elementalBulletPrefab: {fileID: 0}

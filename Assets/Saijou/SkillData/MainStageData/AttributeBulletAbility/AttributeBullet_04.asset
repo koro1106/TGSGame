@@ -22,6 +22,6 @@ MonoBehaviour:
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   preStageData: {fileID: 0}
   expType: 0
-  effectType: 2
+  effectType: 3
   effectValue: 1
   elementalBulletPrefab: {fileID: 2218497407943198192, guid: 7eccedd1dfe352d4fa83bfbac0fde328, type: 3}
