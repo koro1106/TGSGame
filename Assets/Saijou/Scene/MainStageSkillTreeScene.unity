@@ -356,7 +356,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillTreeChange
   uiAnimation: {fileID: 26492057}
   targetButton: {fileID: 20106984}
-  sceneName: PrestageSkillTreeScene
+  sceneName: PrestigeSkillTreeScene
   animationTime: 0.3
 --- !u!1 &26492052
 GameObject:
