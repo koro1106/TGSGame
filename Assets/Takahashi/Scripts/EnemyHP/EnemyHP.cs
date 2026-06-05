@@ -145,6 +145,13 @@ public class EnemyHP : MonoBehaviour
 
         return null;
     }
+    public void ForceKill()
+    {
+        if (isDying) return;
+
+        currentHP = 0;
+        StartCoroutine(DeathSpiral());
+    }
     // 死亡演出
     // =========================================
     IEnumerator DeathSpiral()

@@ -169,6 +169,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHP
   maxHP: 40
   currentHP: 0
+  isRareEnemy: 0
   scaleSmooth: 12
   growInterval: 10
   growMultiplier: 1.5
@@ -184,3 +185,4 @@ MonoBehaviour:
     chance: 5
   dropCount: 3
   damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
+  stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}

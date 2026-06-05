@@ -1,314 +1,292 @@
 using UnityEngine;
 
-/// <summary>
-/// ケアパッケージ本体
-/// ・上から降ってくる
-/// ・着地後に攻撃可能
-/// ・HPが0になるとアイテムをドロップ
-/// </summary>
 public class CarePackage : MonoBehaviour
 {
-    // =====================================================
-    // HP設定
-    // =====================================================
+    // =========================
+    // アイテム
+    // =========================
+
+    [System.Serializable]
+    public class DropItem
+    {
+        public GameObject prefab;
+        [Range(0, 100)] public int dropRate = 10;
+    }
+
+    [Header("ドロップテーブル")]
+    [SerializeField] private DropItem[] dropItems;
+
+    // =========================
+    // HP
+    // =========================
 
     [Header("HP")]
     [SerializeField] private int maxHP = 50;
 
-    /// <summary>
-    /// 現在HP
-    /// </summary>
     private int currentHP;
+    private bool landed;
 
-    // =====================================================
-    // 落下設定
-    // =====================================================
+    // =========================
+    // 落下
+    // =========================
 
     [Header("落下")]
     [SerializeField] private float fallSpeed = 5f;
-
-    /// <summary>
-    /// 地面のY座標
-    /// </summary>
     [SerializeField] private float groundY = 0f;
 
-    /// <summary>
-    /// 着地済みか
-    /// </summary>
-    private bool landed;
-
-    // =====================================================
-    // ドロップ設定
-    // =====================================================
-
-    [Header("ドロップアイテム")]
-    [SerializeField] private GameObject itemPrefab;
-
-    [Header("ドロップ個数")]
-    [SerializeField] private int minDrop = 3;
-
-    [SerializeField] private int maxDrop = 6;
-
-    // =====================================================
-    // 影設定
-    // =====================================================
+    // =========================
+    // 影
+    // =========================
 
     [Header("影Prefab")]
     [SerializeField] private GameObject shadowPrefab;
 
-    [Header("影サイズ")]
-    [SerializeField]
-    public float shadowMaxScale = 8f; // 着地時
-
-    [SerializeField]
-    public float shadowMinScale = 2f; // 上空
-
-    /// <summary>
-    /// 生成した影
-    /// </summary>
     private Transform shadow;
-
-    /// <summary>
-    /// 影のSpriteRenderer
-    /// </summary>
     private SpriteRenderer shadowRenderer;
 
-    // =====================================================
+    // =========================
+    // 報酬
+    // =========================
+
+    public enum RewardType
+    {
+        ItemRain,
+        AmmoSupply,
+        KillAllEnemies
+    }
+
+    [System.Serializable]
+    public class RewardData
+    {
+        public RewardType rewardType;
+        [Range(0, 100)] public int chance = 10;
+    }
+
+    [Header("報酬テーブル")]
+    [SerializeField] private RewardData[] rewards;
+
+    // =========================
     // 初期化
-    // =====================================================
+    // =========================
 
     private void Start()
     {
-        // HP初期化
         currentHP = maxHP;
-
-        // 影生成
         CreateShadow();
     }
 
-    // =====================================================
-    // 更新
-    // =====================================================
-
     private void Update()
     {
-        // 着地前なら落下
         if (!landed)
-        {
             Fall();
-        }
 
-        // 影更新
         UpdateShadow();
     }
 
+    // 落下処理の近く（Fallの上とか）
     public void SetGroundY(float y)
     {
         groundY = y;
     }
 
-    // =====================================================
-    // 落下処理
-    // =====================================================
+    // =========================
+    // 落下
+    // =========================
 
     private void Fall()
     {
-        // 下方向へ移動
-        transform.position +=
-            Vector3.down *
-            fallSpeed *
-            Time.deltaTime;
+        transform.position += Vector3.down * fallSpeed * Time.deltaTime;
 
-        // 地面到達
         if (transform.position.y <= groundY)
         {
             landed = true;
 
-            transform.position =
-                new Vector3(
-                    transform.position.x,
-                    groundY,
-                    0
-                );
+            transform.position = new Vector3(
+                transform.position.x,
+                groundY,
+                0f
+            );
         }
     }
 
-    // =====================================================
+    // =========================
     // ダメージ
-    // =====================================================
+    // =========================
 
     public void TakeDamage(int damage)
     {
-        // 着地前は無敵
-        if (!landed)
-            return;
+        if (!landed) return;
 
         currentHP -= damage;
 
-        Debug.Log("箱HP : " + currentHP);
-
         if (currentHP <= 0)
-        {
             BreakBox();
+    }
+
+    // =========================
+    // 報酬抽選
+    // =========================
+
+    private RewardType GetRandomReward()
+    {
+        int total = 0;
+
+        foreach (var r in rewards)
+            total += r.chance;
+
+        int roll = Random.Range(0, total);
+        int current = 0;
+
+        foreach (var r in rewards)
+        {
+            current += r.chance;
+            if (roll < current)
+                return r.rewardType;
+        }
+
+        return rewards[0].rewardType;
+    }
+
+    // =========================
+    // アイテム雨
+    // =========================
+
+    private GameObject GetRandomItem()
+    {
+        int total = 0;
+
+        foreach (var i in dropItems)
+            total += i.dropRate;
+
+        int roll = Random.Range(0, total);
+        int current = 0;
+
+        foreach (var i in dropItems)
+        {
+            current += i.dropRate;
+            if (roll < current)
+                return i.prefab;
+        }
+
+        return dropItems[0].prefab;
+    }
+
+    private void SpawnManyItems()
+    {
+        for (int i = 0; i < 15; i++)
+        {
+            GameObject item = GetRandomItem();
+            if (item == null) continue;
+
+            Vector3 offset = new Vector3(
+                Random.Range(-80f, 80f),
+                Random.Range(-80f, 80f),
+                0f
+            );
+
+            Instantiate(item, transform.position + offset, Quaternion.identity);
         }
     }
 
-    // =====================================================
-    // 箱破壊
-    // =====================================================
+    // =========================
+    // 弾補給
+    // =========================
+
+    private void AmmoSupply()
+    {
+        Debug.Log("弾補給！");
+    }
+
+    // =========================
+    // 敵全滅
+    // =========================
+
+    private void KillAllEnemies()
+    {
+        EnemyHP[] enemies = FindObjectsOfType<EnemyHP>();
+        Camera cam = Camera.main;
+
+        foreach (var enemy in enemies)
+        {
+            if (enemy == null) continue;
+
+            Vector3 viewportPos = cam.WorldToViewportPoint(enemy.transform.position);
+
+            bool onScreen =
+                viewportPos.z > 0 && // カメラの前にいる
+                viewportPos.x >= 0f && viewportPos.x <= 1f &&
+                viewportPos.y >= 0f && viewportPos.y <= 1f;
+
+            if (!onScreen) continue;
+
+            // 100%確実に倒す
+            enemy.TakeDamage(999999);
+        }
+    }
+
+    // =========================
+    // 破壊
+    // =========================
 
     private void BreakBox()
     {
-        // ランダム個数
-        int dropCount =
-            Random.Range(
-                minDrop,
-                maxDrop + 1
-            );
+        RewardType reward = GetRandomReward();
 
-        // アイテム生成
-        for (int i = 0; i < dropCount; i++)
+        switch (reward)
         {
-            Instantiate(
-                itemPrefab,
-                transform.position,
-                Quaternion.identity
-            );
+            case RewardType.ItemRain:
+                SpawnManyItems();
+                break;
+
+            case RewardType.AmmoSupply:
+                AmmoSupply();
+                break;
+
+            case RewardType.KillAllEnemies:
+                KillAllEnemies();
+                break;
         }
 
-        // 箱削除
         Destroy(gameObject);
     }
 
-    // =====================================================
-    // 影生成
-    // =====================================================
+    // =========================
+    // 影
+    // =========================
 
     private void CreateShadow()
     {
-        if (shadowPrefab == null)
-            return;
+        if (shadowPrefab == null) return;
 
-        GameObject obj =
-            Instantiate(shadowPrefab);
+        GameObject obj = Instantiate(shadowPrefab);
 
         shadow = obj.transform;
-
-        shadowRenderer =
-            obj.GetComponent<SpriteRenderer>();
-
-        // 初期透明度
-        if (shadowRenderer != null)
-        {
-            Color color =
-                shadowRenderer.color;
-
-            color.a = 0.5f;
-
-            shadowRenderer.color = color;
-        }
+        shadowRenderer = obj.GetComponent<SpriteRenderer>();
     }
-
-    // =====================================================
-    // 影更新
-    // =====================================================
 
     private void UpdateShadow()
     {
-        if (shadow == null)
-            return;
+        if (shadow == null) return;
 
-        // -------------------------------------
-        // 影は地面に固定
-        // -------------------------------------
+        shadow.position = new Vector3(transform.position.x, groundY - 60f, 0f);
 
-        shadow.position =
-            new Vector3(
-                transform.position.x,
-                groundY - 60f,
-                0f
-            );
+        float h = Mathf.Max(transform.position.y - groundY, 0f);
+        float t = Mathf.Clamp01(h / 550f);
 
-        // -------------------------------------
-        // 現在の高さ
-        // -------------------------------------
+        float scale = Mathf.Lerp(10f, 2f, t);
 
-        float height =
-            Mathf.Max(
-                transform.position.y - groundY,
-                0f
-            );
+        shadow.localScale = new Vector3(scale, scale * 0.6f, 1f);
 
-        // -------------------------------------
-        // 0～1に変換
-        // 550が最高高度
-        // -------------------------------------
+        Color c = shadowRenderer.color;
+        c.a = Mathf.Lerp(0.5f, 0.1f, t);
+        shadowRenderer.color = c;
 
-        float t =
-            Mathf.Clamp01(
-                height / 550f
-            );
-
-        // -------------------------------------
-        // 影サイズ
-        //
-        // 地面付近 → 大
-        // 上空     → 小
-        // -------------------------------------
-
-        float scale =
-            Mathf.Lerp(
-                10f,   // 着地時
-                2f, // 上空
-                t
-            );
-
-        // 楕円影
-        shadow.localScale =
-            new Vector3(
-                scale,
-                scale * 0.6f,
-                1f
-            );
-
-        // -------------------------------------
-        // 透明度
-        //
-        // 高いほど薄く
-        // -------------------------------------
-
-        if (shadowRenderer != null)
-        {
-            Color color =
-                shadowRenderer.color;
-
-            color.a =
-                Mathf.Lerp(
-                    0.5f, // 着地時
-                    0.1f, // 上空
-                    t
-                );
-
-            shadowRenderer.color = color;
-        }
-
-        // -------------------------------------
-        // 回転させない
-        // -------------------------------------
-
-        shadow.rotation =
-            Quaternion.identity;
+        shadow.rotation = Quaternion.identity;
     }
-
-    // =====================================================
-    // 削除時
-    // =====================================================
 
     private void OnDestroy()
     {
         if (shadow != null)
-        {
             Destroy(shadow.gameObject);
-        }
     }
 }

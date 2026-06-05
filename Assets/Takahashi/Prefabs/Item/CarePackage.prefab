@@ -105,15 +105,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db3cde1f1824ce24b859af7b5b339938, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarePackage
+  dropItems:
+  - prefab: {fileID: 4247095691041555197, guid: 26d748848edfdd6449eec78b67fa87f4, type: 3}
+    dropRate: 33
+  - prefab: {fileID: 4694620910833782341, guid: 46de89cdb13085c408ca2d94137493c2, type: 3}
+    dropRate: 33
+  - prefab: {fileID: 5214269435395224199, guid: 804cf549acb99c949910006ff076e73f, type: 3}
+    dropRate: 33
   maxHP: 50
-  fallSpeed: 50
+  fallSpeed: 100
   groundY: 0
-  itemPrefab: {fileID: 8161785780358070094, guid: d9c2369f3b052b2409e0ec8c8f8b8b25, type: 3}
-  minDrop: 1
-  maxDrop: 1
   shadowPrefab: {fileID: 1354215260935572172, guid: 536db39859af53a47928bcbe00400608, type: 3}
-  shadowMaxScale: 1000
-  shadowMinScale: 500
+  rewards:
+  - rewardType: 0
+    chance: 33
+  - rewardType: 1
+    chance: 33
+  - rewardType: 2
+    chance: 33
 --- !u!61 &4737241381771015983
 BoxCollider2D:
   m_ObjectHideFlags: 0
