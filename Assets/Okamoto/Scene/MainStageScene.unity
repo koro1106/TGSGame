@@ -1123,6 +1123,46 @@ MonoBehaviour:
     image: {fileID: 475326263}
   - ammoType: 0
     image: {fileID: 1752819500}
+  - ammoType: 0
+    image: {fileID: 1752819500}
+  - ammoType: 0
+    image: {fileID: 1752819500}
+  - ammoType: 0
+    image: {fileID: 1752819500}
+  - ammoType: 0
+    image: {fileID: 1752819500}
+  - ammoType: 0
+    image: {fileID: 1752819500}
+  - ammoType: 0
+    image: {fileID: 1752819500}
+  - ammoType: 0
+    image: {fileID: 1752819500}
+  - ammoType: 0
+    image: {fileID: 1752819500}
+  - ammoType: 0
+    image: {fileID: 1752819500}
+  - ammoType: 0
+    image: {fileID: 1752819500}
+  - ammoType: 0
+    image: {fileID: 1752819500}
+  - ammoType: 0
+    image: {fileID: 1752819500}
+  - ammoType: 0
+    image: {fileID: 1752819500}
+  - ammoType: 0
+    image: {fileID: 1752819500}
+  - ammoType: 0
+    image: {fileID: 1752819500}
+  - ammoType: 0
+    image: {fileID: 1752819500}
+  - ammoType: 0
+    image: {fileID: 1752819500}
+  - ammoType: 0
+    image: {fileID: 1752819500}
+  - ammoType: 0
+    image: {fileID: 1752819500}
+  - ammoType: 0
+    image: {fileID: 1752819500}
   ammoText: {fileID: 1212407996}
   crosshair: {fileID: 360144202}
   ammoDropPrefabs:
