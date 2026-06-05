@@ -142,6 +142,7 @@ MonoBehaviour:
     chance: 40
   dropCount: 10
   damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
+  stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
 --- !u!61 &-5702532891261496694
 BoxCollider2D:
   m_ObjectHideFlags: 0
