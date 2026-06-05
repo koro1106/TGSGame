@@ -33,6 +33,14 @@ public class SkillEffectManager : MonoBehaviour
             case SkillEffectType.EnemySpawnWeightBonus:
                 playerStats.enemySpawnWeightBonus += (int)skill.effectValue;
                 break;
+            // クリティカル発生確率
+            case SkillEffectType.Criticalrate:
+                playerStats.enemySpawnWeightBonus += (int)skill.effectValue;
+                break;
+            // クリティカルダメージ倍率
+            case SkillEffectType.CriticalDamage:
+                playerStats.enemySpawnWeightBonus += (int)skill.effectValue;
+                break;
         }
     }
 
