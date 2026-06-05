@@ -6,6 +6,7 @@ public class penetratingbullet : MonoBehaviour
     [SerializeField] private int damage;
 
     private Vector2 direction;
+    public PlayerStats stats; // プレイヤーステータス
 
     void Start()
     {
@@ -23,10 +24,11 @@ public class penetratingbullet : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             Enemy enemy = other.GetComponent<Enemy>();
+            int totalDamage = damage + stats.effectBulletDamage;
 
             if (enemy != null)
             {
-                enemy.TakeDamage(damage);
+                enemy.TakeDamage(totalDamage);
             }
 
             // ↓ 消さないので貫通する

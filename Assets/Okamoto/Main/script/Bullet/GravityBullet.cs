@@ -16,21 +16,25 @@ public class GravityBullet : MonoBehaviour
     [Header("演出")]
     public GameObject gravityEffect;
 
+    public PlayerStats stats; // プレイヤーステータス
     void Start()
     {
         Destroy(gameObject, lifeTime);
+
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Enemy"))
         {
+            int totalDamage = damage + stats.effectBulletDamage;
+
             Enemy centerEnemy = other.GetComponent<Enemy>();
 
             if (centerEnemy != null)
             {
                 // 着弾した敵にダメージ
-                centerEnemy.TakeDamage(damage);
+                centerEnemy.TakeDamage(totalDamage);
 
                 // 重力発生
                 StartCoroutine(GravityPull(centerEnemy.transform));

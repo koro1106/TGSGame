@@ -58,6 +58,7 @@ MonoBehaviour:
   hitSound: {fileID: 8300000, guid: 92202c2a4fa23c445820a27fcf2f61f4, type: 3}
   ammoDropPrefab: {fileID: 5431272660784949491, guid: 59c1a1cf82a32ed419e3dafc1bfda765, type: 3}
   ammoUISprite: {fileID: 8450537012972342862, guid: bcdad1804b565a0489879a3791651db1, type: 3}
+  stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
 --- !u!212 &298442216506815025
 SpriteRenderer:
   serializedVersion: 2
