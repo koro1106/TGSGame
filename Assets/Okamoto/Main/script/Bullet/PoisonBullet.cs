@@ -40,6 +40,8 @@ public class PoisonBullet : Bullet
     // 既に着弾したか判定
     private bool exploded = false;
 
+    public PlayerStats stats; // プレイヤーステータス
+
     // =========================
     // 敵に当たった時
     // =========================
@@ -53,10 +55,12 @@ public class PoisonBullet : Bullet
         {
             Enemy enemy = other.GetComponent<Enemy>();
 
+            int totalDamage = hitDamage + stats.effectBulletDamage;
+
             // 着弾ダメージ
             if (enemy != null)
             {
-                enemy.TakeDamage(hitDamage);
+                enemy.TakeDamage(totalDamage);
             }
 
             // 毒エリア開始

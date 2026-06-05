@@ -16,11 +16,14 @@ public class SkillEffectManager : MonoBehaviour
     {
         switch(skill.effectType)
         {
-            // 弾ダメージUP
+            // 通常弾ダメージUP
             case SkillEffectType.BulletDamage:
                 playerStats.bulletDamage += (int)skill.effectValue;
                 break;
-
+            // 属性弾ダメージUP
+            case SkillEffectType.EffectBulletDamage:
+                playerStats.effectBulletDamage += (int)skill.effectValue;
+                break;
             // 最大弾数UP
             case SkillEffectType.MaxAmmo:
                 playerStats.maxAmmo += (int)skill.effectValue;

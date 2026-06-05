@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d72a7857076136469d8bd487d4193d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PoisonBullet
+  speed: 15
   lifeTime: 5
   damage: 10
   ammoDropPrefab: {fileID: 0}
@@ -58,6 +59,7 @@ MonoBehaviour:
   poisonDuration: 5
   poisonEffectPrefab: {fileID: 1793556059686151916, guid: 721a3194ec1aaeb4abb9756475a050fd, type: 3}
   effectSize: 40
+  stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
 --- !u!212 &6253829430372542568
 SpriteRenderer:
   serializedVersion: 2

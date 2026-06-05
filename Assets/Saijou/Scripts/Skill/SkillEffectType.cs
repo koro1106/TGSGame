@@ -4,7 +4,8 @@ using UnityEngine;
 /// </summary>
 public enum SkillEffectType
 {
-    BulletDamage, // 弾ダメージ
+    BulletDamage, // 通常弾ダメージ
+    EffectBulletDamage, // 属性弾ダメージ
     MaxAmmo,      // 最大弾数
     UnlockElementalBullet, // 属性弾解放
     EnemySpawnWeightBonus, // 敵スポーン率ボーナス

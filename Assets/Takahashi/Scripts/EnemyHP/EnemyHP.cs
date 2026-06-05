@@ -135,7 +135,7 @@ public class EnemyHP : MonoBehaviour
         {
             float finalChance = item.chance + stats.expDroprate;
 
-            total += item.chance;
+            total += finalChance;
 
             if (rand <= total)
             {

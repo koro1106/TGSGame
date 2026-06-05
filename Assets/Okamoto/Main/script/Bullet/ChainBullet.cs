@@ -19,6 +19,8 @@ public class ChainBullet : MonoBehaviour
     public GameObject ammoDropPrefab; // この弾に対応するUIのプレハブ☆
     public Sprite ammoUISprite; // 弾UI用画像☆
 
+    public PlayerStats stats; // プレイヤーステータス
+
     void Awake()
     {
         lr = GetComponent<LineRenderer>();
@@ -55,9 +57,10 @@ public class ChainBullet : MonoBehaviour
     {
         List<Enemy> hitEnemies = new List<Enemy>();
 
+        int totalDamage = damage + stats.effectBulletDamage;
         // 最初の敵
         hitEnemies.Add(startEnemy);
-        startEnemy.TakeDamage(damage);
+        startEnemy.TakeDamage(totalDamage);
 
         // ★最初の雷（これ重要）
         SpawnLightning(transform.position, startEnemy.transform.position);
@@ -77,7 +80,7 @@ public class ChainBullet : MonoBehaviour
         {
             if (count >= chainCount) break;
 
-            enemy.TakeDamage(damage);
+            enemy.TakeDamage(totalDamage);
             hitEnemies.Add(enemy);
 
             SpawnLightning(current.transform.position, enemy.transform.position);
