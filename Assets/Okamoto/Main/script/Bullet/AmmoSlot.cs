@@ -1,10 +1,10 @@
 using UnityEngine.UI;
-/// <summary>
-/// 弾スロット
-/// </summary>
+
 [System.Serializable]
 public class AmmoSlot
 {
-    public AmmoType ammoType; // 弾のタイプ
-    public Image image;       // 弾の画像
+    public Image emptyImage; // 空枠
+    public Image image;      // 弾
+
+    public AmmoType ammoType;
 }
