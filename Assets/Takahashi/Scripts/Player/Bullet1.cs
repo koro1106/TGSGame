@@ -38,29 +38,56 @@ public class Bullet1 : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // 敵に当たったとき
+        // ケアパッケージ
+        if (other.CompareTag("CarePackage"))
+        {
+            CarePackage package =
+                other.GetComponent<CarePackage>();
+
+            if (package != null)
+            {
+                package.TakeDamage(damage);
+            }
+
+            Destroy(gameObject);
+            return;
+        }
+
+
+        // 敵
         if (other.CompareTag("Enemy"))
         {
-            EnemyHP enemy = other.GetComponent<EnemyHP>();
+            EnemyHP enemy =
+                other.GetComponent<EnemyHP>();
 
-            if (enemy == null) return;
+            if (enemy == null)
+                return;
 
             // クリティカル判定
             bool isCritical =
-                Random.Range(0f, 100f) < criticalChance;
+                Random.Range(0f, 100f)
+                < criticalChance;
 
             // 最終ダメージ
             int finalDamage = damage;
 
-            // クリティカルなら倍率
+            // クリティカル
             if (isCritical)
             {
-                finalDamage = Mathf.RoundToInt(damage * criticalMultiplier);
+                finalDamage =
+                    Mathf.RoundToInt(
+                        damage *
+                        criticalMultiplier
+                    );
+
                 Debug.Log("クリティカル！");
             }
 
             // ダメージ適用
-            enemy.TakeDamage(finalDamage, isCritical);
+            enemy.TakeDamage(
+                finalDamage,
+                isCritical
+            );
 
             // 弾消滅
             Destroy(gameObject);
