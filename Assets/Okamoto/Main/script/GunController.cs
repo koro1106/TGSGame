@@ -159,7 +159,7 @@ public class GunController : MonoBehaviour
     void Shoot()
     {
         fireTimer += Time.deltaTime;
-
+       
         if (Input.GetMouseButton(0) && fireTimer >= fireRate)
         {
             // 弾切れ
@@ -186,7 +186,6 @@ public class GunController : MonoBehaviour
 
             // デフォルトは通常弾
             GameObject bulletToShoot = bulletPrefabs[0];
-
             // 弾タイプで変更
             switch (slot.ammoType)
             {
@@ -221,7 +220,6 @@ public class GunController : MonoBehaviour
             PlayMuzzleFlash();
             crosshairTargetRotation += 90f;
 
-
             // =========================
             // ダメージ設定
             // =========================
@@ -235,7 +233,7 @@ public class GunController : MonoBehaviour
             // =========================
             Rigidbody2D rb =
                 bulletInstance.GetComponent<Rigidbody2D>();
-
+            Debug.Log("④ Rigidbody取得");
             rb.linearVelocity =
                 muzzle.right * bulletSpeed;
 
