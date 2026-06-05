@@ -48,6 +48,10 @@ public class GunController : MonoBehaviour
     public float muzzleFlashTime = 0.05f;
     private Coroutine flashRoutine;
 
+    [Header("íeUIÉhÉçÉbÉvââèo")]
+    public GameObject ammoDropUIPrefab;
+    public Transform uiEffectParent;
+
     public AmmoSlot[] ammoSlots;
     public TMP_Text ammoText;
 
@@ -81,6 +85,12 @@ public class GunController : MonoBehaviour
             tempList.AddRange(stats.unlockedElementalBullets);
             bulletPrefabs = tempList.ToArray();
         }
+        //for (int i = 0; i < ammoSlots.Length; i++)
+        //{
+        //    bool active = i < maxAmmo;
+
+        //    ammoSlots[i].image.transform.parent.gameObject.SetActive(active);
+        //}
     }
 
     void Awake()
@@ -119,6 +129,15 @@ public class GunController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             StartReload();
+        }
+        //// KÉLÅ[Ç≈íeí«â¡
+        //if (Input.GetKeyDown(KeyCode.K))
+        //{
+        //    AddAmmo(1);
+        //}
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            IncreaseMaxAmmo(1);
         }
     }
 
@@ -249,6 +268,35 @@ public class GunController : MonoBehaviour
             }
 
             // =========================
+            // íeUIÉhÉçÉbÉvââèo
+            // =========================
+            if (ammoDropUIPrefab != null && img != null)
+            {
+                GameObject drop =
+                    Instantiate(
+                        ammoDropUIPrefab,
+                        img.transform.position,
+                        Quaternion.identity,
+                        img.transform.parent);
+
+                // ÉTÉCÉYçáÇÌÇπ
+                drop.transform.localScale =
+                    img.transform.localScale;
+
+                // SpriteÉRÉsÅ[
+                Image dropImage =
+                    drop.GetComponent<Image>();
+
+                if (dropImage != null)
+                {
+                    dropImage.sprite = img.sprite;
+                }
+            }
+
+            // å≥UIè¡Ç∑
+            img.enabled = false;
+
+            // =========================
             // ââèo
             // =========================
             CameraShake.Instance.Shake();
@@ -292,11 +340,21 @@ public class GunController : MonoBehaviour
     // íeì‡óeåàÇﬂÇÈ
     void GenerateAmmo()
     {
-        for(int i = 0; i < ammoSlots.Length; i++)
+        for (int i = 0; i < ammoSlots.Length; i++)
         {
             AmmoSlot slot = ammoSlots[i];
 
-            // ÉfÉtÉHÉãÉgí èÌíe
+            bool active = i < maxAmmo;
+
+            // ãÛòg
+            slot.emptyImage.gameObject.SetActive(active);
+
+            // íe
+            slot.image.gameObject.SetActive(active);
+
+            if (!active) continue;
+
+            // í èÌíe
             slot.ammoType = AmmoType.Normal;
             slot.image.sprite = normalAmmoSprite;
 
@@ -306,12 +364,13 @@ public class GunController : MonoBehaviour
                 stats.unlockedElementalBullets.Length > 0;
 
             if (canElement &&
-           Random.value < stats.elementalBulletChance)
+                Random.value < stats.elementalBulletChance)
             {
                 slot.ammoType = AmmoType.Lightning;
                 slot.image.sprite = lightningAmmoSprite;
             }
 
+            // íeï\é¶
             slot.image.enabled = true;
         }
     }
@@ -399,4 +458,68 @@ public class GunController : MonoBehaviour
         muzzleFlash.SetActive(false);
     }
 
+    void AddAmmo(int amount)
+    {
+        int oldAmmo = currentAmmo;
+
+        currentAmmo = Mathf.Clamp(currentAmmo + amount, 0, maxAmmo);
+
+        for (int i = oldAmmo; i < currentAmmo; i++)
+        {
+            if (i >= 0 && i < ammoSlots.Length)
+            {
+                AmmoSlot slot = ammoSlots[i];
+
+                // íeéÌóﬁÇ…âûÇ∂ÇƒSpriteïúå≥
+                switch (slot.ammoType)
+                {
+                    case AmmoType.Normal:
+                        slot.image.sprite = normalAmmoSprite;
+                        break;
+
+                    case AmmoType.Lightning:
+                        slot.image.sprite = lightningAmmoSprite;
+                        break;
+                }
+
+                slot.image.enabled = true;
+            }
+        }
+
+        UpdateAmmoUI();
+    }
+    void IncreaseMaxAmmo(int amount)
+    {
+        // ç≈ëÂíeêîëùâ¡
+        maxAmmo += amount;
+
+        maxAmmo = Mathf.Clamp(maxAmmo, 0, ammoSlots.Length);
+
+        // ñûÉ^Éì
+        currentAmmo = maxAmmo;
+
+        for (int i = 0; i < ammoSlots.Length; i++)
+        {
+            AmmoSlot slot = ammoSlots[i];
+
+            bool active = i < maxAmmo;
+
+            // ãÛògï\é¶
+            slot.emptyImage.gameObject.SetActive(active);
+
+            // íeï\é¶
+            slot.image.gameObject.SetActive(active);
+
+            if (!active) continue;
+
+            // í èÌíe
+            slot.ammoType = AmmoType.Normal;
+            slot.image.sprite = normalAmmoSprite;
+
+            // íeON
+            slot.image.enabled = true;
+        }
+
+        UpdateAmmoUI();
+    }
 }
