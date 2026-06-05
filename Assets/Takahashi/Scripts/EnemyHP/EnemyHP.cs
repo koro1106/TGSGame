@@ -10,7 +10,7 @@ public class EnemyHP : MonoBehaviour
         public GameObject prefab; // ドロップするPrefab
 
         [Range(0f, 100f)]
-        public float chance; // ドロップ確率
+        public int chance; // ドロップ確率
     }
 
     [Header("HP")]
@@ -46,6 +46,7 @@ public class EnemyHP : MonoBehaviour
     private bool isDying = false; // 死亡中フラグ
     private Collider2D col;       // コライダー
 
+    public PlayerStats stats; // プレイヤーステータス
     void Start()
     {
         // HP初期化
@@ -58,7 +59,7 @@ public class EnemyHP : MonoBehaviour
         // コライダー取得
         col = GetComponent<Collider2D>();
     }
-
+   
     void Update()
     {
         // 死亡中は処理しない
@@ -132,6 +133,8 @@ public class EnemyHP : MonoBehaviour
 
         foreach (DropItem item in dropItems)
         {
+            float finalChance = item.chance + stats.expDroprate;
+
             total += item.chance;
 
             if (rand <= total)
