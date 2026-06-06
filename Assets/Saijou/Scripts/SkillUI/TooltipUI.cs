@@ -59,6 +59,37 @@ public class TooltipUI : MonoBehaviour
         // 経験値アイコン切替
         expIcon.sprite = GetExpSprite(data.expType);
 
+
+        // レベルアップした時だけ再生
+        if (data.isLevelUp)
+        {
+            UIanim.PlayBounce(levelText.rectTransform);
+            UIanim.PlayBounce(expText.rectTransform);
+
+            data.isLevelUp = false;
+        }
+    }
+    public void ShowText(SkillData data, bool playPanelAnim = true)
+    {
+        panel.SetActive(true);
+
+        // 経験値取得
+        int exp = GetCurrentExp(data);
+
+        // テキスト更新
+        nameText.text = data.skillName;
+        levelText.text = data.level + " / " + data.maxLevel;
+        expText.text = exp + " / " + data.needExp;
+
+        // パネルアニメーション
+        if (playPanelAnim)
+        {
+            UIanim.PlayBounce(panel.GetComponent<RectTransform>());
+        }
+
+        // 経験値アイコン切替
+        expIcon.sprite = GetExpSprite(data.expType);
+
         
         // レベルアップした時だけ再生
         if(data.isLevelUp)
