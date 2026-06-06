@@ -10,7 +10,7 @@ public class SkillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     // マウスが乗った時
     public void OnPointerEnter(PointerEventData eventData)
     {
-        TooltipUI.instance.Show(data,true);
+        TooltipUI.instance.Show(data, eventData, true);
     }
 
     // マウスが離れたとき

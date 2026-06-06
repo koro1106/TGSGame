@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: OthersAbility_05
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillName: "\u56DE\u53CE\u7BC4\u56F2\u5897\u52A0"
-  description: "\u56DE\u53CE\u7BC4\u56F2\u5897\u52A0"
   level: 0
   maxLevel: 5
   needExp: 1
