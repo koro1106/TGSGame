@@ -165,6 +165,12 @@ public class EnemyHP : MonoBehaviour
             col.enabled = false;
         }
 
+        //コンボ追加
+        if(ComboManager.instance != null)
+        {
+            ComboManager.instance.AddCombo();
+        }
+
         // =========================
         // ドロップ生成
         // =========================
