@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Bullet_01
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillName: "\u5F3E\u6570\u5897\u52A0"
-  description: "\u5F3E\u6570\u5897\u52A0"
   level: 0
   maxLevel: 5
   needExp: 1

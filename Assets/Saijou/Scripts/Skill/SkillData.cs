@@ -89,8 +89,6 @@ public class SkillData : ScriptableObject
             // 解放状態
             isUnlocked = true;
 
-            // ツールチップ更新
-            TooltipUI.instance?.Show(this, false);
         }
     }
 

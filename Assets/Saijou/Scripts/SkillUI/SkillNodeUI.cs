@@ -47,18 +47,18 @@ public class SkillNodeUI : MonoBehaviour
         }
 
 
-        if (data.isUnlocked)
-        {
-            state = SkillState.Unlocked;
-        }
-        else if (isStartNode)
-        {
-            state = SkillState.Available;
-        }
-        else
-        {
-            state = SkillState.Locked;
-        }
+        //if (data.isUnlocked)
+        //{
+        //    state = SkillState.Unlocked;
+        //}
+        //else if (isStartNode)
+        //{
+        //    state = SkillState.Available;
+        //}
+        //else
+        //{
+        //    state = SkillState.Locked;
+        //}
 
         // ラインも状態に応じて復元
         foreach (var line in nextLines)
@@ -70,10 +70,43 @@ public class SkillNodeUI : MonoBehaviour
         }
 
         UpdateVisual();
+        RestoreState();
     }
 
-   // スキル解放
-   public void Unlock()
+    void RestoreState()
+    {
+        // このスキルが解放済みの場合
+        if (data.isUnlocked)
+        {
+            // 自身を解放済み状態にする
+            state = SkillState.Unlocked;
+
+            // 次のスキルを解放可能状態にする
+            foreach (var node in nextButtons)
+            {
+                if (!node.data.isUnlocked)
+                    node.SetButtonAvailable();
+            }
+
+            // 次のラインも表示状態にする
+            foreach (var line in nextLines)
+            {
+                line.SetState(SkillState.Available);
+            }
+        }
+        // スタートノードの場合
+        else if (isStartNode)
+        {
+            state = SkillState.Available;
+        }
+        // それ以外は未解放状態
+        else
+        {
+            state = SkillState.Locked;
+        }
+    }
+    // スキル解放
+    public void Unlock()
    {
         // すでに解放済みなら何もしない
         if (state == SkillState.Unlocked) return;

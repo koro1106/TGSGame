@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 /// <summary>
 /// ツールチップ（説明ウィンドウ）管理
 /// ・テキスト表示
@@ -34,9 +35,20 @@ public class TooltipUI : MonoBehaviour
     }
 
     // 表示する
-    public void Show(SkillData data, bool playPanelAnim = true)
+    public void Show(SkillData data, PointerEventData eventData, bool playPanelAnim = true)
     {
         panel.SetActive(true);
+
+        // 経験値取得
+        int exp = GetCurrentExp(data);
+
+        // テキスト更新
+        nameText.text = data.skillName;
+        levelText.text = data.level + " / " + data.maxLevel;
+        expText.text = exp + " / " + data.needExp;
+
+        // 位置決定
+        SetPosition(eventData);
 
         // パネルアニメーション
         if (playPanelAnim)
@@ -44,17 +56,10 @@ public class TooltipUI : MonoBehaviour
             UIanim.PlayBounce(panel.GetComponent<RectTransform>());
         }
 
-        // 経験値取得
-        int exp = GetCurrentExp(data);
-        
         // 経験値アイコン切替
         expIcon.sprite = GetExpSprite(data.expType);
 
-        // テキスト更新
-        nameText.text = data.skillName;
-        levelText.text = data.level + " / " + data.maxLevel;
-        expText.text =  exp + " / " + data.needExp;
-
+        
         // レベルアップした時だけ再生
         if(data.isLevelUp)
         {
@@ -114,5 +119,37 @@ public class TooltipUI : MonoBehaviour
         }
 
         return null;
+    }
+
+    // 位置設定
+    void SetPosition(PointerEventData eventData)
+    {
+        // ツールチップ本体
+        RectTransform tooltipRect = panel.GetComponent<RectTransform>();
+
+        // ホバーしているUI（ボタン）
+        RectTransform target = eventData.pointerEnter?.GetComponent<RectTransform>();
+        if (target == null) return;
+
+        // ボタンの四隅取得
+        Vector3[] corners = new Vector3[4];
+        target.GetWorldCorners(corners);
+
+        // 中心位置を計算（ワールド座標）
+        Vector3 worldCenter = (corners[0] + corners[2]) / 2f;
+
+        // スクリーン座標へ変換（Overlayなのでカメラnull）
+        Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(null, worldCenter);
+
+        // 画面の上下判定
+        bool isUpper = screenPos.y > Screen.height / 2f;
+
+        // 固定オフセット（上下だけ切替）
+        Vector2 offset = isUpper
+            ? new Vector2(-60, -350f)
+            : new Vector2(-60, 130f);
+
+        // 最終位置
+        tooltipRect.position = screenPos + offset;
     }
 }
