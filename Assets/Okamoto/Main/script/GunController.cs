@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GunController : MonoBehaviour
@@ -182,7 +183,10 @@ public class GunController : MonoBehaviour
         if (Input.GetMouseButton(0) && fireTimer >= fireRate)
         {
             // 弾切れ
-            if (currentAmmo <= 0) return;
+            if (currentAmmo <= 0)
+            {
+                SceneManager.LoadScene("MainStageSkillTreeScene");  // スキルツリーに移動
+            }
 
             // =========================
             // 右端の弾UI取得

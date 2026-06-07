@@ -9,6 +9,11 @@ public class SkillTreeManager : MonoBehaviour
     public float minScale = 0.5f;   // 最少スケール
     public float maxScale = 2f;     // 最大スケール
 
+    void Start()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
     void Update()
     {
         float scroll = Input.GetAxis("Mouse ScrollWheel");

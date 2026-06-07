@@ -7,10 +7,10 @@ public class SkillData : ScriptableObject
 {
     public string skillName;        // スキル名
 
-    public int level = 1;        // 現在レベル
+    public int level = 0;        // 現在レベル
     public int maxLevel = 5;    // 最大レベル
 
-    public int needExp = 100;    // 必要経験値
+    public int needExp = 1;    // 必要経験値
 
     public bool isUnlocked = false; //　解放状態
 
@@ -46,7 +46,7 @@ public class SkillData : ScriptableObject
 
         return 0;
     }
-
+   
     /// <summary>
     /// 経験値消費
     /// </summary>

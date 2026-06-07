@@ -46,20 +46,6 @@ public class SkillNodeUI : MonoBehaviour
             state = SkillState.Available;
         }
 
-
-        //if (data.isUnlocked)
-        //{
-        //    state = SkillState.Unlocked;
-        //}
-        //else if (isStartNode)
-        //{
-        //    state = SkillState.Available;
-        //}
-        //else
-        //{
-        //    state = SkillState.Locked;
-        //}
-
         // ƒ‰ƒCƒ“‚àó‘Ô‚É‰‚¶‚Ä•œŒ³
         foreach (var line in nextLines)
         {
@@ -69,8 +55,17 @@ public class SkillNodeUI : MonoBehaviour
                 line.SetState(SkillState.Locked);
         }
 
-        UpdateVisual();
+        //UpdateVisual();
         RestoreState();
+        Debug.Log(
+    data.name +
+    " ID = " +
+    data.GetInstanceID() +
+    " level = " +
+    data.level +
+    " unlock = " +
+    data.isUnlocked
+);
     }
 
     void RestoreState()
@@ -104,6 +99,8 @@ public class SkillNodeUI : MonoBehaviour
         {
             state = SkillState.Locked;
         }
+
+        UpdateVisual();
     }
     // ƒXƒLƒ‹‰ğ•ú
     public void Unlock()

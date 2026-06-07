@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillName: "\u5F3E\u30C0\u30E1\u30FC\u30B8UP"
   level: 0
-  maxLevel: 3
+  maxLevel: 5
   needExp: 1
   isUnlocked: 0
   isLevelUp: 0
