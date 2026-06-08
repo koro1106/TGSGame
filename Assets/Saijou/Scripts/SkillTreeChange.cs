@@ -10,9 +10,17 @@ public class SkillTreeChange : MonoBehaviour
     public RectTransform targetButton; // 対象ボタン
     public string sceneName;           // 遷移先シーン名
     public float animationTime = 0.3f; // アニメーション時間
-
+    public SkillData[] allSkills;
+    public PlayerData playerData;
     public void OnSkilTreeChangeButton()
     {
+        Debug.Log("SAVE");
+        foreach (var skill in allSkills)
+        {
+            Debug.Log($"{skill.skillName} Lv:{skill.level} Unlock:{skill.isUnlocked}");
+        }
+        // セーブ
+        SaveManager.Save(playerData, allSkills);
         StartCoroutine(PlayAnimationAndLoad());
     }
 

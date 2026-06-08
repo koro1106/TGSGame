@@ -9,8 +9,20 @@ public class SkillTreeManager : MonoBehaviour
     public float minScale = 0.5f;   // 最少スケール
     public float maxScale = 2f;     // 最大スケール
 
+    public SkillData[] allSkills;
+    public PlayerData playerData;
     void Start()
     {
+        // セーブロード
+        SaveManager.Load(playerData, allSkills);
+        Debug.Log("LOAD");
+
+        foreach (var skill in allSkills)
+        {
+            Debug.Log($"{skill.skillName} Lv:{skill.level} Unlock:{skill.isUnlocked}");
+        }
+       
+
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }

@@ -38,6 +38,7 @@ public class SkillNodeUI : MonoBehaviour
     [SerializeField] PrestigeExpUIAnimation prestigeExpUIAnimation;
     [SerializeField] UIAnimation uiAnimation;
     [SerializeField] PlayerStats playerStats;
+
     void Start()
     {
         // 最初のノードなら「解放可能状態」にする
@@ -57,15 +58,6 @@ public class SkillNodeUI : MonoBehaviour
 
         //UpdateVisual();
         RestoreState();
-        Debug.Log(
-    data.name +
-    " ID = " +
-    data.GetInstanceID() +
-    " level = " +
-    data.level +
-    " unlock = " +
-    data.isUnlocked
-);
     }
 
     void RestoreState()
@@ -204,7 +196,7 @@ public class SkillNodeUI : MonoBehaviour
         effectManager.ApplySkill(data);// スキル効果適用
         Unlock();                      // 解放
         UpdateVisual();                // 見た目更新
-
+        
         // 経験値UIアップデート
         if (normalExpText != null)
         {
