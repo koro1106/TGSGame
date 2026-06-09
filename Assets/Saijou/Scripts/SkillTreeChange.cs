@@ -14,11 +14,6 @@ public class SkillTreeChange : MonoBehaviour
     public PlayerData playerData;
     public void OnSkilTreeChangeButton()
     {
-        Debug.Log("SAVE");
-        foreach (var skill in allSkills)
-        {
-            Debug.Log($"{skill.skillName} Lv:{skill.level} Unlock:{skill.isUnlocked}");
-        }
         // ÉZÅ[Éu
         SaveManager.Save(playerData, allSkills);
         StartCoroutine(PlayAnimationAndLoad());

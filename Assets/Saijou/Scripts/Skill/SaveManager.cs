@@ -19,7 +19,7 @@ public static class SaveManager
     {
         // セーブ用データ作成
         SaveData save = new SaveData();
-
+        Debug.Log(path);
         // 経験値保存
         save.exp1 = playerData.currentExp_1;
         save.exp2 = playerData.currentExp_2;
@@ -41,6 +41,9 @@ public static class SaveManager
         // JSON化
         string json =
             JsonUtility.ToJson(save, true);
+        Debug.Log("===== SAVE DATA START =====");
+        Debug.Log(json);
+        Debug.Log("===== SAVE DATA END =====");
 
         // ファイル保存
         File.WriteAllText(path, json);
@@ -51,10 +54,11 @@ public static class SaveManager
     /// <summary>
     /// ロード
     /// </summary>
-    public static void Load(
-        PlayerData playerData,
-        SkillData[] skills)
+    public static void Load(PlayerData playerData,SkillData[] skills)
     {
+        Debug.Log("PATH = " + path);
+        Debug.Log("EXISTS = " + File.Exists(path));
+        Debug.Log("LOAD関数に入った");
         // セーブファイルが無い
         if (!File.Exists(path))
         {
@@ -65,6 +69,10 @@ public static class SaveManager
         // JSON読み込み
         string json =
             File.ReadAllText(path);
+        Debug.Log("===== LOAD DATA START =====");
+        Debug.Log(json);
+        Debug.Log("===== LOAD DATA END =====");
+
         // データ変換
         SaveData save =
             JsonUtility.FromJson<SaveData>(json);
@@ -81,13 +89,8 @@ public static class SaveManager
             foreach (var skill in skills)
             {
                 // 同じ名前のスキルを探す
-                if (skill.skillName ==　saveSkill.skillName)
+                if (skill.skillName == saveSkill.skillName)
                 {
-                    Debug.Log(
-                  $"一致: {skill.skillName} " +
-                  $"SaveLv:{saveSkill.level} " +
-                  $"SaveUnlock:{saveSkill.isUnlocked}"
-              );
                     skill.level =
                         saveSkill.level;
 
@@ -96,11 +99,6 @@ public static class SaveManager
 
                     skill.needExp =
                         saveSkill.needExp;
-                    Debug.Log(
-                $"代入後: {skill.skillName} " +
-                $"Lv:{skill.level} " +
-                $"Unlock:{skill.isUnlocked}"
-            );
                 }
             }
           
