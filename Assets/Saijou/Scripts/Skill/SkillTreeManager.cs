@@ -11,18 +11,14 @@ public class SkillTreeManager : MonoBehaviour
 
     public SkillData[] allSkills;
     public PlayerData playerData;
-    void Start()
+    void Awake()
     {
-        // セーブロード
+        // ロード
         SaveManager.Load(playerData, allSkills);
         Debug.Log("LOAD");
-
-        foreach (var skill in allSkills)
-        {
-            Debug.Log($"{skill.skillName} Lv:{skill.level} Unlock:{skill.isUnlocked}");
-        }
-       
-
+    }
+    void Start()
+    {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }
@@ -37,6 +33,11 @@ public class SkillTreeManager : MonoBehaviour
             scale = Mathf.Clamp(scale, minScale, maxScale);
 
             target.localScale = new Vector3(scale, scale, 1f);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            SaveManager.Delete();
         }
     }
 }
