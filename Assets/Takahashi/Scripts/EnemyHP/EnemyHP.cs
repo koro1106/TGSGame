@@ -46,6 +46,9 @@ public class EnemyHP : MonoBehaviour
     private bool isDying = false; // 死亡中フラグ
     private Collider2D col;       // コライダー
 
+    private bool isBind = false;
+    private Coroutine bindCoroutine;
+
     public PlayerStats stats; // プレイヤーステータス
     void Start()
     {
@@ -62,6 +65,11 @@ public class EnemyHP : MonoBehaviour
    
     void Update()
     {
+
+        if (isBind)
+        {
+            return;
+        }
         // 死亡中は処理しない
         if (isDying) return;
 
@@ -263,5 +271,28 @@ public class EnemyHP : MonoBehaviour
             }
         }
            
+    }
+    public void StartBind(float time)
+    {
+        if (bindCoroutine != null)
+        {
+            StopCoroutine(bindCoroutine);
+        }
+
+        bindCoroutine =
+            StartCoroutine(
+                BindCoroutine(time)
+            );
+    }
+
+    IEnumerator BindCoroutine(float time)
+    {
+        isBind = true;
+
+        yield return new WaitForSeconds(time);
+
+        isBind = false;
+
+        bindCoroutine = null;
     }
 }

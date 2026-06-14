@@ -6,154 +6,215 @@ public class GravityBullet : MonoBehaviour
 {
     [Header("弾設定")]
     public float lifeTime = 5f;
-    [SerializeField] private int damage = 10;
+
+    [SerializeField]
+    private int damage = 10;
 
     [Header("重力効果")]
-    public float gravityRadius = 5f;      // 引き寄せ範囲
-    public float pullForce = 15f;         // 引っ張る強さ
-    public float gravityDuration = 2f;    // 吸い込み時間
+    public float gravityRadius = 5f;
+    public float pullForce = 15f;
+    public float gravityDuration = 2f;
 
     [Header("演出")]
     public GameObject gravityEffect;
 
-    public PlayerStats stats; // プレイヤーステータス
+    public PlayerStats stats;
+
     void Start()
     {
         Destroy(gameObject, lifeTime);
-
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Enemy"))
+        // EnemyHP取得
+        EnemyHP centerEnemy =
+            other.GetComponent<EnemyHP>();
+
+        // EnemyHPが無ければ無視
+        if (centerEnemy == null)
+            return;
+
+        int totalDamage =
+            damage +
+            stats.effectBulletDamage;
+
+        // 着弾した敵にダメージ
+        centerEnemy.TakeDamage(totalDamage);
+
+        // 重力発生
+        StartCoroutine(
+            GravityPull(centerEnemy.transform)
+        );
+
+        // 弾の見た目消す
+        SpriteRenderer sr =
+            GetComponent<SpriteRenderer>();
+
+        if (sr != null)
         {
-            int totalDamage = damage + stats.effectBulletDamage;
+            sr.enabled = false;
+        }
 
-            Enemy centerEnemy = other.GetComponent<Enemy>();
+        Collider2D col =
+            GetComponent<Collider2D>();
 
-            if (centerEnemy != null)
-            {
-                // 着弾した敵にダメージ
-                centerEnemy.TakeDamage(totalDamage);
-
-                // 重力発生
-                StartCoroutine(GravityPull(centerEnemy.transform));
-            }
-
-            // 弾の見た目を消す
-            GetComponent<SpriteRenderer>().enabled = false;
-            GetComponent<Collider2D>().enabled = false;
+        if (col != null)
+        {
+            col.enabled = false;
         }
     }
 
     IEnumerator GravityPull(Transform centerTarget)
     {
-        // ===== 着弾した敵を停止 =====
+        // ===== 着弾した敵停止 =====
 
-        // Enemy取得
-        Enemy centerEnemy = centerTarget.GetComponent<Enemy>();
+        EnemyHP centerEnemy =
+            centerTarget.GetComponent<EnemyHP>();
 
-        // Rigidbody取得
-        Rigidbody2D centerRb = centerTarget.GetComponent<Rigidbody2D>();
+        Rigidbody2D centerRb =
+            centerTarget.GetComponent<Rigidbody2D>();
 
         if (centerRb != null)
         {
-            centerRb.linearVelocity = Vector2.zero;
+            centerRb.linearVelocity =
+                Vector2.zero;
 
             // 位置固定
-            centerRb.constraints = RigidbodyConstraints2D.FreezePosition;
+            centerRb.constraints =
+                RigidbodyConstraints2D.FreezePosition;
         }
 
-        // Enemy移動停止
-        if (centerEnemy != null)
+        // EnemyMove停止
+        EnemyMove enemyMove =
+            centerTarget.GetComponent<EnemyMove>();
+
+        if (enemyMove != null)
         {
-            centerEnemy.enabled = false;
+            enemyMove.enabled = false;
         }
 
-        // エフェクト生成
+        // EyeEnemy停止
+        EyeEnemy eyeEnemy =
+            centerTarget.GetComponent<EyeEnemy>();
+
+        if (eyeEnemy != null)
+        {
+            eyeEnemy.enabled = false;
+        }
+
+        // エフェクト
         if (gravityEffect != null)
         {
-            Instantiate(gravityEffect, centerTarget.position, Quaternion.identity);
+            Instantiate(
+                gravityEffect,
+                centerTarget.position,
+                Quaternion.identity
+            );
         }
 
         float timer = 0f;
 
         while (timer < gravityDuration)
         {
-            // 敵が死んだ時対策
+            // 敵死亡対策
             if (centerTarget == null)
             {
                 Destroy(gameObject);
+
                 yield break;
             }
 
-            // 範囲内の敵取得
-            Collider2D[] hits = Physics2D.OverlapCircleAll(
-                centerTarget.position,
-                gravityRadius
-            );
+            // 範囲内敵取得
+            Collider2D[] hits =
+                Physics2D.OverlapCircleAll(
+                    centerTarget.position,
+                    gravityRadius
+                );
 
             foreach (Collider2D hit in hits)
             {
-                if (!hit.CompareTag("Enemy"))
+                EnemyHP enemy =
+                    hit.GetComponent<EnemyHP>();
+
+                if (enemy == null)
                     continue;
 
-                // 着弾した敵自身は除外
+                // 中心敵除外
                 if (hit.transform == centerTarget)
                     continue;
 
-                Rigidbody2D rb = hit.GetComponent<Rigidbody2D>();
+                Rigidbody2D rb =
+                    hit.GetComponent<Rigidbody2D>();
 
                 if (rb != null)
                 {
-                    // 中心への方向
+                    // 中心方向
                     Vector2 dir =
-                        (centerTarget.position - hit.transform.position).normalized;
+                        (
+                            centerTarget.position -
+                            hit.transform.position
+                        ).normalized;
 
                     // 引っ張る
-                    rb.linearVelocity = dir * pullForce;
+                    rb.linearVelocity =
+                        dir * pullForce;
                 }
                 else
                 {
-                    // Rigidbody無い場合
-                    hit.transform.position = Vector2.MoveTowards(
-                        hit.transform.position,
-                        centerTarget.position,
-                        pullForce * Time.deltaTime
-                    );
+                    // Rigidbody無し
+                    hit.transform.position =
+                        Vector2.MoveTowards(
+                            hit.transform.position,
+                            centerTarget.position,
+                            pullForce * Time.deltaTime
+                        );
                 }
             }
 
             timer += Time.deltaTime;
+
             yield return null;
         }
 
         // ===== 停止解除 =====
+
         if (centerRb != null)
         {
             // 回転だけ固定
-            centerRb.constraints = RigidbodyConstraints2D.FreezeRotation;
+            centerRb.constraints =
+                RigidbodyConstraints2D.FreezeRotation;
         }
 
-        // Enemy再開
-        if (centerEnemy != null)
+        // EnemyMove再開
+        if (enemyMove != null)
         {
-            centerEnemy.enabled = true;
+            enemyMove.enabled = true;
+        }
+
+        // EyeEnemy再開
+        if (eyeEnemy != null)
+        {
+            eyeEnemy.enabled = true;
         }
 
         Destroy(gameObject);
     }
 
-    // ダメージ変更用
+    // ダメージ変更
     public void SetDamage(int value)
     {
         damage = value;
     }
 
-    // Sceneビューで範囲表示
+    // 範囲表示
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.magenta;
-        Gizmos.DrawWireSphere(transform.position, gravityRadius);
+
+        Gizmos.DrawWireSphere(
+            transform.position,
+            gravityRadius
+        );
     }
 }

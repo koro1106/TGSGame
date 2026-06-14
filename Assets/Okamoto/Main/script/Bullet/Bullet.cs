@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float speed = 15f; // 弾速
-    public float lifeTime = 5f; // 5秒後に消える
+    public float speed = 15f;
+    public float lifeTime = 5f;
 
-    [SerializeField] private int damage; // ダメージ
+    [SerializeField] private int damage;
 
-    private Vector2 direction; // 発射方向
+    private Vector2 direction;
 
     public GameObject ammoDropPrefab;
     public Sprite ammoUISprite;
@@ -19,37 +19,50 @@ public class Bullet : MonoBehaviour
 
     void Update()
     {
-        // 弾を移動
         transform.Translate(
             direction * speed * Time.deltaTime,
             Space.World
         );
     }
 
-    // Playerから呼ばれる
+    // 発射方向設定
     public void SetDirection(Vector2 dir)
     {
         direction = dir.normalized;
     }
 
+    //========================
+    // 当たり判定
+    //========================
+
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Enemy"))
-        {
-            Enemy enemy = other.GetComponent<Enemy>();
+        // EnemyHP取得
+        EnemyHP enemy =
+            other.GetComponent<EnemyHP>();
 
-            if (enemy != null)
-            {
-                enemy.TakeDamage(damage);
+        // EnemyHPが無ければ無視
+        if (enemy == null)
+            return;
 
-                Debug.Log("敵に " + damage + " ダメージ");
-            }
+        // ダメージ
+        enemy.TakeDamage(damage);
 
-            Destroy(gameObject);
-        }
+        Debug.Log(
+            enemy.name +
+            " に " +
+            damage +
+            " ダメージ"
+        );
+
+        // 弾消滅
+        Destroy(gameObject);
     }
 
+    //========================
     // ダメージ設定
+    //========================
+
     public void SetDamage(int value)
     {
         damage = value;

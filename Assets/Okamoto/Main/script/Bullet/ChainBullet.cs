@@ -11,15 +11,16 @@ public class ChainBullet : MonoBehaviour
     public float chainRadius = 5f;
 
     public GameObject lightningPrefab;
-    public GameObject hitEffectPrefab; // ←追加
+    public GameObject hitEffectPrefab;
 
     public AudioClip hitSound;
+
     private LineRenderer lr;
 
-    public GameObject ammoDropPrefab; // この弾に対応するUIのプレハブ☆
-    public Sprite ammoUISprite; // 弾UI用画像☆
+    public GameObject ammoDropPrefab;
+    public Sprite ammoUISprite;
 
-    public PlayerStats stats; // プレイヤーステータス
+    public PlayerStats stats;
 
     void Awake()
     {
@@ -30,6 +31,7 @@ public class ChainBullet : MonoBehaviour
             Debug.LogError("LineRendererが付いてない！");
         }
     }
+
     void Start()
     {
         Destroy(gameObject, lifeTime);
@@ -37,15 +39,21 @@ public class ChainBullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag("Enemy")) return;
+        // EnemyHP取得
+        EnemyHP firstEnemy =
+            other.GetComponent<EnemyHP>();
 
-        Enemy firstEnemy = other.GetComponent<Enemy>();
-        if (firstEnemy == null) return;
+        // EnemyHPが無ければ無視
+        if (firstEnemy == null)
+            return;
 
-        // 音（安全）
+        // 音
         if (hitSound != null)
         {
-            AudioSource.PlayClipAtPoint(hitSound, transform.position);
+            AudioSource.PlayClipAtPoint(
+                hitSound,
+                transform.position
+            );
         }
 
         ChainDamage(firstEnemy);
@@ -53,59 +61,96 @@ public class ChainBullet : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void ChainDamage(Enemy startEnemy)
+    void ChainDamage(EnemyHP startEnemy)
     {
-        List<Enemy> hitEnemies = new List<Enemy>();
+        List<EnemyHP> hitEnemies =
+            new List<EnemyHP>();
 
-        int totalDamage = damage + stats.effectBulletDamage;
+        int totalDamage =
+            damage +
+            stats.effectBulletDamage;
+
         // 最初の敵
         hitEnemies.Add(startEnemy);
+
         startEnemy.TakeDamage(totalDamage);
 
-        // ★最初の雷（これ重要）
-        SpawnLightning(transform.position, startEnemy.transform.position);
+        // 最初の雷
+        SpawnLightning(
+            transform.position,
+            startEnemy.transform.position
+        );
 
-        Collider2D[] hits = Physics2D.OverlapCircleAll(startEnemy.transform.position, chainRadius);
+        Collider2D[] hits =
+            Physics2D.OverlapCircleAll(
+                startEnemy.transform.position,
+                chainRadius
+            );
 
         var enemies = hits
-            .Select(h => h.GetComponent<Enemy>())
-            .Where(e => e != null && !hitEnemies.Contains(e))
-            .OrderBy(e => Vector2.Distance(startEnemy.transform.position, e.transform.position))
+            .Select(h => h.GetComponent<EnemyHP>())
+            .Where(e =>
+                e != null &&
+                !hitEnemies.Contains(e)
+            )
+            .OrderBy(e =>
+                Vector2.Distance(
+                    startEnemy.transform.position,
+                    e.transform.position
+                )
+            )
             .ToList();
 
-        Enemy current = startEnemy;
+        EnemyHP current =
+            startEnemy;
+
         int count = 0;
 
         foreach (var enemy in enemies)
         {
-            if (count >= chainCount) break;
+            if (count >= chainCount)
+                break;
 
             enemy.TakeDamage(totalDamage);
+
             hitEnemies.Add(enemy);
 
-            SpawnLightning(current.transform.position, enemy.transform.position);
+            SpawnLightning(
+                current.transform.position,
+                enemy.transform.position
+            );
 
             current = enemy;
+
             count++;
         }
     }
 
     void SpawnLightning(Vector3 start, Vector3 end)
     {
-        if (lightningPrefab == null) return;
+        if (lightningPrefab == null)
+            return;
 
         // 雷本体
-        GameObject obj = Instantiate(lightningPrefab);
-        LightningLineEffect le = obj.GetComponent<LightningLineEffect>();
+        GameObject obj =
+            Instantiate(lightningPrefab);
+
+        LightningLineEffect le =
+            obj.GetComponent<LightningLineEffect>();
+
         if (le != null)
         {
             le.Setup(start, end);
         }
 
-        // ★着弾エフェクト
+        // 着弾エフェクト
         if (hitEffectPrefab != null)
         {
-            Instantiate(hitEffectPrefab, end, Quaternion.identity);
+            Instantiate(
+                hitEffectPrefab,
+                end,
+                Quaternion.identity
+            );
         }
     }
 }
