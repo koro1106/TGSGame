@@ -4,107 +4,111 @@ using System.Collections;
 public class PoisonBullet : Bullet
 {
     // =========================
-    // 着弾時のダメージ
+    // 着弾時ダメージ
     // =========================
+
     [Header("着弾ダメージ")]
     public int hitDamage = 10;
 
     // =========================
-    // 毒エリア設定
+    // 毒設定
     // =========================
+
     [Header("毒設定")]
 
     public float poisonRadius = 3f;
-    // 毒の範囲
 
     public int poisonDamage = 3;
-    // 毒の継続ダメージ
 
     public float poisonInterval = 1f;
-    // 何秒ごとにダメージを与えるか
 
     public float poisonDuration = 5f;
-    // 毒エリアが存在する時間
 
     // =========================
     // 毒エフェクト
     // =========================
+
     [Header("毒エフェクト")]
 
     public GameObject poisonEffectPrefab;
-    // 毒の見た目用エフェクト
 
     public float effectSize = 1f;
-    // エフェクトの大きさ
 
-    // 既に着弾したか判定
+    // 着弾済み判定
     private bool exploded = false;
 
-    public PlayerStats stats; // プレイヤーステータス
+    public PlayerStats stats;
 
     // =========================
-    // 敵に当たった時
+    // 敵に当たった
     // =========================
+
     protected new void OnTriggerEnter2D(Collider2D other)
     {
-        // 既に着弾済みなら処理しない
-        if (exploded) return;
+        // 多重発動防止
+        if (exploded)
+            return;
 
-        // Enemyタグに当たったか
-        if (other.CompareTag("Enemy"))
-        {
-            Enemy enemy = other.GetComponent<Enemy>();
+        // EnemyHP取得
+        EnemyHP enemy =
+            other.GetComponent<EnemyHP>();
 
-            int totalDamage = hitDamage + stats.effectBulletDamage;
+        // EnemyHP無ければ無視
+        if (enemy == null)
+            return;
 
-            // 着弾ダメージ
-            if (enemy != null)
-            {
-                enemy.TakeDamage(totalDamage);
-            }
+        int totalDamage =
+            hitDamage +
+            stats.effectBulletDamage;
 
-            // 毒エリア開始
-            StartCoroutine(PoisonArea());
+        // 着弾ダメージ
+        enemy.TakeDamage(totalDamage);
 
-            exploded = true;
-        }
+        // 毒エリア開始
+        StartCoroutine(PoisonArea());
+
+        exploded = true;
     }
 
     // =========================
-    // 毒エリア処理
+    // 毒エリア
     // =========================
+
     IEnumerator PoisonArea()
     {
         // Rigidbody取得
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        Rigidbody2D rb =
+            GetComponent<Rigidbody2D>();
 
-        // 弾を停止
+        // 停止
         if (rb != null)
         {
-            rb.linearVelocity = Vector2.zero;
+            rb.linearVelocity =
+                Vector2.zero;
+
             rb.simulated = false;
         }
 
-        // SpriteRenderer取得
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        // Sprite消す
+        SpriteRenderer sr =
+            GetComponent<SpriteRenderer>();
 
-        // 弾画像を消す
         if (sr != null)
         {
             sr.enabled = false;
         }
 
-        // Collider取得
-        Collider2D col = GetComponent<Collider2D>();
+        // Collider消す
+        Collider2D col =
+            GetComponent<Collider2D>();
 
-        // 当たり判定を消す
         if (col != null)
         {
             col.enabled = false;
         }
 
         // =========================
-        // 毒エフェクト生成
+        // 毒エフェクト
         // =========================
 
         GameObject effect = null;
@@ -117,52 +121,51 @@ public class PoisonBullet : Bullet
                 Quaternion.identity
             );
 
-            // Inspectorで設定したサイズ適用
             effect.transform.localScale =
-                Vector3.one * effectSize;
+                Vector3.one *
+                effectSize;
         }
 
-        // 毒時間カウント
+        // =========================
+        // 毒継続
+        // =========================
+
         float timer = 0f;
 
-        // 指定時間まで継続
         while (timer < poisonDuration)
         {
-            // 範囲内のCollider取得
-            Collider2D[] hits = Physics2D.OverlapCircleAll(
-                transform.position,
-                poisonRadius
-            );
+            Collider2D[] hits =
+                Physics2D.OverlapCircleAll(
+                    transform.position,
+                    poisonRadius
+                );
 
-            // 範囲内の敵へダメージ
             foreach (Collider2D hit in hits)
             {
-                // Enemyタグのみ
-                if (hit.CompareTag("Enemy"))
-                {
-                    Enemy enemy = hit.GetComponent<Enemy>();
+                EnemyHP enemy =
+                    hit.GetComponent<EnemyHP>();
 
-                    if (enemy != null)
-                    {
-                        enemy.TakeDamage(poisonDamage);
-                    }
-                }
+                if (enemy == null)
+                    continue;
+
+                enemy.TakeDamage(poisonDamage);
             }
 
-            // 次のダメージまで待機
-            yield return new WaitForSeconds(poisonInterval);
+            yield return new WaitForSeconds(
+                poisonInterval
+            );
 
-            // 時間加算
             timer += poisonInterval;
         }
 
-        // 毒終了後削除
+        // 毒終了
         Destroy(gameObject);
     }
 
     // =========================
-    // Sceneビューで毒範囲表示
+    // 範囲表示
     // =========================
+
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;

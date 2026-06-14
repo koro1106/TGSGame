@@ -8420,11 +8420,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemies:
-  - prefab: {fileID: 7173860325025810464, guid: fd82647a7b72c544e89b53d67c4a63b9, type: 3}
+  - prefab: {fileID: 2931965587420321019, guid: 3ad3c589ec744814c944ed6ed827ac86, type: 3}
     weight: 100
-  - prefab: {fileID: 1564874167361477582, guid: b212dd7b66d26d741950153427aa1ff8, type: 3}
+  - prefab: {fileID: 2931965587420321019, guid: 3ad3c589ec744814c944ed6ed827ac86, type: 3}
     weight: 0
-  - prefab: {fileID: 1564874167361477582, guid: b212dd7b66d26d741950153427aa1ff8, type: 3}
+  - prefab: {fileID: 2931965587420321019, guid: 3ad3c589ec744814c944ed6ed827ac86, type: 3}
     weight: 0
   player: {fileID: 173762202}
   spawnInterval: 2
