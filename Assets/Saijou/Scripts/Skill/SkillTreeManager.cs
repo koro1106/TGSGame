@@ -11,6 +11,7 @@ public class SkillTreeManager : MonoBehaviour
 
     public SkillData[] allSkills;
     public PlayerData playerData;
+   
     void Awake()
     {
         // ÉçÅ[Éh

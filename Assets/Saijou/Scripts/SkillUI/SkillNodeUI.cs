@@ -86,11 +86,11 @@ public class SkillNodeUI : MonoBehaviour
         {
             state = SkillState.Available;
         }
-        // ‚»‚êˆÈŠO‚Í–¢‰ğ•úó‘Ô
-        else
-        {
-            state = SkillState.Locked;
-        }
+        //// ‚»‚êˆÈŠO‚Í–¢‰ğ•úó‘Ô
+        //else
+        //{
+        //    state = SkillState.Locked;
+        //}
 
         UpdateVisual();
     }
