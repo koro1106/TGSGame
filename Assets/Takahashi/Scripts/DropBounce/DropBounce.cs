@@ -5,30 +5,51 @@
 /// ・ランダム方向へ飛ばす
 /// ・バウンドさせる
 /// ・回転させる
-/// ・地面影を表示する
+/// ・クロスヘアで回収する
 /// スクリプト
 /// </summary>
 public class DropBounce : MonoBehaviour
 {
+    // =========================================================
+    // Exp設定
+    // =========================================================
+
+    [Header("経験値")]
+
+    public PlayerData playerData;
+
+    public int addExp1 = 1;
+    public int addExp2 = 0;
+    public int addExp3 = 0;
+
+    // =========================================================
+    // 回収設定
+    // =========================================================
+
+    [Header("回収")]
+
+    public float collectDistance = 1f;
+
+    private RectTransform crosshair;
+
+    private Camera cam;
+
+    [Header("回収演出")]
+
+    public float collectMoveSpeed = 15f;
+
+    private bool isCollecting;
+
     // =========================================================
     // 移動設定
     // =========================================================
 
     [Header("移動")]
 
-    /// <summary>
-    /// 横移動速度
-    /// </summary>
     public float moveSpeed = 2f;
 
-    /// <summary>
-    /// バウンドの高さ
-    /// </summary>
     public float bounceHeight = 1.5f;
 
-    /// <summary>
-    /// バウンド回数
-    /// </summary>
     public int bounceCount = 2;
 
     // =========================================================
@@ -37,19 +58,10 @@ public class DropBounce : MonoBehaviour
 
     [Header("着地時間ランダム")]
 
-    /// <summary>
-    /// 最小着地時間
-    /// </summary>
     public float minDuration = 0.3f;
 
-    /// <summary>
-    /// 最大着地時間
-    /// </summary>
     public float maxDuration = 1.2f;
 
-    /// <summary>
-    /// 現在の着地時間
-    /// </summary>
     private float duration;
 
     // =========================================================
@@ -58,10 +70,6 @@ public class DropBounce : MonoBehaviour
 
     [Header("散らばり")]
 
-    /// <summary>
-    /// 横方向の散らばり
-    /// 0～150
-    /// </summary>
     [Range(0f, 150f)]
     public float horizontalSpread = 30f;
 
@@ -71,14 +79,8 @@ public class DropBounce : MonoBehaviour
 
     [Header("回転")]
 
-    /// <summary>
-    /// 最小回転速度
-    /// </summary>
     public float minRotateSpeed = 90f;
 
-    /// <summary>
-    /// 最大回転速度
-    /// </summary>
     public float maxRotateSpeed = 360f;
 
     // =========================================================
@@ -87,14 +89,8 @@ public class DropBounce : MonoBehaviour
 
     [Header("回転時間")]
 
-    /// <summary>
-    /// 最小回転時間
-    /// </summary>
     public float minRotateTime = 0.3f;
 
-    /// <summary>
-    /// 最大回転時間
-    /// </summary>
     public float maxRotateTime = 2f;
 
     // =========================================================
@@ -103,82 +99,56 @@ public class DropBounce : MonoBehaviour
 
     [Header("影Prefab")]
 
-    /// <summary>
-    /// 影Prefab
-    /// </summary>
     [SerializeField]
     private GameObject shadowPrefab;
 
-    /// <summary>
-    /// 生成した影
-    /// </summary>
     private Transform shadow;
 
-    /// <summary>
-    /// 影のSpriteRenderer
-    /// </summary>
     private SpriteRenderer shadowRenderer;
 
     // =========================================================
     // 内部変数
     // =========================================================
 
-    /// <summary>
-    /// 開始位置
-    /// </summary>
     private Vector3 startPos;
 
-    /// <summary>
-    /// 元のScale
-    /// </summary>
     private Vector3 baseScale;
 
-    /// <summary>
-    /// 移動方向
-    /// </summary>
     private Vector2 moveDir;
 
-    /// <summary>
-    /// バウンドタイマー
-    /// </summary>
     private float timer;
 
-    /// <summary>
-    /// 現在のバウンド回数
-    /// </summary>
     private int bounceIndex;
 
-    /// <summary>
-    /// 回転速度
-    /// </summary>
     private float rotateSpeed;
 
-    /// <summary>
-    /// 回転方向
-    /// </summary>
     private float rotateDir;
 
-    /// <summary>
-    /// 回転時間
-    /// </summary>
     private float rotateTime;
 
-    /// <summary>
-    /// 回転タイマー
-    /// </summary>
     private float rotateTimer;
 
-    /// <summary>
-    /// バウンド終了
-    /// </summary>
     private bool finished;
 
     // =========================================================
-    // 初期化
+    // Start
     // =========================================================
 
     void Start()
     {
+        // カメラ取得
+        cam = Camera.main;
+
+        // GunController取得
+        GunController gun =
+            FindObjectOfType<GunController>();
+
+        // クロスヘア取得
+        if (gun != null)
+        {
+            crosshair = gun.crosshair;
+        }
+
         // 初期位置保存
         startPos = transform.position;
 
@@ -189,37 +159,30 @@ public class DropBounce : MonoBehaviour
         // 散らばり設定
         // =====================================================
 
-        // 0～150 を 0～1.5 に変換
         float spread =
             horizontalSpread / 100f;
 
-        // 横方向ランダム
         float randomX =
-            UnityEngine.Random.Range(
+            Random.Range(
                 -spread,
                 spread
             );
 
-        // 上方向へ飛ばす
         moveDir =
             new Vector2(randomX, 1f).normalized;
 
         // =====================================================
-        // ランダム回転速度
+        // 回転設定
         // =====================================================
 
         rotateSpeed =
-            UnityEngine.Random.Range(
+            Random.Range(
                 minRotateSpeed,
                 maxRotateSpeed
             );
 
-        // =====================================================
-        // 回転方向ランダム
-        // =====================================================
-
         rotateDir =
-            UnityEngine.Random.Range(-2f, 2f);
+            Random.Range(-2f, 2f);
 
         // ほぼ停止防止
         if (Mathf.Abs(rotateDir) < 0.3f)
@@ -228,22 +191,18 @@ public class DropBounce : MonoBehaviour
                 Mathf.Sign(rotateDir) * 0.3f;
         }
 
-        // =====================================================
-        // ランダム回転時間
-        // =====================================================
-
         rotateTime =
-            UnityEngine.Random.Range(
+            Random.Range(
                 minRotateTime,
                 maxRotateTime
             );
 
         // =====================================================
-        // ランダム着地時間
+        // 着地時間ランダム
         // =====================================================
 
         duration =
-            UnityEngine.Random.Range(
+            Random.Range(
                 minDuration,
                 maxDuration
             );
@@ -281,11 +240,21 @@ public class DropBounce : MonoBehaviour
     }
 
     // =========================================================
-    // 更新処理
+    // Update
     // =========================================================
 
     void Update()
     {
+        // 回収中
+        if (isCollecting)
+        {
+            MoveCollect();
+            return;
+        }
+
+        // 回収判定
+        CheckCollect();
+
         // バウンド終了後
         if (finished)
         {
@@ -318,11 +287,12 @@ public class DropBounce : MonoBehaviour
             // 全バウンド終了
             if (bounceIndex >= bounceCount)
             {
-                transform.position = new Vector3(
-                    transform.position.x,
-                    startPos.y,
-                    0
-                );
+                transform.position =
+                    new Vector3(
+                        transform.position.x,
+                        startPos.y,
+                        0
+                    );
 
                 transform.localScale =
                     baseScale;
@@ -352,11 +322,12 @@ public class DropBounce : MonoBehaviour
             Mathf.Sin(t * Mathf.PI)
             * bounceHeight;
 
-        transform.position = new Vector3(
-            transform.position.x,
-            startPos.y + height,
-            0
-        );
+        transform.position =
+            new Vector3(
+                transform.position.x,
+                startPos.y + height,
+                0
+            );
 
         // =====================================================
         // 回転
@@ -364,7 +335,6 @@ public class DropBounce : MonoBehaviour
 
         rotateTimer += Time.deltaTime;
 
-        // 回転時間内だけ回す
         if (rotateTimer < rotateTime)
         {
             transform.Rotate(
@@ -381,6 +351,100 @@ public class DropBounce : MonoBehaviour
         // =====================================================
 
         UpdateShadow(height);
+    }
+
+    // =========================================================
+    // 回収判定
+    // =========================================================
+
+    void CheckCollect()
+    {
+        if (crosshair == null) return;
+
+        Vector3 crosshairWorld =
+            cam.ScreenToWorldPoint(
+                crosshair.position);
+
+        crosshairWorld.z =
+            transform.position.z;
+
+        // 範囲内のCollider取得
+        Collider2D[] hits =
+            Physics2D.OverlapCircleAll(
+                crosshairWorld,
+                collectDistance);
+
+        foreach (Collider2D hit in hits)
+        {
+            DropBounce drop =
+                hit.GetComponent<DropBounce>();
+
+            if (drop != null)
+            {
+                drop.Collect();
+            }
+        }
+    }
+
+    // =========================================================
+    // 回収開始
+    // =========================================================
+
+    public void Collect()
+    {
+        if (isCollecting) return;
+
+        isCollecting = true;
+    }
+
+    // =========================================================
+    // 回収演出
+    // =========================================================
+
+    void MoveCollect()
+    {
+        // 下方向へ移動
+        transform.position +=
+            Vector3.down *
+            collectMoveSpeed *
+            Time.deltaTime;
+
+        // 少し縮小
+        transform.localScale =
+            Vector3.Lerp(
+                transform.localScale,
+                Vector3.zero,
+                10f * Time.deltaTime
+            );
+
+        // 回転
+        transform.Rotate(
+            0,
+            0,
+            720f * Time.deltaTime
+        );
+
+        // 一定位置で回収完了
+        if (transform.position.y < -10f)
+        {
+            FinishCollect();
+        }
+    }
+
+    // =========================================================
+    // 回収完了
+    // =========================================================
+
+    void FinishCollect()
+    {
+        if (playerData != null)
+        {
+            playerData.currentExp_1 += addExp1;
+            playerData.currentExp_2 += addExp2;
+            playerData.currentExp_3 += addExp3;
+        }
+
+        Destroy(gameObject);
     }
 
     // =========================================================

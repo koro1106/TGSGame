@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6158095167398511110}
   - component: {fileID: 4476953738970460327}
   - component: {fileID: 6748815801255195447}
+  - component: {fileID: -6454711437644961287}
   m_Layer: 0
   m_Name: Circle Blue 1 1
   m_TagString: Enemy
@@ -104,6 +105,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 756a3aa13f4b19f4f9cb35d3c7fb2e99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DropBounce
+  playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
+  addExp1: 0
+  addExp2: 0
+  addExp3: 1
+  collectDistance: 0.5
   moveSpeed: 115
   bounceHeight: 70
   bounceCount: 2
@@ -115,3 +121,39 @@ MonoBehaviour:
   minRotateTime: 0.3
   maxRotateTime: 2
   shadowPrefab: {fileID: 1354215260935572172, guid: 536db39859af53a47928bcbe00400608, type: 3}
+--- !u!58 &-6454711437644961287
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4247095691041555197}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.28
