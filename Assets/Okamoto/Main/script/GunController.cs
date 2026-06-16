@@ -221,6 +221,26 @@ public class GunController : MonoBehaviour
                 case AmmoType.Lightning:
                     bulletToShoot = bulletPrefabs[1];
                     break;
+                // èdóÕíe
+                case AmmoType.Gravity:
+                    bulletToShoot = bulletPrefabs[2];
+                    break;
+                //  çΩíe
+                case AmmoType.Bind:
+                    bulletToShoot = bulletPrefabs[3];
+                    break;
+                //  ì≈íe
+                case AmmoType.Poison:
+                    bulletToShoot = bulletPrefabs[4];
+                    break;
+                // îöî≠íe
+                case AmmoType.Explosion:
+                    bulletToShoot = bulletPrefabs[5];
+                    break;
+                // ä—í íe
+                case AmmoType.Penetrating:
+                    bulletToShoot = bulletPrefabs[6];
+                    break;
             }
 
             // =========================
@@ -256,7 +276,6 @@ public class GunController : MonoBehaviour
             // =========================
             Rigidbody2D rb =
                 bulletInstance.GetComponent<Rigidbody2D>();
-            Debug.Log("áC RigidbodyéÊìæ");
             rb.linearVelocity =
                 muzzle.right * bulletSpeed;
 

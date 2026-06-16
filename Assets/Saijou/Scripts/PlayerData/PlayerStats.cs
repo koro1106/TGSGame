@@ -12,6 +12,7 @@ public class PlayerStats : ScriptableObject
     public int criticalrate = 0;          // クリティカル発生確率
     public int criticalDamage = 0;        // クリティカルダメージ倍率
     public int expDroprate = 0;           // 経験値ドロップ率
+    public float collectionRange = 0.0f;  // 回収範囲
 
     // 解放した属性弾リスト
     public GameObject[] unlockedElementalBullets;
