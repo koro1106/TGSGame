@@ -48,6 +48,10 @@ public class SkillEffectManager : MonoBehaviour
             case SkillEffectType.ExpDroprate:
                 playerStats.expDroprate += (int)skill.effectValue;
                 break;
+            // 回収範囲増加
+            case SkillEffectType.CollectionRange:
+                playerStats.collectionRange += (float)skill.effectValue;
+                break;
         }
     }
 
