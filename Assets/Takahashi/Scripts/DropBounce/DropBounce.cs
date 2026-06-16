@@ -29,7 +29,8 @@ public class DropBounce : MonoBehaviour
     [Header("回収")]
 
     public float collectDistance = 1f;
-
+    [SerializeField] float collectDisTotal = 0f;
+    public PlayerStats stats;
     private RectTransform crosshair;
 
     private Camera cam;
@@ -356,7 +357,7 @@ public class DropBounce : MonoBehaviour
     // =========================================================
     // 回収判定
     // =========================================================
-
+   
     void CheckCollect()
     {
         if (crosshair == null) return;
@@ -368,11 +369,18 @@ public class DropBounce : MonoBehaviour
         crosshairWorld.z =
             transform.position.z;
 
+        // 回収範囲増加
+        collectDisTotal = collectDistance + stats.collectionRange;
+        Debug.Log(
+       $"collectDistance={collectDistance} " +
+       $"collectionRange={stats.collectionRange} " +
+       $"collectDisTotal={collectDisTotal}"
+   );
         // 範囲内のCollider取得
         Collider2D[] hits =
             Physics2D.OverlapCircleAll(
                 crosshairWorld,
-                collectDistance);
+                collectDisTotal);
 
         foreach (Collider2D hit in hits)
         {
@@ -384,6 +392,7 @@ public class DropBounce : MonoBehaviour
                 drop.Collect();
             }
         }
+
     }
 
     // =========================================================

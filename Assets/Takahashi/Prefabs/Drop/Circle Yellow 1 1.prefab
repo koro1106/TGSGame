@@ -110,6 +110,9 @@ MonoBehaviour:
   addExp2: 0
   addExp3: 0
   collectDistance: 0.5
+  collectDisTotal: 0
+  stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
+  collectMoveSpeed: 15
   moveSpeed: 115
   bounceHeight: 70
   bounceCount: 2
