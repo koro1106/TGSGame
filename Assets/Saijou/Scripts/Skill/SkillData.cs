@@ -9,14 +9,10 @@ public class SkillData : ScriptableObject
 
     public int level;        // 現在レベル
     public int maxLevel;    // 最大レベル
-
     public int needExp;    // 必要経験値
-
     public bool isUnlocked = false; //　解放状態
-
     public bool isLevelUp = false; // レベルアップした
     public PlayerData playerData;
-    public PreStagePlayerData preStageData;
     public ExpType expType;
 
     public SkillEffectType effectType; // スキル効果タイプ
@@ -41,7 +37,7 @@ public class SkillData : ScriptableObject
                 return playerData.currentExp_3;
 
             case ExpType.PreExp:
-                return preStageData.prestageExp;
+                return playerData.currentPreExp;
         }
 
         return 0;
@@ -66,7 +62,7 @@ public class SkillData : ScriptableObject
                 playerData.currentExp_3 -= value;
                 break;
             case ExpType.PreExp:
-                preStageData.prestageExp -= value;
+                playerData.currentPreExp -= value;
                 break;
         }
     }

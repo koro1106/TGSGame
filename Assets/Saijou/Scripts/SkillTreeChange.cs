@@ -12,6 +12,7 @@ public class SkillTreeChange : MonoBehaviour
     public float animationTime = 0.3f; // アニメーション時間
     public SkillData[] allSkills;
     public PlayerData playerData;
+
     public void OnSkilTreeChangeButton()
     {
         // セーブ

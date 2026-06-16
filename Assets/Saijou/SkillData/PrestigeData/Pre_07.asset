@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: Pre_07
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillName: "\u3066\u3059\u3068"
-  description: "\u3066\u3059\u3068"
   level: 0
   maxLevel: 5
   needExp: 1
   isUnlocked: 0
   isLevelUp: 0
-  playerData: {fileID: 0}
-  preStageData: {fileID: 11400000, guid: d23ced359bfdc164dbe41405efc9c157, type: 2}
+  playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   expType: 3
+  effectType: 0
+  effectValue: 1
+  elementalBulletPrefab: {fileID: 0}

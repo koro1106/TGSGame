@@ -20,4 +20,5 @@ public class PlayerStats : ScriptableObject
     // 属性弾が出る確率(一旦30％なので0.3)
     [Range(0f, 1f)]
     public float elementalBulletChance = 0.3f;
+    public bool preExpDeviceUnlocked = false; // PreExp装置
 }

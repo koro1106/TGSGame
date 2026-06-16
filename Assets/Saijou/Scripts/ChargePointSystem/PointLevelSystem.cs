@@ -19,7 +19,7 @@ public class PointLevelSystem : MonoBehaviour
     public TextMeshProUGUI levelText;
 
     [Header("プレイヤーデータ")]
-    public PreStagePlayerData playerData;
+    public PlayerData playerData;
 
     // 現在の経験値（0～99）
     private int currentExp = 0;
@@ -46,7 +46,7 @@ public class PointLevelSystem : MonoBehaviour
             // プレイヤーデータに反映
             if (playerData != null)
             {
-                playerData.prestageExp += 1;
+                playerData.currentPreExp += 1;
             }
 
             Debug.Log("レベルポイント獲得！ 現在：" + levelPoint);

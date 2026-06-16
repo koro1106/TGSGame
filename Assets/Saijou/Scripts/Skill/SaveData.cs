@@ -10,6 +10,7 @@ public class SaveData
     public int exp1;
     public int exp2;
     public int exp3;
+    public int Preexp;
 
     // スキル情報リスト
     public List<SkillSaveData> skills =

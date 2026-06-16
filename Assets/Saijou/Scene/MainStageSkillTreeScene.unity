@@ -359,7 +359,7 @@ MonoBehaviour:
   sceneName: PrestigeSkillTreeScene
   animationTime: 0.3
   allSkills: []
-  playerData: {fileID: 0}
+  playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
 --- !u!1 &26492052
 GameObject:
   m_ObjectHideFlags: 0
@@ -457,65 +457,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 46ce1ddf049fe164291e5288ebf7af91, type: 2}
   - {fileID: 11400000, guid: 8e4b8ea0640271c4c937bf123b9b03d8, type: 2}
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
-  allNodes:
-  - {fileID: 1623859187}
-  - {fileID: 1339585117}
-  - {fileID: 252361085}
-  - {fileID: 361241491}
-  - {fileID: 576310877}
-  - {fileID: 1947635867}
-  - {fileID: 1134239845}
-  - {fileID: 1809549240}
-  - {fileID: 2115309979}
-  - {fileID: 1106168477}
-  - {fileID: 1912287870}
-  - {fileID: 1103163691}
-  - {fileID: 639104483}
-  - {fileID: 255285225}
-  - {fileID: 630158886}
-  - {fileID: 1823567916}
-  - {fileID: 1381989068}
-  - {fileID: 1852346199}
-  - {fileID: 1863638118}
-  - {fileID: 647170173}
-  - {fileID: 1076251553}
-  - {fileID: 795802952}
-  - {fileID: 1079252121}
-  - {fileID: 2128135944}
-  - {fileID: 2072155298}
-  - {fileID: 2033376513}
-  - {fileID: 541318710}
-  - {fileID: 746924887}
-  - {fileID: 701614897}
-  - {fileID: 1981715854}
-  - {fileID: 1552856143}
-  - {fileID: 222075476}
-  - {fileID: 1870279646}
-  - {fileID: 874824915}
-  - {fileID: 337357661}
-  - {fileID: 2002556694}
-  - {fileID: 943439311}
-  - {fileID: 1103903341}
-  - {fileID: 1804670628}
-  - {fileID: 2101759437}
-  - {fileID: 1250324768}
-  - {fileID: 193212031}
-  - {fileID: 1252081151}
-  - {fileID: 1220820724}
-  - {fileID: 1806012793}
-  - {fileID: 1709242295}
-  - {fileID: 1538181960}
-  - {fileID: 1734065122}
-  - {fileID: 160536493}
-  - {fileID: 687403048}
-  - {fileID: 39791667}
-  - {fileID: 1347545090}
-  - {fileID: 946721742}
-  - {fileID: 552354535}
-  - {fileID: 1596663726}
-  - {fileID: 513240899}
-  - {fileID: 1414241017}
-  - {fileID: 101656303}
 --- !u!4 &26492054
 Transform:
   m_ObjectHideFlags: 0

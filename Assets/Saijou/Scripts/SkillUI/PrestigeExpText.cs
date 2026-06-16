@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PrestigeExpText : MonoBehaviour
 {
-    public PreStagePlayerData prestagePlayerData;
+    public PlayerData playerData;
 
     public TextMeshProUGUI expText_Pre; // プレステージExp
     void Start()
@@ -16,6 +16,6 @@ public class PrestigeExpText : MonoBehaviour
 
     public void UpdatePrestigeExpText()
     {
-       expText_Pre.text = prestagePlayerData.prestageExp.ToString();
+       expText_Pre.text = playerData.currentPreExp.ToString();
     }
 }

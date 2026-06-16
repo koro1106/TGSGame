@@ -1,14 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static Unity.Collections.AllocatorManager;
 /// <summary>
 /// スキル効果適用管理
 /// </summary>
 public class SkillEffectManager : MonoBehaviour
 {
     [SerializeField]　PlayerStats playerStats;
-
-   // public GunController gunController;
     /// <summary>
     /// スキル効果適用
     /// </summary>
@@ -51,6 +51,10 @@ public class SkillEffectManager : MonoBehaviour
             // 回収範囲増加
             case SkillEffectType.CollectionRange:
                 playerStats.collectionRange += (float)skill.effectValue;
+                break;
+            // プレステージExp獲得装置 
+            case SkillEffectType.PreExpGetDevice:
+                playerStats.preExpDeviceUnlocked = true;
                 break;
         }
     }

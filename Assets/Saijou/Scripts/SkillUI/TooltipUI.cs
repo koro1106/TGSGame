@@ -124,7 +124,7 @@ public class TooltipUI : MonoBehaviour
                 return data.playerData.currentExp_3;
 
             case ExpType.PreExp:
-                return data.preStageData.prestageExp;
+                return data.playerData.currentPreExp;
         }
 
         return 0;

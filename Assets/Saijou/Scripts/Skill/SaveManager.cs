@@ -13,9 +13,7 @@ public static class SaveManager
     /// <summary>
     /// セーブ
     /// </summary>
-    public static void Save(
-        PlayerData playerData,
-        SkillData[] skills)
+    public static void Save(PlayerData playerData,SkillData[] skills)
     {
         // セーブ用データ作成
         SaveData save = new SaveData();
@@ -24,6 +22,7 @@ public static class SaveManager
         save.exp1 = playerData.currentExp_1;
         save.exp2 = playerData.currentExp_2;
         save.exp3 = playerData.currentExp_3;
+        save.Preexp = playerData.currentExp_3;
 
         // スキル情報保存
         foreach (var skill in skills)
@@ -81,6 +80,7 @@ public static class SaveManager
         playerData.currentExp_1 = save.exp1;
         playerData.currentExp_2 = save.exp2;
         playerData.currentExp_3 = save.exp3;
+        playerData.currentPreExp = save.Preexp;
 
 
         // スキル復元
