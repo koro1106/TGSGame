@@ -14,7 +14,7 @@ public class title : MonoBehaviour
  
     public void OnStartButton()
     {
-        curtainManager.ChangeScene("ichikawa");
+        curtainManager.ChangeScene("MainStageScene");
     }
 
     private void Update()
@@ -23,7 +23,7 @@ public class title : MonoBehaviour
         {
             Debug.Log("スタートボタンが押されました");
 
-            curtainManager.ChangeScene("MainScene");
+            curtainManager.ChangeScene("MainStageScene");
         }
     }
 }
