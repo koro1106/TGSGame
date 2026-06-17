@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class EnemyHP : MonoBehaviour
 {
@@ -40,6 +41,9 @@ public class EnemyHP : MonoBehaviour
     [Header("ダメージ表示")]
     public GameObject damageText; // ダメージUI
 
+    [Header("HPバー")]
+    public Slider hpSlider; //hpバー
+
     private Vector3 baseScale;   // 初期スケール
     private Vector3 targetScale; // 目標スケール
 
@@ -54,6 +58,14 @@ public class EnemyHP : MonoBehaviour
     {
         // HP初期化
         currentHP = maxHP;
+
+
+        if (hpSlider != null)
+        {
+            hpSlider.maxValue = maxHP;
+            hpSlider.value = currentHP;
+        }
+
 
         // スケール保存
         baseScale = transform.localScale;
@@ -96,6 +108,11 @@ public class EnemyHP : MonoBehaviour
         currentHP -= damage;              // HP減少
         currentHP = Mathf.Max(currentHP, 0); // 0以下防止
 
+        if (hpSlider != null)
+        {
+            hpSlider.value = currentHP;
+        }
+
         ShowDamage(damage,isCritical); // ダメージ表示
         UpdateScale();      // 見た目更新
 
@@ -120,17 +137,29 @@ public class EnemyHP : MonoBehaviour
             ratio = 0.625f;
 
         targetScale = baseScale * ratio;
+
+        if (hpSlider != null)
+        {
+            hpSlider.maxValue = maxHP;
+            hpSlider.value = currentHP;
+        }
     }
 
     // HP増加処理
     void GrowHP()
     {
-        maxHP = Mathf.RoundToInt(maxHP * growMultiplier);     // 最大HP増加
-        currentHP = Mathf.RoundToInt(currentHP * growMultiplier); // 現在HP増加
+        maxHP = Mathf.RoundToInt(maxHP * growMultiplier);
+        currentHP = Mathf.RoundToInt(currentHP * growMultiplier);
 
-        currentHP = Mathf.Min(currentHP, maxHP); // 上限制御
+        currentHP = Mathf.Min(currentHP, maxHP);
 
-        UpdateScale(); // 見た目更新
+        UpdateScale();
+
+        if (hpSlider != null)
+        {
+            hpSlider.maxValue = maxHP;
+            hpSlider.value = currentHP;
+        }
     }
 
     // ランダムドロップ抽選
