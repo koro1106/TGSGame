@@ -56,6 +56,10 @@ public class SkillEffectManager : MonoBehaviour
             case SkillEffectType.PreExpGetDevice:
                 playerStats.preExpDeviceUnlocked = true;
                 break;
+            // プレステージExp時間短縮 
+            case SkillEffectType.PreExpTime:
+                playerStats.preExpTime += (int)skill.effectValue; ;
+                break;
         }
     }
 
