@@ -67,6 +67,10 @@ public class GunController : MonoBehaviour
 
     private float crosshairTargetRotation = 0f;
 
+    //ショットガン追加
+    public ShotgunController shotgun;
+
+
     void Start()
     {
         crosshairPos = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
@@ -139,6 +143,13 @@ public class GunController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.K))
         {
             IncreaseMaxAmmo(1);
+        }
+
+        //ショットガンPキーで出現
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            shotgun.gameObject.SetActive(true);
+            shotgun.ActivateShotgun();
         }
     }
 
@@ -262,6 +273,11 @@ public class GunController : MonoBehaviour
                     muzzle.rotation);
             PlayMuzzleFlash();
             crosshairTargetRotation += 90f;
+
+            if (shotgun != null && shotgun.isActive)
+            {
+                shotgun.Fire();
+            }
 
             // =========================
             // ダメージ設定
