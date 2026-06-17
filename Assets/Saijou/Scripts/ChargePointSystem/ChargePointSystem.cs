@@ -22,10 +22,11 @@ public class ChargePointSystem : MonoBehaviour
 
     public PointGetEffect pointEffectPrefab;
     public Transform pointSpawn;      // スポーン場所
+    [SerializeField] PlayerStats playerStats;
     void Update()
     {
         // 時間経過で増加
-        currentGauge += chargeGauge * Time.deltaTime;
+        currentGauge += (chargeGauge + playerStats.preExpTime) * Time.deltaTime;
 
         // UI更新
         gaugeSlider.value = currentGauge / 100f;

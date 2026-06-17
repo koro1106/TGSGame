@@ -534,11 +534,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ChargePointSystem
   gaugeSlider: {fileID: 82670036}
   pointText: {fileID: 1847535667}
-  chargeGauge: 200
+  chargeGauge: 10
   pointLevelSystem: {fileID: 1347696651}
   point: 0
   pointEffectPrefab: {fileID: 1011781625567619635, guid: 1f42cb2bf0d99594a88b7fef6ad4fc09, type: 3}
   pointSpawn: {fileID: 312516666}
+  playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
 --- !u!114 &82670036
 MonoBehaviour:
   m_ObjectHideFlags: 0
