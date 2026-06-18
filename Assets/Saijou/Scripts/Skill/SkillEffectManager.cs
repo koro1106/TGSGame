@@ -60,6 +60,10 @@ public class SkillEffectManager : MonoBehaviour
             case SkillEffectType.PreExpTime:
                 playerStats.preExpTime += (int)skill.effectValue; ;
                 break;
+            // // ケアパケ解放
+            case SkillEffectType.CarePackage:
+                playerStats.carePackageUnlocked = true;
+                break;
         }
     }
 

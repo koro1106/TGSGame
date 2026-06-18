@@ -22,4 +22,5 @@ public class PlayerStats : ScriptableObject
     [Range(0f, 1f)]
     public float elementalBulletChance = 0.3f;
     public bool preExpDeviceUnlocked = false; // PreExp装置
+    public bool carePackageUnlocked = false;  // ケアパケ解放
 }
