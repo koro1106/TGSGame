@@ -23,6 +23,8 @@ public class EyeEnemy : MonoBehaviour
 
     private bool angryTriggered = false;
 
+    private EnemyHP enemyHP;
+
     void Start()
     {
         Camera cam = Camera.main;
@@ -34,10 +36,18 @@ public class EyeEnemy : MonoBehaviour
 
         hp = GetComponent<EnemyHP>();
         sr = GetComponent<SpriteRenderer>();
+
+        enemyHP = GetComponent<EnemyHP>();
     }
 
     void Update()
     {
+        if (enemyHP != null &&
+   enemyHP.IsBind())
+        {
+            return;
+        }
+
         if (hp == null) return;
 
         float hpRate = (float)hp.currentHP / hp.maxHP;

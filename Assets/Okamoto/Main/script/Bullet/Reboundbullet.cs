@@ -45,14 +45,12 @@ public class Reboundbullet : MonoBehaviour
         }
 
         // “G
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+        EnemyHP enemy =
+            collision.gameObject.GetComponent<EnemyHP>();
 
-            if (enemy != null)
-            {
-                enemy.TakeDamage(damage);
-            }
+        if (enemy != null)
+        {
+            enemy.TakeDamage(damage);
 
             Destroy(gameObject);
         }

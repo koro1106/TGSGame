@@ -35,6 +35,8 @@ public class RareEnemy : MonoBehaviour
 
     private Vector2 target;
 
+    private EnemyHP enemyHP;
+
     void Start()
     {
         sr = GetComponent<SpriteRenderer>();
@@ -43,10 +45,18 @@ public class RareEnemy : MonoBehaviour
 
         target = Vector2.zero;
         SetRandomDirection();
+
+        enemyHP = GetComponent<EnemyHP>();
     }
 
     void Update()
     {
+        if (enemyHP != null &&
+   enemyHP.IsBind())
+        {
+            return;
+        }
+
         if (state == State.Flee)
         {
             FleeMove();

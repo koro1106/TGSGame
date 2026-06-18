@@ -1341,7 +1341,6 @@ MonoBehaviour:
   muzzle: {fileID: 1936952536}
   bulletPrefabs:
   - {fileID: 2218497407943198192, guid: 2943e97c84661314baf0a600180bff0d, type: 3}
-  - {fileID: 6812141048282945842, guid: 422d710f4cfeb084d880cf1fcecc60f9, type: 3}
   fireRate: 0.1
   bulletSpeed: 2000
   maxAmmo: 10
@@ -1454,6 +1453,12 @@ MonoBehaviour:
   ammoDropPrefabs:
   - {fileID: 2218497407943198192, guid: 2943e97c84661314baf0a600180bff0d, type: 3}
   - {fileID: 6812141048282945842, guid: 422d710f4cfeb084d880cf1fcecc60f9, type: 3}
+  - {fileID: 2218497407943198192, guid: 7eccedd1dfe352d4fa83bfbac0fde328, type: 3}
+  - {fileID: 2218497407943198192, guid: 752b87daab0f8e64597dccda0dd27a6b, type: 3}
+  - {fileID: 2218497407943198192, guid: 865e9bdc7e5fde9448fd9dead0efba78, type: 3}
+  - {fileID: 2218497407943198192, guid: ba778a25b26603e488f2f6370e8852bd, type: 3}
+  - {fileID: 2218497407943198192, guid: 182642bc087fe684ba133f2131c0527e, type: 3}
+  - {fileID: 2218497407943198192, guid: d1d06472924c4cb469288fe6d48b1a23, type: 3}
   stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   shotgun: {fileID: 707356392}
 --- !u!1 &181174874
@@ -4554,7 +4559,7 @@ GameObject:
   - component: {fileID: 707356390}
   - component: {fileID: 707356389}
   m_Layer: 5
-  m_Name: GunImage (1)
+  m_Name: Shotgun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

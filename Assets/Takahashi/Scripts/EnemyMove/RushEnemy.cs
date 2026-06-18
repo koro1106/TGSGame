@@ -24,15 +24,26 @@ public class RushEnemy : MonoBehaviour
 
     private Vector3 baseScale;         // 元のサイズ保存
 
+    private EnemyHP enemyHP;
+
     void Start()
     {
         // 初期サイズを保存
         baseScale = transform.localScale;
 
+        enemyHP = GetComponent<EnemyHP>();
+
     }
 
     void Update()
     {
+
+        if (enemyHP != null &&
+    enemyHP.IsBind())
+        {
+            return;
+        }
+
         // プレイヤーがいなければ何もしない
         if (player == null) return;
 
