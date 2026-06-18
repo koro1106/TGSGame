@@ -70,6 +70,12 @@ public class GunController : MonoBehaviour
     //ショットガン追加
     public ShotgunController shotgun;
 
+    //スナイパー追加
+    public SniperController sniper;
+
+    //ハンドガン追加
+    public HandGunController handgun;
+
 
     void Start()
     {
@@ -150,6 +156,20 @@ public class GunController : MonoBehaviour
         {
             shotgun.gameObject.SetActive(true);
             shotgun.ActivateShotgun();
+        }
+
+        //スナイパーOキーで出現
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            sniper.gameObject.SetActive(true);
+            sniper.ActivateSniper();
+        }
+
+        //ハンドガンIキーで出現
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            handgun.gameObject.SetActive(true);
+            handgun.ActivateHandGun();
         }
     }
 
@@ -278,6 +298,12 @@ public class GunController : MonoBehaviour
             {
                 shotgun.Fire();
             }
+
+            if (sniper != null && sniper.isActive)
+            {
+                sniper.Fire();
+            }
+
 
             // =========================
             // ダメージ設定
