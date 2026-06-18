@@ -6,6 +6,7 @@ public enum SkillEffectType
 {
     BulletDamage,          // 通常弾ダメージ
     EffectBulletDamage,    // 属性弾ダメージ
+    ElementalBulletChance, // 属性弾発生確率
     MaxAmmo,               // 最大弾数
     UnlockElementalBullet, // 属性弾解放
     EnemySpawnWeightBonus, // 敵スポーン率ボーナス
