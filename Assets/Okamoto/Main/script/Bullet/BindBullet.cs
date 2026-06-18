@@ -83,9 +83,9 @@ public class BindBullet : MonoBehaviour
 
         hasHit = true;
 
-        // SlimeEnemyéÊìæ
-        SlimeEnemy firstEnemy =
-            other.GetComponent<SlimeEnemy>();
+        // EnemyHPéÊìæ
+        EnemyHP firstEnemy =
+    other.GetComponent<EnemyHP>();
 
         if (firstEnemy == null)
             return;
@@ -119,7 +119,7 @@ public class BindBullet : MonoBehaviour
     //==============================
 
     IEnumerator BindEnemies(
-        SlimeEnemy firstEnemy
+    EnemyHP firstEnemy
     )
     {
         GameObject chainRoot =
@@ -138,8 +138,8 @@ public class BindBullet : MonoBehaviour
         // ëŒè€Enemy
         //==============================
 
-        List<SlimeEnemy> targets =
-            new List<SlimeEnemy>();
+        List<EnemyHP> targets =
+            new List<EnemyHP>();
 
         targets.Add(firstEnemy);
 
@@ -149,7 +149,7 @@ public class BindBullet : MonoBehaviour
 
         while (targets.Count < bindCount)
         {
-            SlimeEnemy nearestEnemy = null;
+            EnemyHP nearestEnemy = null;
 
             float nearestDistance =
                 Mathf.Infinity;
@@ -159,8 +159,8 @@ public class BindBullet : MonoBehaviour
                 if (!hit.CompareTag("Enemy"))
                     continue;
 
-                SlimeEnemy enemy =
-                    hit.GetComponent<SlimeEnemy>();
+                EnemyHP enemy =
+                    hit.GetComponent<EnemyHP>();
 
                 if (enemy == null)
                     continue;
@@ -191,8 +191,8 @@ public class BindBullet : MonoBehaviour
         // ê⁄ë±Enemy
         //==============================
 
-        List<SlimeEnemy> connectedEnemies =
-            new List<SlimeEnemy>();
+        List<EnemyHP> connectedEnemies =
+            new List<EnemyHP>();
 
         //==============================
         // çΩï€ë∂
@@ -205,7 +205,7 @@ public class BindBullet : MonoBehaviour
         // çSë©äJén
         //==============================
 
-        foreach (SlimeEnemy enemy in targets)
+        foreach (EnemyHP enemy in targets)
         {
             enemy.StartBind(bindTime);
 
@@ -265,7 +265,7 @@ public class BindBullet : MonoBehaviour
                 i++
             )
             {
-                SlimeEnemy targetEnemy =
+                EnemyHP targetEnemy =
                     connectedEnemies[i];
 
                 List<GameObject> chains =

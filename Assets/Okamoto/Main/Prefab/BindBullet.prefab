@@ -58,6 +58,9 @@ MonoBehaviour:
   minChainSpacing: 0.0001
   chainExtendLength: 5000
   firstChainLength: 5000
+  targetTags:
+  - Enemy
+  - EnemyHP
 --- !u!212 &6253829430372542568
 SpriteRenderer:
   serializedVersion: 2

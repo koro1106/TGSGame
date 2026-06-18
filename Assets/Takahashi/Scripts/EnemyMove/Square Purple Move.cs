@@ -25,15 +25,25 @@ public class EnemyMove : MonoBehaviour
 
     private SpriteRenderer sr; // ★向き反転用
 
+    private EnemyHP enemyHP;
+
     void Start()
     {
         target = Vector2.zero;
         SetRandomDirection();
         sr = GetComponent<SpriteRenderer>();
+
+        enemyHP = GetComponent<EnemyHP>();
     }
 
     void Update()
     {
+        if (enemyHP != null &&
+   enemyHP.IsBind())
+        {
+            return;
+        }
+
         if (state == State.Enter)
         {
             MoveToScreen();

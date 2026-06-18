@@ -29,6 +29,8 @@ public class SlimeEnemy : MonoBehaviour
     private Coroutine bindCoroutine;
     private bool isBind = false;
 
+    private EnemyHP enemyHP;
+
     //========================
     // 開始
     //========================
@@ -44,6 +46,8 @@ public class SlimeEnemy : MonoBehaviour
         SetSpawnAndDirection();
 
         UpdateTargetScale();
+
+        enemyHP = GetComponent<EnemyHP>();
     }
 
     //========================
@@ -56,7 +60,8 @@ public class SlimeEnemy : MonoBehaviour
         // 拘束中停止
         //========================
 
-        if (isBind)
+        if (enemyHP != null &&
+   enemyHP.IsBind())
         {
             return;
         }

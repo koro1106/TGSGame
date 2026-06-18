@@ -324,4 +324,9 @@ public class EnemyHP : MonoBehaviour
 
         bindCoroutine = null;
     }
+
+    public bool IsBind()
+    {
+        return isBind;
+    }
 }

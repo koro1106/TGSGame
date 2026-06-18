@@ -14,15 +14,25 @@ public class EnemyWarpMove : MonoBehaviour
     private bool isWarping = false;
     private Vector3 startScale;
 
+    private EnemyHP enemyHP;
+
     void Start()
     {
         startScale = transform.localScale;
 
         StartCoroutine(WarpRoutine());
+
+        enemyHP = GetComponent<EnemyHP>();
     }
 
     void Update()
     {
+        if (enemyHP != null &&
+   enemyHP.IsBind())
+        {
+            return;
+        }
+
         if (isWarping) return;
 
         // ‰æ–Ê’†‰›‚ÖˆÚ“®

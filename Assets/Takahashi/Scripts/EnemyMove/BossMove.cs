@@ -6,8 +6,20 @@ public class BossMove : MonoBehaviour
 
     public float moveSpeed = 3f;
 
+    private EnemyHP enemyHP;
+
+    void Start()
+    {
+        enemyHP = GetComponent<EnemyHP>();
+    }
     void Update()
     {
+        if (enemyHP != null &&
+   enemyHP.IsBind())
+        {
+            return;
+        }
+
         if (player == null) return;
 
         // ƒvƒŒƒCƒ„[•ûŒü
