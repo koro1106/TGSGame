@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273875e9515bae4469b58e69f7b82692, type: 3}
   m_Name: Pre_01
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "HP\u4E0A\u9650UP"
+  skillName: "\u30D4\u30B9\u30C8\u30EB\u89E3\u653E"
   level: 0
-  maxLevel: 5
+  maxLevel: 1
   needExp: 1
   isUnlocked: 0
   isLevelUp: 0
