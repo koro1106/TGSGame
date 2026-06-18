@@ -24,6 +24,10 @@ public class SkillEffectManager : MonoBehaviour
             case SkillEffectType.EffectBulletDamage:
                 playerStats.effectBulletDamage += (int)skill.effectValue;
                 break;
+            // 属性弾発生確率
+            case SkillEffectType.ElementalBulletChance:
+                playerStats.elementalBulletChance += (float)skill.effectValue;
+                break;
             // 最大弾数UP
             case SkillEffectType.MaxAmmo:
                 playerStats.maxAmmo += (int)skill.effectValue;
