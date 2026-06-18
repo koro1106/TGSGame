@@ -31,11 +31,20 @@ public class HandGunController : MonoBehaviour
     [Header("Gun Visual")]
     public Transform gunImage;
 
+    [Header("ï\é¶êÿë÷")]
+    public bool isActive = false;
+
     private Vector3 defaultLocalPos;
 
     private float timer;
     private Transform lastTarget;
 
+    public void ActivateHandGun()
+    {
+        isActive = true;
+
+        gameObject.SetActive(true);
+    }
     void Start()
     {
         defaultLocalPos =
@@ -63,6 +72,8 @@ public class HandGunController : MonoBehaviour
 
     void Update()
     {
+        if (!isActive) return;
+
         MoveCrosshair();
 
         GameObject target = FindNearestEnemy();
