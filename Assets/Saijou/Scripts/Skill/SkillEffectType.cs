@@ -14,5 +14,6 @@ public enum SkillEffectType
     ExpDroprate,           // 経験値ドロップ率
     CollectionRange,       // 回収範囲増加
     PreExpGetDevice,       // プレステージExp獲得装置  
-    PreExpTime             // プレステージExp時間短縮
+    PreExpTime,            // プレステージExp時間短縮
+    CarePackage            // ケアパケ解放
 }
