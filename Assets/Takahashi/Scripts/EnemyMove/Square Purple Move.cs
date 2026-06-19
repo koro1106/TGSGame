@@ -53,7 +53,7 @@ public class EnemyMove : MonoBehaviour
             FloatMove();
         }
 
-        // ★移動方向に応じて向きを変える
+        // 移動方向に応じて向きを変える
         FlipSprite();
     }
 

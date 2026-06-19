@@ -147,6 +147,8 @@ MonoBehaviour:
   warpInterval: 2.5
   warpRange: 500
   warpAnimTime: 0.3
+  stopBeforeWarpTime: 0.3
+  stopAfterWarpTime: 0.15
 --- !u!114 &7487418284984328733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,9 +181,9 @@ MonoBehaviour:
   damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
   hpSlider: {fileID: 7221829426392492471}
   hpDelaySlider: {fileID: 2779994332043503801}
-  hpBarSmoothSpeed: 4
+  hpBarSmoothSpeed: 15
   hpBarDelayTime: 0.1
-  hpBarDelaySpeed: 1
+  hpBarDelaySpeed: 2
   stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
 --- !u!1001 &9080655910590193178
 PrefabInstance:
