@@ -11,7 +11,8 @@ public class SkillTreeManager : MonoBehaviour
 
     public SkillData[] allSkills;
     public PlayerData playerData;
-   
+
+    [SerializeField] private SkillNodeUI[] nodes;
     void Awake()
     {
         // ロード
@@ -22,6 +23,12 @@ public class SkillTreeManager : MonoBehaviour
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+
+        // UI更新
+        foreach (var node in nodes)
+        {
+            node.RestoreState();
+        }
     }
     void Update()
     {

@@ -55,9 +55,6 @@ public static class SaveManager
     /// </summary>
     public static void Load(PlayerData playerData,SkillData[] skills)
     {
-        Debug.Log("PATH = " + path);
-        Debug.Log("EXISTS = " + File.Exists(path));
-        Debug.Log("LOAD関数に入った");
         // セーブファイルが無い
         if (!File.Exists(path))
         {
@@ -91,14 +88,9 @@ public static class SaveManager
                 // 同じ名前のスキルを探す
                 if (skill.skillName == saveSkill.skillName)
                 {
-                    skill.level =
-                        saveSkill.level;
-
-                    skill.isUnlocked =
-                        saveSkill.isUnlocked;
-
-                    skill.needExp =
-                        saveSkill.needExp;
+                    skill.level = saveSkill.level;
+                    skill.isUnlocked = saveSkill.isUnlocked;
+                    skill.needExp = saveSkill.needExp;
                 }
             }
           
