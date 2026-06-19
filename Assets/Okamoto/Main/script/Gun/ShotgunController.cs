@@ -5,8 +5,19 @@ public class ShotgunController : MonoBehaviour
     [Header("ï\é¶êÿë÷")]
     public bool isActive = false;
 
-    [Header("íe")]
-    public GameObject bulletPrefab;
+    [Header("íeâï˙")]
+    public bool unlockBullet = false;
+
+    [Header("éUíeã≠âª")]
+    public bool unlockExtraBullet = false;
+
+    [Header("í èÌíe")]
+    public GameObject defaultBulletPrefab;
+
+    [Header("âï˙å„Ç…égópÇ∑ÇÈíe")]
+    public GameObject[] unlockedBulletPrefabs;
+
+    [Header("î≠éÀà íu")]
     public Transform muzzle;
 
     [Header("ê´î\")]
@@ -16,7 +27,6 @@ public class ShotgunController : MonoBehaviour
     public void ActivateShotgun()
     {
         isActive = true;
-
         gameObject.SetActive(true);
     }
 
@@ -24,20 +34,57 @@ public class ShotgunController : MonoBehaviour
     {
         if (!isActive) return;
 
-        ShootBullet(-spreadAngle);
-        ShootBullet(0);
-        ShootBullet(spreadAngle);
+        GameObject bulletPrefabToShoot;
+
+        // âï˙ëO
+        if (!unlockBullet ||
+            unlockedBulletPrefabs.Length == 0)
+        {
+            bulletPrefabToShoot =
+                defaultBulletPrefab;
+        }
+        else
+        {
+            // âï˙å„ÇÕîzóÒÇ©ÇÁÉâÉìÉ_ÉÄ
+            int randomIndex =
+                Random.Range(
+                    0,
+                    unlockedBulletPrefabs.Length);
+
+            bulletPrefabToShoot =
+                unlockedBulletPrefabs[randomIndex];
+        }
+
+        ShootSpread(bulletPrefabToShoot);
     }
 
-    void ShootBullet(float angleOffset)
+    private void ShootSpread(GameObject prefab)
+    {
+        ShootBullet(prefab, -spreadAngle);
+        ShootBullet(prefab, 0f);
+        ShootBullet(prefab, spreadAngle);
+
+        if (unlockExtraBullet)
+        {
+            ShootBullet(prefab, -spreadAngle * 2f);
+            ShootBullet(prefab, spreadAngle * 2f);
+        }
+    }
+
+    private void ShootBullet(
+        GameObject prefab,
+        float angleOffset)
     {
         Quaternion rot =
             muzzle.rotation *
-            Quaternion.Euler(0, 0, angleOffset);
+            Quaternion.Euler(
+                0f,
+                0f,
+                angleOffset);
 
         GameObject bullet =
             Instantiate(
-                bulletPrefab,
+                prefab,
                 muzzle.position,
                 rot);
 
@@ -47,7 +94,8 @@ public class ShotgunController : MonoBehaviour
         if (rb != null)
         {
             rb.linearVelocity =
-                bullet.transform.right * bulletSpeed;
+                bullet.transform.right *
+                bulletSpeed;
         }
     }
 }
