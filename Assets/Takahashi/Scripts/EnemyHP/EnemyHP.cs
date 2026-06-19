@@ -46,9 +46,9 @@ public class EnemyHP : MonoBehaviour
     public Slider hpDelaySlider; //ダメージを受けた時のhpばー
 
     [Header("HPバーアニメーション設定")]
-    public float hpBarSmoothSpeed = 8f; // メインバーが現在HPに追いつく速さ
-    public float hpBarDelayTime = 0.4f; // 残像バーが追従し始めるまでの待ち時間（秒）
-    public float hpBarDelaySpeed = 4f;  // 残像バーが追いつく速さ
+    public float hpBarSmoothSpeed = 4f; // メインバーが現在HPに追いつく速さ
+    public float hpBarDelayTime = 0.1f; // 残像バーが追従し始めるまでの待ち時間（秒）
+    public float hpBarDelaySpeed = 2f;  // 残像バーが追いつく速さ
 
     private float displayedHP;     // メインバーが今表示している値（アニメ用）
     private float delayedHP;       // 残像バーが今表示している値（アニメ用）
