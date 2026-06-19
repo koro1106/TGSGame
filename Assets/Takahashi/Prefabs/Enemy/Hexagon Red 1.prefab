@@ -126,7 +126,7 @@ BoxCollider2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_LayerOverridePriority: 0
+  m_LayerOverridePriority: -100
   m_ForceSendLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -185,6 +185,11 @@ MonoBehaviour:
     chance: 50
   dropCount: 3
   damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
+  hpSlider: {fileID: 0}
+  hpDelaySlider: {fileID: 0}
+  hpBarSmoothSpeed: 8
+  hpBarDelayTime: 0.4
+  hpBarDelaySpeed: 4
   stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
 --- !u!114 &-8047611574812774607
 MonoBehaviour:
