@@ -76,7 +76,6 @@ public class GunController : MonoBehaviour
     //ƒnƒ“ƒhƒKƒ“’Ç‰Á
     public HandGunController handgun;
 
-
     void Start()
     {
         crosshairPos = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);

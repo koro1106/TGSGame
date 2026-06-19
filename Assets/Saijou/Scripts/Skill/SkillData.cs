@@ -5,8 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "SkillData")]
 public class SkillData : ScriptableObject
 {
-    public string skillName; // スキル名
-
+    public string skillName; // スキルID
     public int level;        // 現在レベル
     public int maxLevel;    // 最大レベル
     public int needExp;    // 必要経験値

@@ -287,6 +287,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ee70e454c5f391844b3fa68f64d1790d, type: 2}
   - {fileID: 11400000, guid: 43c7537cf3761ba4f8ec737e1a485c7d, type: 2}
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
+  nodes:
+  - {fileID: 1220820724}
+  - {fileID: 1806012793}
+  - {fileID: 1709242295}
+  - {fileID: 1734065122}
+  - {fileID: 1892468888}
+  - {fileID: 694688395}
 --- !u!4 &26492054
 Transform:
   m_ObjectHideFlags: 0

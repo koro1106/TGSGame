@@ -33,7 +33,7 @@ public class SkillNodeUI : MonoBehaviour
 
     [SerializeField] SkillEffectManager effectManager;
     [SerializeField] NormalExpText normalExpText;
-    [SerializeField] NormalExpUIAnimation normalExpUIAnimation;
+    [SerializeField] ExpUIAnimation expUIAnimation;
     [SerializeField] PrestigeExpText prestigelExpText;
     [SerializeField] PrestigeExpUIAnimation prestigeExpUIAnimation;
     [SerializeField] UIAnimation uiAnimation;
@@ -60,7 +60,7 @@ public class SkillNodeUI : MonoBehaviour
         RestoreState();
     }
 
-    void RestoreState()
+    public void RestoreState()
     {
         // このスキルが解放済みの場合
         if (data.isUnlocked)
@@ -81,18 +81,10 @@ public class SkillNodeUI : MonoBehaviour
                 line.SetState(SkillState.Available);
             }
         }
-        // スタートノードの場合
-        else if (isStartNode)
-        {
-            state = SkillState.Available;
-        }
-        //// それ以外は未解放状態
-        //else
-        //{
-        //    state = SkillState.Locked;
-        //}
+
 
         UpdateVisual();
+
     }
     // スキル解放
     public void Unlock()
@@ -217,15 +209,19 @@ public class SkillNodeUI : MonoBehaviour
         switch (data.expType)
         {
             case ExpType.Exp1:
-                uiAnimation.PlayBounce(normalExpUIAnimation.exp_1.rectTransform);
+                uiAnimation.PlayBounce(expUIAnimation.exp_1.rectTransform);
                 break;
 
             case ExpType.Exp2:
-                uiAnimation.PlayBounce(normalExpUIAnimation.exp_2.rectTransform);
+                uiAnimation.PlayBounce(expUIAnimation.exp_2.rectTransform);
                 break;
 
             case ExpType.Exp3:
-                uiAnimation.PlayBounce(normalExpUIAnimation.exp_3.rectTransform);
+                uiAnimation.PlayBounce(expUIAnimation.exp_3.rectTransform);
+                break;
+
+            case ExpType.PreExp:
+                uiAnimation.PlayBounce(expUIAnimation.preExp.rectTransform);
                 break;
         }
     }
