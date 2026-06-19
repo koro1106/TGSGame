@@ -311,7 +311,7 @@ public class EnemyHP : MonoBehaviour
             );
 
             // 渦移動
-            float radius = Mathf.Lerp(0.5f, 0f, t);
+            float radius = Mathf.Lerp(0.3f, 0f, t);
 
             Vector3 spiral = new Vector3(
                 Mathf.Cos(timer * spiralSpeed),

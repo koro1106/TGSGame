@@ -188,9 +188,9 @@ MonoBehaviour:
   damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
   hpSlider: {fileID: 5236795886142307678}
   hpDelaySlider: {fileID: 720936136757099600}
-  hpBarSmoothSpeed: 15
+  hpBarSmoothSpeed: 8
   hpBarDelayTime: 0.1
-  hpBarDelaySpeed: 2
+  hpBarDelaySpeed: 2.5
   stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
 --- !u!1001 &5949600307572689651
 PrefabInstance:
