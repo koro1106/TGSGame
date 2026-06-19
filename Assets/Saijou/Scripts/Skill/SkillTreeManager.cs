@@ -13,6 +13,8 @@ public class SkillTreeManager : MonoBehaviour
     public PlayerData playerData;
 
     [SerializeField] private SkillNodeUI[] nodes;
+    [SerializeField] UIDrag uiDrag;
+    [SerializeField] float scroll = 0f;
     void Awake()
     {
         // ÉçÅ[Éh
@@ -32,15 +34,22 @@ public class SkillTreeManager : MonoBehaviour
     }
     void Update()
     {
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
-
-        if(scroll != 0f)
+        if (!uiDrag.isPrestige)
         {
-            float scale = target.localScale.x;
-            scale += scroll * scaleSpeed;
-            scale = Mathf.Clamp(scale, minScale, maxScale);
+            scroll = Input.GetAxis("Mouse ScrollWheel");
 
-            target.localScale = new Vector3(scale, scale, 1f);
+            if (scroll != 0f)
+            {
+                float scale = target.localScale.x;
+                scale += scroll * scaleSpeed;
+                scale = Mathf.Clamp(scale, minScale, maxScale);
+
+                target.localScale = new Vector3(scale, scale, 1f);
+            }
+        }
+        else
+        {
+            target.localScale = new Vector3(maxScale, maxScale, 1f);
         }
 
         if (Input.GetKeyDown(KeyCode.Z))

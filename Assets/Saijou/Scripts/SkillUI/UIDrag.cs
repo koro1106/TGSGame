@@ -8,31 +8,48 @@ public class UIDrag : MonoBehaviour
     private Vector2 lastMousePos; // マウスがどのぐらい動いたかを出すための
     private bool isDragging = false; // ドラッグ中か
 
+    public bool isPrestige = false; // プレステージボタン押したか
+    // プレステージ位置へ移動
+    public void MoveToPrestige()
+    {
+        target.anchoredPosition = new Vector2(-16f, -3812f);
+        isPrestige = true;
+    }
+
+    // 通常位置へ移動
+    public void MoveToNormal()
+    {
+        target.anchoredPosition = new Vector2(26f, 8f);
+        isPrestige = false;
+    }
     void Update()
     {
-        // 押した瞬間
-        if(Input.GetMouseButtonDown(0))
+        if (!isPrestige)
         {
-            isDragging = true;
-            lastMousePos = Input.mousePosition;
-        }
+            // 押した瞬間
+            if (Input.GetMouseButtonDown(0))
+            {
+                isDragging = true;
+                lastMousePos = Input.mousePosition;
+            }
 
-        // 離したら終了
-        if(Input.GetMouseButtonUp(0))
-        {
-            isDragging = false;
-        }
+            // 離したら終了
+            if (Input.GetMouseButtonUp(0))
+            {
+                isDragging = false;
+            }
 
-        // ドラッグ中
-        if(isDragging)
-        {
-            Vector2 currentMousePos = Input.mousePosition;
-            Vector2 delta = currentMousePos - lastMousePos; // 差分
+            // ドラッグ中
+            if (isDragging)
+            {
+                Vector2 currentMousePos = Input.mousePosition;
+                Vector2 delta = currentMousePos - lastMousePos; // 差分
 
-            // UI移動
-            target.anchoredPosition += delta;
+                // UI移動
+                target.anchoredPosition += delta;
 
-            lastMousePos = currentMousePos;
+                lastMousePos = currentMousePos;
+            }
         }
     }
 }
