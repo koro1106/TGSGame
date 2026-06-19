@@ -16,6 +16,10 @@ public class EnemySpawner : MonoBehaviour
     //public int baseHP = 10;
 
     private float timer;
+
+    [Header("時間経過でスポーン時HPが増える設定")]
+    public float hpGrowInterval = 15f;    // 何秒ごとに強くなるか
+    public float hpGrowMultiplier = 1.2f; // 何倍ずつ強くなるか
     private float hpTimer;
     private float hpMultiplier = 1f;
 
@@ -31,6 +35,19 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
+        // ===== 経過時間でスポーン時HP倍率を上げる =====
+        // ※これはスポーン時にだけ適用される倍率。
+        //   すでにスポーン済みの敵のHPには一切影響しない。
+        //   （EnemyHP側では時間経過のHP増加処理は呼んでいないため、
+        //     生成済みの敵のmaxHPはスポーン時のまま固定される）
+        hpTimer += Time.deltaTime;
+
+        if ((hpTimer >= hpGrowInterval))
+        {
+            hpTimer = 0f;
+            hpMultiplier *= hpGrowMultiplier;//次にスポーンする敵から強くなる
+        }
+
         // ===== ボス管理 =====
 
         if (!bossAlive)
@@ -71,7 +88,9 @@ public class EnemySpawner : MonoBehaviour
             EnemyHP hp = enemy.GetComponent<EnemyHP>();
             if (hp != null)
             {
-                //hp.maxHP = Mathf.CeilToInt(baseHP * hpMultiplier);
+                // Prefab本来のmaxHPに、現在の倍率(hpMultiplier)をかけて強くする
+                // ここで決まったHPはスポーン時点で固定され、後から変化しない
+                hp.maxHP = Mathf.CeilToInt(hp.maxHP * hpMultiplier);
                 hp.currentHP = hp.maxHP;
             }
 
