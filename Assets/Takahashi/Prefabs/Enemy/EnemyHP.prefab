@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 121632149584084874}
   - component: {fileID: 6381739682246096547}
   m_Layer: 5
-  m_Name: damageHP
+  m_Name: damageHPSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -388,7 +388,7 @@ GameObject:
   - component: {fileID: 4560008854670769730}
   - component: {fileID: 1890931205840435117}
   m_Layer: 5
-  m_Name: EnemyHP
+  m_Name: maxHPSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -586,7 +586,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &8615694175071651106
 MonoBehaviour:
   m_ObjectHideFlags: 0
