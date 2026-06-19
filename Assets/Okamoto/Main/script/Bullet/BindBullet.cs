@@ -1,11 +1,13 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+/// <summary>
+/// ½‘®«’e
+/// </summary>
 public class BindBullet : MonoBehaviour
 {
     private Vector3 shootStartPos;
-
+    [SerializeField] PlayerStats stats;
     // ‘½dƒqƒbƒg–h~
     private bool hasHit = false;
 
@@ -55,6 +57,7 @@ public class BindBullet : MonoBehaviour
 
         // “G‚É“–‚½‚ç‚È‚©‚Á‚½‚çÁ‚¦‚é
         StartCoroutine(AutoDestroy());
+        bindCount += stats.chainBulletUP;   // «”\UP•ª‰ÁZ
     }
 
     IEnumerator AutoDestroy()
@@ -146,6 +149,7 @@ public class BindBullet : MonoBehaviour
         //==============================
         // ‹ß‚¢Enemy’Ç‰Á
         //==============================
+
 
         while (targets.Count < bindCount)
         {

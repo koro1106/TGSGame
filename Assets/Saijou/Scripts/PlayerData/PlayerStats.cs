@@ -14,6 +14,8 @@ public class PlayerStats : ScriptableObject
     public int expDroprate = 0;           // 経験値ドロップ率
     public float collectionRange = 0.0f;  // 回収範囲
     public int preExpTime = 0;            // PreExp装置時間短縮
+    public int lightningBulletUP = 0; // 雷の弾で感電する敵＋1
+    public int chainBulletUP = 0;     // 鎖の弾で拘束する敵＋1
 
     // 解放した属性弾リスト
     public GameObject[] unlockedElementalBullets;
@@ -21,6 +23,7 @@ public class PlayerStats : ScriptableObject
     // 属性弾が出る確率(一旦30％なので0.3)
     [Range(0f, 1f)]
     public float elementalBulletChance = 0.3f;
-    public bool preExpDeviceUnlocked = false; // PreExp装置
-    public bool carePackageUnlocked = false;  // ケアパケ解放
+    public bool preExpDeviceUnlocked = false;      // PreExp装置
+    public bool carePackageUnlocked = false;       // ケアパケ解放
+
 }
