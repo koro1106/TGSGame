@@ -76,6 +76,18 @@ public class SkillEffectManager : MonoBehaviour
             case SkillEffectType.ChainBulletUP:
                 playerStats.chainBulletUP += (int)skill.effectValue;
                 break;
+            // ピストル解放
+            case SkillEffectType.HandGun:
+                playerStats.handgunUnlocked = true;
+                break;
+            // ショットガン解放
+            case SkillEffectType.Shotgun:
+                playerStats.shotgunUnlocked = true;
+                break;
+            // スナイパー解放
+            case SkillEffectType.Sniper:
+                playerStats.sniperUnlocked = true;
+                break;
         }
     }
 
