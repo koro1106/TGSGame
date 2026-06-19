@@ -43,6 +43,17 @@ public class EnemyHP : MonoBehaviour
 
     [Header("HPバー")]
     public Slider hpSlider; //hpバー
+    public Slider hpDelaySlider; //ダメージを受けた時のhpばー
+
+    [Header("HPバーアニメーション設定")]
+    public float hpBarSmoothSpeed = 8f; // メインバーが現在HPに追いつく速さ
+    public float hpBarDelayTime = 0.4f; // 残像バーが追従し始めるまでの待ち時間（秒）
+    public float hpBarDelaySpeed = 4f;  // 残像バーが追いつく速さ
+
+    private float displayedHP;     // メインバーが今表示している値（アニメ用）
+    private float delayedHP;       // 残像バーが今表示している値（アニメ用）
+    private float delayTimer = 0f; // 残像バーの待ち時間カウント
+    private bool delayWaiting = false; // 残像バーが「まだ待っている」状態かどうか
 
     private Vector3 baseScale;   // 初期スケール
     private Vector3 targetScale; // 目標スケール
@@ -56,6 +67,9 @@ public class EnemyHP : MonoBehaviour
         // HP初期化
         currentHP = maxHP;
 
+        // HPバーアニメーション用の値も初期化（最初はピッタリ満タンの状態）
+        displayedHP = currentHP;
+        delayedHP = currentHP;
 
         if (hpSlider != null)
         {
@@ -63,6 +77,11 @@ public class EnemyHP : MonoBehaviour
             hpSlider.value = currentHP;
         }
 
+        if (hpDelaySlider != null)
+        {
+            hpDelaySlider.maxValue = maxHP;
+            hpDelaySlider.value = currentHP;
+        }
 
         // スケール保存
         baseScale = transform.localScale;
@@ -84,8 +103,45 @@ public class EnemyHP : MonoBehaviour
             targetScale,
             Time.deltaTime * scaleSmooth
         );
+
+        // HPバーのアニメーション更新
+        UpdateHPBarAnimation();
     }
 
+    // HPバーのアニメーション処理
+    // メインバー：なめらかに現在HPへ追従
+    // 残像バー：少し待ってから、ゆっくり追従（削れた量がじわっと見える）
+    void UpdateHPBarAnimation()
+    {
+        // メインバー（即時に近いがなめらか）
+        displayedHP = Mathf.Lerp(displayedHP, currentHP, Time.deltaTime * hpBarSmoothSpeed);
+
+        if (hpSlider != null)
+        {
+            hpSlider.value = displayedHP;
+        }
+
+        //　残像バー（遅れて追従
+        if (delayWaiting)
+        {
+            // ダメージ直後はまだ動かさず、一定時間待つ
+            delayTimer += Time.deltaTime;
+
+            if (delayTimer >= hpBarDelayTime)
+            {
+                delayWaiting = false; // 待ち終わったので追従開始
+            }
+        }
+        else
+        {
+            delayedHP = Mathf.Lerp(delayedHP, currentHP, Time.deltaTime * hpBarDelaySpeed);
+        }
+
+        if (hpDelaySlider != null)
+        {
+            hpDelaySlider.value = delayedHP;
+        }
+    }
     // ダメージ処理
     public void TakeDamage(int damage, bool isCritical = false )
     {

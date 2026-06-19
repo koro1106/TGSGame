@@ -395,7 +395,7 @@ MonoBehaviour:
   - prefab: {fileID: 1514281451404711565, guid: b79716df06544bd4c942bc9f6be16c93, type: 3}
     weight: 0
   - prefab: {fileID: 4832302078142527342, guid: 0aba12c3835267542a9c75abdf6f3dda, type: 3}
-    weight: 50
+    weight: 0
   player: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
   spawnInterval: 5
   hpGrowInterval: 10
