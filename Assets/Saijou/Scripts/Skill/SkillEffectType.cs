@@ -16,5 +16,7 @@ public enum SkillEffectType
     CollectionRange,       // 回収範囲増加
     PreExpGetDevice,       // プレステージExp獲得装置  
     PreExpTime,            // プレステージExp時間短縮
-    CarePackage            // ケアパケ解放
+    CarePackage,           // ケアパケ解放
+    LightningBulletUP,     // 雷の弾で感電する敵＋1
+    ChainBulletUP,         // 鎖の弾で拘束する敵＋1
 }

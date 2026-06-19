@@ -62,11 +62,19 @@ public class SkillEffectManager : MonoBehaviour
                 break;
             // プレステージExp時間短縮 
             case SkillEffectType.PreExpTime:
-                playerStats.preExpTime += (int)skill.effectValue; ;
+                playerStats.preExpTime += (int)skill.effectValue;
                 break;
-            // // ケアパケ解放
+            // ケアパケ解放
             case SkillEffectType.CarePackage:
                 playerStats.carePackageUnlocked = true;
+                break;
+            // 雷の弾で感電する敵＋1
+            case SkillEffectType.LightningBulletUP:
+                playerStats.lightningBulletUP += (int)skill.effectValue;
+                break;
+            // 鎖の弾で拘束する敵＋1
+            case SkillEffectType.ChainBulletUP:
+                playerStats.chainBulletUP += (int)skill.effectValue;
                 break;
         }
     }

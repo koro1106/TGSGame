@@ -1,7 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-
+/// <summary>
+/// —‹‘®«’e
+/// </summary>
 public class ChainBullet : MonoBehaviour
 {
     public float lifeTime = 3f;
@@ -35,6 +37,7 @@ public class ChainBullet : MonoBehaviour
     void Start()
     {
         Destroy(gameObject, lifeTime);
+        chainCount += stats.lightningBulletUP; // «”\UP•ª‰ÁZ
     }
 
     void OnTriggerEnter2D(Collider2D other)
