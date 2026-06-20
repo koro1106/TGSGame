@@ -83,7 +83,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 169ea4b1d0941be44a35189fa31f9531, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -149,6 +149,8 @@ MonoBehaviour:
   warpAnimTime: 0.3
   stopBeforeWarpTime: 0.3
   stopAfterWarpTime: 0.15
+  hitSlowMultiplier: 0.3
+  hitSlowDuration: 0.5
 --- !u!114 &7487418284984328733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,6 +183,12 @@ MonoBehaviour:
   damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
   hpSlider: {fileID: 7221829426392492471}
   hpDelaySlider: {fileID: 2779994332043503801}
+  useRadialFill: 1
+  radialOrigin: 2
+  radialClockwise: 0
+  hpBarRoot: {fileID: 8917478143029826477, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
+  hitFlashColor: {r: 1, g: 0.5660378, b: 0.5660378, a: 1}
+  hitFlashDuration: 0.08
   hpBarSmoothSpeed: 8
   hpBarDelayTime: 0.1
   hpBarDelaySpeed: 2.5
@@ -259,7 +267,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2788937149780402964, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.0075
+      value: -0.14
       objectReference: {fileID: 0}
     - target: {fileID: 2788937149780402964, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_AnchoredPosition.y
