@@ -763,6 +763,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 756a3aa13f4b19f4f9cb35d3c7fb2e99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DropBounce
+  playerData: {fileID: 0}
+  allSkills: []
+  addExp1: 1
+  addExp2: 0
+  addExp3: 0
+  collectDistance: 1
+  collectDisTotal: 0
+  stats: {fileID: 0}
+  collectMoveSpeed: 15
   moveSpeed: 40
   bounceHeight: 0
   bounceCount: 2
@@ -1101,6 +1110,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 756a3aa13f4b19f4f9cb35d3c7fb2e99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DropBounce
+  playerData: {fileID: 0}
+  allSkills: []
+  addExp1: 1
+  addExp2: 0
+  addExp3: 0
+  collectDistance: 1
+  collectDisTotal: 0
+  stats: {fileID: 0}
+  collectMoveSpeed: 15
   moveSpeed: 40
   bounceHeight: 0
   bounceCount: 2
@@ -1389,6 +1407,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 756a3aa13f4b19f4f9cb35d3c7fb2e99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DropBounce
+  playerData: {fileID: 0}
+  allSkills: []
+  addExp1: 1
+  addExp2: 0
+  addExp3: 0
+  collectDistance: 1
+  collectDisTotal: 0
+  stats: {fileID: 0}
+  collectMoveSpeed: 15
   moveSpeed: 40
   bounceHeight: 0
   bounceCount: 2

@@ -36,7 +36,7 @@ public class EnemyHP : MonoBehaviour
 
     [Header("ドロップ")]
     public DropItem[] dropItems;
-    public int dropCount = 1; 
+    public int dropCount = 1;
 
     [Header("ダメージ表示")]
     public GameObject damageText; // ダメージUI
@@ -44,6 +44,22 @@ public class EnemyHP : MonoBehaviour
     [Header("HPバー")]
     public Slider hpSlider; //hpバー
     public Slider hpDelaySlider; //ダメージを受けた時のhpばー
+
+    [Header("HPバー：時計回りの減り方")]
+    public bool useRadialFill = true; // ONにすると時計みたいな円形の減り方になる
+    public Image.Origin180 radialOrigin = Image.Origin180.Top; // 弓形の上側を直径として使う
+    public bool radialClockwise = false; // 右端から減って左端が最後に残る向き。逆だったらここを切り替える
+
+    [Header("HPバー非表示設定")]
+    public GameObject hpBarRoot; // HPバーをまとめている親オブジェクト（背景枠なども含む場合に使用。未設定ならスライダーを個別に非表示にします）
+
+    [Header("被弾点滅")]
+    public Color hitFlashColor = Color.red; // 点滅させる色
+    public float hitFlashDuration = 0.08f;  // 1回の点滅の長さ（秒）
+
+    private SpriteRenderer sr;       // 点滅用
+    private Color originalColor;     // 元の色
+    private Coroutine flashCoroutine; // 実行中の点滅コルーチン
 
     [Header("HPバーアニメーション設定")]
     public float hpBarSmoothSpeed = 4f; // メインバーが現在HPに追いつく速さ
@@ -61,12 +77,17 @@ public class EnemyHP : MonoBehaviour
     private bool isDying = false; // 死亡中フラグ
     private Collider2D col;       // コライダー
 
-    private bool isBind = false;
-    private Coroutine bindCoroutine;
+    private bool isBind = false;          // 鎖などで拘束されている間true
+    private Coroutine bindCoroutine;      // 実行中のバインドコルーチン
+
+    private IHitSlowable hitSlowable; // 被弾鈍化を呼ぶための参照。EnemyMove/EnemyWarpMoveどちらでも対応
 
     public PlayerStats stats; // プレイヤーステータス
     void Start()
     {
+        // 移動スクリプト取得（被弾時の鈍化呼び出し用）
+        hitSlowable = GetComponent<IHitSlowable>();
+
         // HP初期化
         currentHP = maxHP;
 
@@ -78,12 +99,14 @@ public class EnemyHP : MonoBehaviour
         {
             hpSlider.maxValue = maxHP;
             hpSlider.value = currentHP;
+            SetupRadialFill(hpSlider);
         }
 
         if (hpDelaySlider != null)
         {
             hpDelaySlider.maxValue = maxHP;
             hpDelaySlider.value = currentHP;
+            SetupRadialFill(hpDelaySlider);
         }
 
         // スケール保存
@@ -92,15 +115,23 @@ public class EnemyHP : MonoBehaviour
 
         // コライダー取得
         col = GetComponent<Collider2D>();
+
+        // 点滅用のスプライトレンダラー取得
+        sr = GetComponent<SpriteRenderer>();
+        if (sr != null)
+        {
+            originalColor = sr.color;
+        }
     }
-   
+
     void Update()
     {
-
+        // 拘束中（鎖など）は何もしない
         if (isBind)
         {
             return;
         }
+
         // 死亡中は処理しない
         if (isDying) return;
 
@@ -151,12 +182,12 @@ public class EnemyHP : MonoBehaviour
         }
     }
     // ダメージ処理
-    public void TakeDamage(int damage, bool isCritical = false )
+    public void TakeDamage(int damage, bool isCritical = false)
     {
         if (isDying) return;
 
         //レア敵は１ダメ
-        if(isRareEnemy)
+        if (isRareEnemy)
         {
             damage = 1;
         }
@@ -169,8 +200,24 @@ public class EnemyHP : MonoBehaviour
             hpSlider.value = currentHP;
         }
 
-        ShowDamage(damage,isCritical); // ダメージ表示
+        ShowDamage(damage, isCritical); // ダメージ表示
         UpdateScale();      // 見た目更新
+
+        // 被弾点滅
+        if (sr != null)
+        {
+            if (flashCoroutine != null)
+            {
+                StopCoroutine(flashCoroutine);
+            }
+            flashCoroutine = StartCoroutine(HitFlash());
+        }
+
+        // 被弾鈍化（鈍化対応の移動スクリプトがアタッチされている場合のみ）
+        if (hitSlowable != null)
+        {
+            hitSlowable.ApplyHitSlow();
+        }
 
         if (currentHP <= 0)
         {
@@ -228,7 +275,7 @@ public class EnemyHP : MonoBehaviour
         {
             float finalChance = item.chance + stats.expDroprate;
 
-            total += finalChance;
+            total += item.chance;
 
             if (rand <= total)
             {
@@ -245,6 +292,74 @@ public class EnemyHP : MonoBehaviour
         currentHP = 0;
         StartCoroutine(DeathSpiral());
     }
+
+    // 鎖などで一定時間拘束する（BindBulletから呼ばれる）
+    public void StartBind(float time)
+    {
+        if (bindCoroutine != null)
+        {
+            StopCoroutine(bindCoroutine);
+        }
+
+        bindCoroutine = StartCoroutine(BindCoroutine(time));
+    }
+
+    IEnumerator BindCoroutine(float time)
+    {
+        isBind = true;
+
+        yield return new WaitForSeconds(time);
+
+        isBind = false;
+        bindCoroutine = null;
+    }
+
+    // 拘束中かどうか（他スクリプトからの参照用）
+    public bool IsBind()
+    {
+        return isBind;
+    }
+
+    // SliderのFill画像を「時計みたいに円形で減る」設定に自動構成する
+    // ※Image Type を Filled にしておけば、Sliderはvalueの変化に合わせて
+    //   自動でfillAmountを更新してくれるので、TakeDamage側のコードは変更不要
+    void SetupRadialFill(Slider slider)
+    {
+        if (!useRadialFill) return;
+        if (slider.fillRect == null) return;
+
+        Image fillImage = slider.fillRect.GetComponent<Image>();
+        if (fillImage == null) return;
+
+        fillImage.type = Image.Type.Filled;
+        fillImage.fillMethod = Image.FillMethod.Radial180;
+        fillImage.fillOrigin = (int)radialOrigin;
+        fillImage.fillClockwise = radialClockwise;
+    }
+
+    // HPバーを非表示にする
+    void HideHPBar()
+    {
+        if (hpBarRoot != null)
+        {
+            // 親オブジェクトが設定されていればまとめて非表示
+            hpBarRoot.SetActive(false);
+        }
+        else
+        {
+            // 設定されていなければスライダーを個別に非表示
+            if (hpSlider != null)
+            {
+                hpSlider.gameObject.SetActive(false);
+            }
+
+            if (hpDelaySlider != null)
+            {
+                hpDelaySlider.gameObject.SetActive(false);
+            }
+        }
+    }
+
     // 死亡演出
     // =========================================
     IEnumerator DeathSpiral()
@@ -258,8 +373,11 @@ public class EnemyHP : MonoBehaviour
             col.enabled = false;
         }
 
+        // HPバーを非表示
+        HideHPBar();
+
         //コンボ追加
-        if(ComboManager.instance != null)
+        if (ComboManager.instance != null)
         {
             ComboManager.instance.AddCombo();
         }
@@ -333,8 +451,16 @@ public class EnemyHP : MonoBehaviour
         // 完全消滅
         Destroy(gameObject);
     }
+    // 被弾点滅（赤く一瞬光って元の色に戻る）
+    IEnumerator HitFlash()
+    {
+        sr.color = hitFlashColor;
+        yield return new WaitForSeconds(hitFlashDuration);
+        sr.color = originalColor;
+    }
+
     // ダメージUI表示
-    void ShowDamage(int damage , bool isCritical)
+    void ShowDamage(int damage, bool isCritical)
     {
         if (damageText == null) return;
 
@@ -350,39 +476,11 @@ public class EnemyHP : MonoBehaviour
         {
             dmg.SetDamage(damage);
             //クリティカルなら特別表示
-            if(isCritical)
+            if (isCritical)
             {
                 dmg.SetCritical();
             }
         }
-           
-    }
-    public void StartBind(float time)
-    {
-        if (bindCoroutine != null)
-        {
-            StopCoroutine(bindCoroutine);
-        }
 
-        bindCoroutine =
-            StartCoroutine(
-                BindCoroutine(time)
-            );
-    }
-
-    IEnumerator BindCoroutine(float time)
-    {
-        isBind = true;
-
-        yield return new WaitForSeconds(time);
-
-        isBind = false;
-
-        bindCoroutine = null;
-    }
-
-    public bool IsBind()
-    {
-        return isBind;
     }
 }
