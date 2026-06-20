@@ -163,13 +163,6 @@ public class GunController : MonoBehaviour
             sniper.gameObject.SetActive(true);
             sniper.ActivateSniper();
         }
-
-        //ハンドガンIキーで出現
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            handgun.gameObject.SetActive(true);
-            handgun.ActivateHandGun();
-        }
     }
 
     void Aim()

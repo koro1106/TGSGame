@@ -25,8 +25,11 @@ public class PlayerStats : ScriptableObject
     public float elementalBulletChance = 0.3f;
     public bool preExpDeviceUnlocked = false;      // PreExp装置
     public bool carePackageUnlocked = false;       // ケアパケ解放
-    public bool handgunUnlocked = false;       // ピストル(ハンドガン)解放
-    public bool shotgunUnlocked = false;       // ショットガン解放
-    public bool sniperUnlocked = false;        // スナイパー解放
+    public bool handgunUnlocked = false;           // ハンドガン解放
+    public bool handgunBulletUnlocked = false;     // ハンドガン属性弾解放
+    public bool shotgunUnlocked = false;           // ショットガン解放
+    public bool shotgunBulletUnlocked = false;     // ショットガン属性弾解放
+    public bool sniperUnlocked = false;            // スナイパー解放
+    public bool sniperBulletUnlocked = false;      // スナイパー属性弾解放
 
 }

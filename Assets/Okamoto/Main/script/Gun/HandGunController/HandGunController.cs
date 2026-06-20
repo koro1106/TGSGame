@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 public class HandGunController : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class HandGunController : MonoBehaviour
     public GameObject defaultBulletPrefab;
     public GameObject[] unlockedBulletPrefabs;
     public bool unlockBullet = false;
+    [SerializeField] PlayerStats stats;
 
     [Header("Shoot Settings")]
     public float shootInterval = 2f;
@@ -99,6 +101,7 @@ public class HandGunController : MonoBehaviour
     void Shoot()
     {
         GameObject prefabToShoot;
+        if (stats.handgunBulletUnlocked) unlockBullet = true;
 
         if (!unlockBullet || unlockedBulletPrefabs.Length == 0)
         {

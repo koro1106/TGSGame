@@ -80,13 +80,25 @@ public class SkillEffectManager : MonoBehaviour
             case SkillEffectType.HandGun:
                 playerStats.handgunUnlocked = true;
                 break;
+            // ピストル属性弾追加
+            case SkillEffectType.HandGunEffectBullet:
+                playerStats.handgunBulletUnlocked = true;
+                break;
             // ショットガン解放
             case SkillEffectType.Shotgun:
                 playerStats.shotgunUnlocked = true;
                 break;
+            // ショットガン属性弾解放
+            case SkillEffectType.ShotgunEffectBullet:
+                playerStats.shotgunBulletUnlocked = true;
+                break;
             // スナイパー解放
             case SkillEffectType.Sniper:
                 playerStats.sniperUnlocked = true;
+                break;
+            // スナイパー解放
+            case SkillEffectType.SniperEffectBullet:
+                playerStats.sniperBulletUnlocked = true;
                 break;
         }
     }

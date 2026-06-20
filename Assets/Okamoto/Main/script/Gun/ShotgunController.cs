@@ -7,6 +7,7 @@ public class ShotgunController : MonoBehaviour
 
     [Header("’e‰ð•ú")]
     public bool unlockBullet = false;
+    [SerializeField] PlayerStats stats;
 
     [Header("ŽU’e‹­‰»")]
     public bool unlockExtraBullet = false;
@@ -35,6 +36,7 @@ public class ShotgunController : MonoBehaviour
         if (!isActive) return;
 
         GameObject bulletPrefabToShoot;
+        if (stats.shotgunBulletUnlocked) unlockBullet = true;
 
         // ‰ð•ú‘O
         if (!unlockBullet ||
