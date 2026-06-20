@@ -435,10 +435,11 @@ public class DropBounce : MonoBehaviour
         );
 
         // 一定位置で回収完了
-        if (transform.position.y < -10f)
-        {
-            FinishCollect();
-        }
+        //if (transform.position.y < -10f)
+        //{
+        //}
+        FinishCollect();
+
     }
 
     // =========================================================
@@ -447,6 +448,7 @@ public class DropBounce : MonoBehaviour
 
     void FinishCollect()
     {
+        Debug.Log("経験値回収");
         if (playerData != null)
         {
             playerData.currentExp_1 += addExp1;
