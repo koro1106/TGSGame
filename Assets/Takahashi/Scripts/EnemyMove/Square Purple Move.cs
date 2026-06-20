@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class EnemyMove : MonoBehaviour, IHitSlowable
+public class EnemyMove : MonoBehaviour
 {
     enum State
     {
@@ -23,14 +23,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     [Header("スポーン位置の外側距離")]
     public float spawnOffset = 2f;
 
-    [Header("被弾時の鈍化")]
-    public float hitSlowMultiplier = 0.3f; // 鈍化中の速度倍率（1fで鈍化なし、0fで完全停止）
-    public float hitSlowDuration = 0.5f;   // 鈍化が続く時間（秒）
-
-    private float slowTimer = 0f;       // 鈍化の残り時間
-    private float speedMultiplier = 1f; // 現在の速度倍率（鈍化中は1未満になる）
-
-    private SpriteRenderer sr; // 向き反転用
+    private SpriteRenderer sr; // ★向き反転用
 
     void Start()
     {
@@ -41,9 +34,6 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
 
     void Update()
     {
-        // 被弾鈍化の更新
-        UpdateHitSlow();
-
         if (state == State.Enter)
         {
             MoveToScreen();
@@ -64,7 +54,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     {
         Vector2 dir = (target - (Vector2)transform.position).normalized;
 
-        transform.Translate(dir * enterSpeed * speedMultiplier * Time.deltaTime);
+        transform.Translate(dir * enterSpeed * Time.deltaTime);
 
         // 画面に入ったら状態変更
         if (IsInsideScreen())
@@ -87,7 +77,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
             timer = 0f;
         }
 
-        transform.Translate(direction * floatSpeed * speedMultiplier * Time.deltaTime);
+        transform.Translate(direction * floatSpeed * Time.deltaTime);
 
         // 画面外に出ないよう反射
         StayInScreen();
@@ -115,34 +105,6 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         // 左に動く → 右向き（反対）
         else if (direction.x < 0)
             sr.flipX = false;
-    }
-
-    // 被弾時に呼ぶ（EnemyHP側からの呼び出し用）
-    public void ApplyHitSlow()
-    {
-        slowTimer = hitSlowDuration;
-        speedMultiplier = hitSlowMultiplier;
-    }
-
-    // 鈍化タイマーの経過処理
-    void UpdateHitSlow()
-    {
-        if (slowTimer <= 0f)
-        {
-            speedMultiplier = 1f;
-            return;
-        }
-
-        slowTimer -= Time.deltaTime;
-
-        if (slowTimer <= 0f)
-        {
-            speedMultiplier = 1f; // 鈍化終了、通常速度に戻す
-        }
-        else
-        {
-            speedMultiplier = hitSlowMultiplier; // 鈍化継続中
-        }
     }
 
     /*Vector2 GetSpawnPosition()
