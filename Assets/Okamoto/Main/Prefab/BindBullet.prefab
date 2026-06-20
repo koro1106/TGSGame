@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a979f8352278a041953550fc357d10e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BindBullet
+  stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   lifeTime: 3
   bindTime: 3
   searchRadius: 5000
@@ -58,9 +59,6 @@ MonoBehaviour:
   minChainSpacing: 0.0001
   chainExtendLength: 5000
   firstChainLength: 5000
-  targetTags:
-  - Enemy
-  - EnemyHP
 --- !u!212 &6253829430372542568
 SpriteRenderer:
   serializedVersion: 2

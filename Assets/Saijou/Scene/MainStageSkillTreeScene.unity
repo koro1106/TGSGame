@@ -3370,7 +3370,7 @@ MonoBehaviour:
   yellowSprite: {fileID: -2563561379437210377, guid: 97c684b202d3bd3429da85752eab6bd3, type: 3}
   effectManager: {fileID: 1593656332}
   normalExpText: {fileID: 2127618005}
-  expUIAnimation: {fileID: 0}
+  expUIAnimation: {fileID: 26492058}
   prestigelExpText: {fileID: 0}
   prestigeExpUIAnimation: {fileID: 0}
   uiAnimation: {fileID: 26492057}
@@ -4776,7 +4776,7 @@ MonoBehaviour:
   yellowSprite: {fileID: -2563561379437210377, guid: 97c684b202d3bd3429da85752eab6bd3, type: 3}
   effectManager: {fileID: 1593656332}
   normalExpText: {fileID: 2127618005}
-  expUIAnimation: {fileID: 0}
+  expUIAnimation: {fileID: 26492058}
   prestigelExpText: {fileID: 0}
   prestigeExpUIAnimation: {fileID: 0}
   uiAnimation: {fileID: 26492057}
@@ -16677,7 +16677,7 @@ MonoBehaviour:
   yellowSprite: {fileID: -2563561379437210377, guid: 97c684b202d3bd3429da85752eab6bd3, type: 3}
   effectManager: {fileID: 1593656332}
   normalExpText: {fileID: 2127618005}
-  expUIAnimation: {fileID: 0}
+  expUIAnimation: {fileID: 26492058}
   prestigelExpText: {fileID: 0}
   prestigeExpUIAnimation: {fileID: 0}
   uiAnimation: {fileID: 26492057}
@@ -18182,7 +18182,7 @@ MonoBehaviour:
   yellowSprite: {fileID: -2563561379437210377, guid: 97c684b202d3bd3429da85752eab6bd3, type: 3}
   effectManager: {fileID: 1593656332}
   normalExpText: {fileID: 2127618005}
-  expUIAnimation: {fileID: 0}
+  expUIAnimation: {fileID: 26492058}
   prestigelExpText: {fileID: 0}
   prestigeExpUIAnimation: {fileID: 0}
   uiAnimation: {fileID: 26492057}
@@ -21339,7 +21339,7 @@ MonoBehaviour:
   yellowSprite: {fileID: -2563561379437210377, guid: 97c684b202d3bd3429da85752eab6bd3, type: 3}
   effectManager: {fileID: 1593656332}
   normalExpText: {fileID: 2127618005}
-  expUIAnimation: {fileID: 0}
+  expUIAnimation: {fileID: 26492058}
   prestigelExpText: {fileID: 0}
   prestigeExpUIAnimation: {fileID: 0}
   uiAnimation: {fileID: 26492057}
@@ -21815,7 +21815,7 @@ MonoBehaviour:
   yellowSprite: {fileID: -2563561379437210377, guid: 97c684b202d3bd3429da85752eab6bd3, type: 3}
   effectManager: {fileID: 1593656332}
   normalExpText: {fileID: 2127618005}
-  expUIAnimation: {fileID: 0}
+  expUIAnimation: {fileID: 26492058}
   prestigelExpText: {fileID: 0}
   prestigeExpUIAnimation: {fileID: 0}
   uiAnimation: {fileID: 26492057}

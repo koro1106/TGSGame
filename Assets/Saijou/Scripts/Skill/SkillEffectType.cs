@@ -20,6 +20,9 @@ public enum SkillEffectType
     LightningBulletUP,     // 雷の弾で感電する敵＋1
     ChainBulletUP,         // 鎖の弾で拘束する敵＋1
     HandGun,               // ピストル解放
+    HandGunEffectBullet,   // ピストル属性弾追加
     Shotgun,               // ショットガン解放
-    Sniper,               // スナイパー解放
+    ShotgunEffectBullet,   // ショットガン属性弾追加
+    Sniper,                // スナイパー解放
+    SniperEffectBullet,   　// スナイパー属性弾追加
 }

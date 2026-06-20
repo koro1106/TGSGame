@@ -7,6 +7,7 @@ public class SniperController : MonoBehaviour
 
     [Header("’e‰ğ•ú")]
     public bool unlockBullet = false;
+    [SerializeField] PlayerStats stats;
 
     [Header("’Êí’e")]
     public GameObject defaultBulletPrefab;
@@ -31,6 +32,7 @@ public class SniperController : MonoBehaviour
         if (!isActive) return;
 
         GameObject bulletPrefabToShoot;
+        if (stats.sniperBulletUnlocked) unlockBullet = true;
 
         // ‰ğ•ú‘O
         if (!unlockBullet || unlockedBulletPrefabs.Length == 0)
