@@ -54,7 +54,7 @@ MonoBehaviour:
   chainCount: 2
   chainRadius: 2000
   lightningPrefab: {fileID: 4514482655411187178, guid: 70492705cbd050b45b3492ec316dddbd, type: 3}
-  hitEffectPrefab: {fileID: 6792142387433316357, guid: ed91730f85068c248a3b10450adefcb5, type: 3}
+  hitEffectPrefab: {fileID: 1023961267518418972, guid: 18b7573f855935149aebb63cf62be200, type: 3}
   hitSound: {fileID: 8300000, guid: 92202c2a4fa23c445820a27fcf2f61f4, type: 3}
   ammoDropPrefab: {fileID: 5431272660784949491, guid: 59c1a1cf82a32ed419e3dafc1bfda765, type: 3}
   ammoUISprite: {fileID: 8450537012972342862, guid: bcdad1804b565a0489879a3791651db1, type: 3}
@@ -236,24 +236,24 @@ LineRenderer:
     colorGradient:
       serializedVersion: 2
       key0: {r: 0.20545568, g: 0.5724322, b: 0.764151, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
-      key2: {r: 0, g: 0, b: 0, a: 0}
+      key1: {r: 1, g: 1, b: 1, a: 0.42352942}
+      key2: {r: 1, g: 1, b: 1, a: 1}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
       key6: {r: 0, g: 0, b: 0, a: 0}
       key7: {r: 0, g: 0, b: 0, a: 0}
-      ctime0: 0
-      ctime1: 49151
-      ctime2: 0
+      ctime0: 3759
+      ctime1: 37297
+      ctime2: 37297
       ctime3: 0
       ctime4: 0
       ctime5: 0
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 65535
-      atime2: 0
+      atime1: 11758
+      atime2: 65535
       atime3: 0
       atime4: 0
       atime5: 0
@@ -262,7 +262,7 @@ LineRenderer:
       m_Mode: 0
       m_ColorSpace: 0
       m_NumColorKeys: 2
-      m_NumAlphaKeys: 2
+      m_NumAlphaKeys: 3
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0
