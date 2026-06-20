@@ -17,6 +17,7 @@ public class DropBounce : MonoBehaviour
     [Header("経験値")]
 
     public PlayerData playerData;
+    public SkillData[] allSkills;
 
     public int addExp1 = 1;
     public int addExp2 = 0;
@@ -452,7 +453,7 @@ public class DropBounce : MonoBehaviour
             playerData.currentExp_2 += addExp2;
             playerData.currentExp_3 += addExp3;
         }
-
+        SaveManager.Save(playerData, allSkills);
         Destroy(gameObject);
     }
 
