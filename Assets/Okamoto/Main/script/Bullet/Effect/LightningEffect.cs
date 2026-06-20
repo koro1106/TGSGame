@@ -3,41 +3,68 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class LightningLineEffect : MonoBehaviour
 {
+    [Header("Lightning")]
     public int segments = 12;
-    public float amplitude = 0.5f;
+    public float amplitude = 0.15f;
     public float duration = 0.08f;
     public float flickerSpeed = 0.015f;
+
+    [Header("Width")]
+    public float startWidth = 0.12f;
+    public float endWidth = 0.03f;
+
+    [Header("Hit Effect")]
+    public GameObject effectPrefab;
+
+    private GameObject effectInstance;
 
     private LineRenderer lr;
     private Vector3 startPos;
     private Vector3 endPos;
 
-    [Header("太さ")]
-    public float startWidth = 0.6f;
-    public float endWidth = 0.1f;
-
     private float timer;
     private float nextFlicker;
 
-
     void Awake()
-    {
-        lr = GetComponentInChildren<LineRenderer>();
-
-        if (lr == null)
-        {
-            Debug.LogError("LineRendererが見つからない（子も含めて）");
-        }
-    }
-    public void Setup(Vector3 start, Vector3 end)
     {
         lr = GetComponent<LineRenderer>();
 
+        if (lr == null)
+        {
+            lr = GetComponentInChildren<LineRenderer>();
+        }
+
+        if (lr == null)
+        {
+            Debug.LogError("LineRendererが見つかりません");
+        }
+    }
+
+    public void Setup(Vector3 start, Vector3 end)
+    {
         startPos = start;
         endPos = end;
 
-        lr.positionCount = segments;
+        timer = 0f;
         nextFlicker = 0f;
+
+        lr.positionCount = segments;
+
+        // 接触地点にエフェクト生成
+        if (effectPrefab != null)
+        {
+            Vector3 dir = endPos - startPos;
+
+            float angle =
+                Mathf.Atan2(dir.y, dir.x) *
+                Mathf.Rad2Deg;
+
+            effectInstance = Instantiate(
+                effectPrefab,
+                endPos,
+                Quaternion.Euler(0f, 0f, angle)
+            );
+        }
 
         UpdateLine();
     }
@@ -48,25 +75,35 @@ public class LightningLineEffect : MonoBehaviour
 
         if (timer >= duration)
         {
+            if (effectInstance != null)
+            {
+                Destroy(effectInstance);
+            }
+
             Destroy(gameObject);
             return;
         }
 
-        // フリッカー
         if (Time.time >= nextFlicker)
         {
             UpdateLine();
             nextFlicker = Time.time + flickerSpeed;
         }
 
-        // 太さ＆フェード
         float t = timer / duration;
-        float width = Mathf.Lerp(startWidth, endWidth, t);
+
+        float width = Mathf.Lerp(
+            startWidth,
+            endWidth,
+            t
+        );
+
         lr.startWidth = width;
         lr.endWidth = width;
 
         Color c = lr.startColor;
         c.a = 1f - t;
+
         lr.startColor = c;
         lr.endColor = c;
     }
@@ -75,26 +112,41 @@ public class LightningLineEffect : MonoBehaviour
     {
         if (lr == null) return;
 
-        if (lr.positionCount != segments)
-        {
-            lr.positionCount = segments;
-        }
-
         Vector3 dir = (endPos - startPos).normalized;
         Vector3 perpendicular = new Vector3(-dir.y, dir.x, 0);
 
-        for (int i = 0; i < lr.positionCount; i++)
+        for (int i = 0; i < segments; i++)
         {
-            float t = i / (float)(lr.positionCount - 1);
+            float t = i / (float)(segments - 1);
 
-            Vector3 basePos = Vector3.Lerp(startPos, endPos, t);
+            Vector3 basePos = Vector3.Lerp(
+                startPos,
+                endPos,
+                t
+            );
 
-            float strength = Mathf.Sin(t * Mathf.PI);
-            float offset = Random.Range(-amplitude, amplitude) * strength;
+            float strength =
+                Mathf.Sin(t * Mathf.PI);
 
-            Vector3 pos = basePos + perpendicular * offset;
+            float offset =
+                Random.Range(
+                    -amplitude,
+                    amplitude
+                ) * strength;
+
+            Vector3 pos =
+                basePos +
+                perpendicular * offset;
 
             lr.SetPosition(i, pos);
+        }
+    }
+
+    void OnDestroy()
+    {
+        if (effectInstance != null)
+        {
+            Destroy(effectInstance);
         }
     }
 }
