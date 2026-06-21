@@ -19,7 +19,7 @@ MonoBehaviour:
   criticalrate: 0
   criticalDamage: 0
   expDroprate: 0
-  expDroprateDouble: 0
+  expDroprateDouble: 1
   collectionRange: 0
   preExpTime: 0
   lightningBulletUP: 0
