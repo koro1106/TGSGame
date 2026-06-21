@@ -52,6 +52,10 @@ public class SkillEffectManager : MonoBehaviour
             case SkillEffectType.ExpDroprate:
                 playerStats.expDroprate += (int)skill.effectValue;
                 break;
+            // ドロップ量が2倍になる確率
+            case SkillEffectType.ExpDroprateDouble:
+                playerStats.expDroprateDouble += (int)skill.effectValue;
+                break;
             // 回収範囲増加
             case SkillEffectType.CollectionRange:
                 playerStats.collectionRange += (float)skill.effectValue;

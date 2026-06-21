@@ -274,7 +274,6 @@ public class EnemyHP : MonoBehaviour
         foreach (DropItem item in dropItems)
         {
             float finalChance = item.chance + stats.expDroprate;
-
             total += item.chance;
 
             if (rand <= total)
@@ -393,18 +392,28 @@ public class EnemyHP : MonoBehaviour
             // nullじゃなければ生成
             if (drop != null)
             {
-                // 少しバラける
-                Vector3 offset = new Vector3(
-                    Random.Range(-50f, 50f),
-                    Random.Range(-50f, 50f),
-                    0
-                );
+                int count = 1;
 
-                Instantiate(
-                    drop,
-                    transform.position + offset,
-                    Quaternion.identity
-                );
+                // expDroprateDouble%で2倍
+                if (Random.Range(0f, 100f) < stats.expDroprateDouble)
+                {
+                    count = 2;
+                }
+
+                for (int j = 0; j < count; j++)
+                {
+                    Vector3 offset = new Vector3(
+                        Random.Range(-50f, 50f),
+                        Random.Range(-50f, 50f),
+                        0
+                    );
+
+                    Instantiate(
+                        drop,
+                        transform.position + offset,
+                        Quaternion.identity
+                    );
+                }
             }
         }
 

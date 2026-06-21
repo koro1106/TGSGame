@@ -146,13 +146,13 @@ public class SkillNodeUI : MonoBehaviour
                 if (hasExp)
                 {
                     // 経験値足りてる → 薄緑
-                    c.a = 30f / 255f;
+                    c.a = 100f / 255f;
                 }
                 else
                 {
                     // 経験値足りない → 赤画像にする
                     icon.sprite = redSprite;
-                    c.a = 30f / 255f;
+                    c.a = 100f / 255f;
                 }
                 break;
 
