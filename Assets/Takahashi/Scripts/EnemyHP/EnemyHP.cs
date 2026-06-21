@@ -394,10 +394,10 @@ public class EnemyHP : MonoBehaviour
             {
                 int count = 1;
 
-                // expDroprateDouble%で2倍
-                if (Random.Range(0f, 100f) < stats.expDroprateDouble)
+                // 20%で倍率発動
+                if (Random.Range(0f, 100f) < 50f)
                 {
-                    count = 2;
+                    count = stats.expDroprateDouble;
                 }
 
                 for (int j = 0; j < count; j++)
