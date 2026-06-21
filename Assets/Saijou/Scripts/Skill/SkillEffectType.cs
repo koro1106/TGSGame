@@ -13,6 +13,7 @@ public enum SkillEffectType
     Criticalrate,          // クリティカル発生確率
     CriticalDamage,        // クリティカルダメージ倍率
     ExpDroprate,           // 経験値ドロップ率
+    ExpDroprateDouble,     // ドロップ量が2倍になる確率
     CollectionRange,       // 回収範囲増加
     PreExpGetDevice,       // プレステージExp獲得装置  
     PreExpTime,            // プレステージExp時間短縮
