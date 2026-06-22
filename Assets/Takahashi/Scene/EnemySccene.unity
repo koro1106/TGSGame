@@ -388,16 +388,16 @@ MonoBehaviour:
   enemies:
   - prefab: {fileID: 3672385843094609883, guid: 395f7599b11b5514cb4c8c91107c9c7c, type: 3}
     weight: 0
-  - prefab: {fileID: 8321376853146568099, guid: 568ade19d92a2cd40a3379b53519f00b, type: 3}
+  - prefab: {fileID: 8052344111788290768, guid: 071791b8dfb4791469632c75f9e0ef04, type: 3}
     weight: 100
   - prefab: {fileID: 2931965587420321019, guid: 3ad3c589ec744814c944ed6ed827ac86, type: 3}
     weight: 0
   - prefab: {fileID: 1514281451404711565, guid: b79716df06544bd4c942bc9f6be16c93, type: 3}
     weight: 0
   - prefab: {fileID: 4832302078142527342, guid: 0aba12c3835267542a9c75abdf6f3dda, type: 3}
-    weight: 100
+    weight: 0
   player: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
-  spawnInterval: 5
+  spawnInterval: 3
   hpGrowInterval: 10
   hpGrowMultiplier: 1.1
   playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
