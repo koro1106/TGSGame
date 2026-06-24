@@ -24,6 +24,8 @@ MonoBehaviour:
   preExpTime: 0
   lightningBulletUP: 0
   chainBulletUP: 0
+  poisonRangeUP: 0
+  explosionRangeUP: 0
   unlockedElementalBullets:
   - {fileID: 2218497407943198192, guid: 2943e97c84661314baf0a600180bff0d, type: 3}
   elementalBulletChance: 0.2

@@ -20,6 +20,8 @@ public enum SkillEffectType
     CarePackage,           // ケアパケ解放
     LightningBulletUP,     // 雷の弾で感電する敵＋1
     ChainBulletUP,         // 鎖の弾で拘束する敵＋1
+    PoisonRangeUP,         // 毒の範囲UP
+    ExplosionRangeUP,      // 爆発の範囲UP
     HandGun,               // ピストル解放
     HandGunEffectBullet,   // ピストル属性弾追加
     Shotgun,               // ショットガン解放

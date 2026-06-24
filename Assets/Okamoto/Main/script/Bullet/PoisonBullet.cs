@@ -18,6 +18,8 @@ public class PoisonBullet : Bullet
 
     public float poisonRadius = 3f;
 
+    public float totalPoisonRadius = 0f;
+
     public int poisonDamage = 3;
 
     public float poisonInterval = 1f;
@@ -112,7 +114,6 @@ public class PoisonBullet : Bullet
         // =========================
 
         GameObject effect = null;
-
         if (poisonEffectPrefab != null)
         {
             effect = Instantiate(
@@ -131,13 +132,14 @@ public class PoisonBullet : Bullet
         // =========================
 
         float timer = 0f;
-
+        totalPoisonRadius = poisonRadius + stats.poisonRangeUP;
+        Debug.Log("çáåv"+totalPoisonRadius);
         while (timer < poisonDuration)
         {
             Collider2D[] hits =
                 Physics2D.OverlapCircleAll(
                     transform.position,
-                    poisonRadius
+                    totalPoisonRadius 
                 );
 
             foreach (Collider2D hit in hits)
@@ -169,10 +171,11 @@ public class PoisonBullet : Bullet
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
+        totalPoisonRadius = poisonRadius + stats.poisonRangeUP;
 
         Gizmos.DrawWireSphere(
             transform.position,
-            poisonRadius
+            totalPoisonRadius
         );
     }
 }
