@@ -4,9 +4,12 @@ using UnityEngine;
 /// </summary>
 public class UIDrag : MonoBehaviour
 {
-    public RectTransform target; // スキルツリーの親オブジェクト
-    private Vector2 lastMousePos; // マウスがどのぐらい動いたかを出すための
+    public RectTransform target;     // スキルツリーの親オブジェクト
+    private Vector2 lastMousePos;    // マウスがどのぐらい動いたかを出すための
     private bool isDragging = false; // ドラッグ中か
+
+    [SerializeField] GameObject mainSkillTreeButon;
+    [SerializeField] GameObject preSkillTreeButon;
 
     public bool isPrestige = false; // プレステージボタン押したか
     // プレステージ位置へ移動
@@ -26,6 +29,9 @@ public class UIDrag : MonoBehaviour
     {
         if (!isPrestige)
         {
+            mainSkillTreeButon.SetActive(false);
+            preSkillTreeButon.SetActive(true);
+
             // 押した瞬間
             if (Input.GetMouseButtonDown(0))
             {
@@ -50,6 +56,11 @@ public class UIDrag : MonoBehaviour
 
                 lastMousePos = currentMousePos;
             }
+        }
+        else
+        {
+            mainSkillTreeButon.SetActive(true);
+            preSkillTreeButon.SetActive(false);
         }
     }
 }

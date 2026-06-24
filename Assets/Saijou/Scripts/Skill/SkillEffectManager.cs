@@ -80,6 +80,14 @@ public class SkillEffectManager : MonoBehaviour
             case SkillEffectType.ChainBulletUP:
                 playerStats.chainBulletUP += (int)skill.effectValue;
                 break;
+            // 毒の範囲UP
+            case SkillEffectType.PoisonRangeUP:
+                playerStats.poisonRangeUP += (int)skill.effectValue;
+                break;
+            // 爆発の範囲UP
+            case SkillEffectType.ExplosionRangeUP:
+                playerStats.explosionRangeUP += (int)skill.effectValue;
+                break;
             // ピストル解放
             case SkillEffectType.HandGun:
                 playerStats.handgunUnlocked = true;

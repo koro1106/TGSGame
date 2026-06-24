@@ -316,7 +316,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.47058824}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -539,6 +539,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIDrag
   target: {fileID: 2058398392}
+  mainSkillTreeButon: {fileID: 812543374}
+  preSkillTreeButon: {fileID: 20106983}
   isPrestige: 0
 --- !u!114 &26492056
 MonoBehaviour:
@@ -560,10 +562,10 @@ MonoBehaviour:
   UIanim: {fileID: 26492057}
   playerData: {fileID: 0}
   expIcon: {fileID: 1635554813}
-  exp1Sprite: {fileID: 21300000, guid: 1e9ddb04e251e8541a5c177cebf03680, type: 3}
-  exp2Sprite: {fileID: -2679988402054868717, guid: 1be35d8750ecfde4fa914d9bd9bcee1f, type: 3}
-  exp3Sprite: {fileID: -7805317176583911632, guid: 52b79be34bfbb5640a3778cbf018ab0d, type: 3}
-  preExpSprite: {fileID: 7888944104818087802, guid: abc928515c5ac674692badad350336dd, type: 3}
+  exp1Sprite: {fileID: -742143357942135657, guid: 941407f0e2d0841408f44cbd6acb9bd3, type: 3}
+  exp2Sprite: {fileID: -1961628477635468418, guid: 6c65b015f1608e548b76b3017ce2141e, type: 3}
+  exp3Sprite: {fileID: 2833141237302521862, guid: 4b333791c49cbf44f839935f454ea9bc, type: 3}
+  preExpSprite: {fileID: 3840247296602493836, guid: c6b99374aed14694da25e23214a53522, type: 3}
 --- !u!114 &26492057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1089,7 +1091,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 7888944104818087802, guid: abc928515c5ac674692badad350336dd, type: 3}
+  m_Sprite: {fileID: 3840247296602493836, guid: c6b99374aed14694da25e23214a53522, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2400,7 +2402,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -7805317176583911632, guid: 52b79be34bfbb5640a3778cbf018ab0d, type: 3}
+  m_Sprite: {fileID: 2833141237302521862, guid: 4b333791c49cbf44f839935f454ea9bc, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8026,7 +8028,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 306, y: -75}
+  m_AnchoredPosition: {x: 107, y: -75}
   m_SizeDelta: {x: 160, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &812543376
@@ -10727,7 +10729,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1516268718464375844, guid: e46a40c1d3d60664faebd33c911d5ef4, type: 3}
+  m_Sprite: {fileID: -7522163371928197333, guid: 2608b041a6607da449610b067bf70105, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -13996,7 +13998,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 1e9ddb04e251e8541a5c177cebf03680, type: 3}
+  m_Sprite: {fileID: -742143357942135657, guid: 941407f0e2d0841408f44cbd6acb9bd3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -14160,7 +14162,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -2679988402054868717, guid: 1be35d8750ecfde4fa914d9bd9bcee1f, type: 3}
+  m_Sprite: {fileID: -1961628477635468418, guid: 6c65b015f1608e548b76b3017ce2141e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -15330,7 +15332,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -53, y: 7}
+  m_AnchoredPosition: {x: -61, y: 7}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1635554813
@@ -15353,7 +15355,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 1e9ddb04e251e8541a5c177cebf03680, type: 3}
+  m_Sprite: {fileID: -742143357942135657, guid: 941407f0e2d0841408f44cbd6acb9bd3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

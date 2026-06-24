@@ -17,6 +17,8 @@ public class PlayerStats : ScriptableObject
     public int preExpTime = 0;            // PreExp装置時間短縮
     public int lightningBulletUP = 0; // 雷の弾で感電する敵＋1
     public int chainBulletUP = 0;     // 鎖の弾で拘束する敵＋1
+    public int poisonRangeUP = 0;     // 毒の範囲UP
+    public int explosionRangeUP = 0;  // 爆発の範囲UP
 
     // 解放した属性弾リスト
     public GameObject[] unlockedElementalBullets;
