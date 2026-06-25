@@ -13719,18 +13719,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemies:
   - prefab: {fileID: 8321376853146568099, guid: 568ade19d92a2cd40a3379b53519f00b, type: 3}
-    weight: 100
-  - prefab: {fileID: 2931965587420321019, guid: 3ad3c589ec744814c944ed6ed827ac86, type: 3}
+    weight: 10
+  enemyA:
+    prefab: {fileID: 3672385843094609883, guid: 395f7599b11b5514cb4c8c91107c9c7c, type: 3}
+    weight: 20
+  enemyB:
+    prefab: {fileID: 1514281451404711565, guid: b79716df06544bd4c942bc9f6be16c93, type: 3}
+    weight: 50
+  enemyC:
+    prefab: {fileID: 0}
     weight: 0
-  - prefab: {fileID: 2931965587420321019, guid: 3ad3c589ec744814c944ed6ed827ac86, type: 3}
-    weight: 0
+  spawnList: []
   player: {fileID: 173762202}
   spawnInterval: 3
   hpGrowInterval: 15
   hpGrowMultiplier: 1.2
   playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   bossPrefab: {fileID: 1535677997056505620, guid: 38e0c4e553ed7874584eba5a894cc60f, type: 3}
-  bossSpawnTime: 10
+  bossSpawnTime: 30
 --- !u!4 &1683393130
 Transform:
   m_ObjectHideFlags: 0

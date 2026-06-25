@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: PlayerData
   m_EditorClassIdentifier: Assembly-CSharp::PlayerData
   currentExp_1: 200
-  currentExp_2: 20
-  currentExp_3: 5
-  currentPreExp: 5
+  currentExp_2: 25
+  currentExp_3: 18
+  currentPreExp: 18

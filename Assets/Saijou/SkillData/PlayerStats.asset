@@ -37,3 +37,6 @@ MonoBehaviour:
   shotgunBulletUnlocked: 0
   sniperUnlocked: 0
   sniperBulletUnlocked: 0
+  enemyAUnlocked: 0
+  enemyBUnlocked: 0
+  enemyCUnlocked: 0
