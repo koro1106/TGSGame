@@ -112,6 +112,18 @@ public class SkillEffectManager : MonoBehaviour
             case SkillEffectType.SniperEffectBullet:
                 playerStats.sniperBulletUnlocked = true;
                 break;
+            // 敵解放_A
+            case SkillEffectType.EnemyUnlock_A:
+                playerStats.enemyAUnlocked = true;
+                break;
+            // 敵解放_B
+            case SkillEffectType.EnemyUnlock_B:
+                playerStats.enemyBUnlocked = true;
+                break;
+            // 敵解放_C
+            case SkillEffectType.EnemyUnlock_C:
+                playerStats.enemyCUnlocked = true;
+                break;
         }
     }
 

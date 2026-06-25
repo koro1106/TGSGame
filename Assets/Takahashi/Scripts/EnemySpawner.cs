@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -9,7 +11,14 @@ public class EnemyData
 
 public class EnemySpawner : MonoBehaviour
 {
+    [Header("’Êí“G")]
     public EnemyData[] enemies;
+    [Header("‰ğ•ú“G")]
+    public EnemyData enemyA;
+    public EnemyData enemyB;
+    public EnemyData enemyC;
+    public List<EnemyData> spawnList = new List<EnemyData>();
+
     public Transform player;
 
     public float spawnInterval = 2f;
@@ -32,7 +41,7 @@ public class EnemySpawner : MonoBehaviour
     private float bossTimer;
 
     private bool bossAlive = false;
-
+   
     void Update()
     {
         // ===== Œo‰ßŠÔ‚ÅƒXƒ|[ƒ“HP”{—¦‚ğã‚°‚é =====
@@ -143,16 +152,35 @@ public class EnemySpawner : MonoBehaviour
 
     GameObject GetRandomEnemy()
     {
+        spawnList.Clear();
+
+        // Å‰‚©‚ço‚é“G
+        foreach (var e in enemies)
+        {
+            spawnList.Add(e);
+        }
+
+        // ‰ğ•ú“G
+        if (playerStats.enemyAUnlocked)
+            spawnList.Add(enemyA);
+
+        if (playerStats.enemyBUnlocked)
+            spawnList.Add(enemyB);
+
+        if (playerStats.enemyCUnlocked)
+            spawnList.Add(enemyC);
+
+
         int total = 0;
 
-        foreach (var e in enemies)
+        foreach (var e in spawnList)
             total += e.weight + playerStats.enemySpawnWeightBonus;
 
         int r = Random.Range(0, total);
 
         int sum = 0;
 
-        foreach (var e in enemies)
+        foreach (var e in spawnList)
         {
             sum += e.weight + playerStats.enemySpawnWeightBonus;
 
@@ -160,7 +188,7 @@ public class EnemySpawner : MonoBehaviour
                 return e.prefab;
         }
 
-        return enemies[0].prefab;
+        return spawnList[0].prefab;
     }
 
     Vector2 GetSpawnPosition()

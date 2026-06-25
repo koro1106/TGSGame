@@ -107,21 +107,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 479c780d506576344af60278daab9f7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMove
-  enterSpeed: 150
-  floatSpeed: 150
-  spawnOffset: 2
+  jumpMoveSpeed: 200
+  waitTimeMin: 0.3
+  waitTimeMax: 0.8
   hitSlowMultiplier: 0.3
   hitSlowDuration: 0.5
-  body: {fileID: 0}
-  lid: {fileID: 0}
+  bodyBack: {fileID: 0}
+  lidBack: {fileID: 0}
+  bodyFront: {fileID: 0}
+  lidFront: {fileID: 0}
   rabbit: {fileID: 0}
-  jumpInterval: 1.8
+  ears: []
   jumpHeight: 1.2
   jumpDuration: 0.5
   lidOpenAngle: -40
+  lidHeight: 0
   lidOpenSpeed: 8
+  lidMoveSpeed: 10
   rabbitRiseHeight: 0.6
   rabbitRiseSpeed: 5
+  earSwingAngle: 25
+  earSwingSpeed: 8
+  earPhaseOffset: 1
 --- !u!61 &-8573242932278024560
 BoxCollider2D:
   m_ObjectHideFlags: 0

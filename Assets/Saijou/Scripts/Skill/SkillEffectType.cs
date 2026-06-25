@@ -27,5 +27,8 @@ public enum SkillEffectType
     Shotgun,               // ショットガン解放
     ShotgunEffectBullet,   // ショットガン属性弾追加
     Sniper,                // スナイパー解放
-    SniperEffectBullet,   　// スナイパー属性弾追加
+    SniperEffectBullet,  　// スナイパー属性弾追加
+    EnemyUnlock_A,         // 敵解放_A
+    EnemyUnlock_B,         // 敵解放_B
+    EnemyUnlock_C,         // 敵解放_C
 }

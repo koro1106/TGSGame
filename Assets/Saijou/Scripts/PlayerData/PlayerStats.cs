@@ -35,4 +35,8 @@ public class PlayerStats : ScriptableObject
     public bool sniperUnlocked = false;            // スナイパー解放
     public bool sniperBulletUnlocked = false;      // スナイパー属性弾解放
 
+    public bool enemyAUnlocked = false;            // 解放敵＿A
+    public bool enemyBUnlocked = false;            // 解放敵＿B
+    public bool enemyCUnlocked = false;            // 解放敵＿C
+
 }
