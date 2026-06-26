@@ -541,11 +541,26 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     }
 
     // =========================================================
+    // 死亡時に影を消す
+    // =========================================================
+    public void HideShadow()
+    {
+        if (shadow != null)
+        {
+            Destroy(shadow.gameObject);
+            shadow = null;
+        }
+    }
+    // =========================================================
     // 削除時に影も削除
     // =========================================================
     void OnDestroy()
     {
         if (shadow != null)
+        {
             Destroy(shadow.gameObject);
+            shadow = null;
+        }
+           
     }
 }
