@@ -54,6 +54,7 @@ MonoBehaviour:
   ammoUISprite: {fileID: 0}
   hitDamage: 0
   poisonRadius: 300
+  totalPoisonRadius: 0
   poisonDamage: 5
   poisonInterval: 0.5
   poisonDuration: 5
@@ -107,7 +108,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   m_Color: {r: 0.02141363, g: 0.4198113, b: 0, a: 1}
