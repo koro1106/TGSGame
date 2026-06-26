@@ -12,12 +12,6 @@ public class PointLevelSystem : MonoBehaviour
     [Header("経験値ゲージ")]
     public Slider expSlider;
 
-    [Header("経験値表示")]
-    public TextMeshProUGUI expText;
-
-    [Header("レベルポイント表示")]
-    public TextMeshProUGUI levelText;
-
     [Header("プレイヤーデータ")]
     public PlayerData playerData;
 
@@ -27,7 +21,8 @@ public class PointLevelSystem : MonoBehaviour
     // レベルポイント
     private int levelPoint = 0;
 
-
+    public PointGetEffect pointEffectPrefab;
+    public Transform pointSpawn;      // スポーン場所
     // ポイント追加
     public void AddPoint(int amount)
     {
@@ -37,6 +32,17 @@ public class PointLevelSystem : MonoBehaviour
         // 100以上になったらレベルポイント獲得
         while (currentExp >= 10)
         {
+            // Spawn位置で演出生成
+            PointGetEffect effectInstance = Instantiate(
+                pointEffectPrefab,
+                pointSpawn.position,       // 出現場所
+                Quaternion.identity,
+                pointSpawn.parent          // 親は Canvas 内にしておく
+            );
+
+            // ポイント獲得演出再生
+            effectInstance.PlayEffect();
+
             // 100消費
             currentExp -= 10;
 
@@ -61,11 +67,5 @@ public class PointLevelSystem : MonoBehaviour
     {
         // スライダー更新
         expSlider.value = currentExp;
-
-        // 経験値表示
-        expText.text = currentExp + " / 10";
-
-        // レベルポイント表示
-        levelText.text = "レベルポイント：" + levelPoint;
     }
 }

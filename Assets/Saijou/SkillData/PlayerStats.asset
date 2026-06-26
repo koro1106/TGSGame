@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
   bulletDamage: 10
   effectBulletDamage: 15
-  maxAmmo: 10
+  maxAmmo: 15
   enemySpawnWeightBonus: 0
   criticalrate: 0
   criticalDamage: 1
@@ -28,6 +28,7 @@ MonoBehaviour:
   explosionRangeUP: 0
   unlockedElementalBullets:
   - {fileID: 2218497407943198192, guid: 2943e97c84661314baf0a600180bff0d, type: 3}
+  - {fileID: 6812141048282945842, guid: 422d710f4cfeb084d880cf1fcecc60f9, type: 3}
   elementalBulletChance: 0.2
   preExpDeviceUnlocked: 0
   carePackageUnlocked: 0
