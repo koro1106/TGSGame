@@ -54,6 +54,8 @@ MonoBehaviour:
   ammoUISprite: {fileID: 0}
   hitEffectPrefab: {fileID: 3396578696415523958, guid: 0647ef0e6f9f67240832f917951c69cd, type: 3}
   explosionSize: 400
+  totalExplosionSize: 3
+  playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
 --- !u!212 &6253829430372542568
 SpriteRenderer:
   serializedVersion: 2

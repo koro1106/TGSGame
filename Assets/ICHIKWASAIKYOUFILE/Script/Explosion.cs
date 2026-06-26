@@ -18,7 +18,9 @@ public class Bulletxplosion : MonoBehaviour
     // ▼追加
     [Header("Explosion Size")]
     public float explosionSize = 3f;
+    public float totalExplosionSize = 0f;
 
+    public PlayerStats playerStats;
     void Start()
     {
         Destroy(gameObject, lifeTime);
@@ -74,8 +76,10 @@ public class Bulletxplosion : MonoBehaviour
                 );
 
             // 見た目サイズ変更
+            totalExplosionSize = explosionSize + playerStats.explosionRangeUP;
+
             effect.transform.localScale =
-                Vector3.one * explosionSize;
+                Vector3.one * totalExplosionSize;
         }
 
         // 弾消滅
