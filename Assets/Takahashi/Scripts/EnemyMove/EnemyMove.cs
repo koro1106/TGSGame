@@ -123,6 +123,20 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
 
     private EnemyHP enemyHP;
 
+    [Header("── 影 ──────────────────────")]
+    public GameObject shadowPrefab;
+
+    [Header("影の位置オフセット（地面からのずれ）")]
+    public Vector2 shadowOffset = new Vector2(0f, -0.1f);
+
+    [Header("影のスケール")]
+    public Vector2 shadowBaseScale = new Vector2(1f, 0.3f);     // 着地時の基本サイズ
+    public Vector2 shadowAirScale = new Vector2(0.5f, 0.15f);  // 最高点でのサイズ
+
+    private Transform shadow;
+    private SpriteRenderer shadowSR;
+
+
     // =========================================================
     // Start
     // =========================================================
@@ -130,6 +144,29 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     {
         enemyHP = GetComponent<EnemyHP>();
         target = Vector2.zero;
+
+        if (shadowPrefab != null)
+        {
+            GameObject s = Instantiate(shadowPrefab);
+            shadow = s.transform;
+            shadowSR = s.GetComponent<SpriteRenderer>();
+
+            // 初期位置（現在位置）
+            shadow.position = new Vector3(
+                transform.position.x + shadowOffset.x,
+                transform.position.y + shadowOffset.y,
+                0f
+            );
+        
+            shadow.localScale = new Vector3(shadowBaseScale.x, shadowBaseScale.y, 1f);
+
+            if (shadowSR != null)
+            {
+                Color c = shadowSR.color;
+                c.a = 0.5f;
+                shadowSR.color = c;
+            }
+        }
 
         // SpriteRenderer 取得
         if (bodyBack != null) bodyBackSR = bodyBack.GetComponent<SpriteRenderer>();
@@ -204,6 +241,8 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         FlipSprite();
 
         if (IsInsideScreen()) EnterWait();
+
+        UpdateShadow();
     }
 
     // =========================================================
@@ -216,7 +255,10 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         {
             SetRandomDirection();
             StartJump();
+            FixShadow();
         }
+
+      
     }
 
     // =========================================================
@@ -240,6 +282,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         FlipSprite();
 
         if (jumpTimer >= jumpDuration) EndJump();
+        UpdateShadow();
     }
 
     // =========================================================
@@ -439,4 +482,70 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     }
 
     void SetRandomDirection() => direction = Random.insideUnitCircle.normalized;
+
+    // =========================================================
+    // 影更新（ジャンプ中: 高さに応じて薄く・小さく）
+    // =========================================================
+    void UpdateShadow()
+    {
+        if (shadow == null) return;
+
+        // 敵の現在位置に合わせて影も移動
+        shadow.position = new Vector3(
+            transform.position.x + shadowOffset.x,
+            transform.position.y + shadowOffset.y,
+            0f
+        );
+        shadow.rotation = Quaternion.identity;
+
+        if (shadowSR == null) return;
+
+        float bodyY = 0f;
+        if (bodyBack != null)
+            bodyY = bodyBack.localPosition.y - bodyBaseLocalPos.y;
+
+        float t = Mathf.Clamp01(bodyY / Mathf.Max(jumpHeight, 0.001f));
+
+        // スケールを補間
+        Vector2 scale = Vector2.Lerp(shadowBaseScale, shadowAirScale, t);
+        shadow.localScale = new Vector3(scale.x, scale.y, 1f);
+
+        // 透明度を補間
+        Color c = shadowSR.color;
+        c.a = Mathf.Lerp(0.5f, 0.1f, t);
+        shadowSR.color = c;
+    }
+
+    // =========================================================
+    // 影固定（Wait中: 地面に濃く表示）
+    // =========================================================
+    void FixShadow()
+    {
+        if (shadow == null) return;
+
+        // 待機中も敵の足元に影を表示
+        shadow.position = new Vector3(
+            transform.position.x + shadowOffset.x,
+            transform.position.y + shadowOffset.y,
+            0f
+        );
+        shadow.rotation = Quaternion.identity;
+        shadow.localScale = new Vector3(shadowBaseScale.x, shadowBaseScale.y, 1f);
+
+        if (shadowSR != null)
+        {
+            Color c = shadowSR.color;
+            c.a = 0.5f;
+            shadowSR.color = c;
+        }
+    }
+
+    // =========================================================
+    // 削除時に影も削除
+    // =========================================================
+    void OnDestroy()
+    {
+        if (shadow != null)
+            Destroy(shadow.gameObject);
+    }
 }

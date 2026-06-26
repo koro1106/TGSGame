@@ -112,9 +112,13 @@ MonoBehaviour:
   lidMoveSpeed: 25
   rabbitRiseHeight: 230
   rabbitRiseSpeed: 150
-  earSwingAngle: 25
-  earSwingSpeed: 8
-  earPhaseOffset: 1
+  earSwingAngle: 20
+  earSwingSpeed: 10
+  earPhaseOffset: 1.5
+  shadowPrefab: {fileID: 1354215260935572172, guid: 536db39859af53a47928bcbe00400608, type: 3}
+  shadowOffset: {x: 0, y: -87}
+  shadowBaseScale: {x: 10, y: 3}
+  shadowAirScale: {x: 8, y: 2}
 --- !u!61 &2936419270682105936
 BoxCollider2D:
   m_ObjectHideFlags: 0
