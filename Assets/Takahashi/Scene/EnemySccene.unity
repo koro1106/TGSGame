@@ -396,8 +396,18 @@ MonoBehaviour:
     weight: 0
   - prefab: {fileID: 4832302078142527342, guid: 0aba12c3835267542a9c75abdf6f3dda, type: 3}
     weight: 0
+  enemyA:
+    prefab: {fileID: 0}
+    weight: 0
+  enemyB:
+    prefab: {fileID: 0}
+    weight: 0
+  enemyC:
+    prefab: {fileID: 0}
+    weight: 0
+  spawnList: []
   player: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
-  spawnInterval: 3
+  spawnInterval: 10
   hpGrowInterval: 10
   hpGrowMultiplier: 1.1
   playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
