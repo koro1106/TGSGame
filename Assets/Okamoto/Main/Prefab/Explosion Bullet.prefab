@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 698859006654042122}
-  - component: {fileID: 312254605513926487}
+  - component: {fileID: -2158570756601262124}
   - component: {fileID: 6253829430372542568}
   - component: {fileID: -1994986234973849187}
   - component: {fileID: -4717636454762612078}
   m_Layer: 0
-  m_Name: Bullet 2
+  m_Name: Explosion Bullet
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,7 +35,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &312254605513926487
+--- !u!114 &-2158570756601262124
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,14 +44,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 2218497407943198192}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 552e94e4e771db44e9184794f3daf854, type: 3}
+  m_Script: {fileID: 11500000, guid: ba433cbdb68f6ea4ba0a3ee7b2c147b9, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::BulletXplosion
   speed: 15
   lifeTime: 5
-  damage: 10
-  ammoDropPrefab: {fileID: 5431272660784949491, guid: c5b1c4050c4821447bbd84aa65aec6a0, type: 3}
-  ammoUISprite: {fileID: -8445716477887776210, guid: f3a2950e95b2b1b45801d3f30d58d261, type: 3}
+  damage: 20
+  ammoDropPrefab: {fileID: 0}
+  ammoUISprite: {fileID: 0}
+  hitEffectPrefab: {fileID: 3396578696415523958, guid: 0647ef0e6f9f67240832f917951c69cd, type: 3}
+  explosionSize: 400
 --- !u!212 &6253829430372542568
 SpriteRenderer:
   serializedVersion: 2
@@ -102,7 +104,7 @@ SpriteRenderer:
   m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.9528302, g: 0.38635734, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

@@ -1,20 +1,93 @@
 using UnityEngine;
 
-public class Explosion : MonoBehaviour
+public class Bulletxplosion : MonoBehaviour
 {
-    public ParticleSystem hitEffectPrefab; //　爆発物
+    public float speed = 15f;
+    public float lifeTime = 5f;
 
-    // 敵にぶつかったらパーティクルシステム再生してください
-    private void OnCollisionEnter(Collision collision)
+    [SerializeField] private int damage;
+
+    private Vector2 direction;
+
+    public GameObject ammoDropPrefab;
+    public Sprite ammoUISprite;
+
+    [Header("Hit Effect")]
+    public ParticleSystem hitEffectPrefab;
+
+    // ▼追加
+    [Header("Explosion Size")]
+    public float explosionSize = 3f;
+
+    void Start()
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        Destroy(gameObject, lifeTime);
+    }
+
+    void Update()
+    {
+        transform.Translate(
+            direction * speed * Time.deltaTime,
+            Space.World
+        );
+    }
+
+    // 発射方向設定
+    public void SetDirection(Vector2 dir)
+    {
+        direction = dir.normalized;
+    }
+
+    //========================
+    // 当たり判定
+    //========================
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        EnemyHP enemy =
+            other.GetComponent<EnemyHP>();
+
+        if (enemy == null)
+            return;
+
+        // ダメージ
+        enemy.TakeDamage(damage);
+
+        Debug.Log(
+            enemy.name +
+            " に " +
+            damage +
+            " ダメージ"
+        );
+
+        //========================
+        // エフェクト生成
+        //========================
+
+        if (hitEffectPrefab != null)
         {
-            Vector3 hitPos = collision.contacts[0].point;
-            Quaternion rot = Quaternion.LookRotation(collision.contacts[0].normal);
+            ParticleSystem effect =
+                Instantiate(
+                    hitEffectPrefab,
+                    transform.position,
+                    Quaternion.identity
+                );
 
-            Instantiate(hitEffectPrefab, hitPos, rot);
-
-            Destroy(gameObject); // 弾（このオブジェクト）を削除
+            // 見た目サイズ変更
+            effect.transform.localScale =
+                Vector3.one * explosionSize;
         }
+
+        // 弾消滅
+        Destroy(gameObject);
+    }
+
+    //========================
+    // ダメージ設定
+    //========================
+
+    public void SetDamage(int value)
+    {
+        damage = value;
     }
 }
