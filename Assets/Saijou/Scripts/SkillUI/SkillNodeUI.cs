@@ -39,6 +39,9 @@ public class SkillNodeUI : MonoBehaviour
     [SerializeField] UIAnimation uiAnimation;
     [SerializeField] PlayerStats playerStats;
 
+    public PlayerData playerData;
+    public SkillData[] allSkills;
+
     void Start()
     {
         // 最初のノードなら「解放可能状態」にする
@@ -81,7 +84,6 @@ public class SkillNodeUI : MonoBehaviour
                 line.SetState(SkillState.Available);
             }
         }
-
 
         UpdateVisual();
 
@@ -188,7 +190,9 @@ public class SkillNodeUI : MonoBehaviour
         effectManager.ApplySkill(data);// スキル効果適用
         Unlock();                      // 解放
         UpdateVisual();                // 見た目更新
-        
+
+        SaveManager.Save(playerData, allSkills); // セーブ
+
         // 経験値UIアップデート
         if (normalExpText != null)
         {
