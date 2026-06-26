@@ -57,8 +57,8 @@ public class EnemyHP : MonoBehaviour
     public Color hitFlashColor = Color.red; // 点滅させる色
     public float hitFlashDuration = 0.08f;  // 1回の点滅の長さ（秒）
 
-    private SpriteRenderer sr;       // 点滅用
-    private Color originalColor;     // 元の色
+    // 点滅させるSpriteRenderer（子も含めて全部）
+    private SpriteRenderer[] srs;
     private Coroutine flashCoroutine; // 実行中の点滅コルーチン
 
     [Header("HPバーアニメーション設定")]
@@ -117,36 +117,32 @@ public class EnemyHP : MonoBehaviour
         col = GetComponent<Collider2D>();
 
         // 点滅用のスプライトレンダラー取得
-        sr = GetComponent<SpriteRenderer>();
-        if (sr != null)
-        {
-            originalColor = sr.color;
-        }
+        // 点滅用（子オブジェクトも含めて取得）
+        srs = GetComponentsInChildren<SpriteRenderer>();
     }
-
-    void Update()
-    {
-        // 拘束中（鎖など）は何もしない
-        if (isBind)
+        void Update()
         {
-            return;
+            // 拘束中（鎖など）は何もしない
+            if (isBind)
+            {
+                return;
+            }
+
+            // 死亡中は処理しない
+            if (isDying) return;
+
+            // スケール反映
+
+            //transform.localScale = Vector3.Lerp(
+            //    transform.localScale,
+            //    targetScale,
+            //    Time.deltaTime * scaleSmooth
+            //);
+
+            // HPバーのアニメーション更新
+            UpdateHPBarAnimation();
         }
-
-        // 死亡中は処理しない
-        if (isDying) return;
-
-        // スケール反映
-
-        transform.localScale = Vector3.Lerp(
-            transform.localScale,
-            targetScale,
-            Time.deltaTime * scaleSmooth
-        );
-
-        // HPバーのアニメーション更新
-        UpdateHPBarAnimation();
-    }
-
+    
     // HPバーのアニメーション処理
     // メインバー：なめらかに現在HPへ追従
     // 残像バー：少し待ってから、ゆっくり追従（削れた量がじわっと見える）
@@ -195,16 +191,21 @@ public class EnemyHP : MonoBehaviour
         currentHP -= damage;              // HP減少
         currentHP = Mathf.Max(currentHP, 0); // 0以下防止
 
-        if (hpSlider != null)
-        {
-            hpSlider.value = currentHP;
-        }
+        // HPバーアニメーション開始
+        delayWaiting = true;
+        delayTimer = 0f;
+
+        //if (hpSlider != null)
+        //{
+        //    hpSlider.value = currentHP;
+        //}
 
         ShowDamage(damage, isCritical); // ダメージ表示
-        UpdateScale();      // 見た目更新
+                                        //UpdateScale();      // 見た目更新
 
         // 被弾点滅
-        if (sr != null)
+        // 被弾点滅
+        if (srs.Length > 0)
         {
             if (flashCoroutine != null)
             {
@@ -226,7 +227,7 @@ public class EnemyHP : MonoBehaviour
     }
 
     // HP割合でサイズ変更
-    void UpdateScale()
+   /* void UpdateScale()
     {
         float ratio = 1f;
 
@@ -246,7 +247,7 @@ public class EnemyHP : MonoBehaviour
             hpSlider.maxValue = maxHP;
             hpSlider.value = currentHP;
         }
-    }
+    }*/
 
     // HP増加処理
     void GrowHP()
@@ -256,7 +257,7 @@ public class EnemyHP : MonoBehaviour
 
         currentHP = Mathf.Min(currentHP, maxHP);
 
-        UpdateScale();
+        //UpdateScale();
 
         if (hpSlider != null)
         {
@@ -366,6 +367,13 @@ public class EnemyHP : MonoBehaviour
         // 死亡フラグON
         isDying = true;
 
+        // 影をすぐ消す
+        EnemyMove move = GetComponent<EnemyMove>();
+        if (move != null)
+        {
+            move.HideShadow();
+        }
+
         // 当たり判定OFF
         if (col != null)
         {
@@ -461,13 +469,28 @@ public class EnemyHP : MonoBehaviour
         Destroy(gameObject);
     }
     // 被弾点滅（赤く一瞬光って元の色に戻る）
-    IEnumerator HitFlash()
+   IEnumerator HitFlash()
+{
+    // 全部赤くする
+    foreach (SpriteRenderer sr in srs)
     {
-        sr.color = hitFlashColor;
-        yield return new WaitForSeconds(hitFlashDuration);
-        sr.color = originalColor;
+        if (sr != null)
+        {
+            sr.color = hitFlashColor;
+        }
     }
 
+    yield return new WaitForSeconds(hitFlashDuration);
+
+    // 元の色（白）に戻す
+    foreach (SpriteRenderer sr in srs)
+    {
+        if (sr != null)
+        {
+            sr.color = Color.white;
+        }
+    }
+}
     // ダメージUI表示
     void ShowDamage(int damage, bool isCritical)
     {
