@@ -1,21 +1,23 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// ゴミ箱敵：ジャンプしながら移動するスクリプト（前後スプライト対応版）
+/// ゴミ箱敵：アーチ移動・箱傾き・着地埋まり・待機モーション対応版
 ///
 /// 【動きの流れ】
-///   ① 画面外から画面内へジャンプアニメ付きで侵入
-///   ② 着地したら少し待つ（後ろスプライト表示）
-///   ③ ランダムな方向へジャンプしながら移動（前スプライト表示）
-///   ④ ②〜③を繰り返す
+///   ① 画面外から画面内へアーチ状ジャンプで侵入（侵入方向へ飛ぶ）
+///   ② 着地 → ウサギ・蓋が少し埋まってから戻る（着地エフェクト）
+///   ③ 待機モーション（ウサギ・蓋だけバウンス、箱は固定）
+///   ④ ランダム方向へアーチ状ジャンプ → ②へ戻る
+///
+/// 【箱の傾き】
+///   ジャンプ前半：進行方向へ傾く（前のめり感）
+///   ジャンプ後半：徐々に元に戻る
+///   着地・待機中：完全に垂直へリセット
 ///
 /// 【スプライト切り替え】
-///   待機中 → ゴミ箱_後ろ / 蓋_後ろ / 耳_後ろ を表示
-///   ジャンプ中 → ゴミ箱_前 / 蓋_前 / 耳_前 を表示
+///   待機中 → ゴミ箱_前 / 蓋_前 / 耳_前 を表示
+///   ジャンプ中 → ゴミ箱_後ろ / 蓋_後ろ / 耳_後ろ を表示
 ///   ウサギは常に表示
-///
-/// 【耳アニメーション】
-///   ジャンプ中にぷらぷら回転（Sin波で揺れる）
 ///
 /// 【オブジェクト構成】
 ///   TrashEnemy (親)
@@ -32,7 +34,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     // =========================================================
     // 状態管理
     // =========================================================
-    enum State { Enter, Wait, Jump }
+    enum State { Enter, Land, Wait, Jump }
     State state = State.Enter;
     Vector2 direction;
 
@@ -99,6 +101,46 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     public float earPhaseOffset = 1.0f;
 
     // =========================================================
+    // 着地エフェクトパラメータ
+    // =========================================================
+    [Header("── 着地エフェクト ───────────────")]
+    [Tooltip("着地時にウサギ・蓋が沈む深さ")]
+    public float landSinkDepth = 0.15f;
+    [Tooltip("沈み込みの速さ")]
+    public float landSinkSpeed = 20f;
+    [Tooltip("戻りの速さ")]
+    public float landRiseSpeed = 8f;
+    [Tooltip("着地エフェクト全体の時間")]
+    public float landDuration = 0.35f;
+
+    private float landTimer = 0f;
+    private bool landSinking = true;
+    private float rabbitLandOffset = 0f;
+    private float lidLandOffset = 0f;
+
+    // =========================================================
+    // 待機モーションパラメータ（ウサギ・蓋のみ動く、箱は固定）
+    // =========================================================
+    [Header("── 待機モーション（ウサギ・蓋のみ動く） ──")]
+    [Tooltip("ウサギ・蓋のバウンス量")]
+    public float idleBobHeight = 0.06f;
+    [Tooltip("バウンス速さ")]
+    public float idleBobSpeed = 3f;
+
+    private float idleTimer = 0f;
+
+    // =========================================================
+    // 箱傾きパラメータ
+    // =========================================================
+    [Header("── ジャンプ中の箱傾き ─────────────")]
+    [Tooltip("最大傾き角度（度）。進行方向に傾く")]
+    public float bodyTiltAngle = 18f;
+    [Tooltip("傾きの補間速さ")]
+    public float bodyTiltSpeed = 10f;
+
+    private float currentBodyTilt = 0f;
+
+    // =========================================================
     // 内部変数
     // =========================================================
     private float jumpTimer = 0f;
@@ -111,6 +153,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
 
     // 耳の初期値
     private float[] earBaseLocalX;
+    private float[] earBaseLocalY;
     private Quaternion[] earBaseRot;
     private SpriteRenderer[] earSRs;
 
@@ -130,8 +173,8 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     public Vector2 shadowOffset = new Vector2(0f, -0.1f);
 
     [Header("影のスケール")]
-    public Vector2 shadowBaseScale = new Vector2(1f, 0.3f);     // 着地時の基本サイズ
-    public Vector2 shadowAirScale = new Vector2(0.5f, 0.15f);  // 最高点でのサイズ
+    public Vector2 shadowBaseScale = new Vector2(1f, 0.3f);
+    public Vector2 shadowAirScale = new Vector2(0.5f, 0.15f);
 
     private Transform shadow;
     private SpriteRenderer shadowSR;
@@ -151,13 +194,11 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
             shadow = s.transform;
             shadowSR = s.GetComponent<SpriteRenderer>();
 
-            // 初期位置（現在位置）
             shadow.position = new Vector3(
                 transform.position.x + shadowOffset.x,
                 transform.position.y + shadowOffset.y,
                 0f
             );
-        
             shadow.localScale = new Vector3(shadowBaseScale.x, shadowBaseScale.y, 1f);
 
             if (shadowSR != null)
@@ -177,12 +218,14 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
 
         // 耳の初期値を記憶
         earBaseLocalX = new float[ears.Length];
+        earBaseLocalY = new float[ears.Length]; 
         earBaseRot = new Quaternion[ears.Length];
         earSRs = new SpriteRenderer[ears.Length];
         for (int i = 0; i < ears.Length; i++)
         {
             if (ears[i] == null) continue;
             earBaseLocalX[i] = ears[i].localPosition.x;
+            earBaseLocalY[i] = ears[i].localPosition.y; // ★必ず追加
             earBaseRot[i] = ears[i].localRotation;
             earSRs[i] = ears[i].GetComponent<SpriteRenderer>();
         }
@@ -214,6 +257,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         switch (state)
         {
             case State.Enter: UpdateEnter(); break;
+            case State.Land: UpdateLand(); break;
             case State.Wait: UpdateWait(); break;
             case State.Jump: UpdateJump(); break;
         }
@@ -230,7 +274,8 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         float t = Mathf.Clamp01(jumpTimer / jumpDuration);
         float halfDur = jumpDuration * 0.5f;
 
-        transform.Translate(direction * jumpMoveSpeed * speedMultiplier * Time.deltaTime);
+        // アーチ移動（水平方向のみ移動し、Y方向はアニメで表現）
+        transform.Translate((Vector3)direction * jumpMoveSpeed * speedMultiplier * Time.deltaTime);
 
         AnimateBodyLid(t, halfDur);
         AnimateEar(earSwingTimer);
@@ -240,9 +285,56 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
 
         FlipSprite();
 
-        if (IsInsideScreen()) EnterWait();
+        if (IsInsideScreen()) EnterLand();
 
         UpdateShadow();
+    }
+
+    // =========================================================
+    // 【Land】着地エフェクト
+    // =========================================================
+    void UpdateLand()
+    {
+        landTimer += Time.deltaTime;
+
+        float progress = Mathf.Clamp01(landTimer / landDuration);
+
+        // 前半: 沈み込み、後半: 戻り
+        float sinkTarget;
+        if (progress < 0.4f)
+        {
+            // 沈み込む
+            sinkTarget = -landSinkDepth;
+            rabbitLandOffset = Mathf.MoveTowards(rabbitLandOffset, sinkTarget, landSinkSpeed * Time.deltaTime);
+            lidLandOffset = Mathf.MoveTowards(lidLandOffset, sinkTarget, landSinkSpeed * Time.deltaTime);
+        }
+        else
+        {
+            // 戻る
+            rabbitLandOffset = Mathf.MoveTowards(rabbitLandOffset, 0f, landRiseSpeed * Time.deltaTime);
+            lidLandOffset = Mathf.MoveTowards(lidLandOffset, 0f, landRiseSpeed * Time.deltaTime);
+        }
+
+        // ウサギを沈める
+        if (rabbit != null)
+            rabbit.localPosition = rabbitHideLocalPos + Vector3.up * rabbitLandOffset;
+
+        // 蓋を沈める
+        if (lidFront != null)
+            lidFront.localPosition = lidFrontBaseLocalPos + Vector3.up * lidLandOffset;
+        if (lidBack != null)
+            lidBack.localPosition = lidBackBaseLocalPos + Vector3.up * lidLandOffset;
+
+        if (landTimer >= landDuration)
+        {
+            // 着地エフェクト終了 → 待機へ
+            rabbitLandOffset = 0f;
+            lidLandOffset = 0f;
+            ResetParts();
+            EnterWait();
+        }
+
+        FixShadow();
     }
 
     // =========================================================
@@ -251,18 +343,46 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     void UpdateWait()
     {
         waitTimer += Time.deltaTime;
+        idleTimer += Time.deltaTime;
+
+        // ★ 箱（Body）は固定。ウサギと蓋だけバウンス
+        float bob = Mathf.Sin(idleTimer * idleBobSpeed) * idleBobHeight;
+
+        // 蓋だけ上下
+        if (lidFront != null) lidFront.localPosition = lidFrontBaseLocalPos + Vector3.up * bob;
+        if (lidBack != null) lidBack.localPosition = lidBackBaseLocalPos + Vector3.up * bob;
+
+        // ウサギも少し上下（蓋と同期）
+        if (rabbit != null) rabbit.localPosition = rabbitHideLocalPos + Vector3.up * (bob * 0.5f);
+
+        // 箱は BasePos に固定（念のためリセット）
+        if (bodyFront != null) bodyFront.localPosition = bodyBaseLocalPos;
+        if (bodyBack != null) bodyBack.localPosition = bodyBaseLocalPos;
+
+        // UpdateWait 内の耳処理を差し替え
+        for (int i = 0; i < ears.Length; i++)
+        {
+            if (ears[i] == null) continue;
+
+            // 待機中はゆっくり小さくパタパタ
+            float pata = (Mathf.Sin(idleTimer * (earSwingSpeed * 0.3f) + i * earPhaseOffset) + 1f) * 0.5f;
+            float scaleY = Mathf.Lerp(0.7f, 1.0f, pata); // 待機中は控えめ
+            Vector3 baseScale = ears[i].localScale;
+            ears[i].localScale = new Vector3(baseScale.x, scaleY, baseScale.z);
+
+            ears[i].localRotation = earBaseRot[i]; // 回転はリセット
+        }
+
         if (waitTimer >= waitDuration)
         {
             SetRandomDirection();
             StartJump();
             FixShadow();
         }
-
-      
     }
 
     // =========================================================
-    // 【Jump】ジャンプ移動
+    // 【Jump】ジャンプ移動（アーチ状）
     // =========================================================
     void UpdateJump()
     {
@@ -272,7 +392,8 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         float t = Mathf.Clamp01(jumpTimer / jumpDuration);
         float halfDur = jumpDuration * 0.5f;
 
-        transform.Translate(direction * jumpMoveSpeed * speedMultiplier * Time.deltaTime);
+        // ★ アーチ移動：directionへ移動し、Y方向の浮き沈みはアニメーション側で上乗せ
+        transform.Translate((Vector3)direction * jumpMoveSpeed * speedMultiplier * Time.deltaTime);
         StayInScreen();
 
         AnimateBodyLid(t, halfDur);
@@ -286,15 +407,36 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     }
 
     // =========================================================
-    // Body + Lid アニメーション
+    // Body + Lid アニメーション（アーチ：Sin波でY移動 ＋ 箱傾き）
     // =========================================================
     void AnimateBodyLid(float t, float halfDur)
     {
+        // アーチ：0→頂点→0 のSin曲線
         float bodyY = Mathf.Sin(t * Mathf.PI) * jumpHeight;
 
-        if (bodyBack != null) bodyBack.localPosition = bodyBaseLocalPos + Vector3.up * bodyY;
-        if (bodyFront != null) bodyFront.localPosition = bodyBaseLocalPos + Vector3.up * bodyY;
+        // ★ 箱の傾き
+        float tiltDir = (direction.x > 0f) ? 1f : -1f;
+        float tiltCurve = Mathf.Sin(t * Mathf.PI);
+        float targetTilt = tiltDir * bodyTiltAngle * tiltCurve;
+        currentBodyTilt = Mathf.LerpAngle(currentBodyTilt, targetTilt, Time.deltaTime * bodyTiltSpeed);
 
+        Vector3 bodyRot = new Vector3(0f, 0f, currentBodyTilt);
+        if (bodyBack != null)
+        {
+            bodyBack.localPosition = bodyBaseLocalPos + Vector3.up * bodyY;
+            bodyBack.localEulerAngles = bodyRot;
+        }
+        if (bodyFront != null)
+        {
+            bodyFront.localPosition = bodyBaseLocalPos + Vector3.up * bodyY;
+            bodyFront.localEulerAngles = bodyRot;
+        }
+
+        // ★ ウサギにも同じ傾きを適用
+        if (rabbit != null)
+            rabbit.localEulerAngles = bodyRot;
+
+        // 蓋の開閉
         float openAngle = (direction.x < 0f) ? lidOpenAngle : -lidOpenAngle;
         float targetAngle = (jumpTimer < halfDur) ? openAngle : 0f;
         lidAngle = Mathf.LerpAngle(lidAngle, targetAngle, Time.deltaTime * lidOpenSpeed);
@@ -310,17 +452,22 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         lid.localPosition = Vector3.Lerp(lid.localPosition, targetPos, lidMoveSpeed * Time.deltaTime);
         lid.localEulerAngles = new Vector3(0f, 0f, lidAngle);
     }
-
     // =========================================================
-    // 耳のぷらぷら揺れ
+    // 耳のパタパタ（ジャンプ中）
     // =========================================================
     void AnimateEar(float timer)
     {
         for (int i = 0; i < ears.Length; i++)
         {
             if (ears[i] == null) continue;
-            // 耳ごとに位相をずらして揺れる
-            float swing = Mathf.Sin(timer * earSwingSpeed + i * earPhaseOffset) * earSwingAngle;
+
+            // 反転方向（右向きなら＋、左向きなら－）
+            float dir = (direction.x >= 0f) ? -1f : 1f;
+
+            float swing = Mathf.Sin(timer * earSwingSpeed + i * earPhaseOffset)
+                          * earSwingAngle
+                          * dir;
+
             ears[i].localRotation = Quaternion.Euler(0f, 0f, swing);
         }
     }
@@ -338,15 +485,32 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     }
 
     // =========================================================
+    // 着地エフェクト開始
+    // =========================================================
+    void EnterLand()
+    {
+        state = State.Land;
+        landTimer = 0f;
+        landSinking = true;
+        rabbitLandOffset = 0f;
+        lidLandOffset = 0f;
+
+        // まず見た目をリセットして前スプライトへ切り替え
+        ResetParts();
+        SetSpritesForWait();
+        FixShadow();
+    }
+
+    // =========================================================
     // 待機状態へ移行
     // =========================================================
     void EnterWait()
     {
         state = State.Wait;
         waitTimer = 0f;
+        idleTimer = 0f;
         waitDuration = Random.Range(waitTimeMin, waitTimeMax);
         earSwingTimer = 0f;
-        ResetParts();
         SetSpritesForWait();
     }
 
@@ -365,18 +529,33 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         SetSpritesForJump();
     }
 
-    void EndJump() => EnterWait();
+    // ジャンプ終了 → 着地エフェクトへ
+    void EndJump() => EnterLand();
 
     // =========================================================
     // パーツリセット
     // =========================================================
     void ResetParts()
     {
-        if (bodyBack != null) bodyBack.localPosition = bodyBaseLocalPos;
-        if (bodyFront != null) bodyFront.localPosition = bodyBaseLocalPos;
+        if (bodyBack != null)
+        {
+            bodyBack.localPosition = bodyBaseLocalPos;
+            bodyBack.localEulerAngles = Vector3.zero;
+        }
+        if (bodyFront != null)
+        {
+            bodyFront.localPosition = bodyBaseLocalPos;
+            bodyFront.localEulerAngles = Vector3.zero;
+        }
         if (lidBack != null) lidBack.localPosition = lidBackBaseLocalPos;
         if (lidFront != null) lidFront.localPosition = lidFrontBaseLocalPos;
-        if (rabbit != null) rabbit.localPosition = rabbitHideLocalPos;
+        if (rabbit != null)
+        {
+            rabbit.localPosition = rabbitHideLocalPos;
+            rabbit.localEulerAngles = Vector3.zero;  // ★ 傾きリセット追加
+        }
+
+        currentBodyTilt = 0f;
 
         for (int i = 0; i < ears.Length; i++)
         {
@@ -390,11 +569,10 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     // =========================================================
     void SetSpritesForJump()
     {
-        SetActive(bodyBackSR, true);   // ジャンプ中に表示
+        SetActive(bodyBackSR, true);
         SetActive(lidBackSR, true);
         SetActive(bodyFrontSR, false);
         SetActive(lidFrontSR, false);
-        // 耳は常に表示
         for (int i = 0; i < earSRs.Length; i++)
             SetActive(earSRs[i], true);
     }
@@ -403,9 +581,8 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     {
         SetActive(bodyBackSR, false);
         SetActive(lidBackSR, false);
-        SetActive(bodyFrontSR, true);   // 待機中に表示
+        SetActive(bodyFrontSR, true);
         SetActive(lidFrontSR, true);
-        // 耳は常に表示
         for (int i = 0; i < earSRs.Length; i++)
             SetActive(earSRs[i], true);
     }
@@ -421,7 +598,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     void FlipSprite()
     {
         if (direction == Vector2.zero) return;
-        bool facingLeft = direction.x > 0f; 
+        bool facingLeft = direction.x > 0f;
 
         Flip(bodyBackSR, facingLeft);
         Flip(lidBackSR, facingLeft);
@@ -481,16 +658,18 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         speedMultiplier = (slowTimer <= 0f) ? 1f : hitSlowMultiplier;
     }
 
-    void SetRandomDirection() => direction = Random.insideUnitCircle.normalized;
+    void SetRandomDirection()
+    {
+        direction = Random.insideUnitCircle.normalized;
+    }
 
     // =========================================================
-    // 影更新（ジャンプ中: 高さに応じて薄く・小さく）
+    // 影更新
     // =========================================================
     void UpdateShadow()
     {
         if (shadow == null) return;
 
-        // 敵の現在位置に合わせて影も移動
         shadow.position = new Vector3(
             transform.position.x + shadowOffset.x,
             transform.position.y + shadowOffset.y,
@@ -506,24 +685,21 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
 
         float t = Mathf.Clamp01(bodyY / Mathf.Max(jumpHeight, 0.001f));
 
-        // スケールを補間
         Vector2 scale = Vector2.Lerp(shadowBaseScale, shadowAirScale, t);
         shadow.localScale = new Vector3(scale.x, scale.y, 1f);
 
-        // 透明度を補間
         Color c = shadowSR.color;
         c.a = Mathf.Lerp(0.5f, 0.1f, t);
         shadowSR.color = c;
     }
 
     // =========================================================
-    // 影固定（Wait中: 地面に濃く表示）
+    // 影固定（Wait / Land 中）
     // =========================================================
     void FixShadow()
     {
         if (shadow == null) return;
 
-        // 待機中も敵の足元に影を表示
         shadow.position = new Vector3(
             transform.position.x + shadowOffset.x,
             transform.position.y + shadowOffset.y,
@@ -551,6 +727,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
             shadow = null;
         }
     }
+
     // =========================================================
     // 削除時に影も削除
     // =========================================================
@@ -561,6 +738,5 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
             Destroy(shadow.gameObject);
             shadow = null;
         }
-           
     }
 }
