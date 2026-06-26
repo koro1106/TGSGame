@@ -237,11 +237,13 @@ public class GunController : MonoBehaviour
             {
                 // 通常弾
                 case AmmoType.Normal:
+                    Debug.Log("Normal");
                     bulletToShoot = bulletPrefabs[0];
                     break;
 
                 // 雷属性弾
                 case AmmoType.Lightning:
+                    Debug.Log("Lightning");
                     bulletToShoot = bulletPrefabs[1];
                     break;
                 // 重力弾
@@ -265,7 +267,6 @@ public class GunController : MonoBehaviour
                     bulletToShoot = bulletPrefabs[6];
                     break;
             }
-
             // =========================
             // 弾スクリプト取得
             // =========================
