@@ -51,8 +51,15 @@ public class UIDrag : MonoBehaviour
                 Vector2 currentMousePos = Input.mousePosition;
                 Vector2 delta = currentMousePos - lastMousePos; // ·•ª
 
+                // ˆê’UˆÚ“®
+                Vector2 newPos = target.anchoredPosition + delta;
+
+                // ”ÍˆÍ§ŒÀ
+                newPos.x = Mathf.Clamp(newPos.x, -700f, 700f);
+                newPos.y = Mathf.Clamp(newPos.y, -500f, 300f);
+
                 // UIˆÚ“®
-                target.anchoredPosition += delta;
+                target.anchoredPosition = newPos;
 
                 lastMousePos = currentMousePos;
             }

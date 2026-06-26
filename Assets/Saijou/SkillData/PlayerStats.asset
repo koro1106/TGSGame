@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0592070e080912644bed0316049e9fb4, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
-  bulletDamage: 11
-  effectBulletDamage: 10
+  bulletDamage: 10
+  effectBulletDamage: 15
   maxAmmo: 10
-  enemySpawnWeightBonus: 10
+  enemySpawnWeightBonus: 0
   criticalrate: 0
-  criticalDamage: 0
+  criticalDamage: 1
   expDroprate: 0
-  expDroprateDouble: 1
+  expDroprateDouble: 0
   collectionRange: 0
   preExpTime: 0
   lightningBulletUP: 0

@@ -22,7 +22,7 @@ public static class SaveManager
         save.exp1 = playerData.currentExp_1;
         save.exp2 = playerData.currentExp_2;
         save.exp3 = playerData.currentExp_3;
-        save.Preexp = playerData.currentExp_3;
+        save.Preexp = playerData.currentPreExp;
 
         // スキル情報保存
         foreach (var skill in skills)
