@@ -43,6 +43,12 @@ public class GunController : MonoBehaviour
     [Header("íeUIâÊëú")]
     public Sprite normalAmmoSprite;
     public Sprite lightningAmmoSprite;
+    public Sprite BindAmmoSprite;
+    public Sprite ExplosionAmmoSprite;
+    public Sprite GravityAmmoSprite;
+    public Sprite PoisonAmmoSprite;
+    public Sprite penetratingAmmoSprite;
+    public Sprite ReboundAmmoSprite;
 
     [Header("É}ÉYÉãÉtÉâÉbÉVÉÖ")]
     public GameObject muzzleFlash;
@@ -52,6 +58,11 @@ public class GunController : MonoBehaviour
     [Header("íeUIÉhÉçÉbÉvââèo")]
     public GameObject ammoDropUIPrefab;
     public Transform uiEffectParent;
+
+    [Header("ìGåÇîjéûÇÃíeâÒïú")]
+    public bool recoverAmmoOnKill = false;
+
+    public int recoverAmmoAmount = 1;
 
     public AmmoSlot[] ammoSlots;
     public TMP_Text ammoText;
@@ -173,30 +184,20 @@ public class GunController : MonoBehaviour
 
         Vector3 dir = worldPos - gunPivot.position;
 
-        float angle =
-            Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
         bool isLeft = dir.x < 0;
 
-        // äpìxÇÕÇ¢Ç∂ÇÁÇ»Ç¢
-        gunPivot.rotation =
-            Quaternion.Euler(0, 0, angle);
-
-        // å©ÇΩñ⁄ÇæÇØîΩì]
+        // ç∂âEîΩì]ÇæÇØ
         if (isLeft)
         {
-            gunImage.localScale =
-                new Vector3(1, -1, 1);
+            gunImage.localScale = new Vector3(-1, 1, 1);
         }
         else
         {
-            gunImage.localScale =
-                new Vector3(1, 1, 1);
+            gunImage.localScale = new Vector3(1, 1, 1);
         }
 
-        // à íuÇÕèÌÇ…å≈íË
-        gunImage.localPosition =
-            defaultLocalPos;
+        // à íuÇÕå≈íË
+        gunImage.localPosition = defaultLocalPos;
     }
 
     void Shoot()
@@ -309,10 +310,16 @@ public class GunController : MonoBehaviour
             // =========================
             // î≠éÀï˚å¸
             // =========================
-            Rigidbody2D rb =
-                bulletInstance.GetComponent<Rigidbody2D>();
-            rb.linearVelocity =
-                muzzle.right * bulletSpeed;
+            Rigidbody2D rb = bulletInstance.GetComponent<Rigidbody2D>();
+
+            Vector3 screenPos = crosshair.position;
+            Vector3 worldPos = cam.ScreenToWorldPoint(screenPos);
+            worldPos.z = 0;
+
+            Vector2 direction = (worldPos - muzzle.position).normalized;
+
+            bulletInstance.transform.right = direction;
+            rb.linearVelocity = direction * bulletSpeed;
 
             // =========================
             // íeè¡îÔ
@@ -516,7 +523,7 @@ public class GunController : MonoBehaviour
         muzzleFlash.SetActive(false);
     }
 
-    void AddAmmo(int amount)
+    public void AddAmmo(int amount)
     {
         int oldAmmo = currentAmmo;
 
