@@ -24,7 +24,7 @@ public class PlayerStats : ScriptableObject
     public GameObject[] unlockedElementalBullets;
 
     // 属性弾が出る確率(一旦30％なので0.3)
-    [Range(0f, 1f)]
+    [Range(0f, 2f)]
     public float elementalBulletChance = 0.3f;
     public bool preExpDeviceUnlocked = false;      // PreExp装置
     public bool carePackageUnlocked = false;       // ケアパケ解放
