@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
   bulletDamage: 10
   effectBulletDamage: 15
-  maxAmmo: 15
+  maxAmmo: 10
   enemySpawnWeightBonus: 0
   criticalrate: 0
   criticalDamage: 1
