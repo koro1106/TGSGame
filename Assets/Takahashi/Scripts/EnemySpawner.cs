@@ -22,43 +22,43 @@ public class EnemySpawner : MonoBehaviour
     public Transform player;
 
     public float spawnInterval = 2f;
-    //public int baseHP = 10;
-
-    private float timer;
 
     [Header("時間経過でスポーン時HPが増える設定")]
-    public float hpGrowInterval = 15f;    // 何秒ごとに強くなるか
-    public float hpGrowMultiplier = 1.2f; // 何倍ずつ強くなるか
+    public float hpGrowInterval = 15f;
+    public float hpGrowMultiplier = 1.2f;
     private float hpTimer;
     private float hpMultiplier = 1f;
 
-    public PlayerStats playerStats; // Playerのステータス
+    public PlayerStats playerStats;
 
-    public GameObject bossPrefab; //ボス
+    public GameObject bossPrefab;
 
     public float bossSpawnTime = 10f;
 
     private float bossTimer;
 
     private bool bossAlive = false;
-   
+
+    [Header("スポーンY範囲（赤い床の高さ）")]
+    // 画面上端を0、画面下端を1とした割合で指定
+
+    // 上端（0=画面上端, 1=画面下端）
+    public float spawnAreaTopRatio = 0.45f;
+    // 下端（0=画面上端, 1=画面下端）
+    public float spawnAreaBottomRatio = 1.0f;
+
     void Update()
     {
         // ===== 経過時間でスポーン時HP倍率を上げる =====
-        // ※これはスポーン時にだけ適用される倍率。
-        //   すでにスポーン済みの敵のHPには一切影響しない。
-        //   （EnemyHP側では時間経過のHP増加処理は呼んでいないため、
-        //     生成済みの敵のmaxHPはスポーン時のまま固定される）
         hpTimer += Time.deltaTime;
 
-        if ((hpTimer >= hpGrowInterval))
+        if (hpTimer >= hpGrowInterval)
         {
             hpTimer = 0f;
-            hpMultiplier *= hpGrowMultiplier;//次にスポーンする敵から強くなる
+            hpMultiplier *= hpGrowMultiplier;
         }
 
         // ===== ボス管理 =====
-
         if (!bossAlive)
         {
             bossTimer += Time.deltaTime;
@@ -66,14 +66,11 @@ public class EnemySpawner : MonoBehaviour
             if (bossTimer >= bossSpawnTime)
             {
                 SpawnBoss();
-
                 bossTimer = 0f;
             }
         }
 
-        // ===================
-
-        // ボス中は通常敵を止めたいならこれ
+        // ボス中は通常敵を止める
         if (bossAlive)
             return;
 
@@ -88,22 +85,18 @@ public class EnemySpawner : MonoBehaviour
         void SpawnEnemy()
         {
             GameObject prefab = GetRandomEnemy();
+            // 赤いエリア内にスポーン
             Vector2 spawnPos = GetSpawnPosition();
 
-            GameObject enemy =
-                Instantiate(prefab, spawnPos, Quaternion.identity);
+            GameObject enemy = Instantiate(prefab, spawnPos, Quaternion.identity);
 
-            // HP設定
             EnemyHP hp = enemy.GetComponent<EnemyHP>();
             if (hp != null)
             {
-                // Prefab本来のmaxHPに、現在の倍率(hpMultiplier)をかけて強くする
-                // ここで決まったHPはスポーン時点で固定され、後から変化しない
                 hp.maxHP = Mathf.CeilToInt(hp.maxHP * hpMultiplier);
                 hp.currentHP = hp.maxHP;
             }
 
-            // プレイヤー注入
             RushEnemy rush = enemy.GetComponent<RushEnemy>();
             if (rush != null)
             {
@@ -111,86 +104,62 @@ public class EnemySpawner : MonoBehaviour
             }
         }
 
-        // ===== ボス生成 =====
         void SpawnBoss()
         {
             Vector2 spawnPos = GetSpawnPosition();
 
-            GameObject boss =
-                Instantiate(bossPrefab, spawnPos, Quaternion.identity);
+            GameObject boss = Instantiate(bossPrefab, spawnPos, Quaternion.identity);
 
             bossAlive = true;
 
-            // BossMove取得
-            BossMove move =
-                boss.GetComponent<BossMove>();
-
+            BossMove move = boss.GetComponent<BossMove>();
             if (move != null)
-            {
                 move.player = player;
-            }
 
-            // BossEnemy取得
-            BossEnemy bossScript =
-                boss.GetComponent<BossEnemy>();
-
+            BossEnemy bossScript = boss.GetComponent<BossEnemy>();
             if (bossScript != null)
-            {
                 bossScript.spawner = this;
-            }
 
             Debug.Log("ボス出現！");
         }
     }
+
+    private float timer;
+
     public void BossDefeated()
     {
         bossAlive = false;
-
         Debug.Log("ボス撃破！");
     }
-
 
     GameObject GetRandomEnemy()
     {
         spawnList.Clear();
 
-        // 最初から出る敵
         foreach (var e in enemies)
-        {
             spawnList.Add(e);
-        }
 
-        // 解放敵
-        if (playerStats.enemyAUnlocked)
-            spawnList.Add(enemyA);
-
-        if (playerStats.enemyBUnlocked)
-            spawnList.Add(enemyB);
-
-        if (playerStats.enemyCUnlocked)
-            spawnList.Add(enemyC);
-
+        if (playerStats.enemyAUnlocked) spawnList.Add(enemyA);
+        if (playerStats.enemyBUnlocked) spawnList.Add(enemyB);
+        if (playerStats.enemyCUnlocked) spawnList.Add(enemyC);
 
         int total = 0;
-
         foreach (var e in spawnList)
             total += e.weight + playerStats.enemySpawnWeightBonus;
 
         int r = Random.Range(0, total);
-
         int sum = 0;
 
         foreach (var e in spawnList)
         {
             sum += e.weight + playerStats.enemySpawnWeightBonus;
-
-            if (r < sum)
-                return e.prefab;
+            if (r < sum) return e.prefab;
         }
 
         return spawnList[0].prefab;
     }
 
+    // 画面外からスポーン、ただしY座標は赤いエリアの範囲に限定
     Vector2 GetSpawnPosition()
     {
         Camera cam = Camera.main;
@@ -198,38 +167,32 @@ public class EnemySpawner : MonoBehaviour
         float h = cam.orthographicSize;
         float w = h * cam.aspect;
 
-        float halfW = w;
-        float halfH = h;
+        float camX = cam.transform.position.x;
+        float camY = cam.transform.position.y;
 
-        float offset = 2f; // ←ここが重要（画面外距離）
+        float left = camX - w;
+        float right = camX + w;
+        float top = camY + h;
+        float bottom = camY - h;
+        float fullH = top - bottom;
 
-        int side = Random.Range(0, 4);
+        float offset = 2f; // 画面外にはみ出す距離
+
+        // 赤いエリアのY範囲（Ratioで指定）
+        float areaTop = top - fullH * spawnAreaTopRatio;
+        float areaBottom = top - fullH * spawnAreaBottomRatio;
+
+        // 左・右・下の3辺からランダムにスポーン
+        int side = Random.Range(0, 3);
 
         switch (side)
         {
             case 0: // 左
-                return new Vector2(
-                    -halfW - offset,
-                    Random.Range(-halfH - offset, halfH + offset)
-                );
-
+                return new Vector2(left - offset, Random.Range(areaBottom, areaTop));
             case 1: // 右
-                return new Vector2(
-                    halfW + offset,
-                    Random.Range(-halfH - offset, halfH + offset)
-                );
-
-            case 2: // 上
-                return new Vector2(
-                    Random.Range(-halfW - offset, halfW + offset),
-                    halfH + offset
-                );
-
+                return new Vector2(right + offset, Random.Range(areaBottom, areaTop));
             default: // 下
-                return new Vector2(
-                    Random.Range(-halfW - offset, halfW + offset),
-                    -halfH - offset
-                );
+                return new Vector2(Random.Range(left, right), areaBottom - offset);
         }
     }
 }
