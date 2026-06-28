@@ -631,9 +631,19 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     bool IsInsideArea()
     {
         Vector2 pos = transform.position;
-        // 左右は画面端、上下は赤いエリア範囲で判定
-        return pos.x > areaLeft && pos.x < areaRight
-            && pos.y > areaBottom && pos.y < areaTop;
+
+        // 左右は「画面端より enterMargin だけ内側」まで入ったら着地とみなす
+        // areaLeft/areaRight は画面端ぴったりなので、
+        // スポーン直後（画面外2f）はここに引っかからない
+        float enterMargin = 125f;
+        float innerLeft = areaLeft + enterMargin;
+        float innerRight = areaRight - enterMargin;
+
+        // 下からスポーンした場合も areaBottom より少し内側まで入ってから着地
+        float innerBottom = areaBottom + enterMargin;
+
+        return pos.x > innerLeft && pos.x < innerRight
+            && pos.y > innerBottom && pos.y < areaTop;
     }
 
     // =========================================================
@@ -711,7 +721,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         Vector2 toCenter = (center - (Vector2)transform.position).normalized;
 
         // 0.15 = バイアス強さ（0=完全ランダム、1=常に中央へ）
-        direction = (random + toCenter * 1f).normalized;
+        direction = (random + toCenter * 0.15f).normalized;
     }
 
     // =========================================================

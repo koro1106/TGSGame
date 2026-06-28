@@ -413,7 +413,7 @@ MonoBehaviour:
   playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   bossPrefab: {fileID: 1535677997056505620, guid: 38e0c4e553ed7874584eba5a894cc60f, type: 3}
   bossSpawnTime: 100
-  spawnAreaTopRatio: 0.45
+  spawnAreaTopRatio: 0.55
   spawnAreaBottomRatio: 1
 --- !u!4 &497528188
 Transform:
