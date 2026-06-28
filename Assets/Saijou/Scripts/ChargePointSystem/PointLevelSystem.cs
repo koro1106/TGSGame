@@ -15,6 +15,14 @@ public class PointLevelSystem : MonoBehaviour
     [Header("プレイヤーデータ")]
     public PlayerData playerData;
 
+    [Header("経験値プレハブ")]
+    public GameObject expPrefab;
+
+    [Header("プレイヤー")]
+    public Transform player;
+
+    public int spawnCount = 1;   // 何個出すか
+
     // 現在の経験値（0～99）
     private int currentExp = 0;
 
@@ -22,7 +30,7 @@ public class PointLevelSystem : MonoBehaviour
     private int levelPoint = 0;
 
     public PointGetEffect pointEffectPrefab;
-    public Transform pointSpawn;      // スポーン場所
+    //public Transform pointSpawn;      // スポーン場所
     // ポイント追加
     public void AddPoint(int amount)
     {
@@ -32,16 +40,16 @@ public class PointLevelSystem : MonoBehaviour
         // 100以上になったらレベルポイント獲得
         while (currentExp >= 10)
         {
-            // Spawn位置で演出生成
-            PointGetEffect effectInstance = Instantiate(
-                pointEffectPrefab,
-                pointSpawn.position,       // 出現場所
-                Quaternion.identity,
-                pointSpawn.parent          // 親は Canvas 内にしておく
-            );
+            //// Spawn位置で演出生成
+            //PointGetEffect effectInstance = Instantiate(
+            //    pointEffectPrefab,
+            //    pointSpawn.position,       // 出現場所
+            //    Quaternion.identity,
+            //    pointSpawn.parent          // 親は Canvas 内にしておく
+            //);
 
             // ポイント獲得演出再生
-            effectInstance.PlayEffect();
+            //effectInstance.PlayEffect();
 
             // 100消費
             currentExp -= 10;
@@ -49,11 +57,7 @@ public class PointLevelSystem : MonoBehaviour
             // レベルポイント獲得
             levelPoint++;
 
-            // プレイヤーデータに反映
-            if (playerData != null)
-            {
-                playerData.currentPreExp += 1;
-            }
+            SpawnExp();
 
             Debug.Log("レベルポイント獲得！ 現在：" + levelPoint);
         }
@@ -67,5 +71,14 @@ public class PointLevelSystem : MonoBehaviour
     {
         // スライダー更新
         expSlider.value = currentExp;
+    }
+
+    // Exp生成用
+    private void SpawnExp()
+    {
+        for (int i = 0; i < spawnCount; i++)
+        {
+            Instantiate(expPrefab,player.position,Quaternion.identity);
+        }
     }
 }

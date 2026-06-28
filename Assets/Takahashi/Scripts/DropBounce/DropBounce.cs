@@ -22,6 +22,7 @@ public class DropBounce : MonoBehaviour
     public int addExp1 = 1;
     public int addExp2 = 0;
     public int addExp3 = 0;
+    public int addPreExp = 0;
 
     // =========================================================
     // 回収設定
@@ -454,6 +455,7 @@ public class DropBounce : MonoBehaviour
             playerData.currentExp_1 += addExp1;
             playerData.currentExp_2 += addExp2;
             playerData.currentExp_3 += addExp3;
+            playerData.currentPreExp += addPreExp;
         }
         SaveManager.Save(playerData, allSkills);
         Destroy(gameObject);
