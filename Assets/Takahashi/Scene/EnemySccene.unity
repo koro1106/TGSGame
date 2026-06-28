@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ComboManager
   player: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
-  comboPopupPrefab: {fileID: 6182524599874962511, guid: 0f446f0784dc77a4ab926136e45ad5c8, type: 3}
+  comboPopupPrefab: {fileID: 873919367514118230, guid: 723dd77577e9e8849a27a7806cdd55c5, type: 3}
 --- !u!4 &194867987
 Transform:
   m_ObjectHideFlags: 0
@@ -407,12 +407,14 @@ MonoBehaviour:
     weight: 0
   spawnList: []
   player: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
-  spawnInterval: 10
+  spawnInterval: 2
   hpGrowInterval: 10
   hpGrowMultiplier: 1.1
   playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   bossPrefab: {fileID: 1535677997056505620, guid: 38e0c4e553ed7874584eba5a894cc60f, type: 3}
   bossSpawnTime: 100
+  spawnAreaTopRatio: 0.45
+  spawnAreaBottomRatio: 1
 --- !u!4 &497528188
 Transform:
   m_ObjectHideFlags: 0
