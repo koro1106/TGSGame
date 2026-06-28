@@ -51,6 +51,16 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     private float waitDuration;
 
     // =========================================================
+    // 移動エリア制限（赤い床）
+    // =========================================================
+    [Header("── 移動エリア（赤い床） ─────────")]
+    // 画面上端を0、画面下端を1とした割合で指定
+    // 上端（0=画面上端, 1=画面下端）
+    public float moveAreaTopRatio = 0.45f;
+    // 下端（0=画面上端, 1=画面下端）
+    public float moveAreaBottomRatio = 1.0f;
+
+    // =========================================================
     // 被弾鈍化
     // =========================================================
     [Header("被弾時の鈍化")]
@@ -179,6 +189,13 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     private Transform shadow;
     private SpriteRenderer shadowSR;
 
+    // =========================================================
+    // エリア境界キャッシュ（毎フレーム計算しないよう Start で確定）
+    // =========================================================
+    private float areaLeft;
+    private float areaRight;
+    private float areaTop;
+    private float areaBottom;
 
     // =========================================================
     // Start
@@ -187,6 +204,9 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     {
         enemyHP = GetComponent<EnemyHP>();
         target = Vector2.zero;
+
+        // 移動エリアのワールド座標を計算
+        CalcAreaBounds();
 
         if (shadowPrefab != null)
         {
@@ -218,14 +238,14 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
 
         // 耳の初期値を記憶
         earBaseLocalX = new float[ears.Length];
-        earBaseLocalY = new float[ears.Length]; 
+        earBaseLocalY = new float[ears.Length];
         earBaseRot = new Quaternion[ears.Length];
         earSRs = new SpriteRenderer[ears.Length];
         for (int i = 0; i < ears.Length; i++)
         {
             if (ears[i] == null) continue;
             earBaseLocalX[i] = ears[i].localPosition.x;
-            earBaseLocalY[i] = ears[i].localPosition.y; // ★必ず追加
+            earBaseLocalY[i] = ears[i].localPosition.y;
             earBaseRot[i] = ears[i].localRotation;
             earSRs[i] = ears[i].GetComponent<SpriteRenderer>();
         }
@@ -236,7 +256,6 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         if (lidFront != null) lidFrontBaseLocalPos = lidFront.localPosition;
         if (rabbit != null) rabbitHideLocalPos = rabbit.localPosition;
 
-        // 侵入方向
         direction = ((Vector2)target - (Vector2)transform.position).normalized;
 
         StartJump();
@@ -244,6 +263,25 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         SetSpritesForJump();
 
         if (rabbitSR != null) rabbitSR.enabled = true;
+    }
+
+    // =========================================================
+    // エリア境界をワールド座標で計算
+    // =========================================================
+    void CalcAreaBounds()
+    {
+        Camera cam = Camera.main;
+        float h = cam.orthographicSize;
+        float w = h * cam.aspect;
+        float camX = cam.transform.position.x;
+        float camY = cam.transform.position.y;
+        float fullH = h * 2f;
+
+        areaLeft = camX - w;
+        areaRight = camX + w;
+        // topRatio=0 → 画面上端、topRatio=1 → 画面下端
+        areaTop = (camY + h) - fullH * moveAreaTopRatio;
+        areaBottom = (camY + h) - fullH * moveAreaBottomRatio;
     }
 
     // =========================================================
@@ -274,7 +312,6 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         float t = Mathf.Clamp01(jumpTimer / jumpDuration);
         float halfDur = jumpDuration * 0.5f;
 
-        // アーチ移動（水平方向のみ移動し、Y方向はアニメで表現）
         transform.Translate((Vector3)direction * jumpMoveSpeed * speedMultiplier * Time.deltaTime);
 
         AnimateBodyLid(t, halfDur);
@@ -285,7 +322,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
 
         FlipSprite();
 
-        if (IsInsideScreen()) EnterLand();
+        if (IsInsideArea()) EnterLand();
 
         UpdateShadow();
     }
@@ -299,35 +336,24 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
 
         float progress = Mathf.Clamp01(landTimer / landDuration);
 
-        // 前半: 沈み込み、後半: 戻り
-        float sinkTarget;
         if (progress < 0.4f)
         {
-            // 沈み込む
-            sinkTarget = -landSinkDepth;
+            float sinkTarget = -landSinkDepth;
             rabbitLandOffset = Mathf.MoveTowards(rabbitLandOffset, sinkTarget, landSinkSpeed * Time.deltaTime);
             lidLandOffset = Mathf.MoveTowards(lidLandOffset, sinkTarget, landSinkSpeed * Time.deltaTime);
         }
         else
         {
-            // 戻る
             rabbitLandOffset = Mathf.MoveTowards(rabbitLandOffset, 0f, landRiseSpeed * Time.deltaTime);
             lidLandOffset = Mathf.MoveTowards(lidLandOffset, 0f, landRiseSpeed * Time.deltaTime);
         }
 
-        // ウサギを沈める
-        if (rabbit != null)
-            rabbit.localPosition = rabbitHideLocalPos + Vector3.up * rabbitLandOffset;
-
-        // 蓋を沈める
-        if (lidFront != null)
-            lidFront.localPosition = lidFrontBaseLocalPos + Vector3.up * lidLandOffset;
-        if (lidBack != null)
-            lidBack.localPosition = lidBackBaseLocalPos + Vector3.up * lidLandOffset;
+        if (rabbit != null) rabbit.localPosition = rabbitHideLocalPos + Vector3.up * rabbitLandOffset;
+        if (lidFront != null) lidFront.localPosition = lidFrontBaseLocalPos + Vector3.up * lidLandOffset;
+        if (lidBack != null) lidBack.localPosition = lidBackBaseLocalPos + Vector3.up * lidLandOffset;
 
         if (landTimer >= landDuration)
         {
-            // 着地エフェクト終了 → 待機へ
             rabbitLandOffset = 0f;
             lidLandOffset = 0f;
             ResetParts();
@@ -345,32 +371,23 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         waitTimer += Time.deltaTime;
         idleTimer += Time.deltaTime;
 
-        // ★ 箱（Body）は固定。ウサギと蓋だけバウンス
         float bob = Mathf.Sin(idleTimer * idleBobSpeed) * idleBobHeight;
 
-        // 蓋だけ上下
         if (lidFront != null) lidFront.localPosition = lidFrontBaseLocalPos + Vector3.up * bob;
         if (lidBack != null) lidBack.localPosition = lidBackBaseLocalPos + Vector3.up * bob;
-
-        // ウサギも少し上下（蓋と同期）
         if (rabbit != null) rabbit.localPosition = rabbitHideLocalPos + Vector3.up * (bob * 0.5f);
 
-        // 箱は BasePos に固定（念のためリセット）
         if (bodyFront != null) bodyFront.localPosition = bodyBaseLocalPos;
         if (bodyBack != null) bodyBack.localPosition = bodyBaseLocalPos;
 
-        // UpdateWait 内の耳処理を差し替え
         for (int i = 0; i < ears.Length; i++)
         {
             if (ears[i] == null) continue;
-
-            // 待機中はゆっくり小さくパタパタ
             float pata = (Mathf.Sin(idleTimer * (earSwingSpeed * 0.3f) + i * earPhaseOffset) + 1f) * 0.5f;
-            float scaleY = Mathf.Lerp(0.7f, 1.0f, pata); // 待機中は控えめ
+            float scaleY = Mathf.Lerp(0.7f, 1.0f, pata);
             Vector3 baseScale = ears[i].localScale;
             ears[i].localScale = new Vector3(baseScale.x, scaleY, baseScale.z);
-
-            ears[i].localRotation = earBaseRot[i]; // 回転はリセット
+            ears[i].localRotation = earBaseRot[i];
         }
 
         if (waitTimer >= waitDuration)
@@ -392,9 +409,10 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         float t = Mathf.Clamp01(jumpTimer / jumpDuration);
         float halfDur = jumpDuration * 0.5f;
 
-        // ★ アーチ移動：directionへ移動し、Y方向の浮き沈みはアニメーション側で上乗せ
         transform.Translate((Vector3)direction * jumpMoveSpeed * speedMultiplier * Time.deltaTime);
-        StayInScreen();
+
+        // エリア内に収める（反射 + 押し戻し）
+        ClampToArea();
 
         AnimateBodyLid(t, halfDur);
         AnimateEar(earSwingTimer);
@@ -407,14 +425,12 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     }
 
     // =========================================================
-    // Body + Lid アニメーション（アーチ：Sin波でY移動 ＋ 箱傾き）
+    // Body + Lid アニメーション
     // =========================================================
     void AnimateBodyLid(float t, float halfDur)
     {
-        // アーチ：0→頂点→0 のSin曲線
         float bodyY = Mathf.Sin(t * Mathf.PI) * jumpHeight;
 
-        // ★ 箱の傾き
         float tiltDir = (direction.x > 0f) ? 1f : -1f;
         float tiltCurve = Mathf.Sin(t * Mathf.PI);
         float targetTilt = tiltDir * bodyTiltAngle * tiltCurve;
@@ -432,11 +448,8 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
             bodyFront.localEulerAngles = bodyRot;
         }
 
-        // ★ ウサギにも同じ傾きを適用
-        if (rabbit != null)
-            rabbit.localEulerAngles = bodyRot;
+        if (rabbit != null) rabbit.localEulerAngles = bodyRot;
 
-        // 蓋の開閉
         float openAngle = (direction.x < 0f) ? lidOpenAngle : -lidOpenAngle;
         float targetAngle = (jumpTimer < halfDur) ? openAngle : 0f;
         lidAngle = Mathf.LerpAngle(lidAngle, targetAngle, Time.deltaTime * lidOpenSpeed);
@@ -452,22 +465,17 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         lid.localPosition = Vector3.Lerp(lid.localPosition, targetPos, lidMoveSpeed * Time.deltaTime);
         lid.localEulerAngles = new Vector3(0f, 0f, lidAngle);
     }
+
     // =========================================================
-    // 耳のパタパタ（ジャンプ中）
+    // 耳のパタパタ
     // =========================================================
     void AnimateEar(float timer)
     {
         for (int i = 0; i < ears.Length; i++)
         {
             if (ears[i] == null) continue;
-
-            // 反転方向（右向きなら＋、左向きなら－）
             float dir = (direction.x >= 0f) ? -1f : 1f;
-
-            float swing = Mathf.Sin(timer * earSwingSpeed + i * earPhaseOffset)
-                          * earSwingAngle
-                          * dir;
-
+            float swing = Mathf.Sin(timer * earSwingSpeed + i * earPhaseOffset) * earSwingAngle * dir;
             ears[i].localRotation = Quaternion.Euler(0f, 0f, swing);
         }
     }
@@ -495,7 +503,6 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         rabbitLandOffset = 0f;
         lidLandOffset = 0f;
 
-        // まず見た目をリセットして前スプライトへ切り替え
         ResetParts();
         SetSpritesForWait();
         FixShadow();
@@ -529,7 +536,6 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         SetSpritesForJump();
     }
 
-    // ジャンプ終了 → 着地エフェクトへ
     void EndJump() => EnterLand();
 
     // =========================================================
@@ -552,7 +558,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         if (rabbit != null)
         {
             rabbit.localPosition = rabbitHideLocalPos;
-            rabbit.localEulerAngles = Vector3.zero;  // ★ 傾きリセット追加
+            rabbit.localEulerAngles = Vector3.zero;
         }
 
         currentBodyTilt = 0f;
@@ -573,8 +579,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         SetActive(lidBackSR, true);
         SetActive(bodyFrontSR, false);
         SetActive(lidFrontSR, false);
-        for (int i = 0; i < earSRs.Length; i++)
-            SetActive(earSRs[i], true);
+        for (int i = 0; i < earSRs.Length; i++) SetActive(earSRs[i], true);
     }
 
     void SetSpritesForWait()
@@ -583,8 +588,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         SetActive(lidBackSR, false);
         SetActive(bodyFrontSR, true);
         SetActive(lidFrontSR, true);
-        for (int i = 0; i < earSRs.Length; i++)
-            SetActive(earSRs[i], true);
+        for (int i = 0; i < earSRs.Length; i++) SetActive(earSRs[i], true);
     }
 
     void SetActive(SpriteRenderer sr, bool active)
@@ -609,12 +613,9 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         for (int i = 0; i < ears.Length; i++)
         {
             Flip(earSRs[i], facingLeft);
-
             if (ears[i] == null) continue;
             Vector3 pos = ears[i].localPosition;
-            pos.x = facingLeft
-                ? -Mathf.Abs(earBaseLocalX[i])
-                : Mathf.Abs(earBaseLocalX[i]);
+            pos.x = facingLeft ? -Mathf.Abs(earBaseLocalX[i]) : Mathf.Abs(earBaseLocalX[i]);
             ears[i].localPosition = pos;
         }
     }
@@ -625,21 +626,59 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     }
 
     // =========================================================
-    // 画面内判定 / 反射
+    // エリア内判定（侵入完了チェック用）
     // =========================================================
-    bool IsInsideScreen()
+    bool IsInsideArea()
     {
-        Vector3 vp = Camera.main.WorldToViewportPoint(transform.position);
-        float m = 0.05f;
-        return vp.x > m && vp.x < 1 - m && vp.y > m && vp.y < 1 - m;
+        Vector2 pos = transform.position;
+        // 左右は画面端、上下は赤いエリア範囲で判定
+        return pos.x > areaLeft && pos.x < areaRight
+            && pos.y > areaBottom && pos.y < areaTop;
     }
 
-    void StayInScreen()
+    // =========================================================
+    // エリア内に収める（反射 + 押し戻し）
+    // 高速回転対策：反射後に必ずエリア内へ押し戻す
+    // =========================================================
+    void ClampToArea()
     {
-        Vector3 vp = Camera.main.WorldToViewportPoint(transform.position);
-        float m = 0.05f;
-        if (vp.x < m || vp.x > 1 - m) direction.x *= -1;
-        if (vp.y < m || vp.y > 1 - m) direction.y *= -1;
+        Vector2 pos = transform.position;
+        bool reflected = false;
+
+        // 左右
+        if (pos.x <= areaLeft)
+        {
+            pos.x = areaLeft + 0.01f; // 押し戻し
+            direction.x = Mathf.Abs(direction.x);  // 必ず右向きに
+            reflected = true;
+        }
+        else if (pos.x >= areaRight)
+        {
+            pos.x = areaRight - 0.01f;
+            direction.x = -Mathf.Abs(direction.x); // 必ず左向きに
+            reflected = true;
+        }
+
+        // 上下（赤いエリアの範囲）
+        if (pos.y <= areaBottom)
+        {
+            pos.y = areaBottom + 0.01f;
+            direction.y = Mathf.Abs(direction.y);  // 必ず上向きに
+            reflected = true;
+        }
+        else if (pos.y >= areaTop)
+        {
+            pos.y = areaTop - 0.01f;
+            direction.y = -Mathf.Abs(direction.y); // 必ず下向きに
+            reflected = true;
+        }
+
+        if (reflected)
+        {
+            transform.position = pos;
+            // 反射後に direction を正規化して速度の変化を防ぐ
+            direction = direction.normalized;
+        }
     }
 
     // =========================================================
@@ -660,7 +699,19 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
 
     void SetRandomDirection()
     {
-        direction = Random.insideUnitCircle.normalized;
+        // ランダム方向にほんの少しだけ中央寄りのバイアスをかける
+        Vector2 random = Random.insideUnitCircle.normalized;
+
+        // エリア中央のワールド座標
+        Vector2 center = new Vector2(
+            (areaLeft + areaRight) * 0.5f,
+            (areaTop + areaBottom) * 0.5f
+        );
+        // 自分から中央への方向
+        Vector2 toCenter = (center - (Vector2)transform.position).normalized;
+
+        // 0.15 = バイアス強さ（0=完全ランダム、1=常に中央へ）
+        direction = (random + toCenter * 1f).normalized;
     }
 
     // =========================================================
@@ -684,7 +735,6 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
             bodyY = bodyBack.localPosition.y - bodyBaseLocalPos.y;
 
         float t = Mathf.Clamp01(bodyY / Mathf.Max(jumpHeight, 0.001f));
-
         Vector2 scale = Vector2.Lerp(shadowBaseScale, shadowAirScale, t);
         shadow.localScale = new Vector3(scale.x, scale.y, 1f);
 
@@ -693,9 +743,6 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         shadowSR.color = c;
     }
 
-    // =========================================================
-    // 影固定（Wait / Land 中）
-    // =========================================================
     void FixShadow()
     {
         if (shadow == null) return;
@@ -716,9 +763,6 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         }
     }
 
-    // =========================================================
-    // 死亡時に影を消す
-    // =========================================================
     public void HideShadow()
     {
         if (shadow != null)
@@ -728,9 +772,6 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         }
     }
 
-    // =========================================================
-    // 削除時に影も削除
-    // =========================================================
     void OnDestroy()
     {
         if (shadow != null)

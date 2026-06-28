@@ -95,6 +95,8 @@ MonoBehaviour:
   jumpMoveSpeed: 75
   waitTimeMin: 0.3
   waitTimeMax: 1.5
+  moveAreaTopRatio: 0.55
+  moveAreaBottomRatio: 1
   hitSlowMultiplier: 0.3
   hitSlowDuration: 0.5
   bodyBack: {fileID: 8423149178599641482}
