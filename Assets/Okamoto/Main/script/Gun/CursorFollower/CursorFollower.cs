@@ -2,57 +2,57 @@ using UnityEngine;
 
 public class CursorFollower : MonoBehaviour
 {
+    [Header("Æ€")]
     public RectTransform crosshair;
 
-    public Transform gunPivot;
+    [Header("‰ñ“]‚Ì’†S(Empty)")]
+    public Transform gunCenter;
+
+    [Header("e‰æ‘œ")]
     public Transform gunImage;
 
     private Camera cam;
-
     private Vector3 defaultLocalPos;
 
     void Start()
     {
         cam = Camera.main;
 
+        // e‰æ‘œ‚Ì‰ŠúˆÊ’u‚ğ•Û‘¶
         defaultLocalPos = gunImage.localPosition;
     }
 
     void Update()
     {
-        Vector3 screenPos = crosshair.position;
+        Aim();
+    }
 
-        Vector3 worldPos =
-            cam.ScreenToWorldPoint(screenPos);
+    void Aim()
+    {
+        // ƒNƒƒXƒwƒA‚ğƒ[ƒ‹ƒhÀ•W‚Ö•ÏŠ·
+        Vector3 worldPos = cam.ScreenToWorldPoint(crosshair.position);
+        worldPos.z = 0f;
 
-        worldPos.z = 0;
+        // GunCenter‚©‚çƒNƒƒXƒwƒA‚Ö‚Ì•ûŒü
+        Vector3 dir = worldPos - gunCenter.position;
 
-        Vector3 dir =
-            worldPos - gunPivot.position;
+        // ‰ñ“]Šp“x
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-        float angle =
-            Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
-        bool isLeft = dir.x < 0;
-
-        // ‰ñ“]
-        gunPivot.rotation =
-            Quaternion.Euler(0, 0, angle);
+        // GunCenter‚¾‚¯‰ñ“]
+        gunCenter.rotation = Quaternion.Euler(0f, 0f, angle);
 
         // ¶‰E”½“]
-        if (isLeft)
+        if (angle > 90f || angle < -90f)
         {
-            gunImage.localScale =
-                new Vector3(1, -1, 1);
+            gunImage.localScale = new Vector3(1f, -1f, 1f);
         }
         else
         {
-            gunImage.localScale =
-                new Vector3(1, 1, 1);
+            gunImage.localScale = new Vector3(1f, 1f, 1f);
         }
 
-        // ˆÊ’uŒÅ’è
-        gunImage.localPosition =
-            defaultLocalPos;
+        // e‰æ‘œ‚ÌˆÊ’u‚ğŒÅ’è
+        gunImage.localPosition = defaultLocalPos;
     }
 }
