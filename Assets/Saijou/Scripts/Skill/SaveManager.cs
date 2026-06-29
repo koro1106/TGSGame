@@ -15,6 +15,7 @@ public static class SaveManager
     /// </summary>
     public static void Save(PlayerData playerData,SkillData[] skills)
     {
+        Debug.Log("skills.Length = " + skills.Length);
         // セーブ用データ作成
         SaveData save = new SaveData();
         Debug.Log(path);
