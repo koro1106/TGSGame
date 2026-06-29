@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 6fab8681c3b1bc04789c4f95744e999d
+guid: a7cf6ad9ca0f0594e9921b52809473cd
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6298388043425717753
-    second: SkillTreeBG_0
+      213: -8148858893206365100
+    second: "\u30D4\u30B9\u30C8\u30EB\u30ED\u30B4_\u9EC4\u8272_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SkillTreeBG_0
+      name: "\u30D4\u30B9\u30C8\u30EB\u30ED\u30B4_\u9EC4\u8272_0"
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1672
-        height: 941
+        x: 81
+        y: 13
+        width: 1128
+        height: 1239
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 9fd15f12e8e586750800000000000000
-      internalID: 6298388043425717753
+      spriteID: 45cd6a9d20079ee80800000000000000
+      internalID: -8148858893206365100
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      SkillTreeBG_0: 6298388043425717753
+      "\u30D4\u30B9\u30C8\u30EB\u30ED\u30B4_\u9EC4\u8272_0": -8148858893206365100
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

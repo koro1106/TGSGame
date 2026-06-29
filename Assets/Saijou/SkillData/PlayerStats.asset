@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: PlayerStats
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
   bulletDamage: 10
-  effectBulletDamage: 15
+  effectBulletDamage: 10
   maxAmmo: 10
-  enemySpawnWeightBonus: 0
+  enemySpawnWeightBonus: 15
   criticalrate: 0
   criticalDamage: 1
-  expDroprate: 0
+  expDroprate: 1
   expDroprateDouble: 0
   collectionRange: 0
   preExpTime: 0
