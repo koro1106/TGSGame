@@ -378,7 +378,7 @@ MonoBehaviour:
   target: {fileID: 2058398392}
   scaleSpeed: 0.5
   minScale: 1.2
-  maxScale: 1.8
+  maxScale: 2
   allSkills:
   - {fileID: 11400000, guid: 3df914e848c3dad4dabfd87295df0bf3, type: 2}
   - {fileID: 11400000, guid: 0675f49effbcc714ca9fc54f9b0dfe7d, type: 2}

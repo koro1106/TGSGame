@@ -85,7 +85,7 @@ SpriteRenderer:
   m_SortingOrder: 100
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 9b7abc43430eb2341a10c9e2f13b5371, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.754717, g: 0.754717, b: 0.754717, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -154,6 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHP
   maxHP: 20
   currentHP: 0
+  isRareEnemy: 0
   scaleSmooth: 15
   growInterval: 5
   growMultiplier: 2
@@ -163,6 +164,18 @@ MonoBehaviour:
   dropItems: []
   dropCount: 1
   damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
+  hpSlider: {fileID: 0}
+  hpDelaySlider: {fileID: 0}
+  useRadialFill: 1
+  radialOrigin: 2
+  radialClockwise: 0
+  hpBarRoot: {fileID: 0}
+  hitFlashColor: {r: 1, g: 0, b: 0, a: 1}
+  hitFlashDuration: 0.08
+  hpBarSmoothSpeed: 4
+  hpBarDelayTime: 0.1
+  hpBarDelaySpeed: 2
+  stats: {fileID: 0}
 --- !u!114 &-4898356081957499612
 MonoBehaviour:
   m_ObjectHideFlags: 0

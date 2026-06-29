@@ -39,4 +39,6 @@ public class PlayerStats : ScriptableObject
     public bool enemyBUnlocked = false;            // 解放敵＿B
     public bool enemyCUnlocked = false;            // 解放敵＿C
 
+    public bool recoveryBullet = false;            // 撃破時弾回復
+
 }
