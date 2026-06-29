@@ -54,6 +54,7 @@ MonoBehaviour:
   effectPrefab: {fileID: 1023961267518418972, guid: 18b7573f855935149aebb63cf62be200, type: 3}
   stretchSpeed: 10
   maxStretchLength: 1.5
+  useRandomDirectionIfSingle: 1
 --- !u!120 &4888632597417477226
 LineRenderer:
   serializedVersion: 3
@@ -101,7 +102,7 @@ LineRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 14
   m_MaskInteraction: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}

@@ -41,3 +41,4 @@ MonoBehaviour:
   enemyAUnlocked: 0
   enemyBUnlocked: 0
   enemyCUnlocked: 0
+  recoveryBullet: 0

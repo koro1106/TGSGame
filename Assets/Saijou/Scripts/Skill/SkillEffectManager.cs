@@ -124,6 +124,10 @@ public class SkillEffectManager : MonoBehaviour
             case SkillEffectType.EnemyUnlock_C:
                 playerStats.enemyCUnlocked = true;
                 break;
+            // 敵解放_C
+            case SkillEffectType.RecoveryBullet:
+                playerStats.recoveryBullet = true;
+                break;
         }
     }
 

@@ -1,16 +1,9 @@
 using System.Collections;
-
 using System.Collections.Generic;
-
 using TMPro;
-
 using UnityEngine;
-
 using UnityEngine.SceneManagement;
-
 using UnityEngine.UI;
-
-
 
 public class GunController : MonoBehaviour
 
@@ -21,7 +14,6 @@ public class GunController : MonoBehaviour
     public Transform muzzle;
 
 
-
     // ¥’Ç‰Á
 
     // •¡”‚Ì’ePrefab‚ğInspector‚É“ü‚ê‚é
@@ -29,13 +21,11 @@ public class GunController : MonoBehaviour
     public GameObject[] bulletPrefabs;
 
 
-
     // ¥’Ç‰Á
 
     // Œ»İg‚Á‚Ä‚¢‚é’e”Ô†
 
     private int currentBulletIndex = 0;
-
 
 
     public float fireRate = 0.1f;
@@ -115,21 +105,12 @@ public class GunController : MonoBehaviour
 
 
     [Header("’eUIƒhƒƒbƒv‰‰o")]
-
     public GameObject ammoDropUIPrefab;
-
     public Transform uiEffectParent;
 
-
-
     [Header("“GŒ‚”j‚Ì’e‰ñ•œ")]
-
     public bool recoverAmmoOnKill = false;
-
-
-
     public int recoverAmmoAmount = 1;
-
 
 
     [Header("’eØ‚êUI")]
@@ -226,16 +207,14 @@ public class GunController : MonoBehaviour
 
         }
 
+        // Œ‚”j’e‰ñ•œ‚·‚é
+        if (stats.recoveryBullet)
+            recoverAmmoOnKill = true;
+        
         //for (int i = 0; i < ammoSlots.Length; i++)
-
         //{
-
         //    bool active = i < maxAmmo;
-
-
-
         //    ammoSlots[i].image.transform.parent.gameObject.SetActive(active);
-
         //}
 
     }
@@ -315,16 +294,6 @@ public class GunController : MonoBehaviour
             StartReload();
 
         }
-
-        //// KƒL[‚Å’e’Ç‰Á
-
-        //if (Input.GetKeyDown(KeyCode.K))
-
-        //{
-
-        //    AddAmmo(1);
-
-        //}
 
         if (Input.GetKeyDown(KeyCode.K))
 
