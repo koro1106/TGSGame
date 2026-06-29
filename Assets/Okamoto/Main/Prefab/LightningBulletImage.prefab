@@ -50,17 +50,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9fdf0b5897f8874db4dd2c8ed716521, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AmmoDropUI
-  lifeTime: 1.5
-  gravity: 1500
-  minX: -400
-  maxX: 400
-  minY: 700
-  maxY: 400
-  minRotateSpeed: 400
-  maxRotateSpeed: 1000
-  minRotateAccel: 400
-  maxRotateAccel: 2000
-  drag: 0.99
+  chainRange: 1000
+  maxChainCount: 3
+  damage: 10
+  chainEffectPrefab: {fileID: 1023961267518418972, guid: 18b7573f855935149aebb63cf62be200, type: 3}
 --- !u!222 &3302720655613419686
 CanvasRenderer:
   m_ObjectHideFlags: 0
