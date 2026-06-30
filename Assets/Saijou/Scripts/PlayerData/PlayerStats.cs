@@ -10,15 +10,16 @@ public class PlayerStats : ScriptableObject
     public int maxAmmo = 10;           // 最大弾数
     public int enemySpawnWeightBonus = 0;   // 敵スポーン率ボーナス
     public int criticalrate = 0;          // クリティカル発生確率
-    public int criticalDamage = 0;        // クリティカルダメージ倍率
-    public int expDroprate = 0;           // 経験値ドロップ率
-    public int expDroprateDouble = 0;     // ドロップ量の倍率増加
-    public float collectionRange = 0.0f;  // 回収範囲
-    public int preExpTime = 0;            // PreExp装置時間短縮
-    public int lightningBulletUP = 0; // 雷の弾で感電する敵＋1
-    public int chainBulletUP = 0;     // 鎖の弾で拘束する敵＋1
-    public int poisonRangeUP = 0;     // 毒の範囲UP
-    public float explosionRangeUP = 0;  // 爆発の範囲UP
+    public int criticalDamage = 0;       // クリティカルダメージ倍率
+    public int expDroprate = 0;          // 経験値ドロップ率
+    public int expDroprateDouble = 0;    // ドロップ量の倍率増加
+    public float collectionRange = 0.0f; // 回収範囲
+    public int preExpTime = 0;           // PreExp装置時間短縮
+    public int lightningBulletUP = 0;    // 雷の弾で感電する敵＋1
+    public int chainBulletUP = 0;        // 鎖の弾で拘束する敵＋1
+    public int poisonRangeUP = 0;        // 毒の範囲UP
+    public float explosionRangeUP = 0;   // 爆発の範囲UP
+    public int recoveryBulletCount = 0;  // 回復弾数UP
 
     // 解放した属性弾リスト
     public GameObject[] unlockedElementalBullets;
