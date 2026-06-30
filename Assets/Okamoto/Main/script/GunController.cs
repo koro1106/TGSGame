@@ -210,7 +210,10 @@ public class GunController : MonoBehaviour
         // Œ‚”j’e‰ñ•œ‚·‚é
         if (stats.recoveryBullet)
             recoverAmmoOnKill = true;
-        
+
+        // ‰ñ•œ’e”‘‰Á
+        recoverAmmoAmount += stats.recoveryBulletCount;
+
         //for (int i = 0; i < ammoSlots.Length; i++)
         //{
         //    bool active = i < maxAmmo;
