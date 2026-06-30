@@ -108,7 +108,7 @@ public class SkillNodeUI : MonoBehaviour
        }
        foreach (var line in nextLines) // ƒ‰ƒCƒ“
        {
-           line.SetState(SkillState.Available);
+           line.SetState(SkillState.Unlocked);
        }
    }
 
