@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 273875e9515bae4469b58e69f7b82692, type: 3}
-  m_Name: AttributeBullet_16
+  m_Name: Bullet_21
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "\u5F3E\u4E38\u56DE\u5FA9\u306E\u5F3E_\u89E3\u653E"
+  skillName: "\u30AF\u30EA\u30C6\u30A3\u30AB\u30EB\u30C0\u30E1\u30FC\u30B8\u500D\u7387UP04"
   level: 0
-  maxLevel: 1
+  maxLevel: 5
   needExp: 1
   isUnlocked: 0
   isLevelUp: 0
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   expType: 0
-  effectType: 27
+  effectType: 7
   effectValue: 1
   elementalBulletPrefab: {fileID: 0}
