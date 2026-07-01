@@ -394,7 +394,9 @@ public class EnemyHP : MonoBehaviour
         //=========================
         GunController gun = FindFirstObjectByType<GunController>();
 
-        if (gun != null && gun.recoverAmmoOnKill)
+        if (gun != null &&
+            gun.recoverAmmoOnKill &&
+            Random.value < gun.recoverAmmoChance / 100f)
         {
             gun.AddAmmo(gun.recoverAmmoAmount);
         }
