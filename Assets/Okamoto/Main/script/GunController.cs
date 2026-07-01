@@ -108,14 +108,24 @@ public class GunController : MonoBehaviour
     public GameObject ammoDropUIPrefab;
     public Transform uiEffectParent;
 
-    [Header("“GŒ‚”j‚Ì’e‰ñ•œ")]
-    public bool recoverAmmoOnKill = false;
-    public int recoverAmmoAmount = 1;
+    //[Header("“GŒ‚”j‚Ì’e‰ñ•œ")]
+    //public bool recoverAmmoOnKill = false;
+    //public int recoverAmmoAmount = 1;
 
 
     [Header("’eØ‚êUI")]
 
     public GameObject outOfAmmoUIImage;
+
+    [Header("“GŒ‚”j‚Ì’e‰ñ•œ")]
+    public bool recoverAmmoOnKill = false;
+
+    [Range(0f, 100f)]
+    public float recoverAmmoChance = 50f; // ‰ñ•œŠm—¦ %
+
+    public int recoverAmmoAmount = 1;
+
+    public GameObject ammoRecoverEffectPrefab;
 
 
 
@@ -1035,63 +1045,67 @@ public class GunController : MonoBehaviour
 
 
     public void AddAmmo(int amount)
-
     {
-
         int oldAmmo = currentAmmo;
-
-
 
         currentAmmo = Mathf.Clamp(currentAmmo + amount, 0, maxAmmo);
 
-
-
         for (int i = oldAmmo; i < currentAmmo; i++)
-
         {
-
             if (i >= 0 && i < ammoSlots.Length)
-
             {
-
                 AmmoSlot slot = ammoSlots[i];
 
-
-
-                // ’eí—Ş‚É‰‚¶‚ÄSprite•œŒ³
+                Sprite targetSprite = normalAmmoSprite;
 
                 switch (slot.ammoType)
-
                 {
-
                     case AmmoType.Normal:
-
-                        slot.image.sprite = normalAmmoSprite;
-
+                        targetSprite = normalAmmoSprite;
                         break;
-
-
 
                     case AmmoType.Lightning:
-
-                        slot.image.sprite = lightningAmmoSprite;
-
+                        targetSprite = lightningAmmoSprite;
                         break;
-
                 }
 
+                // Œ³UI‚Í‚¢‚Á‚½‚ñ”ñ•\¦
+                slot.image.enabled = false;
 
+                //========================
+                // ‰ñ•œ‰‰o¶¬
+                //========================
 
-                slot.image.enabled = true;
+                if (ammoRecoverEffectPrefab != null)
+                {
+                    GameObject obj =
+                        Instantiate(
+                            ammoRecoverEffectPrefab,
+                            slot.image.canvas.transform
+                        );
 
+                    AmmoRecoverEffect effect =
+                        obj.GetComponent<AmmoRecoverEffect>();
+
+                    effect.Init(
+                        targetSprite,
+                        slot.image.transform.position,
+                        () =>
+                        {
+                            // “’…ŒãUI•\¦
+                            slot.image.sprite = targetSprite;
+                            slot.image.enabled = true;
+                        });
+                }
+                else
+                {
+                    slot.image.sprite = targetSprite;
+                    slot.image.enabled = true;
+                }
             }
-
         }
 
-
-
         UpdateAmmoUI();
-
     }
 
     void IncreaseMaxAmmo(int amount)

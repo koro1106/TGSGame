@@ -9,11 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3965686385142582239}
-  - component: {fileID: 2369424070253736316}
+  - component: {fileID: 2065582839574094463}
   - component: {fileID: 3302720655613419686}
   - component: {fileID: 2447125007672265321}
   m_Layer: 5
-  m_Name: BulletImage
+  m_Name: BulletImage 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -38,7 +38,7 @@ RectTransform:
   m_AnchoredPosition: {x: -268.79993, y: -355}
   m_SizeDelta: {x: 55, y: 55}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2369424070253736316
+--- !u!114 &2065582839574094463
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47,20 +47,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 5431272660784949491}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9fdf0b5897f8874db4dd2c8ed716521, type: 3}
+  m_Script: {fileID: 11500000, guid: b878646ba55c0234fa0c57d1e40598dc, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AmmoDropUI
-  lifeTime: 1.5
-  gravity: 1500
-  minX: -400
-  maxX: 400
-  minY: 700
-  maxY: 400
-  minRotateSpeed: 400
-  maxRotateSpeed: 1000
-  minRotateAccel: 400
-  maxRotateAccel: 2000
-  drag: 0.99
+  m_EditorClassIdentifier: Assembly-CSharp::AmmoRecoverEffect
+  fallSpeed: 1800
+  squishAmount: 0.25
+  squishTime: 0.08
+  arriveEffectPrefab: {fileID: 1412672641212645560, guid: 2783fccc1ce5bd34391ee6f09e894ae0, type: 3}
+  effectLifeTime: 2.5
 --- !u!222 &3302720655613419686
 CanvasRenderer:
   m_ObjectHideFlags: 0
