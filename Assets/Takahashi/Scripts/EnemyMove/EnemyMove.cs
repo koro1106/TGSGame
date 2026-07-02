@@ -17,7 +17,13 @@
 /// 【スプライト切り替え】
 ///   待機中 → ゴミ箱_前 / 蓋_前 / 耳_前 を表示
 ///   ジャンプ中 → ゴミ箱_後ろ / 蓋_後ろ / 耳_後ろ を表示
-///   ウサギは常に表示
+///   ウサギ・手は常に表示
+///
+/// 【手の挙動】
+///   左右の手はウサギと完全連動（ウサギの基準位置からのズレ量をそのまま手に適用）
+///
+/// 【耳の待機モーション】
+///   Yスケールは一切変更しない。回転（パタパタ）のみで揺れを表現する
 ///
 /// 【オブジェクト構成】
 ///   TrashEnemy (親)
@@ -25,6 +31,8 @@
 ///     ├ Lid_Back   (蓋_後ろ)
 ///     ├ Ear_Back   (耳_後ろ)
 ///     ├ Rabbit     (ウサギ)
+///     ├ HandRight  (右手)
+///     ├ HandLeft   (左手)
 ///     ├ Body_Front (ゴミ箱_前)
 ///     ├ Ear_Front  (耳_前)
 ///     └ Lid_Front  (蓋_前)
@@ -84,6 +92,10 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     [Header("── 常に表示 ──────────────")]
     public Transform rabbit;
 
+    [Header("── 手（ウサギと連動） ──────────")]
+    public Transform handRight;
+    public Transform handLeft;
+
     [Header("── 耳（何個でも登録可） ────────")]
     public Transform[] ears;
 
@@ -109,6 +121,10 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     public float earSwingAngle = 25f;
     public float earSwingSpeed = 8f;
     public float earPhaseOffset = 1.0f;
+    [Tooltip("待機中の耳パタパタ角度（ジャンプ中より控えめにするのが目安）")]
+    public float earIdleSwingAngle = 8f;
+    [Tooltip("待機中の耳パタパタ速度")]
+    public float earIdleSwingSpeed = 3f;
 
     // =========================================================
     // 着地エフェクトパラメータ
@@ -160,6 +176,8 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     private Vector3 lidBackBaseLocalPos;
     private Vector3 lidFrontBaseLocalPos;
     private Vector3 rabbitHideLocalPos;
+    private Vector3 handRightBaseLocalPos;
+    private Vector3 handLeftBaseLocalPos;
 
     // 耳の初期値
     private float[] earBaseLocalX;
@@ -173,6 +191,8 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     private SpriteRenderer bodyFrontSR;
     private SpriteRenderer lidFrontSR;
     private SpriteRenderer rabbitSR;
+    private SpriteRenderer handRightSR;
+    private SpriteRenderer handLeftSR;
 
     private EnemyHP enemyHP;
 
@@ -235,6 +255,8 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         if (bodyFront != null) bodyFrontSR = bodyFront.GetComponent<SpriteRenderer>();
         if (lidFront != null) lidFrontSR = lidFront.GetComponent<SpriteRenderer>();
         if (rabbit != null) rabbitSR = rabbit.GetComponent<SpriteRenderer>();
+        if (handRight != null) handRightSR = handRight.GetComponent<SpriteRenderer>();
+        if (handLeft != null) handLeftSR = handLeft.GetComponent<SpriteRenderer>();
 
         // 耳の初期値を記憶
         earBaseLocalX = new float[ears.Length];
@@ -255,6 +277,8 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         if (lidBack != null) lidBackBaseLocalPos = lidBack.localPosition;
         if (lidFront != null) lidFrontBaseLocalPos = lidFront.localPosition;
         if (rabbit != null) rabbitHideLocalPos = rabbit.localPosition;
+        if (handRight != null) handRightBaseLocalPos = handRight.localPosition;
+        if (handLeft != null) handLeftBaseLocalPos = handLeft.localPosition;
 
         direction = ((Vector2)target - (Vector2)transform.position).normalized;
 
@@ -263,6 +287,8 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         SetSpritesForJump();
 
         if (rabbitSR != null) rabbitSR.enabled = true;
+        if (handRightSR != null) handRightSR.enabled = true;
+        if (handLeftSR != null) handLeftSR.enabled = true;
     }
 
     // =========================================================
@@ -348,7 +374,12 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
             lidLandOffset = Mathf.MoveTowards(lidLandOffset, 0f, landRiseSpeed * Time.deltaTime);
         }
 
+        // ウサギ本体
         if (rabbit != null) rabbit.localPosition = rabbitHideLocalPos + Vector3.up * rabbitLandOffset;
+        // 手はウサギの沈み込みにそのまま連動
+        if (handRight != null) handRight.localPosition = handRightBaseLocalPos + Vector3.up * rabbitLandOffset;
+        if (handLeft != null) handLeft.localPosition = handLeftBaseLocalPos + Vector3.up * rabbitLandOffset;
+
         if (lidFront != null) lidFront.localPosition = lidFrontBaseLocalPos + Vector3.up * lidLandOffset;
         if (lidBack != null) lidBack.localPosition = lidBackBaseLocalPos + Vector3.up * lidLandOffset;
 
@@ -375,19 +406,23 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
 
         if (lidFront != null) lidFront.localPosition = lidFrontBaseLocalPos + Vector3.up * bob;
         if (lidBack != null) lidBack.localPosition = lidBackBaseLocalPos + Vector3.up * bob;
-        if (rabbit != null) rabbit.localPosition = rabbitHideLocalPos + Vector3.up * (bob * 0.5f);
+
+        // ウサギの待機バウンス
+        float rabbitBob = bob * 0.5f;
+        if (rabbit != null) rabbit.localPosition = rabbitHideLocalPos + Vector3.up * rabbitBob;
+        // 手はウサギと完全連動（同じ量だけ動く）
+        if (handRight != null) handRight.localPosition = handRightBaseLocalPos + Vector3.up * rabbitBob;
+        if (handLeft != null) handLeft.localPosition = handLeftBaseLocalPos + Vector3.up * rabbitBob;
 
         if (bodyFront != null) bodyFront.localPosition = bodyBaseLocalPos;
         if (bodyBack != null) bodyBack.localPosition = bodyBaseLocalPos;
 
+        // 耳のパタパタ：Yスケールは変更せず、回転のみで表現する
         for (int i = 0; i < ears.Length; i++)
         {
             if (ears[i] == null) continue;
-            float pata = (Mathf.Sin(idleTimer * (earSwingSpeed * 0.3f) + i * earPhaseOffset) + 1f) * 0.5f;
-            float scaleY = Mathf.Lerp(0.7f, 1.0f, pata);
-            Vector3 baseScale = ears[i].localScale;
-            ears[i].localScale = new Vector3(baseScale.x, scaleY, baseScale.z);
-            ears[i].localRotation = earBaseRot[i];
+            float swing = Mathf.Sin(idleTimer * earIdleSwingSpeed + i * earPhaseOffset) * earIdleSwingAngle;
+            ears[i].localRotation = earBaseRot[i] * Quaternion.Euler(0f, 0f, swing);
         }
 
         if (waitTimer >= waitDuration)
@@ -449,6 +484,9 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         }
 
         if (rabbit != null) rabbit.localEulerAngles = bodyRot;
+        // 手もウサギ・箱と同じ傾きに連動させる
+        if (handRight != null) handRight.localEulerAngles = bodyRot;
+        if (handLeft != null) handLeft.localEulerAngles = bodyRot;
 
         float openAngle = (direction.x < 0f) ? lidOpenAngle : -lidOpenAngle;
         float targetAngle = (jumpTimer < halfDur) ? openAngle : 0f;
@@ -467,7 +505,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     }
 
     // =========================================================
-    // 耳のパタパタ
+    // 耳のパタパタ（ジャンプ中）
     // =========================================================
     void AnimateEar(float timer)
     {
@@ -481,15 +519,23 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     }
 
     // =========================================================
-    // ウサギの飛び出し
+    // ウサギ・手の飛び出し（完全連動）
     // =========================================================
     void AnimateRabbit(float halfDur)
     {
         if (rabbit == null) return;
+
         Vector3 showPos = rabbitHideLocalPos + Vector3.up * rabbitRiseHeight;
         Vector3 rabbitTarget = (jumpTimer < halfDur) ? showPos : rabbitHideLocalPos;
         rabbit.localPosition = Vector3.MoveTowards(
             rabbit.localPosition, rabbitTarget, rabbitRiseSpeed * Time.deltaTime);
+
+        // ウサギが基準位置からどれだけズレたかを計算し、
+        // そのズレ量をそのまま手にも適用する（＝完全連動）
+        Vector3 rabbitOffset = rabbit.localPosition - rabbitHideLocalPos;
+
+        if (handRight != null) handRight.localPosition = handRightBaseLocalPos + rabbitOffset;
+        if (handLeft != null) handLeft.localPosition = handLeftBaseLocalPos + rabbitOffset;
     }
 
     // =========================================================
@@ -560,6 +606,16 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
             rabbit.localPosition = rabbitHideLocalPos;
             rabbit.localEulerAngles = Vector3.zero;
         }
+        if (handRight != null)
+        {
+            handRight.localPosition = handRightBaseLocalPos;
+            handRight.localEulerAngles = Vector3.zero;
+        }
+        if (handLeft != null)
+        {
+            handLeft.localPosition = handLeftBaseLocalPos;
+            handLeft.localEulerAngles = Vector3.zero;
+        }
 
         currentBodyTilt = 0f;
 
@@ -609,6 +665,8 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         Flip(bodyFrontSR, facingLeft);
         Flip(lidFrontSR, facingLeft);
         Flip(rabbitSR, facingLeft);
+        Flip(handRightSR, facingLeft);
+        Flip(handLeftSR, facingLeft);
 
         for (int i = 0; i < ears.Length; i++)
         {
