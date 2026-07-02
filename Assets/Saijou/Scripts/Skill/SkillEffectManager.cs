@@ -132,6 +132,10 @@ public class SkillEffectManager : MonoBehaviour
             case SkillEffectType.RecoveryBulletCount:
                 playerStats.recoveryBulletCount += (int)skill.effectValue;
                 break;
+            // 弾の大きさUP
+            case SkillEffectType.BulletSizeUP:
+                playerStats.bulletSize += (int)skill.effectValue;
+                break;
         }
     }
 

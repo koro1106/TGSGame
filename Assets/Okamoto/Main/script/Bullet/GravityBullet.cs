@@ -19,9 +19,11 @@ public class GravityBullet : MonoBehaviour
     public GameObject gravityEffect;
 
     public PlayerStats stats;
+    private Vector3 defaultScale = new Vector3(210.7f, 95.8f, 144.1f);
 
     void Start()
     {
+        transform.localScale = defaultScale + Vector3.one * stats.bulletSize;
         Destroy(gameObject, lifeTime);
     }
 

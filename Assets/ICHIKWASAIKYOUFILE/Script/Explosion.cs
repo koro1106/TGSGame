@@ -21,8 +21,11 @@ public class Bulletxplosion : MonoBehaviour
     public float totalExplosionSize = 0f;
 
     public PlayerStats playerStats;
+    private Vector3 defaultScale = new Vector3(210.7f, 95.8f, 144.1f);
+
     void Start()
     {
+        transform.localScale = defaultScale + Vector3.one * playerStats.bulletSize;
         Destroy(gameObject, lifeTime);
     }
 
