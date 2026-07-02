@@ -50,10 +50,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b878646ba55c0234fa0c57d1e40598dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AmmoRecoverEffect
-  fallSpeed: 1800
+  fallSpeed: 200
   squishAmount: 0.25
   squishTime: 0.08
   arriveEffectPrefab: {fileID: 1412672641212645560, guid: 2783fccc1ce5bd34391ee6f09e894ae0, type: 3}
+  effectOffset: {x: 0, y: 0}
   effectLifeTime: 2.5
 --- !u!222 &3302720655613419686
 CanvasRenderer:
