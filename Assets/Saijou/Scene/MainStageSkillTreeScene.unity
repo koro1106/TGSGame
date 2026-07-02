@@ -1409,7 +1409,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &160536491
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1426,7 +1426,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -300, y: -380}
+  m_AnchoredPosition: {x: -400, y: -80}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &160536492
@@ -1456,8 +1456,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillNodeUI
   data: {fileID: 11400000, guid: e188741f1c2dbf843abdbab354ca8874, type: 2}
   icon: {fileID: 160536495}
-  nextButtons: []
-  nextLines: []
+  nextButtons:
+  - {fileID: 1134727362}
+  - {fileID: 946721742}
+  - {fileID: 627591619}
+  nextLines:
+  - {fileID: 195043177}
+  - {fileID: 1373197652}
+  - {fileID: 274982559}
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 0
   redSprite: {fileID: -3834718544918968400, guid: 284c3d048e034474c878ed67c23072c9, type: 3}
@@ -6092,7 +6098,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &534329895
 RectTransform:
   m_ObjectHideFlags: 0
@@ -19146,7 +19152,7 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 3eb295374bd1244458ae8a1c093d8e42, type: 2}
   icon: {fileID: 1396807291}
   nextButtons:
-  - {fileID: 534329897}
+  - {fileID: 160536493}
   - {fileID: 513240899}
   - {fileID: 552354535}
   nextLines:
