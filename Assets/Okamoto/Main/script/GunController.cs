@@ -15,29 +15,22 @@ public class GunController : MonoBehaviour
 
 
     // ▼追加
-
     // 複数の弾PrefabをInspectorに入れる
 
     public GameObject[] bulletPrefabs;
 
-
     // ▼追加
-
     // 現在使っている弾番号
 
     private int currentBulletIndex = 0;
-
 
     public float fireRate = 0.1f;
 
     public float bulletSpeed = 15f;
 
-
-
     public int maxAmmo = 15; // 弾数
 
     public float reloadTime = 1.5f;
-
 
 
     private int currentAmmo;
@@ -45,8 +38,6 @@ public class GunController : MonoBehaviour
     private float fireTimer;
 
     private bool isReloading;
-
-
 
     public float radius = 0.5f;
 
@@ -59,20 +50,13 @@ public class GunController : MonoBehaviour
     Vector3 defaultLocalPos;
 
 
-
     public TMP_Text sensitivityText;
 
-
-
     private Vector3 crosshairPos;
-
-
 
     [Range(0.1f, 10f)]
 
     public float sensitivity = 1f;
-
-
 
     [Header("弾UI画像")]
 
@@ -93,7 +77,6 @@ public class GunController : MonoBehaviour
     public Sprite ReboundAmmoSprite;
 
 
-
     [Header("マズルフラッシュ")]
 
     public GameObject muzzleFlash;
@@ -101,8 +84,6 @@ public class GunController : MonoBehaviour
     public float muzzleFlashTime = 0.05f;
 
     private Coroutine flashRoutine;
-
-
 
     [Header("弾UIドロップ演出")]
     public GameObject ammoDropUIPrefab;
@@ -127,45 +108,27 @@ public class GunController : MonoBehaviour
 
     public GameObject ammoRecoverEffectPrefab;
 
-
-
     public AmmoSlot[] ammoSlots;
 
     public TMP_Text ammoText;
 
-
-
     public RectTransform crosshair; // UIのクロスヘア
-
-
 
     private SpriteRenderer sr;
 
     private Camera cam;
 
-
-
     public GameObject[] ammoDropPrefabs; // bulletPrefabs と同じ順番で設定弾プレハブ
-
-
 
     public PlayerStats stats; // プレイヤーステータス☆
 
-
-
     private float crosshairTargetRotation = 0f;
 
-
-
     private bool isChangingScene = false;
-
-
 
     //ショットガン追加
 
     public ShotgunController shotgun;
-
-
 
     //スナイパー追加
 
@@ -402,270 +365,193 @@ public class GunController : MonoBehaviour
 
         fireTimer += Time.deltaTime;
 
-
-
         if (Input.GetMouseButton(0) && fireTimer >= fireRate)
 
         {
 
-            // 弾切れ
+            //=========================
+            // 撃てる弾があるか
+            //=========================
 
-            if (currentAmmo <= 0 && !isChangingScene)
+            bool hasAmmo = currentAmmo > 0;
 
+            // 回復演出中弾も撃てる扱い
+            if (!hasAmmo)
             {
-
-                StartCoroutine(OutOfAmmoAndChangeScene());
-
-                return;
-
+                for (int i = 0; i < ammoSlots.Length; i++)
+                {
+                    if (ammoSlots[i].isRecovering)
+                    {
+                        hasAmmo = true;
+                        break;
+                    }
+                }
             }
 
-
+            // 弾切れ
+            if (!hasAmmo && !isChangingScene)
+            {
+                StartCoroutine(OutOfAmmoAndChangeScene());
+                return;
+            }
 
             // =========================
-
-            // 右端の弾UI取得
-
+            // 使用する弾スロット決定
             // =========================
 
-            int uiIndex = currentAmmo - 1;
+            int uiIndex = -1;
 
+            // 回復演出中優先
+            for (int i = ammoSlots.Length - 1; i >= 0; i--)
+            {
+                if (ammoSlots[i].isRecovering)
+                {
+                    uiIndex = i;
+                    break;
+                }
+            }
 
+            // 通常弾
+            if (uiIndex == -1)
+            {
+                uiIndex = currentAmmo - 1;
+            }
 
-            // 念のため範囲チェック
-
+            // 範囲チェック
             if (uiIndex < 0 || uiIndex >= ammoSlots.Length)
-
                 return;
 
-
-
-            // 現在使う弾スロット
-
+            // 現在使う弾
             AmmoSlot slot = ammoSlots[uiIndex];
 
-
-
             // UI画像
-
             Image img = slot.image;
 
-
-
             // =========================
-
-            // 発射する弾を決定
-
+            // 発射する弾決定
             // =========================
-
-
-
-            // デフォルトは通常弾
 
             GameObject bulletToShoot = bulletPrefabs[0];
-
-            // 弾タイプで変更
 
             switch (slot.ammoType)
 
             {
 
-                // 通常弾
-
                 case AmmoType.Normal:
-
-                    Debug.Log("Normal");
-
                     bulletToShoot = bulletPrefabs[0];
-
                     break;
-
-
-
-                // 雷属性弾
 
                 case AmmoType.Lightning:
-
-                    Debug.Log("Lightning");
-
                     bulletToShoot = bulletPrefabs[1];
-
                     break;
-
-                // 重力弾
 
                 case AmmoType.Gravity:
-
                     bulletToShoot = bulletPrefabs[2];
-
                     break;
-
-                //  鎖弾
 
                 case AmmoType.Bind:
-
                     bulletToShoot = bulletPrefabs[3];
-
                     break;
-
-                //  毒弾
 
                 case AmmoType.Poison:
-
                     bulletToShoot = bulletPrefabs[4];
-
                     break;
-
-                // 爆発弾
 
                 case AmmoType.Explosion:
-
                     bulletToShoot = bulletPrefabs[5];
-
                     break;
-
-                // 貫通弾
 
                 case AmmoType.Penetrating:
-
                     bulletToShoot = bulletPrefabs[6];
-
                     break;
-
             }
 
             // =========================
-
-            // 弾スクリプト取得
-
-            // =========================
-
-            Bullet bulletScript =
-
-                bulletToShoot.GetComponent<Bullet>();
-
-
-
-            ChainBullet chainScript =
-
-                bulletToShoot.GetComponent<ChainBullet>();
-
-
-
-            // =========================
-
             // 弾生成
-
             // =========================
 
             GameObject bulletInstance =
-
                 Instantiate(
-
                     bulletToShoot,
-
                     muzzle.position,
-
                     muzzle.rotation);
 
             PlayMuzzleFlash();
 
             crosshairTargetRotation += 90f;
 
-
-
             if (shotgun != null && shotgun.isActive)
-
             {
-
                 shotgun.Fire();
-
             }
-
-
 
             if (sniper != null && sniper.isActive)
-
             {
-
                 sniper.Fire();
-
             }
 
-
-
-
-
             // =========================
-
             // ダメージ設定
-
             // =========================
+
+            Bullet bulletScript =
+                bulletToShoot.GetComponent<Bullet>();
 
             if (bulletScript != null)
-
             {
-
                 bulletScript.SetDamage(stats.bulletDamage);
-
             }
 
-
-
             // =========================
-
             // 発射方向
-
             // =========================
 
-            Rigidbody2D rb = bulletInstance.GetComponent<Rigidbody2D>();
-
-
+            Rigidbody2D rb =
+                bulletInstance.GetComponent<Rigidbody2D>();
 
             Vector3 screenPos = crosshair.position;
 
-            Vector3 worldPos = cam.ScreenToWorldPoint(screenPos);
+            Vector3 worldPos =
+                cam.ScreenToWorldPoint(screenPos);
 
             worldPos.z = 0;
 
-
-
-            Vector2 direction = (worldPos - muzzle.position).normalized;
-
-
+            Vector2 direction =
+                (worldPos - muzzle.position).normalized;
 
             bulletInstance.transform.right = direction;
 
-            rb.linearVelocity = direction * bulletSpeed;
-
-
+            rb.linearVelocity =
+                direction * bulletSpeed;
 
             // =========================
-
             // 弾消費
-
             // =========================
 
-            currentAmmo--;
-
-
-
-            // UIを消す
-
-            if (img != null)
-
+            // 通常弾だけ減らす
+            if (!slot.isRecovering)
             {
-
-                img.enabled = false;
-
+                currentAmmo--;
             }
 
+            // 回復演出中なら消す
+            if (slot.recoverEffectObject != null)
+            {
+                Destroy(slot.recoverEffectObject);
 
+                slot.recoverEffectObject = null;
+
+                slot.isRecovering = false;
+            }
+
+            // UI消す
+            if (img != null)
+            {
+                img.enabled = false;
+            }
 
             // =========================
-
             // 弾UIドロップ演出
-
             // =========================
 
             if (ammoDropUIPrefab != null && img != null)
@@ -684,70 +570,39 @@ public class GunController : MonoBehaviour
 
                         img.transform.parent);
 
-
-
                 // サイズ合わせ
-
                 drop.transform.localScale =
-
                     img.transform.localScale;
 
-
-
                 // Spriteコピー
-
                 Image dropImage =
-
                     drop.GetComponent<Image>();
 
-
-
                 if (dropImage != null)
-
                 {
-
                     dropImage.sprite = img.sprite;
-
                 }
-
             }
 
-
-
             // 元UI消す
-
             img.enabled = false;
 
-
-
             // =========================
-
             // 演出
-
             // =========================
 
             CameraShake.Instance.Shake();
 
-
-
             PlayerHP.Instance.TakeDamage(1);
 
-
-
             // =========================
-
             // UI更新
-
             // =========================
 
             UpdateAmmoUI();
 
-
-
             // 発射間隔リセット
-
             fireTimer = 0;
-
         }
 
     }
@@ -877,11 +732,9 @@ public class GunController : MonoBehaviour
     }
 
     void UpdateAmmoUI()
-
     {
-
-        ammoText.text = currentAmmo + " / " + maxAmmo;
-
+        ammoText.text =
+            currentAmmo + " / " + maxAmmo;
     }
 
 
@@ -1048,13 +901,29 @@ public class GunController : MonoBehaviour
     {
         int oldAmmo = currentAmmo;
 
-        currentAmmo = Mathf.Clamp(currentAmmo + amount, 0, maxAmmo);
+        int targetAmmo =
+            Mathf.Clamp(currentAmmo + amount, 0, maxAmmo);
 
-        for (int i = oldAmmo; i < currentAmmo; i++)
+        for (int i = oldAmmo; i < targetAmmo; i++)
         {
             if (i >= 0 && i < ammoSlots.Length)
             {
+                //========================
+                // スロット取得
+                //========================
+
                 AmmoSlot slot = ammoSlots[i];
+
+                // すでに回復中なら飛ばす
+                if (slot.isRecovering)
+                    continue;
+
+                // 回復中フラグ
+                slot.isRecovering = true;
+
+                //========================
+                // Sprite決定
+                //========================
 
                 Sprite targetSprite = normalAmmoSprite;
 
@@ -1069,7 +938,7 @@ public class GunController : MonoBehaviour
                         break;
                 }
 
-                // 元UIはいったん非表示
+                // 元UI非表示
                 slot.image.enabled = false;
 
                 //========================
@@ -1084,23 +953,44 @@ public class GunController : MonoBehaviour
                             slot.image.canvas.transform
                         );
 
+                    // 演出保持
+                    slot.recoverEffectObject = obj;
+
                     AmmoRecoverEffect effect =
                         obj.GetComponent<AmmoRecoverEffect>();
 
                     effect.Init(
-                        targetSprite,
-                        slot.image.transform.position,
-                        () =>
-                        {
-                            // 到着後UI表示
-                            slot.image.sprite = targetSprite;
-                            slot.image.enabled = true;
-                        });
+     targetSprite,
+     slot.image.transform.position,
+     slot.image.rectTransform,
+     () =>
+     {
+         // 途中で撃たれてたら終了
+         if (slot.recoverEffectObject == null)
+             return;
+
+         slot.isRecovering = false;
+
+         currentAmmo++;
+
+         slot.image.sprite = targetSprite;
+         slot.image.enabled = true;
+
+         slot.recoverEffectObject = null;
+
+         UpdateAmmoUI();
+     });
                 }
                 else
                 {
+                    slot.isRecovering = false;
+
+                    currentAmmo++;
+
                     slot.image.sprite = targetSprite;
                     slot.image.enabled = true;
+
+                    UpdateAmmoUI();
                 }
             }
         }

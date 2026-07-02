@@ -1971,193 +1971,373 @@ MonoBehaviour:
   muzzleFlash: {fileID: 1729561889}
   muzzleFlashTime: 0.05
   ammoDropUIPrefab: {fileID: 5431272660784949491, guid: c5b1c4050c4821447bbd84aa65aec6a0, type: 3}
-  uiEffectParent: {fileID: 3965686385142582239, guid: e273b6025358baa40b4af473c09b58bb, type: 3}
+  uiEffectParent: {fileID: 0}
   outOfAmmoUIImage: {fileID: 248278258}
   recoverAmmoOnKill: 1
   recoverAmmoChance: 100
   recoverAmmoAmount: 10
-  ammoRecoverEffectPrefab: {fileID: 0}
+  ammoRecoverEffectPrefab: {fileID: 5431272660784949491, guid: e273b6025358baa40b4af473c09b58bb, type: 3}
   ammoSlots:
   - emptyImage: {fileID: 974064374}
     image: {fileID: 1752819500}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1454558356}
     image: {fileID: 475326263}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 925302779}
     image: {fileID: 1493139783}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 787937897}
     image: {fileID: 165047445}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1827413481}
     image: {fileID: 783387190}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 754617014}
     image: {fileID: 359120282}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 748904935}
     image: {fileID: 825680858}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 899650518}
     image: {fileID: 197047195}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 957391783}
     image: {fileID: 696019186}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1095180571}
     image: {fileID: 31427388}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 482420656}
     image: {fileID: 432192523}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1195219822}
     image: {fileID: 1918664828}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1270195700}
     image: {fileID: 1434947040}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1822235478}
     image: {fileID: 2125321522}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 2046078272}
     image: {fileID: 1912804369}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1379516313}
     image: {fileID: 1682574722}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 876943897}
     image: {fileID: 222989649}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 805761138}
     image: {fileID: 501101928}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1816602133}
     image: {fileID: 1998057911}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1931340045}
     image: {fileID: 1124215775}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 2049965557}
     image: {fileID: 977330689}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1196873294}
     image: {fileID: 690740807}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1022624506}
     image: {fileID: 2064181789}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 598345226}
     image: {fileID: 1016976852}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 653240301}
     image: {fileID: 32476336}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1476059598}
     image: {fileID: 1984015149}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1267059211}
     image: {fileID: 1243989957}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 946605881}
     image: {fileID: 415539213}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1667708720}
     image: {fileID: 1697897822}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1662209553}
     image: {fileID: 508568111}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1351715841}
     image: {fileID: 1811426834}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1686908139}
     image: {fileID: 454900001}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1535735158}
     image: {fileID: 1597055118}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1108238979}
     image: {fileID: 134834269}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 513593159}
     image: {fileID: 542775798}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 460479254}
     image: {fileID: 637280924}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 188778470}
     image: {fileID: 928781945}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 988540524}
     image: {fileID: 2064285247}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1115021474}
     image: {fileID: 797267148}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1272348932}
     image: {fileID: 666280071}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1883787069}
     image: {fileID: 671466058}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1208083209}
     image: {fileID: 199664682}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1691381491}
     image: {fileID: 1384171249}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 139284180}
     image: {fileID: 1260900154}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 986636672}
     image: {fileID: 1295399921}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 2098216180}
     image: {fileID: 1942977014}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 441481808}
     image: {fileID: 665609941}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 2013893651}
     image: {fileID: 1376209770}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 889276264}
     image: {fileID: 781382533}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1225392771}
     image: {fileID: 639240005}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1657040808}
     image: {fileID: 686870677}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 175131884}
     image: {fileID: 2123602050}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 860336329}
     image: {fileID: 213158781}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1167167998}
     image: {fileID: 647382200}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 74016686}
     image: {fileID: 139228344}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 209089742}
     image: {fileID: 1795052966}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 37303302}
     image: {fileID: 1111092448}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1273918457}
     image: {fileID: 1444854726}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 83169570}
     image: {fileID: 1025283180}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   - emptyImage: {fileID: 1000009065}
     image: {fileID: 634883367}
     ammoType: 0
+    recoverEffectObject: {fileID: 0}
+    isRecovering: 0
+    isLoaded: 1
   ammoText: {fileID: 1212407996}
   crosshair: {fileID: 360144202}
   ammoDropPrefabs:
@@ -4752,7 +4932,7 @@ Transform:
   m_GameObject: {fileID: 472724069}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 529, y: 192.2, z: 0}
+  m_LocalPosition: {x: 1513.3, y: 721.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5444,7 +5624,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -17, y: 3, z: -10}
+  m_LocalPosition: {x: 967.3, y: 532.5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14587,7 +14767,7 @@ Transform:
   m_GameObject: {fileID: 1683393128}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 72.06495, y: -88.75866, z: 0}
+  m_LocalPosition: {x: 959, y: 538, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -17942,7 +18122,7 @@ Transform:
   m_GameObject: {fileID: 2145044091}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -40.3, y: -105.5, z: -10}
+  m_LocalPosition: {x: 944, y: 424, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
