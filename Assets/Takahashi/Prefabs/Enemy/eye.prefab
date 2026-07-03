@@ -497,7 +497,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EyeEnemy
   moveSpeed: 60
   graphics: {fileID: 6798725746096270528}
-  bounceHeight: 0.8
+  bounceHeight: 0.3
   bounceSpeed: 3
   head: {fileID: 2731322339776137143}
   headOpenSprite: {fileID: 21300000, guid: baa1e611b381d3d43b32ef3fcf073ccc, type: 3}

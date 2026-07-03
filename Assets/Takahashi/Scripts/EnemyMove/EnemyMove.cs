@@ -15,19 +15,21 @@
 ///   着地・待機中：完全に垂直へリセット
 ///
 /// 【スプライト切り替え】
-///   待機中 → ゴミ箱_前 / 蓋_前 / 耳_前 を表示
-///   ジャンプ中 → ゴミ箱_後ろ / 蓋_後ろ / 耳_後ろ を表示
+///   待機中 → ゴミ箱_前 / 蓋_前 / 蓋_後ろ / 耳_前 を表示（ゴミ箱_後ろは使わない）
+///   ジャンプ中 → ゴミ箱_前 / 蓋_前 / 蓋_後ろ / 耳_後ろ を表示（ゴミ箱_後ろは使わない）
 ///   ウサギ・手は常に表示
 ///
-/// 【手の挙動】
-///   左右の手はウサギと完全連動（ウサギの基準位置からのズレ量をそのまま手に適用）
+/// 【手・耳の挙動】
+///   左右の手、および耳はウサギと完全連動
+///   （ウサギの基準位置からのY方向のズレ量をそのまま適用する）
 ///
 /// 【耳の待機モーション】
 ///   Yスケールは一切変更しない。回転（パタパタ）のみで揺れを表現する
+///   （Y位置はウサギのバウンスに連動）
 ///
 /// 【オブジェクト構成】
 ///   TrashEnemy (親)
-///     ├ Body_Back  (ゴミ箱_後ろ)
+///     ├ Body_Back  (ゴミ箱_後ろ) ※未使用
 ///     ├ Lid_Back   (蓋_後ろ)
 ///     ├ Ear_Back   (耳_後ろ)
 ///     ├ Rabbit     (ウサギ)
@@ -380,6 +382,15 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         if (handRight != null) handRight.localPosition = handRightBaseLocalPos + Vector3.up * rabbitLandOffset;
         if (handLeft != null) handLeft.localPosition = handLeftBaseLocalPos + Vector3.up * rabbitLandOffset;
 
+        // 耳もウサギの沈み込みに連動（置き去り防止）
+        for (int i = 0; i < ears.Length; i++)
+        {
+            if (ears[i] == null) continue;
+            Vector3 earPos = ears[i].localPosition;
+            earPos.y = earBaseLocalY[i] + rabbitLandOffset;
+            ears[i].localPosition = earPos;
+        }
+
         if (lidFront != null) lidFront.localPosition = lidFrontBaseLocalPos + Vector3.up * lidLandOffset;
         if (lidBack != null) lidBack.localPosition = lidBackBaseLocalPos + Vector3.up * lidLandOffset;
 
@@ -418,11 +429,16 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         if (bodyBack != null) bodyBack.localPosition = bodyBaseLocalPos;
 
         // 耳のパタパタ：Yスケールは変更せず、回転のみで表現する
+        // ＋ ウサギの待機バウンスにY位置も連動させる（置き去り防止）
         for (int i = 0; i < ears.Length; i++)
         {
             if (ears[i] == null) continue;
             float swing = Mathf.Sin(idleTimer * earIdleSwingSpeed + i * earPhaseOffset) * earIdleSwingAngle;
             ears[i].localRotation = earBaseRot[i] * Quaternion.Euler(0f, 0f, swing);
+
+            Vector3 earPos = ears[i].localPosition;
+            earPos.y = earBaseLocalY[i] + rabbitBob;
+            ears[i].localPosition = earPos;
         }
 
         if (waitTimer >= waitDuration)
@@ -519,7 +535,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     }
 
     // =========================================================
-    // ウサギ・手の飛び出し（完全連動）
+    // ウサギ・手・耳の飛び出し（完全連動）
     // =========================================================
     void AnimateRabbit(float halfDur)
     {
@@ -531,11 +547,21 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
             rabbit.localPosition, rabbitTarget, rabbitRiseSpeed * Time.deltaTime);
 
         // ウサギが基準位置からどれだけズレたかを計算し、
-        // そのズレ量をそのまま手にも適用する（＝完全連動）
+        // そのズレ量をそのまま手・耳にも適用する（＝完全連動）
         Vector3 rabbitOffset = rabbit.localPosition - rabbitHideLocalPos;
 
         if (handRight != null) handRight.localPosition = handRightBaseLocalPos + rabbitOffset;
         if (handLeft != null) handLeft.localPosition = handLeftBaseLocalPos + rabbitOffset;
+
+        // 耳もウサギのY方向の動きに連動（置き去り防止）
+        // ※X位置はFlipSpriteで別途左右反転されるため、Yのみ更新する
+        for (int i = 0; i < ears.Length; i++)
+        {
+            if (ears[i] == null) continue;
+            Vector3 earPos = ears[i].localPosition;
+            earPos.y = earBaseLocalY[i] + rabbitOffset.y;
+            ears[i].localPosition = earPos;
+        }
     }
 
     // =========================================================
@@ -619,29 +645,34 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
 
         currentBodyTilt = 0f;
 
+        // 耳も基準位置・基準回転へリセット（置き去り防止）
         for (int i = 0; i < ears.Length; i++)
         {
             if (ears[i] == null) continue;
             ears[i].localRotation = earBaseRot[i];
+            Vector3 earPos = ears[i].localPosition;
+            earPos.y = earBaseLocalY[i];
+            ears[i].localPosition = earPos;
         }
     }
 
     // =========================================================
     // スプライト表示切り替え
+    // 待機中・ジャンプ中とも「箱前・蓋前・蓋後ろ」を表示する（箱後ろは未使用）
     // =========================================================
     void SetSpritesForJump()
     {
-        SetActive(bodyBackSR, true);
+        SetActive(bodyBackSR, false);
         SetActive(lidBackSR, true);
-        SetActive(bodyFrontSR, false);
-        SetActive(lidFrontSR, false);
+        SetActive(bodyFrontSR, true);
+        SetActive(lidFrontSR, true);
         for (int i = 0; i < earSRs.Length; i++) SetActive(earSRs[i], true);
     }
 
     void SetSpritesForWait()
     {
         SetActive(bodyBackSR, false);
-        SetActive(lidBackSR, false);
+        SetActive(lidBackSR, true);
         SetActive(bodyFrontSR, true);
         SetActive(lidFrontSR, true);
         for (int i = 0; i < earSRs.Length; i++) SetActive(earSRs[i], true);
@@ -673,7 +704,8 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
             Flip(earSRs[i], facingLeft);
             if (ears[i] == null) continue;
             Vector3 pos = ears[i].localPosition;
-            pos.x = facingLeft ? -Mathf.Abs(earBaseLocalX[i]) : Mathf.Abs(earBaseLocalX[i]);
+            // 各耳の元々の左右位置（符号）を保ったまま、向きが変わったら符号だけ反転
+            pos.x = facingLeft ? -earBaseLocalX[i] : earBaseLocalX[i];
             ears[i].localPosition = pos;
         }
     }
