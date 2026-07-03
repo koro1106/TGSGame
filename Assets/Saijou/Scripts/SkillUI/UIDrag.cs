@@ -15,7 +15,7 @@ public class UIDrag : MonoBehaviour
     // プレステージ位置へ移動
     public void MoveToPrestige()
     {
-        target.anchoredPosition = new Vector2(-16f, -3812f);
+        target.anchoredPosition = new Vector2(-16f, -4100f);
         isPrestige = true;
     }
 

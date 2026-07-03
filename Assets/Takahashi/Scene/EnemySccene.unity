@@ -390,8 +390,8 @@ MonoBehaviour:
     weight: 100
   - prefab: {fileID: 1791151817480522782, guid: 7258712290291ef4ca007d794424fc5e, type: 3}
     weight: 0
-  - prefab: {fileID: 2931965587420321019, guid: 3ad3c589ec744814c944ed6ed827ac86, type: 3}
-    weight: 0
+  - prefab: {fileID: 7801636748621657906, guid: 799c801ec8b355a48bcf47943e3e85c0, type: 3}
+    weight: 100
   - prefab: {fileID: 1514281451404711565, guid: b79716df06544bd4c942bc9f6be16c93, type: 3}
     weight: 0
   - prefab: {fileID: 4832302078142527342, guid: 0aba12c3835267542a9c75abdf6f3dda, type: 3}

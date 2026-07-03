@@ -92,8 +92,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22
-  m_fontSizeBase: 22
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -192,9 +192,9 @@ MonoBehaviour:
   numberPosLeft: {x: 20, y: 115}
   numberPosRight: {x: -30, y: 115}
   numberPosUp: {x: 0, y: 30}
-  labelPosLeft: {x: 20, y: 95}
-  labelPosRight: {x: -30, y: 95}
-  labelPosUp: {x: 0, y: 10}
+  labelPosLeft: {x: 20, y: 90}
+  labelPosRight: {x: -30, y: 90}
+  labelPosUp: {x: 0, y: 5}
   displayDuration: 1
   scaleDuration: 0.12
   floatDistance: 30
@@ -394,8 +394,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 22
-  m_fontSizeBase: 22
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
