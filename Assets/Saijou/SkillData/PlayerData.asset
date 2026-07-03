@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7c6cc05dd2a39e4d871b2527651a9cd, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: Assembly-CSharp::PlayerData
-  currentExp_1: 100
+  currentExp_1: 91
   currentExp_2: 0
   currentExp_3: 0
   currentPreExp: 0

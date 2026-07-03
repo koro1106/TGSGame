@@ -74,7 +74,7 @@ public class GunController : MonoBehaviour
 
     public Sprite penetratingAmmoSprite;
 
-    public Sprite ReboundAmmoSprite;
+    //public Sprite ReboundAmmoSprite;
 
 
     [Header("É}ÉYÉãÉtÉâÉbÉVÉÖ")]
@@ -434,41 +434,43 @@ public class GunController : MonoBehaviour
             // î≠éÀÇ∑ÇÈíeåàíË
             // =========================
 
-            GameObject bulletToShoot = bulletPrefabs[0];
+            //GameObject bulletToShoot = bulletPrefabs[0];
 
-            switch (slot.ammoType)
+            //switch (slot.ammoType)
 
-            {
+            //{
 
-                case AmmoType.Normal:
-                    bulletToShoot = bulletPrefabs[0];
-                    break;
+            //    case AmmoType.Normal:
+            //        bulletToShoot = bulletPrefabs[0];
+            //        break;
 
-                case AmmoType.Lightning:
-                    bulletToShoot = bulletPrefabs[1];
-                    break;
+            //    case AmmoType.Lightning:
+            //        bulletToShoot = bulletPrefabs[1];
+            //        break;
 
-                case AmmoType.Gravity:
-                    bulletToShoot = bulletPrefabs[2];
-                    break;
+            //    case AmmoType.Gravity:
+            //        bulletToShoot = bulletPrefabs[2];
+            //        break;
 
-                case AmmoType.Bind:
-                    bulletToShoot = bulletPrefabs[3];
-                    break;
+            //    case AmmoType.Bind:
+            //        bulletToShoot = bulletPrefabs[3];
+            //        break;
 
-                case AmmoType.Poison:
-                    bulletToShoot = bulletPrefabs[4];
-                    break;
+            //    case AmmoType.Poison:
+            //        bulletToShoot = bulletPrefabs[4];
+            //        break;
 
-                case AmmoType.Explosion:
-                    bulletToShoot = bulletPrefabs[5];
-                    break;
+            //    case AmmoType.Explosion:
+            //        bulletToShoot = bulletPrefabs[5];
+            //        break;
 
-                case AmmoType.Penetrating:
-                    bulletToShoot = bulletPrefabs[6];
-                    break;
-            }
+            //    case AmmoType.Penetrating:
+            //        bulletToShoot = bulletPrefabs[6];
+            //        break;
+            //}
 
+            GameObject bulletToShoot = GetBulletPrefab(slot.ammoType);
+            
             // =========================
             // íeê∂ê¨
             // =========================
@@ -611,6 +613,56 @@ public class GunController : MonoBehaviour
 
     }
 
+    GameObject GetBulletPrefab(AmmoType type)
+    {
+        // í èÌíe
+        if (type == AmmoType.Normal)
+        {
+            return bulletPrefabs[0];
+        }
+
+        // âï˙çœÇ›ëÆê´íeÇ©ÇÁíTÇ∑
+        foreach (GameObject prefab in stats.unlockedElementalBullets)
+        {
+            string bulletName = prefab.name;
+
+            switch (type)
+            {
+                case AmmoType.Lightning:
+                    if (bulletName.Contains("Lightning"))
+                        return prefab;
+                    break;
+
+                case AmmoType.Gravity:
+                    if (bulletName.Contains("Gravity"))
+                        return prefab;
+                    break;
+
+                case AmmoType.Bind:
+                    if (bulletName.Contains("Bind"))
+                        return prefab;
+                    break;
+
+                case AmmoType.Poison:
+                    if (bulletName.Contains("Poison"))
+                        return prefab;
+                    break;
+
+                case AmmoType.Explosion:
+                    if (bulletName.Contains("Explosion"))
+                        return prefab;
+                    break;
+
+                case AmmoType.Penetrating:
+                    if (bulletName.Contains("Penetrating"))
+                        return prefab;
+                    break;
+            }
+        }
+
+        // å©Ç¬Ç©ÇÁÇ»Ç©Ç¡ÇΩÇÁí èÌíe
+        return bulletPrefabs[0];
+    }
 
 
     void StartReload()
@@ -713,24 +765,70 @@ public class GunController : MonoBehaviour
 
 
 
-            if (canElement &&
-
-                Random.value < stats.elementalBulletChance)
-
+            if (canElement && Random.value < stats.elementalBulletChance)
             {
+                // âï˙çœÇ›ëÆê´íeÇ©ÇÁÉâÉìÉ_ÉÄ
+                GameObject randomPrefab =
+                    stats.unlockedElementalBullets[ Random.Range( 0, stats.unlockedElementalBullets.Length)];
 
-                slot.ammoType = AmmoType.Lightning;
+                string bulletName = randomPrefab.name;
 
-                slot.image.sprite = lightningAmmoSprite;
+                // =========================
+                // ëÆê´îªíË
+                // =========================
 
+                if (bulletName.Contains("Lightning"))
+                {
+                    slot.ammoType =
+                        AmmoType.Lightning;
+
+                    slot.image.sprite =
+                        lightningAmmoSprite;
+                }
+                else if (bulletName.Contains("Gravity"))
+                {
+                    slot.ammoType =
+                        AmmoType.Gravity;
+
+                    slot.image.sprite =
+                        GravityAmmoSprite;
+                }
+                else if (bulletName.Contains("Bind"))
+                {
+                    slot.ammoType =
+                        AmmoType.Bind;
+
+                    slot.image.sprite =
+                        BindAmmoSprite;
+                }
+                else if (bulletName.Contains("Poison"))
+                {
+                    slot.ammoType =
+                        AmmoType.Poison;
+
+                    slot.image.sprite =
+                        PoisonAmmoSprite;
+                }
+                else if (bulletName.Contains("Explosion"))
+                {
+                    slot.ammoType =
+                        AmmoType.Explosion;
+
+                    slot.image.sprite =
+                        ExplosionAmmoSprite;
+                }
+                else if (bulletName.Contains("Penetrating"))
+                {
+                    slot.ammoType =
+                        AmmoType.Penetrating;
+
+                    slot.image.sprite =
+                        penetratingAmmoSprite;
+                }
             }
 
-
-
             // íeï\é¶
-
             slot.image.enabled = true;
-
         }
 
     }
@@ -939,6 +1037,26 @@ public class GunController : MonoBehaviour
 
                     case AmmoType.Lightning:
                         targetSprite = lightningAmmoSprite;
+                        break;
+
+                    case AmmoType.Gravity:
+                        targetSprite = GravityAmmoSprite;
+                        break;
+
+                    case AmmoType.Bind:
+                        targetSprite = BindAmmoSprite;
+                        break;
+
+                    case AmmoType.Poison:
+                        targetSprite = PoisonAmmoSprite;
+                        break;
+
+                    case AmmoType.Explosion:
+                        targetSprite =ExplosionAmmoSprite;
+                        break;
+
+                    case AmmoType.Penetrating:
+                        targetSprite = penetratingAmmoSprite;
                         break;
                 }
 

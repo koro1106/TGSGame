@@ -38,25 +38,34 @@ public class AmmoRecoverEffect : MonoBehaviour
     }
 
     public void Init(
-     Sprite sprite,
-     Vector3 target,
-     RectTransform targetUI,
-     System.Action callback)
+ Sprite sprite,
+ Vector3 target,
+ RectTransform targetUI,
+ System.Action callback)
     {
         GetComponent<Image>().sprite = sprite;
 
         targetPos = target;
-
         targetRect = targetUI;
-
         onArrive = callback;
 
-        // 上から出現
         rect.position =
             target + Vector3.up * 90f;
 
         arrived = false;
         effectPlayed = false;
+
+        // ここで即表示
+        if (arriveEffectPrefab != null && targetRect != null)
+        {
+            GameObject fx = Instantiate(arriveEffectPrefab);
+
+            fx.transform.position =
+                targetRect.position +
+                new Vector3(effectOffset.x, effectOffset.y, 0f);
+
+            Destroy(fx, effectLifeTime);
+        }
     }
 
     void Update()
@@ -78,7 +87,7 @@ public class AmmoRecoverEffect : MonoBehaviour
         float dist = Vector3.Distance(rect.position, targetPos);
 
         // 少し手前でParticle表示
-        if (!effectPlayed && dist < 5000f)
+        if (!effectPlayed && dist < 30000f)
         {
             effectPlayed = true;
 
