@@ -40,7 +40,12 @@ public class PoisonBullet : Bullet
     private bool exploded = false;
 
     public PlayerStats stats;
+    private Vector3 defaultScale = new Vector3(210.7f, 95.8f, 144.1f);
 
+    private void Start()
+    {
+        transform.localScale = defaultScale + Vector3.one * stats.bulletSize;
+    }
     // =========================
     // “G‚É“–‚½‚Á‚½
     // =========================

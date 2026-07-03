@@ -31,4 +31,8 @@ public enum SkillEffectType
     EnemyUnlock_A,         // 敵解放_A
     EnemyUnlock_B,         // 敵解放_B
     EnemyUnlock_C,         // 敵解放_C
+    RecoveryBullet,        // 撃破時弾回復
+    RecoveryBulletCount,   // 回復弾数UP
+    BulletSizeUP           // 弾の大きさUP
+
 }

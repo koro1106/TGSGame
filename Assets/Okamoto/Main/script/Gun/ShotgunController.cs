@@ -25,6 +25,16 @@ public class ShotgunController : MonoBehaviour
     public float bulletSpeed = 20f;
     public float spreadAngle = 15f;
 
+    [SerializeField] GunController gunController;
+
+    private Camera cam;
+    [SerializeField] RectTransform crosshair;
+
+
+    void Start()
+    {
+        cam = Camera.main;
+    }
     public void ActivateShotgun()
     {
         isActive = true;
@@ -74,21 +84,46 @@ public class ShotgunController : MonoBehaviour
     }
 
     private void ShootBullet(
-        GameObject prefab,
-        float angleOffset)
+     GameObject prefab,
+     float angleOffset)
     {
-        Quaternion rot =
-            muzzle.rotation *
-            Quaternion.Euler(
-                0f,
-                0f,
-                angleOffset);
+        // =========================
+        // ÉNÉçÉXÉwÉAà íuéÊìæ
+        // =========================
+
+        Vector3 screenPos =
+            gunController.Crosshair.position;
+
+        Vector3 worldPos =
+            gunController.Cam.ScreenToWorldPoint(
+                screenPos);
+
+        worldPos.z = 0;
+
+        // =========================
+        // ÉNÉçÉXÉwÉAï˚å¸
+        // =========================
+
+        Vector2 baseDirection =
+            (worldPos - muzzle.position).normalized;
+
+        // éUíeäpìxí«â¡
+        Vector2 shootDirection =
+            Quaternion.Euler(0f, 0f, angleOffset)
+            * baseDirection;
+
+        // =========================
+        // íeê∂ê¨
+        // =========================
 
         GameObject bullet =
             Instantiate(
                 prefab,
                 muzzle.position,
-                rot);
+                Quaternion.identity);
+
+        bullet.transform.right =
+            shootDirection;
 
         Rigidbody2D rb =
             bullet.GetComponent<Rigidbody2D>();
@@ -96,8 +131,7 @@ public class ShotgunController : MonoBehaviour
         if (rb != null)
         {
             rb.linearVelocity =
-                bullet.transform.right *
-                bulletSpeed;
+                shootDirection * bulletSpeed;
         }
     }
 }

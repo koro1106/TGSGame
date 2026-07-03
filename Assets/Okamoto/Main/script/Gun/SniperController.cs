@@ -21,6 +21,16 @@ public class SniperController : MonoBehaviour
     [Header("”­ŽËˆÊ’u")]
     public Transform muzzle;
 
+    private Camera cam;
+    [SerializeField] RectTransform crosshair;
+
+    [SerializeField] GunController gunController;
+
+
+    void Start()
+    {
+        cam = Camera.main;
+    }
     public void ActivateSniper()
     {
         isActive = true;
@@ -53,11 +63,26 @@ public class SniperController : MonoBehaviour
 
     private void ShootBullet(GameObject prefab)
     {
+        Vector3 screenPos =
+            gunController.Crosshair.position;
+
+        Vector3 worldPos =
+            gunController.Cam.ScreenToWorldPoint(
+                screenPos);
+
+        worldPos.z = 0;
+
+        Vector2 direction =
+            (worldPos - muzzle.position).normalized;
+
         GameObject bullet =
             Instantiate(
                 prefab,
                 muzzle.position,
-                muzzle.rotation);
+                Quaternion.identity);
+
+        bullet.transform.right =
+            direction;
 
         Rigidbody2D rb =
             bullet.GetComponent<Rigidbody2D>();
@@ -65,7 +90,7 @@ public class SniperController : MonoBehaviour
         if (rb != null)
         {
             rb.linearVelocity =
-                bullet.transform.right * bulletSpeed;
+                direction * bulletSpeed;
         }
     }
 }

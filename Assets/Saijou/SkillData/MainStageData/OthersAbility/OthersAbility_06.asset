@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273875e9515bae4469b58e69f7b82692, type: 3}
   m_Name: OthersAbility_06
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "\u7D20\u6750\u30C9\u30ED\u30C3\u30D7\u7387UP02"
+  skillName: "\u7D20\u6750\u30C9\u30ED\u30C3\u30D7\u7387 +15%"
   level: 0
   maxLevel: 5
   needExp: 1
@@ -21,5 +21,5 @@ MonoBehaviour:
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   expType: 0
   effectType: 8
-  effectValue: 1
+  effectValue: 15
   elementalBulletPrefab: {fileID: 0}

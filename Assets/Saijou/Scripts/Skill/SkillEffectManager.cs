@@ -124,6 +124,18 @@ public class SkillEffectManager : MonoBehaviour
             case SkillEffectType.EnemyUnlock_C:
                 playerStats.enemyCUnlocked = true;
                 break;
+            // 撃破時弾回復
+            case SkillEffectType.RecoveryBullet:
+                playerStats.recoveryBullet = true;
+                break;
+            // 回復弾数UP
+            case SkillEffectType.RecoveryBulletCount:
+                playerStats.recoveryBulletCount += (int)skill.effectValue;
+                break;
+            // 弾の大きさUP
+            case SkillEffectType.BulletSizeUP:
+                playerStats.bulletSize += (int)skill.effectValue;
+                break;
         }
     }
 

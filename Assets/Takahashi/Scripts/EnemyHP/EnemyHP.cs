@@ -389,6 +389,18 @@ public class EnemyHP : MonoBehaviour
             ComboManager.instance.AddCombo();
         }
 
+        //=========================
+        // 撃破時に弾回復
+        //=========================
+        GunController gun = FindFirstObjectByType<GunController>();
+
+        if (gun != null &&
+            gun.recoverAmmoOnKill &&
+            Random.value < gun.recoverAmmoChance / 100f)
+        {
+            gun.AddAmmo(gun.recoverAmmoAmount);
+        }
+
         // =========================
         // ドロップ生成
         // =========================

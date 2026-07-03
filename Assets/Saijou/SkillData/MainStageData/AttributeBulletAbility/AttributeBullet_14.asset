@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273875e9515bae4469b58e69f7b82692, type: 3}
   m_Name: AttributeBullet_14
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "\u5F3E\u4E38\u56DE\u5FA9\u306E\u5F3E_\u89E3\u653E"
+  skillName: "\u5C5E\u6027\u5F3E\u30C0\u30E1\u30FC\u30B8 +200%"
   level: 0
-  maxLevel: 1
+  maxLevel: 5
   needExp: 1
   isUnlocked: 0
   isLevelUp: 0
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   expType: 0
   effectType: 4
-  effectValue: 1
+  effectValue: 200
   elementalBulletPrefab: {fileID: 0}
