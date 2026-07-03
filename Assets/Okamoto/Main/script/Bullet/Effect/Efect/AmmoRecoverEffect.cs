@@ -86,22 +86,22 @@ public class AmmoRecoverEffect : MonoBehaviour
 
         float dist = Vector3.Distance(rect.position, targetPos);
 
-        // 少し手前でParticle表示
-        if (!effectPlayed && dist < 30000f)
-        {
-            effectPlayed = true;
+        //// 少し手前でParticle表示
+        //if (!effectPlayed && dist < 30000f)
+        //{
+        //    effectPlayed = true;
 
-            if (arriveEffectPrefab != null && targetRect != null)
-            {
-                GameObject fx = Instantiate(arriveEffectPrefab);
+        //    if (arriveEffectPrefab != null && targetRect != null)
+        //    {
+        //        GameObject fx = Instantiate(arriveEffectPrefab);
 
-                fx.transform.position =
-                    targetRect.position +
-                    new Vector3(effectOffset.x, effectOffset.y, 0f);
+        //        fx.transform.position =
+        //            targetRect.position +
+        //            new Vector3(effectOffset.x, effectOffset.y, 0f);
 
-                Destroy(fx, effectLifeTime);
-            }
-        }
+        //        Destroy(fx, effectLifeTime);
+        //    }
+        //}
 
         // 到着
         if (dist < 50f)
@@ -202,15 +202,15 @@ public class AmmoRecoverEffect : MonoBehaviour
         // エフェクト
         //=====================
 
-        if (arriveEffectPrefab != null && targetRect != null)
-        {
-            GameObject fx = Instantiate(arriveEffectPrefab);
+        //if (arriveEffectPrefab != null && targetRect != null)
+        //{
+        //    GameObject fx = Instantiate(arriveEffectPrefab);
 
-            fx.transform.position =
-                targetRect.position +
-                new Vector3(effectOffset.x, effectOffset.y, 0f);
+        //    fx.transform.position =
+        //        targetRect.position +
+        //        new Vector3(effectOffset.x, effectOffset.y, 0f);
 
-            Destroy(fx, effectLifeTime);
+        //    Destroy(fx, effectLifeTime);
 
             //RectTransform fxRect =
             //    fx.GetComponent<RectTransform>();
@@ -224,8 +224,8 @@ public class AmmoRecoverEffect : MonoBehaviour
             //    fxRect.localScale = Vector3.one;
             //}
 
-            Destroy(fx, effectLifeTime);
-        }
+        //    Destroy(fx, effectLifeTime);
+        //}
 
         Destroy(gameObject);
     }
