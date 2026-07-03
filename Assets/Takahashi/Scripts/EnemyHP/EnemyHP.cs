@@ -275,7 +275,7 @@ public class EnemyHP : MonoBehaviour
         foreach (DropItem item in dropItems)
         {
             float finalChance = item.chance + stats.expDroprate;
-            total += item.chance;
+            total += finalChance;
 
             if (rand <= total)
             {
