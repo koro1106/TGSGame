@@ -188,6 +188,7 @@ public class SkillNodeUI : MonoBehaviour
         
         data.TryLevelUp();             // レベルアップ
         effectManager.ApplySkill(data);// スキル効果適用
+        SEManager.Instance.PlayLevelUpSE(); // SE再生
         Unlock();                      // 解放
         UpdateVisual();                // 見た目更新
 

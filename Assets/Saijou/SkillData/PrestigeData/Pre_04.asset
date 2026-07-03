@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273875e9515bae4469b58e69f7b82692, type: 3}
   m_Name: Pre_04
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "\u30D4\u30B9\u30C8\u30EB\u5F3E\uFF3F\u89E3\u653E"
+  skillName: "\u30D4\u30B9\u30C8\u30EB\u5F3E \u89E3\u653E"
   level: 0
   maxLevel: 1
   needExp: 1
