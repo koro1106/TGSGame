@@ -139,7 +139,10 @@ public class GunController : MonoBehaviour
     //ƒnƒ“ƒhƒKƒ“’Ç‰Á
 
     public HandGunController handgun;
+    public RectTransform Crosshair => crosshair;
+    public Camera Cam => cam;
 
+    public Vector2 LastShootDirection { get; private set; }
 
 
     void Start()
@@ -518,6 +521,7 @@ public class GunController : MonoBehaviour
 
             Vector2 direction =
                 (worldPos - muzzle.position).normalized;
+            LastShootDirection = direction;
 
             bulletInstance.transform.right = direction;
 
