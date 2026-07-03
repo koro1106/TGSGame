@@ -655,7 +655,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5f51142236e4fe41a458647ffb58bc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHP
-  maxHP: 100
+  maxHP: 80
   currentHP: 0
   isRareEnemy: 0
   scaleSmooth: 12
@@ -664,7 +664,9 @@ MonoBehaviour:
   deathDuration: 1.2
   spiralSpeed: 20
   rotationSpeed: 1080
-  dropItems: []
+  dropItems:
+  - prefab: {fileID: 4247095691041555197, guid: 26d748848edfdd6449eec78b67fa87f4, type: 3}
+    chance: 100
   dropCount: 1
   damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
   hpSlider: {fileID: 896544758054549419}

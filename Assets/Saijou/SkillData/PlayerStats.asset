@@ -18,7 +18,7 @@ MonoBehaviour:
   enemySpawnWeightBonus: 0
   criticalrate: 0
   criticalDamage: 0
-  expDroprate: 0
+  expDroprate: 5
   expDroprateDouble: 0
   collectionRange: 0
   preExpTime: 0

@@ -2162,6 +2162,7 @@ GameObject:
   m_Component:
   - component: {fileID: 165127801}
   - component: {fileID: 165127800}
+  - component: {fileID: 165127802}
   m_Layer: 0
   m_Name: Sound
   m_TagString: Untagged
@@ -2281,6 +2282,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &165127802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 165127799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 281f9bccc7ab51444aa3cee0ec0f2b91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SEManager
+  audioSource: {fileID: 165127800}
+  levelUpSE: {fileID: 0}
+  shootSE: {fileID: 8300000, guid: 2cfb7de65a70e024f959c29f2b6a8264, type: 3}
 --- !u!1 &173762201
 GameObject:
   m_ObjectHideFlags: 0
@@ -19517,14 +19533,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemies:
-  - prefab: {fileID: 5658466300848699742, guid: 4451329126ffa93498ccea07ae4d06a7, type: 3}
-    weight: 10
+  - prefab: {fileID: 7801636748621657906, guid: 799c801ec8b355a48bcf47943e3e85c0, type: 3}
+    weight: 70
   enemyA:
-    prefab: {fileID: 7801636748621657906, guid: 799c801ec8b355a48bcf47943e3e85c0, type: 3}
-    weight: 20
+    prefab: {fileID: 5658466300848699742, guid: 4451329126ffa93498ccea07ae4d06a7, type: 3}
+    weight: 50
   enemyB:
     prefab: {fileID: 1514281451404711565, guid: b79716df06544bd4c942bc9f6be16c93, type: 3}
-    weight: 50
+    weight: 30
   enemyC:
     prefab: {fileID: 4832302078142527342, guid: 0aba12c3835267542a9c75abdf6f3dda, type: 3}
     weight: 40
