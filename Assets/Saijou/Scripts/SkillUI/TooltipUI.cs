@@ -44,8 +44,8 @@ public class TooltipUI : MonoBehaviour
 
         // テキスト更新
         nameText.text = data.skillName;
-        levelText.text = data.level + " / " + data.maxLevel;
-        expText.text = exp + " / " + data.needExp;
+        levelText.text = "レベル " +data.level + "/" + data.maxLevel;
+        expText.text = exp + "/" + data.needExp;
 
         // 位置決定
         SetPosition(eventData);
@@ -177,8 +177,8 @@ public class TooltipUI : MonoBehaviour
 
         // 固定オフセット（上下だけ切替）
         Vector2 offset = isUpper
-            ? new Vector2(-60, -350f)
-            : new Vector2(-60, 130f);
+            ? new Vector2(-60, -400f)
+            : new Vector2(-60, 200f);
 
         // 最終位置
         tooltipRect.position = screenPos + offset;
