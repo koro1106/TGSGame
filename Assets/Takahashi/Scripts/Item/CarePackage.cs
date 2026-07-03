@@ -35,11 +35,43 @@ public class CarePackage : MonoBehaviour
     [SerializeField] private float groundY = 0f;
 
     // =========================
+    // 着地エフェクト（スカッシュ＆ストレッチ）
+    // =========================
+
+    [Header("── 落下中の潰れ ──────────")]
+    [Tooltip("落下中、横にどれだけ狭く/広くなるか（1.0が基準）")]
+    [SerializeField] private float fallSquashScaleX = 1f;
+    [Tooltip("落下中、縦にどれだけ狭くなるか（1.0が基準）")]
+    [SerializeField] private float fallSquashScaleY = 0.9f;
+    [Tooltip("落下中の潰れの補間速さ")]
+    [SerializeField] private float fallSquashSpeed = 4f;
+
+    [Header("── 着地エフェクト ──────────")]
+    [Tooltip("着地した瞬間、横にどれだけ伸びるか（1.0が基準）")]
+    [SerializeField] private float squashScaleX = 1.3f;
+    [Tooltip("着地した瞬間、縦にどれだけ潰れるか（1.0が基準）")]
+    [SerializeField] private float squashScaleY = 0.6f;
+    [Tooltip("潰れきるまでの速さ")]
+    [SerializeField] private float squashSpeed = 18f;
+    [Tooltip("元のスケールに戻る速さ")]
+    [SerializeField] private float squashRecoverSpeed = 10f;
+    [Tooltip("潰れている時間（この後、戻り始める）")]
+    [SerializeField] private float squashHoldTime = 0.05f;
+
+    private Vector3 baseScale;
+    private bool squashing;
+    private bool squashPhaseDone; // true = 潰れ切って戻りフェーズへ
+    private float squashTimer;
+
+    // =========================
     // 影
     // =========================
 
     [Header("影Prefab")]
     [SerializeField] private GameObject shadowPrefab;
+
+    [Header("影の位置オフセット（地面からのずれ）")]
+    [SerializeField] private Vector2 shadowOffset = new Vector2(0f, -60f);
 
     private Transform shadow;
     private SpriteRenderer shadowRenderer;
@@ -72,6 +104,7 @@ public class CarePackage : MonoBehaviour
     private void Start()
     {
         currentHP = maxHP;
+        baseScale = transform.localScale;
         CreateShadow();
     }
 
@@ -79,6 +112,8 @@ public class CarePackage : MonoBehaviour
     {
         if (!landed)
             Fall();
+        else if (squashing)
+            UpdateSquash();
 
         UpdateShadow();
     }
@@ -97,6 +132,14 @@ public class CarePackage : MonoBehaviour
     {
         transform.position += Vector3.down * fallSpeed * Time.deltaTime;
 
+        // 落下中は少しずつX/Yを潰す・伸ばす
+        Vector3 fallTarget = new Vector3(
+            baseScale.x * fallSquashScaleX,
+            baseScale.y * fallSquashScaleY,
+            baseScale.z);
+        transform.localScale = Vector3.MoveTowards(
+            transform.localScale, fallTarget, fallSquashSpeed * Time.deltaTime);
+
         if (transform.position.y <= groundY)
         {
             landed = true;
@@ -106,6 +149,51 @@ public class CarePackage : MonoBehaviour
                 groundY,
                 0f
             );
+
+            StartSquash();
+        }
+    }
+
+    // =========================
+    // 着地エフェクト（スカッシュ＆ストレッチ）
+    // =========================
+
+    private void StartSquash()
+    {
+        squashing = true;
+        squashPhaseDone = false;
+        squashTimer = 0f;
+    }
+
+    private void UpdateSquash()
+    {
+        if (!squashPhaseDone)
+        {
+            // 潰れフェーズ：横に伸びて縦に潰れる
+            Vector3 target = new Vector3(
+                baseScale.x * squashScaleX,
+                baseScale.y * squashScaleY,
+                baseScale.z
+            );
+
+            transform.localScale = Vector3.MoveTowards(
+                transform.localScale, target, squashSpeed * Time.deltaTime);
+
+            if (transform.localScale == target)
+            {
+                squashTimer += Time.deltaTime;
+                if (squashTimer >= squashHoldTime)
+                    squashPhaseDone = true;
+            }
+        }
+        else
+        {
+            // 戻りフェーズ：元のスケールへ補間
+            transform.localScale = Vector3.MoveTowards(
+                transform.localScale, baseScale, squashRecoverSpeed * Time.deltaTime);
+
+            if (transform.localScale == baseScale)
+                squashing = false;
         }
     }
 
@@ -262,13 +350,23 @@ public class CarePackage : MonoBehaviour
 
         shadow = obj.transform;
         shadowRenderer = obj.GetComponent<SpriteRenderer>();
+
+        shadow.position = new Vector3(
+            transform.position.x + shadowOffset.x,
+            groundY + shadowOffset.y,
+            0f
+        );
     }
 
     private void UpdateShadow()
     {
         if (shadow == null) return;
 
-        shadow.position = new Vector3(transform.position.x, groundY - 60f, 0f);
+        shadow.position = new Vector3(
+            transform.position.x + shadowOffset.x,
+            groundY + shadowOffset.y,
+            0f
+        );
 
         float h = Mathf.Max(transform.position.y - groundY, 0f);
         float t = Mathf.Clamp01(h / 550f);

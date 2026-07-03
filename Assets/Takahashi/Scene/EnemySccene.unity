@@ -408,6 +408,7 @@ MonoBehaviour:
   spawnList: []
   player: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
   spawnInterval: 2
+  s: 0
   hpGrowInterval: 10
   hpGrowMultiplier: 1.1
   playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
@@ -780,6 +781,7 @@ MonoBehaviour:
   addExp1: 1
   addExp2: 0
   addExp3: 0
+  addPreExp: 0
   collectDistance: 1
   collectDisTotal: 0
   stats: {fileID: 0}
@@ -1127,6 +1129,7 @@ MonoBehaviour:
   addExp1: 1
   addExp2: 0
   addExp3: 0
+  addPreExp: 0
   collectDistance: 1
   collectDisTotal: 0
   stats: {fileID: 0}
@@ -1424,6 +1427,7 @@ MonoBehaviour:
   addExp1: 1
   addExp2: 0
   addExp3: 0
+  addPreExp: 0
   collectDistance: 1
   collectDisTotal: 0
   stats: {fileID: 0}
@@ -1535,7 +1539,7 @@ MonoBehaviour:
   carePackagePrefab: {fileID: 4164928430599087363, guid: aa70d1370b94b0c46aceee4fb666d5f4, type: 3}
   player: {fileID: 494130003}
   safeRadius: 200
-  spawnInterval: 100
+  spawnInterval: 10
   spawnChance: 100
   spawnOffsetY: 50
   minGroundY: -400
