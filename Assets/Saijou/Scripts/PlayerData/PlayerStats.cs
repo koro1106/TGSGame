@@ -8,7 +8,7 @@ public class PlayerStats : ScriptableObject
     public int bulletDamage = 10;      // 通常弾のダメージ
     public int effectBulletDamage = 0; // 属性弾のダメージ
     public int maxAmmo = 10;           // 最大弾数
-    public int enemySpawnWeightBonus = 0;   // 敵スポーン率ボーナス
+    public float enemySpawnWeightBonus = 0;   // 敵スポーン率ボーナス
     public int criticalrate = 0;          // クリティカル発生確率
     public int criticalDamage = 0;       // クリティカルダメージ倍率
     public int expDroprate = 0;          // 経験値ドロップ率
