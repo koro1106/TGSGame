@@ -2459,7 +2459,7 @@ MonoBehaviour:
   ammoDropUIPrefab: {fileID: 5431272660784949491, guid: c5b1c4050c4821447bbd84aa65aec6a0, type: 3}
   uiEffectParent: {fileID: 0}
   outOfAmmoUIImage: {fileID: 248278258}
-  recoverAmmoOnKill: 1
+  recoverAmmoOnKill: 0
   recoverAmmoChance: 100
   recoverAmmoAmount: 10
   ammoRecoverEffectPrefab: {fileID: 5431272660784949491, guid: e273b6025358baa40b4af473c09b58bb, type: 3}
@@ -6558,7 +6558,7 @@ Transform:
   m_GameObject: {fileID: 472724069}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 231.20007, y: 59.799988, z: 0}
+  m_LocalPosition: {x: 541.2001, y: 175.79999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7400,7 +7400,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -314.8, y: -129.40002, z: -10}
+  m_LocalPosition: {x: -4.799988, y: -13.400024, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -24294,7 +24294,7 @@ Transform:
   m_GameObject: {fileID: 2145044091}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -339, y: -218, z: -10}
+  m_LocalPosition: {x: -29, y: -102, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
