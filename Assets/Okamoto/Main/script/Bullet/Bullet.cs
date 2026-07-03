@@ -15,6 +15,7 @@ public class Bullet : MonoBehaviour
 
     private Vector3 defaultScale = new Vector3(210.7f, 95.8f, 144.1f);
     public PlayerStats stats;
+
     void Start()
     {
         transform.localScale = defaultScale + Vector3.one * stats.bulletSize;

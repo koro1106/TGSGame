@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -1994986234973849187}
   - component: {fileID: -4717636454762612078}
   m_Layer: 0
-  m_Name: GravityBullet
+  m_Name: Gravity
   m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
