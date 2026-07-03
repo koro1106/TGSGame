@@ -22,6 +22,7 @@ public class EnemySpawner : MonoBehaviour
     public Transform player;
 
     public float spawnInterval = 2f;
+    public float s = 0;
 
     [Header("時間経過でスポーン時HPが増える設定")]
     public float hpGrowInterval = 15f;
@@ -75,8 +76,8 @@ public class EnemySpawner : MonoBehaviour
             return;
 
         timer += Time.deltaTime;
-
-        if (timer >= spawnInterval)
+        s = spawnInterval - playerStats.enemySpawnWeightBonus;
+        if (timer >= s)
         {
             SpawnEnemy();
             timer = 0f;
@@ -143,12 +144,12 @@ public class EnemySpawner : MonoBehaviour
         if (playerStats.enemyBUnlocked) spawnList.Add(enemyB);
         if (playerStats.enemyCUnlocked) spawnList.Add(enemyC);
 
-        int total = 0;
+        float total = 0;
         foreach (var e in spawnList)
             total += e.weight + playerStats.enemySpawnWeightBonus;
 
-        int r = Random.Range(0, total);
-        int sum = 0;
+        float r = Random.Range(0, total);
+        float sum = 0;
 
         foreach (var e in spawnList)
         {
