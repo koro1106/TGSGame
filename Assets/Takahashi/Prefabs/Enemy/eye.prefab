@@ -532,7 +532,11 @@ MonoBehaviour:
   deathDuration: 1.2
   spiralSpeed: 20
   rotationSpeed: 1080
-  dropItems: []
+  dropItems:
+  - prefab: {fileID: 4247095691041555197, guid: 26d748848edfdd6449eec78b67fa87f4, type: 3}
+    chance: 50
+  - prefab: {fileID: 4694620910833782341, guid: 46de89cdb13085c408ca2d94137493c2, type: 3}
+    chance: 30
   dropCount: 1
   damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
   hpSlider: {fileID: 5660963032352913457}

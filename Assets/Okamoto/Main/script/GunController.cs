@@ -550,6 +550,8 @@ public class GunController : MonoBehaviour
                 slot.isRecovering = false;
             }
 
+            SEManager.Instance.PlayShootSE(); // SEçƒê∂
+
             // UIè¡Ç∑
             if (img != null)
             {

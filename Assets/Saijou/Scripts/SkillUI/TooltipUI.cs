@@ -78,8 +78,8 @@ public class TooltipUI : MonoBehaviour
 
         // テキスト更新
         nameText.text = data.skillName;
-        levelText.text = data.level + " / " + data.maxLevel;
-        expText.text = exp + " / " + data.needExp;
+        levelText.text = "レベル " + data.level + "/" + data.maxLevel;
+        expText.text = exp + "/" + data.needExp;
 
         // パネルアニメーション
         if (playPanelAnim)
