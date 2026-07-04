@@ -70,7 +70,7 @@ MonoBehaviour:
     chance: 74
   - prefab: {fileID: 4694620910833782341, guid: 46de89cdb13085c408ca2d94137493c2, type: 3}
     chance: 17
-  dropCount: 1
+  dropCount: 3
   damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
   hpSlider: {fileID: 8326548923667873042}
   hpDelaySlider: {fileID: 3539910281402088476}
@@ -108,6 +108,8 @@ MonoBehaviour:
   bodyFront: {fileID: 2903200801563004159}
   lidFront: {fileID: 3070961252717191965}
   rabbit: {fileID: 4617967087180612779}
+  handRight: {fileID: 0}
+  handLeft: {fileID: 0}
   ears:
   - {fileID: 1132725910522431008}
   - {fileID: 373660827643826166}
@@ -122,6 +124,8 @@ MonoBehaviour:
   earSwingAngle: 25
   earSwingSpeed: 4.2
   earPhaseOffset: 1.5
+  earIdleSwingAngle: 8
+  earIdleSwingSpeed: 3
   landSinkDepth: 0.15
   landSinkSpeed: 20
   landRiseSpeed: 8
