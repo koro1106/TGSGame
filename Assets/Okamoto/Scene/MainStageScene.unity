@@ -2575,7 +2575,7 @@ MonoBehaviour:
   ammoDropUIPrefab: {fileID: 5431272660784949491, guid: c5b1c4050c4821447bbd84aa65aec6a0, type: 3}
   uiEffectParent: {fileID: 0}
   outOfAmmoUIImage: {fileID: 248278258}
-  recoverAmmoOnKill: 1
+  recoverAmmoOnKill: 0
   recoverAmmoChance: 100
   recoverAmmoAmount: 3
   ammoRecoverEffectPrefab: {fileID: 5431272660784949491, guid: e273b6025358baa40b4af473c09b58bb, type: 3}
@@ -9922,7 +9922,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &707356388
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20659,8 +20659,8 @@ MonoBehaviour:
   player: {fileID: 173762202}
   spawnInterval: 3
   s: 0
-  hpGrowInterval: 100
-  hpGrowMultiplier: 1.2
+  hpGrowInterval: 5
+  hpGrowMultiplier: 1.1
   playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   bossPrefab: {fileID: 1535677997056505620, guid: 38e0c4e553ed7874584eba5a894cc60f, type: 3}
   bossSpawnTime: 300
@@ -22444,7 +22444,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1891900654
 RectTransform:
   m_ObjectHideFlags: 0
@@ -23488,7 +23488,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1964341955
 RectTransform:
   m_ObjectHideFlags: 0
