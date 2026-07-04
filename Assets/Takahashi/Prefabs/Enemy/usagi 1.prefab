@@ -381,7 +381,7 @@ MonoBehaviour:
   dropItems:
   - prefab: {fileID: 5214269435395224199, guid: 804cf549acb99c949910006ff076e73f, type: 3}
     chance: 100
-  dropCount: 1
+  dropCount: 3
   damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
   hpSlider: {fileID: 6860329940431520504}
   hpDelaySlider: {fileID: 2132832929078756342}
@@ -407,15 +407,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 479c780d506576344af60278daab9f7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMove
-  enterSpeed: 60
   jumpMoveSpeed: 60
   waitTimeMin: 0.3
   waitTimeMax: 0.8
+  moveAreaTopRatio: 0.45
+  moveAreaBottomRatio: 1
   hitSlowMultiplier: 0.3
   hitSlowDuration: 0.5
-  body: {fileID: 1982486470551866068}
-  lid: {fileID: 263227041274509063}
+  bodyBack: {fileID: 0}
+  lidBack: {fileID: 0}
+  bodyFront: {fileID: 0}
+  lidFront: {fileID: 0}
   rabbit: {fileID: 6922144459134735522}
+  handRight: {fileID: 0}
+  handLeft: {fileID: 0}
+  ears: []
   jumpHeight: 0.15
   jumpDuration: 1
   lidOpenAngle: -20
@@ -424,6 +430,23 @@ MonoBehaviour:
   lidMoveSpeed: 50
   rabbitRiseHeight: 0.27
   rabbitRiseSpeed: 0.75
+  earSwingAngle: 25
+  earSwingSpeed: 8
+  earPhaseOffset: 1
+  earIdleSwingAngle: 8
+  earIdleSwingSpeed: 3
+  landSinkDepth: 0.15
+  landSinkSpeed: 20
+  landRiseSpeed: 8
+  landDuration: 0.35
+  idleBobHeight: 0.06
+  idleBobSpeed: 3
+  bodyTiltAngle: 18
+  bodyTiltSpeed: 10
+  shadowPrefab: {fileID: 0}
+  shadowOffset: {x: 0, y: -0.1}
+  shadowBaseScale: {x: 1, y: 0.3}
+  shadowAirScale: {x: 0.5, y: 0.15}
 --- !u!1001 &4974549399044896085
 PrefabInstance:
   m_ObjectHideFlags: 0

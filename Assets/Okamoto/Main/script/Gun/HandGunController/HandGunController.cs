@@ -123,10 +123,13 @@ public class HandGunController : MonoBehaviour
 
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
 
-        if (rb != null)
+        if (rb != null && lastTarget != null)
         {
-            rb.linearVelocity =
-                gunPivot.right * bulletSpeed;
+            Vector2 direction =
+                (lastTarget.position - muzzle.position).normalized;
+
+            bullet.transform.right = direction;
+            rb.linearVelocity = direction * bulletSpeed;
         }
     }
 
@@ -149,24 +152,19 @@ public class HandGunController : MonoBehaviour
     {
         Vector3 dir = target.position - gunPivot.position;
 
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
         bool isLeft = dir.x < 0;
 
-        Quaternion targetRotation =
-            Quaternion.Euler(0, 0, angle);
+        // ¶‰E”½“]‚¾‚¯
+        if (isLeft)
+        {
+            gunImage.localScale = new Vector3(-1, 1, 1);
+        }
+        else
+        {
+            gunImage.localScale = new Vector3(1, 1, 1);
+        }
 
-        gunPivot.rotation =
-            Quaternion.Lerp(
-                gunPivot.rotation,
-                targetRotation,
-                rotateSpeed * Time.deltaTime
-            );
-
-        gunImage.localScale =
-            isLeft ? new Vector3(1, -1, 1)
-                   : new Vector3(1, 1, 1);
-
+        // ˆÊ’u‚ÍŒÅ’è
         gunImage.localPosition = defaultLocalPos;
     }
 

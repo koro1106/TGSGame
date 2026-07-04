@@ -667,7 +667,7 @@ MonoBehaviour:
   dropItems:
   - prefab: {fileID: 4247095691041555197, guid: 26d748848edfdd6449eec78b67fa87f4, type: 3}
     chance: 100
-  dropCount: 1
+  dropCount: 3
   damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
   hpSlider: {fileID: 896544758054549419}
   hpDelaySlider: {fileID: 5682622649206797989}

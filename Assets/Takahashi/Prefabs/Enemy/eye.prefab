@@ -537,7 +537,7 @@ MonoBehaviour:
     chance: 70
   - prefab: {fileID: 4694620910833782341, guid: 46de89cdb13085c408ca2d94137493c2, type: 3}
     chance: 50
-  dropCount: 1
+  dropCount: 3
   damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
   hpSlider: {fileID: 5660963032352913457}
   hpDelaySlider: {fileID: 874356276393965887}
