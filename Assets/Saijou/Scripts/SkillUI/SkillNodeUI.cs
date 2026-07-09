@@ -147,30 +147,26 @@ public class SkillNodeUI : MonoBehaviour
 
                 if (hasExp)
                 {
-                    // 経験値足りてる → 薄緑
-                    c.a = 100f / 255f;
+                    // 経験値足りてる → 少し暗い
+                    c = new Color(0.6f, 0.6f, 0.6f, 1f);
                 }
                 else
                 {
-                    // 経験値足りない → 赤画像にする
+                    // 経験値足りない → 赤＋暗い
                     icon.sprite = redSprite;
-                    c.a = 100f / 255f;
+                    c = new Color(0.4f, 0.4f, 0.4f, 1f);
                 }
                 break;
 
             case SkillState.Unlocked:
                 icon.enabled = true;
-                c.a = 1f; // 完全表示
+                c = Color.white;   // 元の明るさ
                 if (isMax)
-                {
                     // 最大レベル → 黄色
                     icon.sprite = yellowSprite;
-                }
                 else
-                {
                     // 通常解放 → 緑
                     icon.sprite = greenSprite;
-                }
                 break;
         }
 
