@@ -3,18 +3,20 @@ using UnityEngine;
 
 //タイトル画面管理
 
+//　カーテンでないです
+
 public class title : MonoBehaviour
 {
-    [Header("カーテン")]
-    [SerializeField]
-    private CurtainSceneManager curtainManager;
+    //[Header("カーテン")]
+    //[SerializeField]
+    //private CurtainSceneManager curtainManager;
 
 
     // スタートボタン
  
     public void OnStartButton()
     {
-        curtainManager.ChangeScene("MainStageScene");
+        //curtainManager.ChangeScene("MainStageScene");
     }
 
     private void Update()
@@ -23,7 +25,7 @@ public class title : MonoBehaviour
         {
             Debug.Log("スタートボタンが押されました");
 
-            curtainManager.ChangeScene("MainStageScene");
+            //curtainManager.ChangeScene("MainStageScene");
         }
     }
 }

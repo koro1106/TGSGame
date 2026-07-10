@@ -360,7 +360,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcea8301c709fb9439a27e5abe621f5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::title
-  curtainManager: {fileID: 1159031563}
 --- !u!4 &220294845
 Transform:
   m_ObjectHideFlags: 0
