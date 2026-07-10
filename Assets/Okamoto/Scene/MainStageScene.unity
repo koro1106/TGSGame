@@ -6796,13 +6796,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 472724069}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 666c56c26148cc54a949e9d7316f07e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  moveSpeed: 500
+  moveSpeed: 100
+  crosshair: {fileID: 360144202}
+  canvas: {fileID: 185761654}
   gameOverSceneName: MainStageSkillTreeScene
+  gunController: {fileID: 173762207}
 --- !u!1 &475326261
 GameObject:
   m_ObjectHideFlags: 0
@@ -7597,7 +7600,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.799988, y: -13.400024, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
