@@ -3,32 +3,61 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("移動速度")]
     public float moveSpeed = 5f;
+
+    [Header("追従するクロスヘア(UI)")]
+    public RectTransform crosshair;
+
+    [Header("クロスヘアがあるCanvas")]
+    public Canvas canvas;
 
     [Header("移動するシーン名")]
     public string gameOverSceneName;
 
+    public GunController gunController;
+
     private Rigidbody2D rb;
-    private Vector2 moveInput;
+    private Camera cam;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-    }
-
-    void Update()
-    {
-        // WASD入力
-        moveInput.x = Input.GetAxisRaw("Horizontal");
-        moveInput.y = Input.GetAxisRaw("Vertical");
-
-        // 斜め移動速度を統一
-        moveInput = moveInput.normalized;
+        cam = Camera.main;
     }
 
     void FixedUpdate()
     {
-        rb.linearVelocity = moveInput * moveSpeed;
+        MoveToCrosshair();
+    }
+
+    // ========================
+    // クロスヘアへ移動
+    // ========================
+    void MoveToCrosshair()
+    {
+        if (gunController == null)
+            return;
+
+        Vector3 screenPos = gunController.Crosshair.position;
+
+        Vector3 targetPos = gunController.Cam.ScreenToWorldPoint(
+            new Vector3(
+                screenPos.x,
+                screenPos.y,
+                Mathf.Abs(gunController.Cam.transform.position.z)
+            )
+        );
+
+        targetPos.z = transform.position.z;
+
+        rb.MovePosition(
+            Vector2.MoveTowards(
+                rb.position,
+                targetPos,
+                moveSpeed * Time.fixedDeltaTime
+            )
+        );
     }
 
     // ========================
@@ -37,29 +66,21 @@ public class PlayerMovement : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // EnemyHP取得
-        EnemyHP enemy =
-            other.GetComponent<EnemyHP>();
+        EnemyHP enemy = other.GetComponent<EnemyHP>();
 
-        // EnemyHPが無ければ無視
         if (enemy == null)
             return;
 
-        // シーン移動
         SceneManager.LoadScene(gameOverSceneName);
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // EnemyHP取得
-        EnemyHP enemy =
-            collision.gameObject.GetComponent<EnemyHP>();
+        EnemyHP enemy = collision.gameObject.GetComponent<EnemyHP>();
 
-        // EnemyHPが無ければ無視
         if (enemy == null)
             return;
 
-        // シーン移動
         SceneManager.LoadScene(gameOverSceneName);
     }
 }
