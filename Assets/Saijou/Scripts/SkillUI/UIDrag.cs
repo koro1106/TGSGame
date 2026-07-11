@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 /// <summary>
 /// スキルツリードラッグ用
 /// </summary>
@@ -25,6 +26,7 @@ public class UIDrag : MonoBehaviour
         target.anchoredPosition = new Vector2(26f, 8f);
         isPrestige = false;
     }
+
     void Update()
     {
         if (!isPrestige)
@@ -56,7 +58,7 @@ public class UIDrag : MonoBehaviour
 
                 // 範囲制限
                 newPos.x = Mathf.Clamp(newPos.x, -700f, 700f);
-                newPos.y = Mathf.Clamp(newPos.y, -500f, 300f);
+                newPos.y = Mathf.Clamp(newPos.y, -700f, 500f);
 
                 // UI移動
                 target.anchoredPosition = newPos;

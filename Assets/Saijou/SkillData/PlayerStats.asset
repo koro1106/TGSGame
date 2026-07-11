@@ -15,10 +15,10 @@ MonoBehaviour:
   bulletDamage: 10
   effectBulletDamage: 10
   maxAmmo: 10
-  enemySpawnWeightBonus: 0
+  enemySpawnWeightBonus: 1
   criticalrate: 0
   criticalDamage: 0
-  expDroprate: 1
+  expDroprate: 0
   expDroprateDouble: 0
   collectionRange: 0
   preExpTime: 0
