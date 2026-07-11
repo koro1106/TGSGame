@@ -20,6 +20,11 @@ public class SkillTreeChange : MonoBehaviour
         StartCoroutine(PlayAnimationAndLoad());
     }
 
+    // ショップに移動
+    public void MoveToShop()
+    {
+        StartCoroutine(PlayAnimationAndLoad());
+    }
     IEnumerator PlayAnimationAndLoad()
     {
         // バウンド演出再生
