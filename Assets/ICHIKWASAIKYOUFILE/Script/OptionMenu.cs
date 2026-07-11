@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class OptionMenu : MonoBehaviour
 {
-    public Animator animator;
+    [SerializeField] private Animator animator;
+    [SerializeField] private MenuSelector menuSelector;
 
     public void OpenOption()
     {
