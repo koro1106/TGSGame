@@ -14,12 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillName: "\u30AF\u30EA\u30C6\u30A3\u30AB\u30EB\u767A\u751F\u78BA\u7387 +2%"
   level: 0
-  maxLevel: 1
-  needExp: 1
+  maxLevel: 5
+  needExp: 150
   isUnlocked: 0
   isLevelUp: 0
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   expType: 0
   effectType: 6
   effectValue: 2
+  addNeedExp: 20
   elementalBulletPrefab: {fileID: 0}

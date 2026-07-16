@@ -17,6 +17,7 @@ public class SkillData : ScriptableObject
     public SkillEffectType effectType; // スキル効果タイプ
     public float effectValue = 1;
 
+    public int addNeedExp = 0; // Lv.UPごとに増加する必要経験値量
     // 属性弾解放用
     public GameObject elementalBulletPrefab; // UnlockElementalBullet用
     /// <summary>
@@ -98,7 +99,7 @@ public class SkillData : ScriptableObject
         isLevelUp = true;
 
         // 必要経験値増加
-        needExp = Mathf.RoundToInt(needExp * 1.3f);
+        needExp = Mathf.RoundToInt(needExp + addNeedExp);
 
         // 最大レベル制限
         if (level >= maxLevel)
