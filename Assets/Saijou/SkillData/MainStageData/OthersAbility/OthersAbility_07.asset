@@ -15,11 +15,12 @@ MonoBehaviour:
   skillName: "\u7D20\u6750\u7372\u5F97\u88C5\u7F6E\u304C\u89E3\u653E"
   level: 0
   maxLevel: 1
-  needExp: 1
+  needExp: 50
   isUnlocked: 0
   isLevelUp: 0
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   expType: 0
   effectType: 11
   effectValue: 1
+  addNeedExp: 0
   elementalBulletPrefab: {fileID: 0}
