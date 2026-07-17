@@ -675,7 +675,7 @@ MonoBehaviour:
   radialOrigin: 2
   radialClockwise: 0
   hpBarRoot: {fileID: 7894240887929033643}
-  hitFlashColor: {r: 1, g: 0, b: 0, a: 1}
+  hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
   hitFlashDuration: 0.08
   hpBarSmoothSpeed: 4
   hpBarDelayTime: 0.1

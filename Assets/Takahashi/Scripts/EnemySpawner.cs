@@ -40,17 +40,24 @@ public class EnemySpawner : MonoBehaviour
 
     private bool bossAlive = false;
 
-    [Header("スポーンY範囲（赤い床の高さ）")]
-    // 画面上端を0、画面下端を1とした割合で指定
+    [Header("ボスHPバー")]
+    public BossHPBar bossHPBar;
 
-    // 上端（0=画面上端, 1=画面下端）
+    [Header("ボス予告演出")]
+    public float bossWarningTime = 3f;   // ボス出現サイクル中、予告演出を開始するタイミング
+    private bool bossWarningShown = false;
+
+    // 予告演出が終わってボスがまだ出ていない待機中かどうかのフラグ
+    private bool waitingForBossSpawn = false;
+
+    [Header("スポーンY範囲（赤い床の高さ）")]
     public float spawnAreaTopRatio = 0.45f;
-    // 下端（0=画面上端, 1=画面下端）
     public float spawnAreaBottomRatio = 1.0f;
+
+    private float timer;
 
     void Update()
     {
-        // ===== 経過時間でスポーン時HP倍率を上げる =====
         hpTimer += Time.deltaTime;
 
         if (hpTimer >= hpGrowInterval)
@@ -60,15 +67,33 @@ public class EnemySpawner : MonoBehaviour
         }
 
         // ===== ボス管理 =====
-        if (!bossAlive)
+        // waitingForBossSpawn 中はタイマーを進めない
+        // （予告演出→コールバックでの出現待ちの間、時間経過処理を止めておく）
+        if (!bossAlive && !waitingForBossSpawn)
         {
             bossTimer += Time.deltaTime;
 
-            if (bossTimer >= bossSpawnTime)
+            // ボス出現の bossWarningTime 秒前になったら予告表示を開始
+            if (!bossWarningShown && bossTimer >= bossSpawnTime - bossWarningTime)
             {
-                SpawnBoss();
-                bossTimer = 0f;
+                bossWarningShown = true;
+                waitingForBossSpawn = true; // 演出完了待ち状態に入る
+
+                if (bossHPBar != null)
+                {
+                    // 演出完了時に SpawnBoss を呼ぶようコールバックを渡す
+                    bossHPBar.ShowWarning("BOSS", SpawnBoss);
+                }
+                else
+                {
+                    // 万が一bossHPBarが未設定でも進行が止まらないよう、
+                    // 参照がない場合は即座にボスを出す。
+                    SpawnBoss();
+                }
             }
+
+            // 以前あった「bossTimer >= bossSpawnTime で SpawnBoss」の直接呼び出しは撤去済み。
+            // 今は ShowWarning の演出完了コールバック経由でのみ SpawnBoss が呼ばれる。
         }
 
         // ボス中は通常敵を止める
@@ -82,54 +107,68 @@ public class EnemySpawner : MonoBehaviour
             SpawnEnemy();
             timer = 0f;
         }
+    }
 
-        void SpawnEnemy()
+    void SpawnEnemy()
+    {
+        GameObject prefab = GetRandomEnemy();
+        Vector2 spawnPos = GetSpawnPosition();
+
+        GameObject enemy = Instantiate(prefab, spawnPos, Quaternion.identity);
+
+        EnemyHP hp = enemy.GetComponent<EnemyHP>();
+        if (hp != null)
         {
-            GameObject prefab = GetRandomEnemy();
-            // 赤いエリア内にスポーン
-            Vector2 spawnPos = GetSpawnPosition();
-
-            GameObject enemy = Instantiate(prefab, spawnPos, Quaternion.identity);
-
-            EnemyHP hp = enemy.GetComponent<EnemyHP>();
-            if (hp != null)
-            {
-                hp.maxHP = Mathf.CeilToInt(hp.maxHP * hpMultiplier);
-                hp.currentHP = hp.maxHP;
-            }
-
-            RushEnemy rush = enemy.GetComponent<RushEnemy>();
-            if (rush != null)
-            {
-                rush.player = player;
-            }
+            hp.maxHP = Mathf.CeilToInt(hp.maxHP * hpMultiplier);
+            hp.currentHP = hp.maxHP;
         }
 
-        void SpawnBoss()
+        RushEnemy rush = enemy.GetComponent<RushEnemy>();
+        if (rush != null)
         {
-            Vector2 spawnPos = GetSpawnPosition();
-
-            GameObject boss = Instantiate(bossPrefab, spawnPos, Quaternion.identity);
-
-            bossAlive = true;
-
-            BossMove move = boss.GetComponent<BossMove>();
-            if (move != null)
-                move.player = player;
-
-            BossEnemy bossScript = boss.GetComponent<BossEnemy>();
-            if (bossScript != null)
-                bossScript.spawner = this;
-
-            Debug.Log("ボス出現！");
+            rush.player = player;
         }
     }
 
-    private float timer;
+    // HPバーの予告演出が終わった瞬間に呼ばれるメソッド
+    void SpawnBoss()
+    {
+        waitingForBossSpawn = false; // 待機状態を解除
+
+        Vector2 spawnPos = GetSpawnPosition();
+
+        GameObject boss = Instantiate(bossPrefab, spawnPos, Quaternion.identity);
+
+        bossAlive = true;
+
+        BossMove move = boss.GetComponent<BossMove>();
+        if (move != null)
+            move.player = player;
+
+        BossEnemy bossScript = boss.GetComponent<BossEnemy>();
+        if (bossScript != null)
+            bossScript.spawner = this;
+
+        EnemyHP bossHP = boss.GetComponent<EnemyHP>();
+        if (bossHPBar != null && bossHP != null)
+        {
+            // HPバーは既に満タン表示済み・待機中なので、HPを紐付けて追従を始めるだけ
+            bossHPBar.AttachBoss(bossHP);
+        }
+
+        bossTimer = 0f;
+        bossWarningShown = false;
+
+        Debug.Log("ボス出現！");
+    }
 
     public void BossDefeated()
     {
         bossAlive = false;
+
+        if (bossHPBar != null)
+            bossHPBar.Hide();
+
         Debug.Log("ボス撃破！");
     }
 
@@ -160,7 +199,6 @@ public class EnemySpawner : MonoBehaviour
         return spawnList[0].prefab;
     }
 
-    // 画面外からスポーン、ただしY座標は赤いエリアの範囲に限定
     Vector2 GetSpawnPosition()
     {
         Camera cam = Camera.main;
@@ -177,22 +215,20 @@ public class EnemySpawner : MonoBehaviour
         float bottom = camY - h;
         float fullH = top - bottom;
 
-        float offset = 2f; // 画面外にはみ出す距離
+        float offset = 2f;
 
-        // 赤いエリアのY範囲（Ratioで指定）
         float areaTop = top - fullH * spawnAreaTopRatio;
         float areaBottom = top - fullH * spawnAreaBottomRatio;
 
-        // 左・右・下の3辺からランダムにスポーン
         int side = Random.Range(0, 3);
 
         switch (side)
         {
-            case 0: // 左
+            case 0:
                 return new Vector2(left - offset, Random.Range(areaBottom, areaTop));
-            case 1: // 右
+            case 1:
                 return new Vector2(right + offset, Random.Range(areaBottom, areaTop));
-            default: // 下
+            default:
                 return new Vector2(Random.Range(left, right), areaBottom - offset);
         }
     }
