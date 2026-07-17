@@ -23,6 +23,8 @@ public class SkillTreeChange : MonoBehaviour
     // ショップに移動
     public void MoveToShop()
     {
+        // セーブ
+        SaveManager.Save(playerData, allSkills);
         StartCoroutine(PlayAnimationAndLoad());
     }
     IEnumerator PlayAnimationAndLoad()
