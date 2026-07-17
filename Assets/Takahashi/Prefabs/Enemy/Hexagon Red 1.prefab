@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4314733086519044195}
   - component: {fileID: 3513389222456426194}
   - component: {fileID: 2411255936248574082}
-  - component: {fileID: -8047611574812774607}
   m_Layer: 0
   m_Name: Hexagon Red 1
   m_TagString: Enemy
@@ -187,20 +186,13 @@ MonoBehaviour:
   damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
   hpSlider: {fileID: 0}
   hpDelaySlider: {fileID: 0}
+  useRadialFill: 1
+  radialOrigin: 2
+  radialClockwise: 0
+  hpBarRoot: {fileID: 0}
+  hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
+  hitFlashDuration: 0.08
   hpBarSmoothSpeed: 8
   hpBarDelayTime: 0.4
   hpBarDelaySpeed: 4
   stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
---- !u!114 &-8047611574812774607
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1535677997056505620}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40fcfadc685a8a149bbd7b35bca1fb26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BossEnemy
-  spawner: {fileID: 0}

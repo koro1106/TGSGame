@@ -545,7 +545,7 @@ MonoBehaviour:
   radialOrigin: 2
   radialClockwise: 0
   hpBarRoot: {fileID: 3419101919107931185}
-  hitFlashColor: {r: 1, g: 0, b: 0, a: 1}
+  hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
   hitFlashDuration: 0.08
   hpBarSmoothSpeed: 4
   hpBarDelayTime: 0.1
@@ -832,6 +832,10 @@ PrefabInstance:
     - target: {fileID: 2788937149780402964, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5913239047362683599, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6534775236774933173, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_PresetInfoIsWorld
