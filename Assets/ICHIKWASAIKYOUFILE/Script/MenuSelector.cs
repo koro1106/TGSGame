@@ -82,34 +82,16 @@ public class MenuSelector : MonoBehaviour
         );
     }
 
-
-    private bool IsInsideCanvas(RectTransform rect)
+    public void OnPointerEnterItem(int newIndex)
     {
-        Canvas canvas = rect.GetComponentInParent<Canvas>();
-
-        if (canvas == null)
-            return true;
-
-        RectTransform canvasRect = canvas.GetComponent<RectTransform>();
-
-        Vector3[] objectCorners = new Vector3[4];
-        Vector3[] canvasCorners = new Vector3[4];
-
-        rect.GetWorldCorners(objectCorners);
-        canvasRect.GetWorldCorners(canvasCorners);
-
-
-        // 横方向だけ確認
-        bool insideX =
-            objectCorners[2].x > canvasCorners[0].x &&
-            objectCorners[0].x < canvasCorners[2].x;
-
-        // 縦方向も確認
-        bool insideY =
-            objectCorners[2].y > canvasCorners[0].y &&
-            objectCorners[0].y < canvasCorners[2].y;
-
-
-        return insideX && insideY;
+        Debug.Log("Pointer Enter : " + newIndex);
+       
+        SetIndex(newIndex);
     }
+
+    public void Test()
+    {
+        Debug.Log("呼ばれた！");
+    }
+    
 }
