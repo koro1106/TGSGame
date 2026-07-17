@@ -20,6 +20,9 @@ public class SkillData : ScriptableObject
     public int addNeedExp = 0; // Lv.UPごとに増加する必要経験値量
     // 属性弾解放用
     public GameObject elementalBulletPrefab; // UnlockElementalBullet用
+
+    [TextArea(3, 5)]
+    public string description; // ショップ用
     /// <summary>
     /// 現在の経験値取得
     /// </summary>
