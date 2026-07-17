@@ -31,7 +31,9 @@ public static class SaveManager
             save.skills.Add(
                 new SkillSaveData()
                 {
-                    skillName = skill.skillName,
+                    // ScriptableObjectのアセット名をIDとして保存
+                    skillName = skill.name,
+
                     level = skill.level,
                     isUnlocked = skill.isUnlocked,
                     needExp = skill.needExp
@@ -87,7 +89,7 @@ public static class SaveManager
             foreach (var skill in skills)
             {
                 // 同じ名前のスキルを探す
-                if (skill.skillName == saveSkill.skillName)
+                if (skill.name == saveSkill.skillName)
                 {
                     skill.level = saveSkill.level;
                     skill.isUnlocked = saveSkill.isUnlocked;
