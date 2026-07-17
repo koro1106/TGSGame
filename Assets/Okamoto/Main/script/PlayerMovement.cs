@@ -39,16 +39,11 @@ public class PlayerMovement : MonoBehaviour
         if (gunController == null)
             return;
 
-        Vector3 screenPos = gunController.Crosshair.position;
-
-        Vector3 targetPos = gunController.Cam.ScreenToWorldPoint(
-            new Vector3(
-                screenPos.x,
-                screenPos.y,
-                Mathf.Abs(gunController.Cam.transform.position.z)
-            )
-        );
-
+        // ★ GunController側でOverlay/World Spaceを自動判定した
+        //    「本当のクロスヘアのワールド座標」をそのまま使う。
+        //    ここで独自にScreenToWorldPointをかけ直すと、
+        //    World Space Canvasのときに二重変換されてズレる原因になる。
+        Vector3 targetPos = gunController.GetCrosshairWorldPosition();
         targetPos.z = transform.position.z;
 
         rb.MovePosition(
@@ -63,11 +58,9 @@ public class PlayerMovement : MonoBehaviour
     // ========================
     // Enemy接触
     // ========================
-
     void OnTriggerEnter2D(Collider2D other)
     {
         EnemyHP enemy = other.GetComponent<EnemyHP>();
-
         if (enemy == null)
             return;
 
@@ -77,7 +70,6 @@ public class PlayerMovement : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         EnemyHP enemy = collision.gameObject.GetComponent<EnemyHP>();
-
         if (enemy == null)
             return;
 
