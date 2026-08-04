@@ -13,6 +13,10 @@ public class SkillTreeChange : MonoBehaviour
     public SkillData[] allSkills;
     public PlayerData playerData;
 
+    public bool isShop = false; // ショップが開かれているか
+
+    [SerializeField] UIDrag uIDrag;
+
     public void OnSkilTreeChangeButton()
     {
         // セーブ
@@ -26,6 +30,8 @@ public class SkillTreeChange : MonoBehaviour
         // セーブ
         SaveManager.Save(playerData, allSkills);
         StartCoroutine(PlayAnimationAndLoad());
+        isShop = true;
+        uIDrag.UpdateButtonAlpha();
     }
     IEnumerator PlayAnimationAndLoad()
     {
