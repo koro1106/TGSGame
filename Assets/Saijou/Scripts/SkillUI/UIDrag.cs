@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 /// <summary>
 /// スキルツリードラッグ用
 /// </summary>
@@ -9,15 +10,23 @@ public class UIDrag : MonoBehaviour
     private Vector2 lastMousePos;    // マウスがどのぐらい動いたかを出すための
     private bool isDragging = false; // ドラッグ中か
 
-    [SerializeField] GameObject mainSkillTreeButon;
-    [SerializeField] GameObject preSkillTreeButon;
+    [SerializeField] GameObject skillTreeButon;
+    [SerializeField] GameObject prestigeButon;
+    [SerializeField] GameObject shopButon;
+
+    [SerializeField] Image skillTreeImage;
+    [SerializeField] Image prestigeImage;
+    [SerializeField] Image shopImage;
 
     public bool isPrestige = false; // プレステージボタン押したか
+
+    [SerializeField] SkillTreeChange skillTreeChange;
     // プレステージ位置へ移動
     public void MoveToPrestige()
     {
         target.anchoredPosition = new Vector2(-16f, -4100f);
         isPrestige = true;
+        UpdateButtonAlpha();
     }
 
     // 通常位置へ移動
@@ -25,15 +34,22 @@ public class UIDrag : MonoBehaviour
     {
         target.anchoredPosition = new Vector2(26f, 8f);
         isPrestige = false;
+        UpdateButtonAlpha();
+    }
+
+    void Start()
+    {
+        skillTreeImage = skillTreeButon.GetComponent<Image>();
+        prestigeImage = prestigeButon.GetComponent<Image>();
+        shopImage = shopButon.GetComponent<Image>();
+
+        UpdateButtonAlpha();
     }
 
     void Update()
     {
         if (!isPrestige)
         {
-            mainSkillTreeButon.SetActive(false);
-            preSkillTreeButon.SetActive(true);
-
             // 押した瞬間
             if (Input.GetMouseButtonDown(0))
             {
@@ -66,10 +82,27 @@ public class UIDrag : MonoBehaviour
                 lastMousePos = currentMousePos;
             }
         }
+    }
+
+    public void UpdateButtonAlpha()
+    {
+        if (isPrestige)
+        {
+            skillTreeImage.color = new Color32(255, 255, 255, 100);
+            prestigeImage.color = new Color32(255, 255, 255, 255);
+            shopImage.color = new Color32(255, 255, 255, 100);
+        }
         else
         {
-            mainSkillTreeButon.SetActive(true);
-            preSkillTreeButon.SetActive(false);
+            skillTreeImage.color = new Color32(255, 255, 255, 255);
+            prestigeImage.color = new Color32(255, 255, 255, 100);
+            shopImage.color = new Color32(255, 255, 255, 100);
+        }
+        if(skillTreeChange.isShop)
+        {
+            skillTreeImage.color = new Color32(255, 255, 255, 100);
+            prestigeImage.color = new Color32(255, 255, 255, 100);
+            shopImage.color = new Color32(255, 255, 255, 255);
         }
     }
 }
