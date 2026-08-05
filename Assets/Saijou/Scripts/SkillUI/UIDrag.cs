@@ -18,6 +18,10 @@ public class UIDrag : MonoBehaviour
     [SerializeField] Image prestigeImage;
     [SerializeField] Image shopImage;
 
+    [SerializeField] private Outline skillTreeOutline;
+    [SerializeField] private Outline prestigeOutline;
+    [SerializeField] private Outline shopOutline;
+
     public bool isPrestige = false; // プレステージボタン押したか
 
     [SerializeField] SkillTreeChange skillTreeChange;
@@ -88,21 +92,36 @@ public class UIDrag : MonoBehaviour
     {
         if (isPrestige)
         {
-            skillTreeImage.color = new Color32(255, 255, 255, 100);
+            skillTreeImage.color = new Color32(100, 100, 100, 255);
             prestigeImage.color = new Color32(255, 255, 255, 255);
-            shopImage.color = new Color32(255, 255, 255, 100);
+            shopImage.color = new Color32(100, 100, 100, 255);
+
+            // 枠
+            skillTreeOutline.enabled = false;
+            prestigeOutline.enabled = true;
+            shopOutline.enabled = false;
         }
         else
         {
             skillTreeImage.color = new Color32(255, 255, 255, 255);
-            prestigeImage.color = new Color32(255, 255, 255, 100);
-            shopImage.color = new Color32(255, 255, 255, 100);
+            prestigeImage.color = new Color32(100, 100, 100, 255);
+            shopImage.color = new Color32(100, 100, 100, 255);
+
+            // 枠
+            skillTreeOutline.enabled = true;
+            prestigeOutline.enabled = false;
+            shopOutline.enabled = false;
         }
         if(skillTreeChange.isShop)
         {
-            skillTreeImage.color = new Color32(255, 255, 255, 100);
-            prestigeImage.color = new Color32(255, 255, 255, 100);
+            skillTreeImage.color = new Color32(100, 100, 100, 255);
+            prestigeImage.color = new Color32(100, 100, 100, 255);
             shopImage.color = new Color32(255, 255, 255, 255);
+
+            // 枠
+            skillTreeOutline.enabled = false;
+            prestigeOutline.enabled = false;
+            shopOutline.enabled = true;
         }
     }
 }

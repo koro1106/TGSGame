@@ -221,6 +221,7 @@ GameObject:
   - component: {fileID: 20106987}
   - component: {fileID: 20106986}
   - component: {fileID: 20106989}
+  - component: {fileID: 20106990}
   m_Layer: 5
   m_Name: PrestigeButton
   m_TagString: Untagged
@@ -356,6 +357,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
   hoverScale: 1.1
   speed: 25
+--- !u!114 &20106990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20106983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0.28235295, g: 1, b: 0, a: 0.5}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1
 --- !u!1 &26492052
 GameObject:
   m_ObjectHideFlags: 0
@@ -597,6 +613,9 @@ MonoBehaviour:
   skillTreeImage: {fileID: 812543377}
   prestigeImage: {fileID: 20106987}
   shopImage: {fileID: 2055902819}
+  skillTreeOutline: {fileID: 812543380}
+  prestigeOutline: {fileID: 20106990}
+  shopOutline: {fileID: 2055902823}
   isPrestige: 0
   skillTreeChange: {fileID: 2055902822}
 --- !u!114 &26492056
@@ -12246,6 +12265,7 @@ GameObject:
   - component: {fileID: 812543377}
   - component: {fileID: 812543376}
   - component: {fileID: 812543379}
+  - component: {fileID: 812543380}
   m_Layer: 5
   m_Name: SkillTreeButton
   m_TagString: Untagged
@@ -12381,6 +12401,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
   hoverScale: 1.1
   speed: 25
+--- !u!114 &812543380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812543374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0.2796452, g: 1, b: 0, a: 0.6039216}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1
 --- !u!1 &822380513
 GameObject:
   m_ObjectHideFlags: 0
@@ -30773,6 +30808,7 @@ GameObject:
   - component: {fileID: 2055902818}
   - component: {fileID: 2055902821}
   - component: {fileID: 2055902822}
+  - component: {fileID: 2055902823}
   m_Layer: 5
   m_Name: ShopButton
   m_TagString: Untagged
@@ -31010,6 +31046,21 @@ MonoBehaviour:
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   isShop: 0
   uIDrag: {fileID: 26492055}
+--- !u!114 &2055902823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2055902816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0.28235295, g: 1, b: 0, a: 0.5}
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 1
 --- !u!1 &2058398391
 GameObject:
   m_ObjectHideFlags: 0
