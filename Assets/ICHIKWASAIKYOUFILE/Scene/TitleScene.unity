@@ -4846,7 +4846,7 @@ MonoBehaviour:
   fadeImage: {fileID: 434504257}
   endPos: {x: 0, y: 0}
   startPos: {x: -1500, y: 0}
-  slideTime: 2
+  slideTime: 0.6
   waitTime: 2
 --- !u!4 &1911244856
 Transform:
