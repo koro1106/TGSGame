@@ -36,11 +36,28 @@ public class GunController : MonoBehaviour
     public TMP_Text sensitivityText;
     private Vector3 crosshairPos; // ★ スクリーン座標で保持（World/Overlay共通の基準値）
 
+    private int ammoUIAnimationQueue = 0;
+
     [Range(0.1f, 10f)]
     public float sensitivity = 1f;
 
     [SerializeField]
     private PlayableDirector outOfAmmoTimeline;
+
+    // 弾UIの本来の位置を保存
+    private Vector3[] ammoSlotOriginalPositions;
+
+    [Header("弾UI表示設定")]
+    public int visibleAmmoCount = 10;
+
+    // ＋から弾が出てくる位置
+    public RectTransform ammoPlusPoint;
+
+    // 左へスライドする時間
+    public float ammoSlideDuration = 0.15f;
+    // ＋から飛んでくる時間
+    public float ammoEnterDuration = 0.15f;
+
 
     [Header("弾UI画像")]
     public Sprite normalAmmoSprite;
@@ -76,7 +93,25 @@ public class GunController : MonoBehaviour
 
     public int recoverAmmoAmount = 1;
     public GameObject ammoRecoverEffectPrefab;
+
     public AmmoSlot[] ammoSlots;
+    // =====================================================
+    // 実際の弾データ
+    // AmmoSlotとは分離して管理する
+    // =====================================================
+
+    private AmmoType[] ammoTypes;
+    private Sprite[] ammoSprites;
+
+    // 弾UIの本来の位置
+    private Vector3[] ammoOriginalPositions;
+
+    // 現在UIに表示している最初の弾
+    private int visibleStartIndex = 0;
+
+    // UIアニメーション中
+    private bool isAmmoUIAnimating = false;
+
     public TMP_Text ammoText;
     public RectTransform crosshair; // UIのクロスヘア（Screen Space / World Space どちらのCanvasでもOK）
     private SpriteRenderer sr;
@@ -120,6 +155,26 @@ public class GunController : MonoBehaviour
             bulletPrefabs = tempList.ToArray();
         }
 
+        // 弾UIの本来の位置を保存
+        ammoSlotOriginalPositions =
+            new Vector3[ammoSlots.Length];
+
+        // =====================================================
+        // UI本来の位置を保存
+        // =====================================================
+
+        ammoOriginalPositions =
+            new Vector3[ammoSlots.Length];
+
+        for (int i = 0; i < ammoSlots.Length; i++)
+        {
+            if (ammoSlots[i].image != null)
+            {
+                ammoOriginalPositions[i] =
+                    ammoSlots[i].image.rectTransform.localPosition;
+            }
+        }
+
         // 撃破時弾回復する
         if (stats.recoveryBullet)
             recoverAmmoOnKill = true;
@@ -127,9 +182,16 @@ public class GunController : MonoBehaviour
         // 回復弾数増加
         recoverAmmoAmount += stats.recoveryBulletCount;
 
+        // 弾データ生成
+        GenerateAmmo();
+
         //for (int i = 0; i < ammoSlots.Length; i++)
         //{
-        //    bool active = i < maxAmmo;
+        //bool active = i < maxAmmo;
+
+        //bool visible =
+        //    i < visibleAmmoCount;
+
         //    ammoSlots[i].image.transform.parent.gameObject.SetActive(active);
         //}
     }
@@ -152,6 +214,16 @@ public class GunController : MonoBehaviour
         maxAmmo = stats.maxAmmo;
         currentAmmo = maxAmmo;
 
+        // =====================================================
+        // 実際の弾データ配列
+        // =====================================================
+
+        ammoTypes =
+            new AmmoType[ammoSlots.Length];
+
+        ammoSprites =
+            new Sprite[ammoSlots.Length];
+
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Confined;
 
@@ -160,8 +232,6 @@ public class GunController : MonoBehaviour
 
         UpdateAmmoUI();
         sensitivityText.text = "感度 : " + sensitivity.ToString("F1");
-
-        GenerateAmmo();
     }
 
     void Update()
@@ -254,37 +324,56 @@ public class GunController : MonoBehaviour
             // =========================
             // 使用する弾スロット決定
             // =========================
-            int uiIndex = -1;
+            // =========================================
+            // 現在表示されている一番左の弾を撃つ
+            // =========================================
 
-            // 回復演出中優先
-            for (int i = ammoSlots.Length - 1; i >= 0; i--)
+            int uiIndex = 0;
+
+            if (uiIndex < 0 ||
+                uiIndex >= ammoSlots.Length)
             {
-                if (ammoSlots[i].isRecovering)
-                {
-                    uiIndex = i;
-                    break;
-                }
+                return;
             }
 
-            // 通常弾
-            if (uiIndex == -1)
+            AmmoSlot slot =
+                ammoSlots[uiIndex];
+
+            // 実際に撃つ弾は、UIの0番ではなく
+            // 実データのvisibleStartIndexを見る
+            int dataIndex =
+                visibleStartIndex;
+
+            if (dataIndex < 0 ||
+                dataIndex >= ammoTypes.Length)
             {
-                uiIndex = currentAmmo - 1;
+                return;
             }
+
+            // 実際の弾タイプ
+            AmmoType currentAmmoType =
+                ammoTypes[dataIndex];
+
+            slot.ammoType =
+                currentAmmoType;
+
+            // UI画像
+            Image img =
+                slot.image;
 
             // 範囲チェック
             if (uiIndex < 0 || uiIndex >= ammoSlots.Length)
                 return;
 
-            // 現在使う弾
-            AmmoSlot slot = ammoSlots[uiIndex];
-            // UI画像
-            Image img = slot.image;
+            //// 現在使う弾
+            //AmmoSlot slot = ammoSlots[uiIndex];
+            //// UI画像
+            //Image img = slot.image;
 
             // =========================
             // 発射する弾決定
             // =========================
-            GameObject bulletToShoot = GetBulletPrefab(slot.ammoType);
+            GameObject bulletToShoot = GetBulletPrefab(currentAmmoType);
 
             // =========================
             // 弾生成
@@ -330,11 +419,7 @@ public class GunController : MonoBehaviour
             // =========================
             // 弾消費
             // =========================
-            // 通常弾だけ減らす
-            if (!slot.isRecovering)
-            {
-                currentAmmo--;
-            }
+            currentAmmo--;
 
             // 回復演出中なら消す
             if (slot.recoverEffectObject != null)
@@ -346,15 +431,7 @@ public class GunController : MonoBehaviour
 
             SEManager.Instance.PlayShootSE(); // SE再生
 
-            // UI消す
-            if (img != null)
-            {
-                img.enabled = false;
-            }
-
-            // =========================
             // 弾UIドロップ演出
-            // =========================
             if (ammoDropUIPrefab != null && img != null)
             {
                 GameObject drop =
@@ -364,19 +441,18 @@ public class GunController : MonoBehaviour
                         Quaternion.identity,
                         img.transform.parent);
 
-                // サイズ合わせ
                 drop.transform.localScale = img.transform.localScale;
 
-                // Spriteコピー
                 Image dropImage = drop.GetComponent<Image>();
+
                 if (dropImage != null)
                 {
                     dropImage.sprite = img.sprite;
                 }
             }
 
-            // 元UI消す
-            img.enabled = false;
+            // 弾UIを更新
+            StartCoroutine(PlayAmmoSlideAnimation());
 
             // =========================
             // 演出
@@ -466,72 +542,89 @@ public class GunController : MonoBehaviour
     // 弾内容決める
     void GenerateAmmo()
     {
+        if (ammoTypes == null ||
+            ammoTypes.Length != ammoSlots.Length)
+        {
+            ammoTypes =
+                new AmmoType[ammoSlots.Length];
+
+            ammoSprites =
+                new Sprite[ammoSlots.Length];
+        }
+
+        // =========================================
+        // 100発分の弾データを生成
+        // =========================================
+
         for (int i = 0; i < ammoSlots.Length; i++)
         {
-            AmmoSlot slot = ammoSlots[i];
-            bool active = i < maxAmmo;
+            AmmoType type = AmmoType.Normal;
+            Sprite sprite = normalAmmoSprite;
 
-            // 空枠
-            slot.emptyImage.gameObject.SetActive(active);
-            // 弾
-            slot.image.gameObject.SetActive(active);
-
-            if (!active) continue;
-
-            // 通常弾
-            slot.ammoType = AmmoType.Normal;
-            slot.image.sprite = normalAmmoSprite;
-
+            // -------------------------
             // 属性弾抽選
+            // -------------------------
+
             bool canElement =
                 stats.unlockedElementalBullets != null &&
                 stats.unlockedElementalBullets.Length > 0;
 
-            if (canElement && Random.value < stats.elementalBulletChance)
+            if (canElement &&
+                Random.value < stats.elementalBulletChance)
             {
-                // 解放済み属性弾からランダム
                 GameObject randomPrefab =
-                    stats.unlockedElementalBullets[Random.Range(0, stats.unlockedElementalBullets.Length)];
-                string bulletName = randomPrefab.name;
+                    stats.unlockedElementalBullets[
+                        Random.Range(
+                            0,
+                            stats.unlockedElementalBullets.Length
+                        )
+                    ];
 
-                // =========================
-                // 属性判定
-                // =========================
+                string bulletName =
+                    randomPrefab.name;
+
                 if (bulletName.Contains("Lightning"))
                 {
-                    slot.ammoType = AmmoType.Lightning;
-                    slot.image.sprite = lightningAmmoSprite;
+                    type = AmmoType.Lightning;
+                    sprite = lightningAmmoSprite;
                 }
                 else if (bulletName.Contains("Gravity"))
                 {
-                    slot.ammoType = AmmoType.Gravity;
-                    slot.image.sprite = GravityAmmoSprite;
+                    type = AmmoType.Gravity;
+                    sprite = GravityAmmoSprite;
                 }
                 else if (bulletName.Contains("Bind"))
                 {
-                    slot.ammoType = AmmoType.Bind;
-                    slot.image.sprite = BindAmmoSprite;
+                    type = AmmoType.Bind;
+                    sprite = BindAmmoSprite;
                 }
                 else if (bulletName.Contains("Poison"))
                 {
-                    slot.ammoType = AmmoType.Poison;
-                    slot.image.sprite = PoisonAmmoSprite;
+                    type = AmmoType.Poison;
+                    sprite = PoisonAmmoSprite;
                 }
                 else if (bulletName.Contains("Explosion"))
                 {
-                    slot.ammoType = AmmoType.Explosion;
-                    slot.image.sprite = ExplosionAmmoSprite;
+                    type = AmmoType.Explosion;
+                    sprite = ExplosionAmmoSprite;
                 }
                 else if (bulletName.Contains("Penetrating"))
                 {
-                    slot.ammoType = AmmoType.Penetrating;
-                    slot.image.sprite = penetratingAmmoSprite;
+                    type = AmmoType.Penetrating;
+                    sprite = penetratingAmmoSprite;
                 }
             }
 
-            // 弾表示
-            slot.image.enabled = true;
+            // 実際の弾データを保存
+            ammoTypes[i] = type;
+            ammoSprites[i] = sprite;
         }
+
+        // =========================================
+        // UI表示
+        // =========================================
+
+        RefreshAmmoUIImmediate();
     }
 
     void UpdateAmmoUI()
@@ -581,6 +674,85 @@ public class GunController : MonoBehaviour
         else
         {
             crosshair.position = crosshairPos;
+        }
+    }
+
+    void RefreshAmmoUIImmediate()
+    {
+        if (ammoSlots == null)
+            return;
+
+        int visibleCount =
+            Mathf.Min(
+                visibleAmmoCount,
+                currentAmmo
+            );
+
+        // -----------------------------------------
+        // 最後の10発を表示
+        // -----------------------------------------
+
+        visibleStartIndex =
+            Mathf.Max(
+                0,
+                currentAmmo - visibleCount
+            );
+
+        // -----------------------------------------
+        // 100個のUIを一旦非表示
+        // -----------------------------------------
+
+        for (int i = 0; i < ammoSlots.Length; i++)
+        {
+            if (ammoSlots[i].image != null)
+            {
+                ammoSlots[i].image.enabled = false;
+            }
+
+            if (ammoSlots[i].emptyImage != null)
+            {
+                ammoSlots[i].emptyImage.gameObject.SetActive(false);
+            }
+        }
+
+        // -----------------------------------------
+        // 画面には最大10個だけ表示
+        // -----------------------------------------
+
+        for (int displayIndex = 0;
+             displayIndex < visibleCount;
+             displayIndex++)
+        {
+            int dataIndex =
+                visibleStartIndex + displayIndex;
+
+            if (dataIndex < 0 ||
+                dataIndex >= ammoTypes.Length)
+                continue;
+
+            AmmoSlot uiSlot =
+                ammoSlots[displayIndex];
+
+            // Sprite
+            uiSlot.image.sprite =
+                ammoSprites[dataIndex];
+
+            // 属性
+            uiSlot.ammoType =
+                ammoTypes[dataIndex];
+
+            // 表示
+            uiSlot.image.enabled = true;
+
+            // 空枠
+            if (uiSlot.emptyImage != null)
+            {
+                uiSlot.emptyImage.gameObject.SetActive(true);
+            }
+
+            // 位置を必ず元に戻す
+            uiSlot.image.rectTransform.localPosition =
+                ammoOriginalPositions[displayIndex];
         }
     }
 
@@ -762,32 +934,31 @@ public class GunController : MonoBehaviour
 
     void IncreaseMaxAmmo(int amount)
     {
-        // 最大弾数増加
+        // =========================================
+        // 最大弾数を増やす
+        // =========================================
+
         maxAmmo += amount;
-        maxAmmo = Mathf.Clamp(maxAmmo, 0, ammoSlots.Length);
 
+        maxAmmo =
+            Mathf.Clamp(
+                maxAmmo,
+                0,
+                ammoSlots.Length
+            );
+
+        // =========================================
         // 満タン
-        currentAmmo = maxAmmo;
+        // =========================================
 
-        for (int i = 0; i < ammoSlots.Length; i++)
-        {
-            AmmoSlot slot = ammoSlots[i];
-            bool active = i < maxAmmo;
+        currentAmmo =
+            maxAmmo;
 
-            // 空枠表示
-            slot.emptyImage.gameObject.SetActive(active);
-            // 弾表示
-            slot.image.gameObject.SetActive(active);
+        // =========================================
+        // 弾データを作り直す
+        // =========================================
 
-            if (!active) continue;
-
-            // 通常弾
-            slot.ammoType = AmmoType.Normal;
-            slot.image.sprite = normalAmmoSprite;
-
-            // 弾ON
-            slot.image.enabled = true;
-        }
+        GenerateAmmo();
 
         UpdateAmmoUI();
     }
@@ -817,4 +988,323 @@ public class GunController : MonoBehaviour
 
         SceneManager.LoadScene("MainStageSkillTreeScene");
     }
+
+    IEnumerator PlayAmmoSlideAnimation()
+    {
+        // =====================================================
+        // このアニメーションは「射撃を止めない」
+        // =====================================================
+
+        int beforeAmmo = currentAmmo + 1;
+        int afterAmmo = currentAmmo;
+
+        int beforeVisibleCount =
+            Mathf.Min(visibleAmmoCount, beforeAmmo);
+
+        int afterVisibleCount =
+            Mathf.Min(visibleAmmoCount, afterAmmo);
+
+        // =====================================================
+        // 発射前の表示開始位置
+        // =====================================================
+
+        int beforeStartIndex =
+            Mathf.Max(
+                0,
+                beforeAmmo - beforeVisibleCount
+            );
+
+        // =====================================================
+        // 発射後の表示開始位置
+        // =====================================================
+
+        int afterStartIndex =
+            Mathf.Max(
+                0,
+                afterAmmo - afterVisibleCount
+            );
+
+        // =====================================================
+        // 弾が0なら即更新
+        // =====================================================
+
+        if (afterVisibleCount <= 0)
+        {
+            RefreshAmmoUIImmediate();
+            yield break;
+        }
+
+        // =====================================================
+        // 現在表示されている弾を取得
+        // =====================================================
+
+        Vector3[] startPositions =
+            new Vector3[beforeVisibleCount];
+
+        for (int i = 0;
+             i < beforeVisibleCount &&
+             i < ammoSlots.Length;
+             i++)
+        {
+            startPositions[i] =
+                ammoOriginalPositions[i];
+        }
+
+        // =====================================================
+        // UIを即座に次の状態へ
+        // =====================================================
+
+        visibleStartIndex = afterStartIndex;
+
+        RefreshAmmoUIImmediate();
+
+        // =====================================================
+        // 左スライド演出
+        //
+        // 「今表示されている弾」を左へ移動させる
+        // =====================================================
+
+        float timer = 0f;
+
+        while (timer < ammoSlideDuration)
+        {
+            timer += Time.deltaTime;
+
+            float t =
+                Mathf.Clamp01(
+                    timer / ammoSlideDuration
+                );
+
+            t = Mathf.SmoothStep(0f, 1f, t);
+
+            // ---------------------------------------------
+            // 2個目以降を左へ
+            // ---------------------------------------------
+
+            for (int i = 1;
+                 i < beforeVisibleCount &&
+                 i < ammoSlots.Length;
+                 i++)
+            {
+                if (ammoSlots[i].image == null)
+                    continue;
+
+                ammoSlots[i]
+                    .image
+                    .rectTransform
+                    .localPosition =
+                    Vector3.Lerp(
+                        startPositions[i],
+                        ammoOriginalPositions[i - 1],
+                        t
+                    );
+            }
+
+            yield return null;
+        }
+
+        // =====================================================
+        // UI位置を完全に元へ戻す
+        // =====================================================
+
+        for (int i = 0;
+             i < visibleAmmoCount &&
+             i < ammoSlots.Length;
+             i++)
+        {
+            if (ammoSlots[i].image == null)
+                continue;
+
+            ammoSlots[i]
+                .image
+                .rectTransform
+                .localPosition =
+                ammoOriginalPositions[i];
+        }
+
+        // =====================================================
+        // 10発以上残っている場合
+        // ＋から新しい弾を出す
+        // =====================================================
+
+        if (afterAmmo >= visibleAmmoCount &&
+            ammoPlusPoint != null)
+        {
+            int newDataIndex =
+                afterStartIndex +
+                afterVisibleCount -
+                1;
+
+            StartCoroutine(
+                PlayAmmoEnterEffect(newDataIndex)
+            );
+        }
+    }
+
+    IEnumerator PlayAmmoEnterEffect(int dataIndex)
+    {
+        if (ammoPlusPoint == null)
+            yield break;
+
+        if (ammoSprites == null)
+            yield break;
+
+        if (dataIndex < 0 ||
+            dataIndex >= ammoSprites.Length)
+            yield break;
+
+        int displayIndex =
+            visibleAmmoCount - 1;
+
+        if (displayIndex < 0 ||
+            displayIndex >= ammoSlots.Length)
+            yield break;
+
+        Image targetImage =
+            ammoSlots[displayIndex].image;
+
+        if (targetImage == null)
+            yield break;
+
+        // =====================================================
+        // 演出用Image作成
+        // =====================================================
+
+        GameObject effectObject =
+            new GameObject("AmmoEnterEffect");
+
+        effectObject.transform.SetParent(
+            targetImage.transform.parent,
+            false
+        );
+
+        Image effectImage =
+            effectObject.AddComponent<Image>();
+
+        effectImage.sprite =
+            ammoSprites[dataIndex];
+
+        effectImage.preserveAspect = true;
+
+        RectTransform effectRect =
+            effectObject.GetComponent<RectTransform>();
+
+        // =====================================================
+        // ＋の位置
+        // =====================================================
+
+        Vector3 startPosition =
+            ammoPlusPoint.position;
+
+        Vector3 endPosition =
+            targetImage.rectTransform.position;
+
+        effectRect.position =
+            startPosition;
+
+        // =====================================================
+        // サイズ
+        // 最初は小さく
+        // 最後は通常サイズ
+        // =====================================================
+
+        Vector3 normalScale =
+            targetImage.transform.lossyScale;
+
+        Vector3 startScale =
+            normalScale * 0.25f;
+
+        effectRect.localScale =
+            Vector3.one * 0.25f;
+
+        // =====================================================
+        // アニメーション
+        // =====================================================
+
+        float timer = 0f;
+
+        while (timer < ammoEnterDuration)
+        {
+            timer += Time.deltaTime;
+
+            float t =
+                Mathf.Clamp01(
+                    timer / ammoEnterDuration
+                );
+
+            // なめらかに
+            float moveT =
+                Mathf.SmoothStep(
+                    0f,
+                    1f,
+                    t
+                );
+
+            // -------------------------------------------------
+            // ＋ → スロット
+            // -------------------------------------------------
+
+            effectRect.position =
+                Vector3.Lerp(
+                    startPosition,
+                    endPosition,
+                    moveT
+                );
+
+            // -------------------------------------------------
+            // 小 → 通常サイズ
+            // -------------------------------------------------
+
+            float scaleT =
+                Mathf.SmoothStep(
+                    0f,
+                    1f,
+                    t
+                );
+
+            effectRect.localScale =
+                Vector3.Lerp(
+                    Vector3.one * 0.25f,
+                    Vector3.one,
+                    scaleT
+                );
+
+            yield return null;
+        }
+
+        // =====================================================
+        // 最終位置・サイズ
+        // =====================================================
+
+        effectRect.position =
+            endPosition;
+
+        effectRect.localScale =
+            Vector3.one;
+
+        // =====================================================
+        // 最終的なUI状態を更新
+        // =====================================================
+
+        RefreshAmmoUIImmediate();
+
+        Destroy(effectObject);
+    }
+
+    //IEnumerator ProcessAmmoUIAnimationQueue()
+    //{
+    //    isAmmoUIAnimating = true;
+
+    //    while (ammoUIAnimationQueue > 0)
+    //    {
+    //        ammoUIAnimationQueue--;
+
+    //        yield return StartCoroutine(
+    //            PlayAmmoSlideAnimation()
+    //        );
+    //    }
+
+    //    isAmmoUIAnimating = false;
+    //}
+
 }
