@@ -2279,7 +2279,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 165127799}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
@@ -2568,6 +2568,9 @@ MonoBehaviour:
   ammoPlusPoint: {fileID: 289254091}
   ammoSlideDuration: 0.15
   ammoEnterDuration: 0.15
+  firstAmmoDropHeight: 60
+  firstAmmoDropDuration: 0.12
+  firstAmmoStartScale: 0.7
   normalAmmoSprite: {fileID: 21300000, guid: 27c4801de398b4542a1ce347ebca5213, type: 3}
   lightningAmmoSprite: {fileID: 21300000, guid: a57becc52ca586f4a9983f8c6811ce5d, type: 3}
   BindAmmoSprite: {fileID: 21300000, guid: 1b37e9fad018c7a4f92c504224f508b6, type: 3}
