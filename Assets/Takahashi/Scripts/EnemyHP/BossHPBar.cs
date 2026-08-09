@@ -17,11 +17,19 @@ public class BossHPBar : MonoBehaviour
     public float fillDuration = 1.0f;     // 0→maxまで段々満ちる時間
     public float damageFollowSpeed = 2f;
 
+    [Header("エフェクト演出（スプラトゥーン風）")]
+    public RectTransform barBackground;   // バー全体の幅を測るための背景RectTransform（maxHpSliderの親などを想定）
+    public RectTransform edgeGlow;        // バーの削れた先端（現在HP位置）に追従して光らせる小さいImageのRectTransform
+    public float edgeGlowPulseSpeed = 4f; // 先端の光が明滅する速さ
+    public GameObject hitSparkPrefab;     // ダメージを受けた瞬間に出す火花・光エフェクトのプレハブ（任意）
+    public float hitSparkLifetime = 0.5f; // 火花エフェクトの自動消滅までの時間
+
     // ※位置移動(スライドイン)は廃止したため hiddenPosY / shownPosY は使用していません
 
     private EnemyHP targetHP;
     private Coroutine currentRoutine;
     private RectTransform rectTransform;
+    private float lastRatio = 1f; // ダメージ検知（減った瞬間だけエフェクトを出す）用
 
     void Awake()
     {
@@ -36,6 +44,12 @@ public class BossHPBar : MonoBehaviour
         {
             Hide();
         }
+
+        // バー先端の光を常時明滅させる（HPバーが表示されている間だけ）
+        if (edgeGlow != null && barRoot != null && barRoot.activeSelf)
+        {
+            UpdateEdgeGlowPulse();
+        }
     }
 
     // ===== 予告表示メソッド =====
@@ -44,6 +58,7 @@ public class BossHPBar : MonoBehaviour
     public void ShowWarning(string bossName, Action onComplete = null)
     {
         targetHP = null;
+        lastRatio = 1f;
 
         if (barRoot != null)
             barRoot.SetActive(true);
@@ -62,6 +77,7 @@ public class BossHPBar : MonoBehaviour
     public void AttachBoss(EnemyHP hp)
     {
         targetHP = hp;
+        lastRatio = 1f;
 
         if (barRoot != null)
             barRoot.SetActive(true);
@@ -76,6 +92,7 @@ public class BossHPBar : MonoBehaviour
     public void ShowBoss(EnemyHP hp, string bossName = "BOSS")
     {
         targetHP = hp;
+        lastRatio = 1f;
 
         if (barRoot != null)
             barRoot.SetActive(true);
@@ -137,10 +154,13 @@ public class BossHPBar : MonoBehaviour
             float v = Mathf.Lerp(0f, 1f, ft / fillDuration);
             maxHpSlider.value = v;
             damageHpSlider.value = v;
+            UpdateEdgeGlowPosition(v);
             yield return null;
         }
         maxHpSlider.value = 1f;
         damageHpSlider.value = 1f;
+        UpdateEdgeGlowPosition(1f);
+        lastRatio = 1f;
 
         // 演出が完全に終わったのでコールバック実行（EnemySpawner側でボス出現に使う）
         onComplete?.Invoke();
@@ -154,6 +174,13 @@ public class BossHPBar : MonoBehaviour
 
             maxHpSlider.value = ratio;
 
+            // ダメージを受けて減った瞬間だけ、火花エフェクトを出す
+            if (ratio < lastRatio - 0.0001f)
+            {
+                SpawnHitSpark(lastRatio);
+            }
+            lastRatio = ratio;
+
             if (damageHpSlider.value > ratio)
             {
                 damageHpSlider.value = Mathf.MoveTowards(
@@ -164,8 +191,54 @@ public class BossHPBar : MonoBehaviour
                 damageHpSlider.value = ratio;
             }
 
+            // バー先端（現在HP位置）に光の目印を追従させる
+            UpdateEdgeGlowPosition(ratio);
+
             yield return null;
         }
+    }
+
+    // バー背景の幅を基準に、現在の割合(ratio)に対応するX位置へ edgeGlow を移動させる
+    // ※barBackground / edgeGlow は「アンカーが左端(0, 0.5)、pivotも左端」の想定です。
+    //   別のアンカー設定を使っている場合は、ここの計算式を合わせて調整してください。
+    void UpdateEdgeGlowPosition(float ratio)
+    {
+        if (edgeGlow == null || barBackground == null) return;
+
+        float width = barBackground.rect.width;
+        Vector2 pos = edgeGlow.anchoredPosition;
+        pos.x = width * Mathf.Clamp01(ratio);
+        edgeGlow.anchoredPosition = pos;
+    }
+
+    // 先端の光をゆっくり明滅させる（スプラトゥーンのボス体力の光っている感じ）
+    void UpdateEdgeGlowPulse()
+    {
+        Image glowImage = edgeGlow.GetComponent<Image>();
+        if (glowImage == null) return;
+
+        float alpha = Mathf.Lerp(0.4f, 1f, (Mathf.Sin(Time.time * edgeGlowPulseSpeed) + 1f) * 0.5f);
+        Color c = glowImage.color;
+        c.a = alpha;
+        glowImage.color = c;
+    }
+
+    // ダメージを受けた瞬間に、バーの削れた位置あたりで火花エフェクトを出す
+    void SpawnHitSpark(float ratioBeforeDamage)
+    {
+        if (hitSparkPrefab == null || barBackground == null) return;
+
+        float width = barBackground.rect.width;
+        float x = width * Mathf.Clamp01(ratioBeforeDamage);
+
+        GameObject spark = Instantiate(hitSparkPrefab, barBackground);
+        RectTransform sparkRect = spark.GetComponent<RectTransform>();
+        if (sparkRect != null)
+        {
+            sparkRect.anchoredPosition = new Vector2(x, 0f);
+        }
+
+        Destroy(spark, hitSparkLifetime);
     }
 
     // オーバーシュートしない、なめらかに減速するイージング（現在の広がり演出で使用中）
