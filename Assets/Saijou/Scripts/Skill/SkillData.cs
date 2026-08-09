@@ -23,6 +23,8 @@ public class SkillData : ScriptableObject
 
     [TextArea(3, 5)]
     public string description; // ショップ用
+    public bool isShopUnlocked = false; // ショップスキル解放用
+    public bool isShopButton = false; // ショップボタンかどうか
     /// <summary>
     /// 現在の経験値取得
     /// </summary>
@@ -88,8 +90,11 @@ public class SkillData : ScriptableObject
             // 解放状態
             isUnlocked = true;
 
-            // ツールチップ更新
-            TooltipUI.instance?.ShowText(this, false);
+            if (!isShopButton)
+            {
+                // ツールチップ更新
+                TooltipUI.instance?.ShowText(this, false);
+            }
         }
     }
 
