@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 300290d2e280cb14f8cd843531bffa6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ComboManager
-  player: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
+  player: {fileID: 494130003}
   comboPopupPrefab: {fileID: 873919367514118230, guid: 723dd77577e9e8849a27a7806cdd55c5, type: 3}
 --- !u!4 &194867987
 Transform:
@@ -369,7 +369,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &355992742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1357,6 +1357,7 @@ GameObject:
   - component: {fileID: 1246104952}
   - component: {fileID: 1609810721}
   - component: {fileID: 1609810720}
+  - component: {fileID: 1609810722}
   m_Layer: 0
   m_Name: Hexagon Red
   m_TagString: Enemy
@@ -1377,7 +1378,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossEnemy
   player: {fileID: 0}
-  moveSpeed: 3
+  movementScriptToDisable: {fileID: 0}
+  walkDirection: {x: -1, y: 0}
+  walkDistance: 5
+  walkSpeed: 3
+  telegraphPrefab: {fileID: 0}
+  telegraphLength: 8
+  aimDuration: 1
+  chargeSpeed: 18
+  chargeDuration: 0.6
+  chargeDamage: 20
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  chargeHitRadius: 0.6
+  appearDelay: 10
+  attackInterval: 4
+  debugTriggerKey: 116
 --- !u!212 &1609810721
 SpriteRenderer:
   serializedVersion: 2
@@ -1437,6 +1454,42 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &1609810722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1609810719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5f51142236e4fe41a458647ffb58bc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHP
+  maxHP: 100
+  currentHP: 0
+  isRareEnemy: 0
+  scaleSmooth: 12
+  growInterval: 10
+  growMultiplier: 1.5
+  deathDuration: 1.2
+  spiralSpeed: 20
+  rotationSpeed: 1080
+  dropItems: []
+  dropCount: 1
+  damageText: {fileID: 0}
+  hpSlider: {fileID: 0}
+  hpDelaySlider: {fileID: 0}
+  useRadialFill: 1
+  radialOrigin: 2
+  radialClockwise: 0
+  hpBarRoot: {fileID: 0}
+  hitFlashColor: {r: 1, g: 0, b: 0, a: 1}
+  hitFlashDuration: 0.08
+  hpBarSmoothSpeed: 4
+  hpBarDelayTime: 0.1
+  hpBarDelaySpeed: 2
+  stats: {fileID: 0}
 --- !u!4 &1828623762 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4909119946807905130, guid: 395f7599b11b5514cb4c8c91107c9c7c, type: 3}
@@ -1500,11 +1553,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3599685186096162977, guid: 7bce92ffa8315aa4cae0e0a34f0b17e5, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3599685186096162977, guid: 7bce92ffa8315aa4cae0e0a34f0b17e5, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5811812476736568378, guid: 7bce92ffa8315aa4cae0e0a34f0b17e5, type: 3}
       propertyPath: m_Name
@@ -1516,11 +1569,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6848715591875883194, guid: 7bce92ffa8315aa4cae0e0a34f0b17e5, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6848715591875883194, guid: 7bce92ffa8315aa4cae0e0a34f0b17e5, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7384646960275457490, guid: 7bce92ffa8315aa4cae0e0a34f0b17e5, type: 3}
       propertyPath: m_LocalScale.x
