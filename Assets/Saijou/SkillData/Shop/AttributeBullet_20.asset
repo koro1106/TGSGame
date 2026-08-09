@@ -25,3 +25,5 @@ MonoBehaviour:
   addNeedExp: 0
   elementalBulletPrefab: {fileID: 2218497407943198192, guid: 865e9bdc7e5fde9448fd9dead0efba78, type: 3}
   description: "\u91CD\u529B\u306E\u529B\u3092\u5BBF\u3057\u305F\u4EBA\u5F62"
+  isShopUnlocked: 0
+  isShopButton: 1
