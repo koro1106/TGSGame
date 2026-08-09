@@ -18,6 +18,10 @@ public class BossMove : MonoBehaviour
     public Transform player;                   // プレイヤーのTransform（未設定ならタグ"Player"から自動取得）
     public Behaviour movementScriptToDisable;   // 突進中だけ止めたい外部の移動スクリプト（使っている場合のみ設定）
 
+    // ★追加：ボス撃破をスポナーに通知するための参照
+    // EnemySpawner.SpawnBoss() 側で自動的にセットされる
+    public EnemySpawner spawner;
+
     [Header("移動（うさぎと同じ、一度だけ歩く。プレイヤー追従なし）")]
     public Vector2 walkDirection = Vector2.left; // 歩く方向（固定。プレイヤーは追わない）
     public float walkDistance = 5f;              // どれだけ歩いたら止まるか
@@ -57,12 +61,24 @@ public class BossMove : MonoBehaviour
             if (p != null) player = p.transform;
         }
 
+        //ボスのHPが0になって死亡演出が始まった瞬間、スポナーへ通知する
+        hp.OnDeath += HandleBossDeath;
+
         // Prefabはシーン上に実体がないと表示できないので、ここで一度だけInstantiateしておく
         if (telegraphPrefab != null)
         {
             GameObject instance = Instantiate(telegraphPrefab, transform.position, Quaternion.identity);
             telegraphVisual = instance.transform;
             telegraphVisual.gameObject.SetActive(false);
+        }
+    }
+
+    // ★追加：ボス撃破の通知処理。EnemyHPのOnDeathイベントから呼ばれる
+    void HandleBossDeath()
+    {
+        if (spawner != null)
+        {
+            spawner.BossDefeated();
         }
     }
 

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using Action = System.Action; // ★変更：Systemを丸ごと持ち込むとUnityEngine.RandomとSystem.Randomが衝突するため、Actionだけをエイリアスとして使う
 
 public class EnemyHP : MonoBehaviour
 {
@@ -83,6 +84,12 @@ public class EnemyHP : MonoBehaviour
     private IHitSlowable hitSlowable; // 被弾鈍化を呼ぶための参照。EnemyMove/EnemyWarpMoveどちらでも対応
 
     public PlayerStats stats; // プレイヤーステータス
+
+    // ★追加：この敵が死亡した瞬間に発火するイベント。
+    // 誰でも `enemyHP.OnDeath += 処理;` の形で購読できる。
+    // ボスの場合はBossMove側でこれを購読し、EnemySpawner.BossDefeated()を呼ぶのに使う。
+    public event Action OnDeath;
+
     void Start()
     {
         // 移動スクリプト取得（被弾時の鈍化呼び出し用）
@@ -120,29 +127,29 @@ public class EnemyHP : MonoBehaviour
         // 点滅用（子オブジェクトも含めて取得）
         srs = GetComponentsInChildren<SpriteRenderer>();
     }
-        void Update()
+    void Update()
+    {
+        // 拘束中（鎖など）は何もしない
+        if (isBind)
         {
-            // 拘束中（鎖など）は何もしない
-            if (isBind)
-            {
-                return;
-            }
-
-            // 死亡中は処理しない
-            if (isDying) return;
-
-            // スケール反映
-
-            //transform.localScale = Vector3.Lerp(
-            //    transform.localScale,
-            //    targetScale,
-            //    Time.deltaTime * scaleSmooth
-            //);
-
-            // HPバーのアニメーション更新
-            UpdateHPBarAnimation();
+            return;
         }
-    
+
+        // 死亡中は処理しない
+        if (isDying) return;
+
+        // スケール反映
+
+        //transform.localScale = Vector3.Lerp(
+        //    transform.localScale,
+        //    targetScale,
+        //    Time.deltaTime * scaleSmooth
+        //);
+
+        // HPバーのアニメーション更新
+        UpdateHPBarAnimation();
+    }
+
     // HPバーのアニメーション処理
     // メインバー：なめらかに現在HPへ追従
     // 残像バー：少し待ってから、ゆっくり追従（削れた量がじわっと見える）
@@ -227,27 +234,27 @@ public class EnemyHP : MonoBehaviour
     }
 
     // HP割合でサイズ変更
-   /* void UpdateScale()
-    {
-        float ratio = 1f;
+    /* void UpdateScale()
+     {
+         float ratio = 1f;
 
-        if (currentHP > maxHP * 0.75f)
-            ratio = 1f;
-        else if (currentHP > maxHP * 0.5f)
-            ratio = 0.875f;
-        else if (currentHP > maxHP * 0.25f)
-            ratio = 0.75f;
-        else
-            ratio = 0.625f;
+         if (currentHP > maxHP * 0.75f)
+             ratio = 1f;
+         else if (currentHP > maxHP * 0.5f)
+             ratio = 0.875f;
+         else if (currentHP > maxHP * 0.25f)
+             ratio = 0.75f;
+         else
+             ratio = 0.625f;
 
-        targetScale = baseScale * ratio;
+         targetScale = baseScale * ratio;
 
-        if (hpSlider != null)
-        {
-            hpSlider.maxValue = maxHP;
-            hpSlider.value = currentHP;
-        }
-    }*/
+         if (hpSlider != null)
+         {
+             hpSlider.maxValue = maxHP;
+             hpSlider.value = currentHP;
+         }
+     }*/
 
     // HP増加処理
     void GrowHP()
@@ -367,6 +374,9 @@ public class EnemyHP : MonoBehaviour
         // 死亡フラグON
         isDying = true;
 
+        // ★追加：死亡が確定した瞬間に通知する（ボス撃破判定などに使われる）
+        OnDeath?.Invoke();
+
         // 影をすぐ消す
         EnemyMove move = GetComponent<EnemyMove>();
         if (move != null)
@@ -481,28 +491,28 @@ public class EnemyHP : MonoBehaviour
         Destroy(gameObject);
     }
     // 被弾点滅（赤く一瞬光って元の色に戻る）
-   IEnumerator HitFlash()
-{
-    // 全部赤くする
-    foreach (SpriteRenderer sr in srs)
+    IEnumerator HitFlash()
     {
-        if (sr != null)
+        // 全部赤くする
+        foreach (SpriteRenderer sr in srs)
         {
-            sr.color = hitFlashColor;
+            if (sr != null)
+            {
+                sr.color = hitFlashColor;
+            }
+        }
+
+        yield return new WaitForSeconds(hitFlashDuration);
+
+        // 元の色（白）に戻す
+        foreach (SpriteRenderer sr in srs)
+        {
+            if (sr != null)
+            {
+                sr.color = Color.white;
+            }
         }
     }
-
-    yield return new WaitForSeconds(hitFlashDuration);
-
-    // 元の色（白）に戻す
-    foreach (SpriteRenderer sr in srs)
-    {
-        if (sr != null)
-        {
-            sr.color = Color.white;
-        }
-    }
-}
     // ダメージUI表示
     void ShowDamage(int damage, bool isCritical)
     {
