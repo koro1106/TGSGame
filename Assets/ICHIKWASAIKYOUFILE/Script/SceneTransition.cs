@@ -6,6 +6,8 @@ public class SceneTransition : MonoBehaviour
 {
     [SerializeField] private RectTransform fadeImage;
 
+    [SerializeField] private GameObject loadingEnemy;
+
     // ç∂í[ÇÃà íu
     [SerializeField] private Vector2 endPos = Vector2.zero;
 
@@ -18,6 +20,7 @@ public class SceneTransition : MonoBehaviour
 
     public void StartGame()
     {
+
         StartCoroutine(Transition());
     }
 
@@ -36,6 +39,8 @@ public class SceneTransition : MonoBehaviour
 
             yield return null;
         }
+
+        loadingEnemy.SetActive(true);
 
         // è≠Çµë“Ç¬
         yield return new WaitForSeconds(waitTime);
