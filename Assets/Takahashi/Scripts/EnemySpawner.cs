@@ -143,7 +143,10 @@ public class EnemySpawner : MonoBehaviour
 
         BossMove move = boss.GetComponent<BossMove>();
         if (move != null)
+        {
             move.player = player;
+            move.spawner = this; // ★追加：ボス撃破の通知を受け取れるようにする
+        }
 
         BossEnemy bossScript = boss.GetComponent<BossEnemy>();
         if (bossScript != null)

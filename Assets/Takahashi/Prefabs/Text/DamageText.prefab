@@ -201,12 +201,12 @@ MonoBehaviour:
   diagonalSpread: 0.6
   spawnDropDistance: 0.15
   spawnScale: 0.3
-  riseUpDuration: 0.1
+  riseUpDuration: 0.05
   riseUpDistance: 20
   overshootScale: 1.3
-  settleDuration: 0.12
-  settleDistance: 8
+  settleDuration: 0.05
+  settleDistance: 3
   settleScale: 1.05
-  finalDuration: 0.35
+  finalDuration: 0.2
   finalMoveDistance: 60
   criticalScaleMultiplier: 1
