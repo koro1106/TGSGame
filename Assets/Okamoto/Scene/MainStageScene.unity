@@ -290,7 +290,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -340.3, y: -356.49997}
+  m_AnchoredPosition: {x: -338.6, y: -350.8}
   m_SizeDelta: {x: 100, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &31427388
@@ -2568,9 +2568,12 @@ MonoBehaviour:
   ammoPlusPoint: {fileID: 289254091}
   ammoSlideDuration: 0.15
   ammoEnterDuration: 0.15
-  firstAmmoDropHeight: 60
+  firstAmmoDropHeight: 100
   firstAmmoDropDuration: 0.12
   firstAmmoStartScale: 0.7
+  firstAmmoBounceDown: 50
+  firstAmmoBounceUp: 2
+  firstAmmoBounceDuration: 0.08
   normalAmmoSprite: {fileID: 21300000, guid: 27c4801de398b4542a1ce347ebca5213, type: 3}
   lightningAmmoSprite: {fileID: 21300000, guid: a57becc52ca586f4a9983f8c6811ce5d, type: 3}
   BindAmmoSprite: {fileID: 21300000, guid: 1b37e9fad018c7a4f92c504224f508b6, type: 3}
@@ -5045,7 +5048,7 @@ GameObject:
   - component: {fileID: 289254093}
   - component: {fileID: 289254092}
   m_Layer: 5
-  m_Name: Image
+  m_Name: +
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5067,7 +5070,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 301, y: -418}
+  m_AnchoredPosition: {x: 257.8, y: -431.8}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &289254092
@@ -14454,7 +14457,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -382, y: -358.7}
+  m_AnchoredPosition: {x: -382, y: -361.2}
   m_SizeDelta: {x: 53.8, y: 125.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1095180571
