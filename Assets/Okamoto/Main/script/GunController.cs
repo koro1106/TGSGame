@@ -65,6 +65,10 @@ public class GunController : MonoBehaviour
     public float firstAmmoDropHeight = 60f;
     public float firstAmmoDropDuration = 0.12f;
     public float firstAmmoStartScale = 0.7f;
+    [Header("NEXT弾の跳ね演出")]
+    public float firstAmmoBounceDown = 10f;   // 目標より少し下まで落ちる距離
+    public float firstAmmoBounceUp = 6f;      // そこから上に跳ねる距離
+    public float firstAmmoBounceDuration = 0.08f; // 跳ねる時間
 
     [Header("弾UI画像")]
     public Sprite normalAmmoSprite;
@@ -109,6 +113,7 @@ public class GunController : MonoBehaviour
 
     private AmmoType[] ammoTypes;
     private Sprite[] ammoSprites;
+    private GameObject[] ammoPrefabs;
 
     // 弾UIの本来の位置
     private Vector3[] ammoOriginalPositions;
@@ -128,6 +133,12 @@ public class GunController : MonoBehaviour
     private float crosshairTargetRotation = 0f;
     private bool isChangingScene = false;
 
+    private Coroutine ammoSlideCoroutine;
+   
+    private int ammoSlideQueue = 0; // 弾UIスライド待ち数
+
+    private bool isAmmoSlidePlaying = false;// スライドアニメーションが現在動いているか
+
     // ★追加：クロスヘアが乗っているCanvasとそのRenderMode判定
     private Canvas crosshairCanvas;
     private bool isWorldSpaceCanvas;
@@ -142,6 +153,8 @@ public class GunController : MonoBehaviour
     public RectTransform Crosshair => crosshair;
     public Camera Cam => cam;
     public Vector2 LastShootDirection { get; private set; }
+
+
 
     void Start()
     {
@@ -226,10 +239,13 @@ public class GunController : MonoBehaviour
         // =====================================================
 
         ammoTypes =
-            new AmmoType[ammoSlots.Length];
+    new AmmoType[ammoSlots.Length];
 
         ammoSprites =
             new Sprite[ammoSlots.Length];
+
+        ammoPrefabs =
+            new GameObject[ammoSlots.Length];
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Confined;
@@ -301,14 +317,14 @@ public class GunController : MonoBehaviour
     void Shoot()
     {
         fireTimer += Time.deltaTime;
+
         if (Input.GetMouseButton(0) && fireTimer >= fireRate)
         {
-            //=========================
-            // 撃てる弾があるか
-            //=========================
+            // =========================
+            // 弾切れチェック
+            // =========================
             if (currentAmmo <= 0)
             {
-                // 弾切れ
                 if (!isChangingScene)
                 {
                     StartCoroutine(OutOfAmmoAndChangeScene());
@@ -318,81 +334,70 @@ public class GunController : MonoBehaviour
             }
 
             // =========================
-            // 使用する弾スロット決定
+            // 弾データチェック
             // =========================
-            // =========================================
-            // 現在表示されている一番左の弾を撃つ
-            // =========================================
-
-            int uiIndex = 0;
-
-            if (uiIndex < 0 ||
-                uiIndex >= ammoSlots.Length)
+            if (ammoPrefabs == null ||
+                ammoPrefabs.Length == 0 ||
+                ammoPrefabs[0] == null)
             {
+                Debug.LogError("撃つ弾データがありません。");
                 return;
             }
 
-            AmmoSlot slot =
-                ammoSlots[uiIndex];
+            // =========================
+            // 先頭の弾を取得
+            // =========================
 
-            // 実際に撃つ弾は、UIの0番ではなく
-            // 実データのvisibleStartIndexを見る
-            int dataIndex =
-                visibleStartIndex;
+            GameObject bulletToShoot = ammoPrefabs[0];
 
-            if (dataIndex < 0 ||
-                dataIndex >= ammoTypes.Length)
+            AmmoType currentType = ammoTypes[0];
+            Sprite currentSprite = ammoSprites[0];
+
+            // =========================
+            // NEXT UI
+            // =========================
+
+            Image nextImage = null;
+
+            if (ammoSlots != null &&
+                ammoSlots.Length > 0 &&
+                ammoSlots[0].image != null)
             {
-                return;
+                nextImage = ammoSlots[0].image;
             }
-
-            // 実際の弾タイプ
-            AmmoType currentAmmoType =
-                ammoTypes[dataIndex];
-
-            slot.ammoType =
-                currentAmmoType;
-
-            // UI画像
-            Image img =
-                slot.image;
-
-            // 範囲チェック
-            if (uiIndex < 0 || uiIndex >= ammoSlots.Length)
-                return;
-
-            //// 現在使う弾
-            //AmmoSlot slot = ammoSlots[uiIndex];
-            //// UI画像
-            //Image img = slot.image;
-
-            // =========================
-            // 発射する弾決定
-            // =========================
-            GameObject bulletToShoot = GetBulletPrefab(currentAmmoType);
 
             // =========================
             // 弾生成
             // =========================
+
             GameObject bulletInstance =
-                Instantiate(bulletToShoot, muzzle.position, muzzle.rotation);
+                Instantiate(
+                    bulletToShoot,
+                    muzzle.position,
+                    muzzle.rotation
+                );
 
             PlayMuzzleFlash();
+
             crosshairTargetRotation += 90f;
 
             if (shotgun != null && shotgun.isActive)
             {
                 shotgun.Fire();
             }
+
             if (sniper != null && sniper.isActive)
             {
                 sniper.Fire();
             }
 
             // =========================
-            // ダメージ設定
+            // ダメージ
             // =========================
-            Bullet bulletScript = bulletToShoot.GetComponent<Bullet>();
+
+            Bullet bulletScript =
+                bulletInstance.GetComponent<Bullet>();
+
             if (bulletScript != null)
             {
                 bulletScript.SetDamage(stats.bulletDamage);
@@ -401,115 +406,188 @@ public class GunController : MonoBehaviour
             // =========================
             // 発射方向
             // =========================
-            Rigidbody2D rb = bulletInstance.GetComponent<Rigidbody2D>();
 
-            // ★ World/Overlay両対応のワールド座標取得に変更
-            Vector3 worldPos = GetCrosshairWorldPosition();
+            Rigidbody2D rb =
+                bulletInstance.GetComponent<Rigidbody2D>();
 
-            Vector2 direction = (worldPos - muzzle.position).normalized;
+            Vector3 worldPos =
+                GetCrosshairWorldPosition();
+
+            Vector2 direction =
+                (worldPos - muzzle.position).normalized;
+
             LastShootDirection = direction;
 
-            bulletInstance.transform.right = direction;
-            rb.linearVelocity = direction * bulletSpeed;
+            bulletInstance.transform.right =
+                direction;
 
-            // =========================
-            // 弾消費
-            // =========================
-            currentAmmo--;
-
-            // 回復演出中なら消す
-            if (slot.recoverEffectObject != null)
+            if (rb != null)
             {
-                Destroy(slot.recoverEffectObject);
-                slot.recoverEffectObject = null;
-                slot.isRecovering = false;
+                rb.linearVelocity =
+                    direction * bulletSpeed;
             }
 
-            SEManager.Instance.PlayShootSE(); // SE再生
+            // =========================
+            // 発射UIドロップ演出
+            // =========================
 
-            // 弾UIドロップ演出
-            if (ammoDropUIPrefab != null && img != null)
+            if (ammoDropUIPrefab != null &&
+                nextImage != null)
             {
                 GameObject drop =
                     Instantiate(
                         ammoDropUIPrefab,
-                        img.transform.position,
+                        nextImage.transform.position,
                         Quaternion.identity,
-                        img.transform.parent);
+                        nextImage.transform.parent
+                    );
 
-                drop.transform.localScale = img.transform.localScale;
+                drop.transform.localScale =
+                    nextImage.transform.localScale;
 
-                Image dropImage = drop.GetComponent<Image>();
+                Image dropImage =
+                    drop.GetComponent<Image>();
 
                 if (dropImage != null)
                 {
-                    dropImage.sprite = img.sprite;
+                    dropImage.sprite =
+                        nextImage.sprite;
                 }
             }
 
-            // 弾UIを更新
-            StartCoroutine(PlayAmmoSlideAnimation());
+            // =========================
+            // 弾データを1発消費
+            // =========================
+            ConsumeCurrentAmmo();
+
+            // =========================
+            // SE
+            // =========================
+
+            SEManager.Instance.PlayShootSE();
 
             // =========================
             // 演出
             // =========================
+
             CameraShake.Instance.Shake();
             PlayerHP.Instance.TakeDamage(1);
 
             // =========================
-            // UI更新
+            // UIアニメーションをキューに追加
             // =========================
+
+            ammoSlideQueue++;
+
+            if (!isAmmoSlidePlaying)
+            {
+                ammoSlideCoroutine =
+                    StartCoroutine(ProcessAmmoSlideQueue());
+            }
+
+            // =========================
+            // 数字UI
+            // =========================
+
             UpdateAmmoUI();
 
-            // 発射間隔リセット
-            fireTimer = 0;
+            // =========================
+            // 発射間隔
+            // =========================
+
+            fireTimer = 0f;
         }
     }
 
-    GameObject GetBulletPrefab(AmmoType type)
+    void ConsumeCurrentAmmo()
     {
-        // 通常弾
-        if (type == AmmoType.Normal)
+        if (currentAmmo <= 0)
+            return;
+
+        // =========================================
+        // 現在存在している弾だけを前に詰める
+        // =========================================
+
+        int oldAmmoCount = currentAmmo;
+
+        for (int i = 0; i < oldAmmoCount - 1; i++)
         {
-            return bulletPrefabs[0];
+            ammoPrefabs[i] = ammoPrefabs[i + 1];
+            ammoTypes[i] = ammoTypes[i + 1];
+            ammoSprites[i] = ammoSprites[i + 1];
         }
 
-        // 解放済み属性弾から探す
-        foreach (GameObject prefab in stats.unlockedElementalBullets)
+        // =========================================
+        // 最後に存在していた弾を消す
+        // =========================================
+
+        int lastIndex = oldAmmoCount - 1;
+
+        if (lastIndex >= 0 &&
+            lastIndex < ammoPrefabs.Length)
         {
-            string bulletName = prefab.name;
-            switch (type)
-            {
-                case AmmoType.Lightning:
-                    if (bulletName.Contains("Lightning"))
-                        return prefab;
-                    break;
-                case AmmoType.Gravity:
-                    if (bulletName.Contains("Gravity"))
-                        return prefab;
-                    break;
-                case AmmoType.Bind:
-                    if (bulletName.Contains("Bind"))
-                        return prefab;
-                    break;
-                case AmmoType.Poison:
-                    if (bulletName.Contains("Poison"))
-                        return prefab;
-                    break;
-                case AmmoType.Explosion:
-                    if (bulletName.Contains("Explosion"))
-                        return prefab;
-                    break;
-                case AmmoType.Penetrating:
-                    if (bulletName.Contains("Penetrating"))
-                        return prefab;
-                    break;
-            }
+            ammoPrefabs[lastIndex] = null;
+            ammoTypes[lastIndex] = AmmoType.Normal;
+            ammoSprites[lastIndex] = null;
         }
 
-        // 見つからなかったら通常弾
-        return bulletPrefabs[0];
+        // =========================================
+        // 弾数を減らす
+        // =========================================
+
+        currentAmmo--;
+
+        // =========================================
+        // UIの開始位置
+        // =========================================
+
+        visibleStartIndex++;
     }
+
+    //GameObject GetBulletPrefab(AmmoType type)
+    //{
+    //    // 通常弾
+    //    if (type == AmmoType.Normal)
+    //    {
+    //        return bulletPrefabs[0];
+    //    }
+
+    //    // 解放済み属性弾から探す
+    //    foreach (GameObject prefab in stats.unlockedElementalBullets)
+    //    {
+    //        string bulletName = prefab.name;
+    //        switch (type)
+    //        {
+    //            case AmmoType.Lightning:
+    //                if (bulletName.Contains("Lightning"))
+    //                    return prefab;
+    //                break;
+    //            case AmmoType.Gravity:
+    //                if (bulletName.Contains("Gravity"))
+    //                    return prefab;
+    //                break;
+    //            case AmmoType.Bind:
+    //                if (bulletName.Contains("Bind"))
+    //                    return prefab;
+    //                break;
+    //            case AmmoType.Poison:
+    //                if (bulletName.Contains("Poison"))
+    //                    return prefab;
+    //                break;
+    //            case AmmoType.Explosion:
+    //                if (bulletName.Contains("Explosion"))
+    //                    return prefab;
+    //                break;
+    //            case AmmoType.Penetrating:
+    //                if (bulletName.Contains("Penetrating"))
+    //                    return prefab;
+    //                break;
+    //        }
+    //    }
+
+    //    // 見つからなかったら通常弾
+    //    return bulletPrefabs[0];
+    //}
 
     void StartReload()
     {
@@ -546,10 +624,13 @@ public class GunController : MonoBehaviour
 
             ammoSprites =
                 new Sprite[ammoSlots.Length];
+
+            ammoPrefabs =
+                new GameObject[ammoSlots.Length];
         }
 
         // =========================================
-        // 100発分の弾データを生成
+        // 弾データ生成
         // =========================================
 
         for (int i = 0; i < ammoSlots.Length; i++)
@@ -557,9 +638,12 @@ public class GunController : MonoBehaviour
             AmmoType type = AmmoType.Normal;
             Sprite sprite = normalAmmoSprite;
 
-            // -------------------------
+            // 最初は通常弾
+            GameObject prefab = bulletPrefabs[0];
+
+            // =========================================
             // 属性弾抽選
-            // -------------------------
+            // =========================================
 
             bool canElement =
                 stats.unlockedElementalBullets != null &&
@@ -579,45 +663,59 @@ public class GunController : MonoBehaviour
                 string bulletName =
                     randomPrefab.name;
 
+                // =====================================
+                // 属性弾
+                // =====================================
+
                 if (bulletName.Contains("Lightning"))
                 {
                     type = AmmoType.Lightning;
                     sprite = lightningAmmoSprite;
+                    prefab = randomPrefab;
                 }
                 else if (bulletName.Contains("Gravity"))
                 {
                     type = AmmoType.Gravity;
                     sprite = GravityAmmoSprite;
+                    prefab = randomPrefab;
                 }
                 else if (bulletName.Contains("Bind"))
                 {
                     type = AmmoType.Bind;
                     sprite = BindAmmoSprite;
+                    prefab = randomPrefab;
                 }
                 else if (bulletName.Contains("Poison"))
                 {
                     type = AmmoType.Poison;
                     sprite = PoisonAmmoSprite;
+                    prefab = randomPrefab;
                 }
                 else if (bulletName.Contains("Explosion"))
                 {
                     type = AmmoType.Explosion;
                     sprite = ExplosionAmmoSprite;
+                    prefab = randomPrefab;
                 }
                 else if (bulletName.Contains("Penetrating"))
                 {
                     type = AmmoType.Penetrating;
                     sprite = penetratingAmmoSprite;
+                    prefab = randomPrefab;
                 }
             }
 
-            // 実際の弾データを保存
+            // =========================================
+            // 1発分のデータを保存
+            // =========================================
+
             ammoTypes[i] = type;
             ammoSprites[i] = sprite;
+            ammoPrefabs[i] = prefab;
         }
 
         // =========================================
-        // UI表示
+        // UI更新
         // =========================================
 
         RefreshAmmoUIImmediate();
@@ -684,70 +782,72 @@ public class GunController : MonoBehaviour
                 currentAmmo
             );
 
-        // -----------------------------------------
-        // 最後の10発を表示
-        // -----------------------------------------
-
-        visibleStartIndex =
-            Mathf.Max(
-                0,
-                currentAmmo - visibleCount
-            );
-
-        // -----------------------------------------
-        // 100個のUIを一旦非表示
-        // -----------------------------------------
+        // =========================================
+        // 全UIを非表示
+        // =========================================
 
         for (int i = 0; i < ammoSlots.Length; i++)
         {
             if (ammoSlots[i].image != null)
             {
                 ammoSlots[i].image.enabled = false;
+
+                ammoSlots[i]
+                    .image
+                    .rectTransform
+                    .localPosition =
+                    ammoOriginalPositions[i];
             }
 
             if (ammoSlots[i].emptyImage != null)
             {
-                ammoSlots[i].emptyImage.gameObject.SetActive(false);
+                ammoSlots[i]
+                    .emptyImage
+                    .gameObject
+                    .SetActive(false);
             }
         }
 
-        // -----------------------------------------
-        // 画面には最大10個だけ表示
-        // -----------------------------------------
+        // =========================================
+        // 0番目から表示
+        // =========================================
 
         for (int displayIndex = 0;
              displayIndex < visibleCount;
              displayIndex++)
         {
-            int dataIndex =
-                visibleStartIndex + displayIndex;
+            if (displayIndex >= ammoPrefabs.Length)
+                break;
 
-            if (dataIndex < 0 ||
-                dataIndex >= ammoTypes.Length)
-                continue;
-
-            AmmoSlot uiSlot =
+            AmmoSlot slot =
                 ammoSlots[displayIndex];
 
-            // Sprite
-            uiSlot.image.sprite =
-                ammoSprites[dataIndex];
+            if (slot.image == null)
+                continue;
 
-            // 属性
-            uiSlot.ammoType =
-                ammoTypes[dataIndex];
+            // =====================================
+            // 弾データ → UI
+            // =====================================
 
-            // 表示
-            uiSlot.image.enabled = true;
+            slot.ammoType =
+                ammoTypes[displayIndex];
 
-            // 空枠
-            if (uiSlot.emptyImage != null)
+            slot.image.sprite =
+                ammoSprites[displayIndex];
+
+            slot.image.enabled =
+                true;
+
+            if (slot.emptyImage != null)
             {
-                uiSlot.emptyImage.gameObject.SetActive(true);
+                slot.emptyImage
+                    .gameObject
+                    .SetActive(true);
             }
 
-            // 位置を必ず元に戻す
-            uiSlot.image.rectTransform.localPosition =
+            slot.image
+                .rectTransform
+                .localPosition =
                 ammoOriginalPositions[displayIndex];
         }
     }
@@ -985,190 +1085,264 @@ public class GunController : MonoBehaviour
         SceneManager.LoadScene("MainStageSkillTreeScene");
     }
 
-    IEnumerator PlayAmmoSlideAnimation()
-{
-    // =========================================
-    // 発射前の状態
-    // =========================================
-
-    int oldVisibleCount =
-        Mathf.Min(
-            visibleAmmoCount,
-            currentAmmo + 1
-        );
-
-    int newVisibleCount =
-        Mathf.Min(
-            visibleAmmoCount,
-            currentAmmo
-        );
-
-    if (oldVisibleCount <= 0)
-        yield break;
-
-    // 発射前の先頭データ
-    int oldStartIndex =
-        Mathf.Max(
-            0,
-            (currentAmmo + 1) - oldVisibleCount
-        );
-
-    // 発射後の先頭データ
-    int newStartIndex =
-        Mathf.Max(
-            0,
-            currentAmmo - newVisibleCount
-        );
-
-    // =========================================
-    // ① 撃たれた一番左の弾を即座に消す
-    // =========================================
-
-    if (ammoSlots.Length > 0 &&
-        ammoSlots[0].image != null)
+    IEnumerator ProcessAmmoSlideQueue()
     {
-        ammoSlots[0].image.enabled = false;
-    }
+        isAmmoSlidePlaying = true;
 
-    // =========================================
-    // ② 2番目以降を左へスライド
-    //
-    // ただし、
-    // 2番目 → 1番目
-    // は普通の横移動ではなく
-    // 「上から降ってくる」
-    // =========================================
-
-    Vector3[] startPositions =
-        new Vector3[oldVisibleCount];
-
-    for (int i = 0;
-         i < oldVisibleCount &&
-         i < ammoSlots.Length;
-         i++)
-    {
-        if (ammoSlots[i].image != null)
+        while (ammoSlideQueue > 0)
         {
-            startPositions[i] =
-                ammoSlots[i].image.rectTransform.localPosition;
+            ammoSlideQueue--;
+
+            yield return StartCoroutine(
+                PlaySingleAmmoSlideAnimation()
+            );
         }
+
+        isAmmoSlidePlaying = false;
+        ammoSlideCoroutine = null;
+
+        // 最後に必ず現在の弾数と一致させる
+        RefreshAmmoUIImmediate();
     }
-
-    // =========================================
-    // 左端に入ってくる弾の情報
-    // =========================================
-
-    Sprite nextSprite = null;
-    AmmoType nextAmmoType = AmmoType.Normal;
-
-    bool hasNextAmmo = false;
-
-    if (newVisibleCount > 0 &&
-        newStartIndex >= 0 &&
-        newStartIndex < ammoTypes.Length)
+    IEnumerator PlaySingleAmmoSlideAnimation()
     {
-        nextSprite =
-            ammoSprites[newStartIndex];
+        bool wasInterrupted = false;
 
-        nextAmmoType =
-            ammoTypes[newStartIndex];
+        if (ammoSlots == null ||
+            ammoSlots.Length == 0)
+        {
+            yield break;
+        }
 
-        hasNextAmmo = true;
-    }
-
-    // =========================================
-    // 左端に降ってくる弾を作る
-    // =========================================
-
-    GameObject nextDropObject = null;
-    RectTransform nextDropRect = null;
-
-    if (hasNextAmmo &&
-        ammoSlots.Length > 0 &&
-        ammoSlots[0].image != null)
-    {
-        Image targetImage =
-            ammoSlots[0].image;
-
-        nextDropObject =
-            new GameObject(
-                "NextAmmoDropEffect"
+        int displayCount =
+            Mathf.Min(
+                visibleAmmoCount,
+                ammoSlots.Length
             );
 
-        nextDropObject.transform.SetParent(
-            targetImage.transform.parent,
-            false
-        );
+        // =========================================
+        // 現在の残弾数
+        // =========================================
 
-        Image effectImage =
-            nextDropObject.AddComponent<Image>();
+        int remainingAmmo = currentAmmo;
 
-        effectImage.sprite =
-            nextSprite;
+        // =========================================
+        // 弾が0発
+        // =========================================
 
-        effectImage.preserveAspect = true;
+        if (remainingAmmo <= 0)
+        {
+            for (int i = 0; i < displayCount; i++)
+            {
+                if (ammoSlots[i].image != null)
+                {
+                    ammoSlots[i]
+                        .image
+                        .enabled = false;
 
-        nextDropRect =
-            nextDropObject.GetComponent<RectTransform>();
+                    ammoSlots[i]
+                        .image
+                        .rectTransform
+                        .localPosition =
+                        ammoOriginalPositions[i];
+                }
 
-            // -------------------------------------
-            // 左端の本来の位置
-            // -------------------------------------
+                if (ammoSlots[i].emptyImage != null)
+                {
+                    ammoSlots[i]
+                        .emptyImage
+                        .gameObject
+                        .SetActive(false);
+                }
+            }
 
-            RectTransform targetRect =
-        ammoSlots[0].image.rectTransform;
+            yield break;
+        }
 
-            Vector2 targetPosition =
-                targetRect.anchoredPosition;
+        // =========================================
+        // 現在のUI位置を保存
+        // =========================================
 
-            Vector2 startPosition =
-                targetPosition + new Vector2(0f, 120f);
+        Vector3[] startPositions =
+            new Vector3[displayCount];
 
-            nextDropRect.anchoredPosition =
-                startPosition;
+        for (int i = 0; i < displayCount; i++)
+        {
+            if (ammoSlots[i].image != null)
+            {
+                startPositions[i] =
+                    ammoSlots[i]
+                        .image
+                        .rectTransform
+                        .localPosition;
+            }
+            else
+            {
+                startPositions[i] =
+                    ammoOriginalPositions[i];
+            }
+        }
 
-            // 少し小さく開始
-            nextDropRect.localScale =
-            Vector3.one * 0.65f;
-    }
+        // =========================================
+        // 一番左の弾を消す
+        // =========================================
 
-    // =========================================
-    // ③ アニメーション
-    // =========================================
+        if (ammoSlots[0].image != null)
+        {
+            ammoSlots[0]
+                .image
+                .enabled = false;
+        }
 
-    float timer = 0f;
-
-    while (timer < ammoSlideDuration)
-    {
-        timer += Time.deltaTime;
-
-        float t =
-            Mathf.Clamp01(
-                timer / ammoSlideDuration
-            );
-
-        t =
-            Mathf.SmoothStep(
-                0f,
-                1f,
-                t
-            );
-
-        // =====================================
-        // 2番目以降を左へ
+        // =========================================
+        // NEXT弾の情報
         //
-        // 例：
-        //
-        // C → B
-        // D → C
-        // E → D
-        // ...
-        // =====================================
+        // ConsumeCurrentAmmo() 後なので
+        // ammoSprites[0] が「次に撃つ弾」
+        // =========================================
 
-        for (int i = 2;
-             i < oldVisibleCount &&
-             i < ammoSlots.Length;
-             i++)
+        Sprite nextSprite = null;
+        AmmoType nextType = AmmoType.Normal;
+
+        if (remainingAmmo > 0 &&
+            ammoSprites != null &&
+            ammoTypes != null &&
+            ammoSprites.Length > 0)
+        {
+            nextSprite = ammoSprites[0];
+            nextType = ammoTypes[0];
+        }
+
+        // =========================================
+        // NEXT弾の上から落下する演出
+        // =========================================
+
+        Coroutine nextDropCoroutine = null;
+
+        if (nextSprite != null &&
+            ammoSlots[0].image != null)
+        {
+            // 本物の2番目以降のUIが
+            // 左端に一瞬表示されないようにする
+            if (displayCount >= 2 &&
+                ammoSlots[1].image != null)
+            {
+                ammoSlots[1]
+                    .image
+                    .enabled = false;
+            }
+
+            nextDropCoroutine =
+    StartCoroutine(
+        AnimateNextAmmoDropFromAbove(
+            nextSprite,
+            ammoSlots[0].image.rectTransform
+        )
+    );
+        }
+
+        // =========================================
+        // 3番目以降を左へスライド
+        // =========================================
+
+        float timer = 0f;
+
+
+        // =========================================
+        // ＋から11個目以降の弾を入れる演出
+        // =========================================
+        //
+        // 発射後に11発以上残っている場合、
+        // 10番目の表示位置に新しい弾が入ってくる
+        //
+        Coroutine ammoEnterCoroutine = null;
+
+        if (remainingAmmo > visibleAmmoCount &&
+            visibleAmmoCount <= ammoSlots.Length &&
+            ammoSprites != null &&
+            visibleAmmoCount < ammoSprites.Length &&
+            ammoSprites[visibleAmmoCount - 1] != null)
+        {
+            // 10番目のスロットを一旦非表示
+            if (ammoSlots[visibleAmmoCount - 1].image != null)
+            {
+                ammoSlots[visibleAmmoCount - 1]
+                    .image
+                    .enabled = false;
+            }
+
+            // ＋から10番目の位置へ入ってくる
+            ammoEnterCoroutine =
+                StartCoroutine(
+                    PlayAmmoEnterEffect(visibleAmmoCount - 1)
+                );
+        }
+
+        while (timer < ammoSlideDuration)
+        {
+            timer += Time.deltaTime;
+
+            float t =
+                Mathf.Clamp01(
+                    timer / ammoSlideDuration
+                );
+
+            t =
+                Mathf.SmoothStep(
+                    0f,
+                    1f,
+                    t
+                );
+
+            // =====================================
+            // 3番目 → 2番目
+            // 4番目 → 3番目
+            // ...
+            // =====================================
+
+            for (int i = 2;
+     i < displayCount;
+     i++)
+            {
+                if (ammoSlots[i].image == null)
+                    continue;
+
+                // 存在しない弾は表示しない
+                if (i >= remainingAmmo)
+                {
+                    ammoSlots[i].image.enabled = false;
+                    continue;
+                }
+
+                Vector3 start =
+                    startPositions[i];
+
+                Vector3 target =
+                    ammoOriginalPositions[i - 1];
+
+                // SmoothStepよりさらに滑らかな補間
+                float smoothT =
+                    t * t * (3f - 2f * t);
+
+                ammoSlots[i]
+                    .image
+                    .rectTransform
+                    .localPosition =
+                    Vector3.LerpUnclamped(
+                        start,
+                        target,
+                        smoothT
+                    );
+            }
+
+            yield return null;
+        }
+
+        // =========================================
+        // スライド終了
+        // =========================================
+
+        for (int i = 0; i < displayCount; i++)
         {
             if (ammoSlots[i].image == null)
                 continue;
@@ -1177,109 +1351,408 @@ public class GunController : MonoBehaviour
                 .image
                 .rectTransform
                 .localPosition =
-                Vector3.Lerp(
-                    startPositions[i],
-                    ammoOriginalPositions[i - 1],
-                    t
-                );
+                ammoOriginalPositions[i];
         }
 
-        // =====================================
-        // B → 左端
-        //
-        // 実際のBは動かさず、
-        // 上から降ってくる演出を表示
-        // =====================================
+        // =========================================
+        // NEXT弾の落下演出が終わるまで待つ
+        // =========================================
 
-        if (nextDropRect != null)
+        //if (nextDropCoroutine != null)
+        //{
+        //    yield return nextDropCoroutine;
+        //}
+
+        // =========================================
+        // ＋から入ってくる弾の演出が終わるまで待つ
+        // =========================================
+
+        if (ammoEnterCoroutine != null)
         {
-            Vector3 targetPosition =
-                ammoOriginalPositions[0];
+            yield return ammoEnterCoroutine;
+        }
 
-            Vector3 startPosition =
-                targetPosition +
-                new Vector3(
-                    0f,
-                    80f,
-                    0f
+        // =========================================
+        // 現在の弾数に合わせてUIを確定
+        // =========================================
+
+        int newVisibleCount =
+            Mathf.Min(
+                visibleAmmoCount,
+                remainingAmmo
+            );
+
+        for (int i = 0; i < displayCount; i++)
+        {
+            if (ammoSlots[i].image == null)
+                continue;
+
+            // =====================================
+            // 存在する弾
+            // =====================================
+
+            if (i < newVisibleCount &&
+                i < ammoSprites.Length &&
+                ammoSprites[i] != null)
+            {
+                ammoSlots[i]
+                    .image
+                    .sprite =
+                    ammoSprites[i];
+
+                ammoSlots[i]
+                    .ammoType =
+                    ammoTypes[i];
+
+                ammoSlots[i]
+                    .image
+                    .enabled = true;
+
+                if (ammoSlots[i].emptyImage != null)
+                {
+                    ammoSlots[i]
+                        .emptyImage
+                        .gameObject
+                        .SetActive(true);
+                }
+            }
+            // =====================================
+            // 存在しない弾
+            // =====================================
+
+            else
+            {
+                ammoSlots[i]
+                    .image
+                    .enabled = false;
+
+                if (ammoSlots[i].emptyImage != null)
+                {
+                    ammoSlots[i]
+                        .emptyImage
+                        .gameObject
+                        .SetActive(false);
+                }
+            }
+        }
+    }
+
+    IEnumerator AnimateNextAmmoDropFromAbove(
+    Sprite sprite,
+    RectTransform target)
+    {
+        if (sprite == null ||
+            target == null)
+            yield break;
+
+        // =========================================
+        // 演出用UI
+        // =========================================
+
+        GameObject effectObject =
+            new GameObject("NextAmmoDropEffect");
+
+        effectObject.transform.SetParent(
+            target.parent,
+            false
+        );
+
+        Image image =
+            effectObject.AddComponent<Image>();
+
+        image.sprite = sprite;
+        image.preserveAspect = true;
+
+        RectTransform rect =
+            effectObject.GetComponent<RectTransform>();
+
+        // =========================================
+        // サイズは元の弾UIと完全に同じ
+        // =========================================
+
+        rect.sizeDelta = target.sizeDelta;
+
+        // Scaleは一切変更しない
+        rect.localScale = target.localScale;
+
+        // =========================================
+        // 元の位置
+        // =========================================
+
+        Vector3 targetPosition =
+            target.localPosition;
+
+        // =========================================
+        // 上から開始
+        // =========================================
+
+        Vector3 startPosition =
+            targetPosition +
+            Vector3.up * firstAmmoDropHeight;
+
+        rect.localPosition =
+            startPosition;
+
+        // =========================================
+        // ① 上から下へ落ちる
+        // =========================================
+
+        float timer = 0f;
+
+        while (timer < firstAmmoDropDuration)
+        {
+            timer += Time.deltaTime;
+
+            float t =
+                Mathf.Clamp01(
+                    timer / firstAmmoDropDuration
                 );
 
-                nextDropRect.anchoredPosition =
-         Vector2.Lerp(
-             startPosition,
-             targetPosition,
-             t
-         );
+            t = Mathf.SmoothStep(
+                0f,
+                1f,
+                t
+            );
 
-                // 小 → 通常サイズ
-                nextDropRect.localScale =
+            rect.localPosition =
                 Vector3.Lerp(
-                    Vector3.one * 0.65f,
+                    startPosition,
+                    targetPosition,
+                    t
+                );
+
+            yield return null;
+        }
+
+        // =========================================
+        // ② 少し下まで行く
+        // =========================================
+
+        Vector3 bounceDownPosition =
+            targetPosition +
+            Vector3.down * firstAmmoBounceDown;
+
+        timer = 0f;
+
+        while (timer < firstAmmoBounceDuration)
+        {
+            timer += Time.deltaTime;
+
+            float t =
+                Mathf.Clamp01(
+                    timer / firstAmmoBounceDuration
+                );
+
+            t = Mathf.SmoothStep(
+                0f,
+                1f,
+                t
+            );
+
+            rect.localPosition =
+                Vector3.Lerp(
+                    targetPosition,
+                    bounceDownPosition,
+                    t
+                );
+
+            yield return null;
+        }
+
+        // =========================================
+        // ③ 元の位置へ戻る
+        // =========================================
+
+        timer = 0f;
+
+        while (timer < firstAmmoBounceDuration)
+        {
+            timer += Time.deltaTime;
+
+            float t =
+                Mathf.Clamp01(
+                    timer / firstAmmoBounceDuration
+                );
+
+            t = Mathf.SmoothStep(
+                0f,
+                1f,
+                t
+            );
+
+            rect.localPosition =
+                Vector3.Lerp(
+                    bounceDownPosition,
+                    targetPosition,
+                    t
+                );
+
+            yield return null;
+        }
+
+        // =========================================
+        // 元の位置で終了
+        // =========================================
+
+        rect.localPosition =
+            targetPosition;
+
+        // =========================================
+        // 本物のNEXT弾を表示
+        // =========================================
+
+        target.GetComponent<Image>().enabled = true;
+
+        Destroy(effectObject);
+    }
+
+
+    IEnumerator PlayNextAmmoDropAnimation(int dataIndex)
+    {
+        if (dataIndex < 0 ||
+            dataIndex >= ammoSprites.Length)
+        {
+            yield break;
+        }
+
+        if (ammoSlots == null ||
+            ammoSlots.Length == 0)
+        {
+            yield break;
+        }
+
+        Image targetImage =
+            ammoSlots[0].image;
+
+        if (targetImage == null)
+            yield break;
+
+        if (targetImage.sprite == null)
+            yield break;
+
+        // =========================================
+        // 元の位置
+        // =========================================
+
+        Vector3 targetPosition =
+            targetImage.rectTransform.position;
+
+        // =========================================
+        // 少し上からスタート
+        // =========================================
+
+        Vector3 startPosition =
+            targetPosition + Vector3.up * 80f;
+
+        // =========================================
+        // 一旦UIを非表示
+        // =========================================
+
+        targetImage.enabled = false;
+
+        // =========================================
+        // 演出用Image
+        // =========================================
+
+        GameObject effectObject =
+            new GameObject("NextAmmoDropEffect");
+
+        effectObject.transform.SetParent(
+            targetImage.transform.parent,
+            false
+        );
+
+        Image effectImage =
+            effectObject.AddComponent<Image>();
+
+        effectImage.sprite =
+            ammoSprites[dataIndex];
+
+        effectImage.preserveAspect =
+            true;
+
+        RectTransform effectRect =
+            effectObject.GetComponent<RectTransform>();
+
+        effectRect.position =
+            startPosition;
+
+        // =========================================
+        // 最初は少し小さく
+        // =========================================
+
+        effectRect.localScale =
+            Vector3.one * 0.75f;
+
+        float timer = 0f;
+
+        float duration = 0.12f;
+
+        // =========================================
+        // 上から降りてくる
+        // =========================================
+
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+
+            float t =
+                Mathf.Clamp01(
+                    timer / duration
+                );
+
+            t =
+                Mathf.SmoothStep(
+                    0f,
+                    1f,
+                    t
+                );
+
+            effectRect.position =
+                Vector3.Lerp(
+                    startPosition,
+                    targetPosition,
+                    t
+                );
+
+            effectRect.localScale =
+                Vector3.Lerp(
+                    Vector3.one * 0.75f,
                     Vector3.one,
                     t
                 );
+
+            yield return null;
         }
 
-        yield return null;
+        // =========================================
+        // 到着
+        // =========================================
+
+        effectRect.position =
+            targetPosition;
+
+        effectRect.localScale =
+            Vector3.one;
+
+        // =========================================
+        // 本物のUIを表示
+        // =========================================
+
+        targetImage.enabled = true;
+
+        targetImage.sprite =
+            ammoSprites[dataIndex];
+
+        ammoSlots[0].ammoType =
+            ammoTypes[dataIndex];
+
+        // =========================================
+        // 演出オブジェクト削除
+        // =========================================
+
+        Destroy(effectObject);
     }
-
-    // =========================================
-    // ④ 最終位置を完全に揃える
-    // =========================================
-
-    for (int i = 0;
-         i < visibleAmmoCount &&
-         i < ammoSlots.Length;
-         i++)
-    {
-        if (ammoSlots[i].image != null)
-        {
-            ammoSlots[i]
-                .image
-                .rectTransform
-                .localPosition =
-                ammoOriginalPositions[i];
-        }
-    }
-
-    // =========================================
-    // ⑤ 実際の弾データをUIへ反映
-    // =========================================
-
-    visibleStartIndex =
-        newStartIndex;
-
-    RefreshAmmoUIImmediate();
-
-    // =========================================
-    // ⑥ 上から降ってきた演出を消す
-    // =========================================
-
-    if (nextDropObject != null)
-    {
-        Destroy(nextDropObject);
-    }
-
-    // =========================================
-    // ⑦ 右端の新しい弾
-    //
-    // 10発以上残っている場合は
-    // 今まで通り＋から出す
-    // =========================================
-
-    if (currentAmmo >= visibleAmmoCount &&
-        ammoPlusPoint != null)
-    {
-        yield return StartCoroutine(
-            PlayAmmoEnterEffect(
-                newStartIndex +
-                newVisibleCount - 1
-            )
-        );
-    }
-
-    isAmmoUIAnimating = false;
-}
 
     IEnumerator PlayAmmoEnterEffect(int dataIndex)
     {
@@ -1412,9 +1885,9 @@ public class GunController : MonoBehaviour
             yield return null;
         }
 
-        // =====================================================
+        // =========================================
         // 最終位置・サイズ
-        // =====================================================
+        // =========================================
 
         effectRect.position =
             endPosition;
@@ -1422,13 +1895,13 @@ public class GunController : MonoBehaviour
         effectRect.localScale =
             Vector3.one;
 
-        // =====================================================
-        // 最終的なUI状態を更新
-        // =====================================================
-
-        RefreshAmmoUIImmediate();
+        // =========================================
+        // 演出オブジェクト削除
+        // =========================================
 
         Destroy(effectObject);
+
+        RefreshAmmoUIImmediate();
     }
 
     IEnumerator PlayFirstAmmoLoadEffect()
@@ -1553,5 +2026,144 @@ public class GunController : MonoBehaviour
 
     //    isAmmoUIAnimating = false;
     //}
+
+    IEnumerator AnimateAmmoSlide(
+    RectTransform rect,
+    Vector3 startPosition,
+    Vector3 endPosition)
+    {
+        float timer = 0f;
+
+        while (timer < ammoSlideDuration)
+        {
+            timer += Time.deltaTime;
+
+            float t =
+                Mathf.Clamp01(
+                    timer / ammoSlideDuration
+                );
+
+            t = Mathf.SmoothStep(
+                0f,
+                1f,
+                t
+            );
+
+            rect.localPosition =
+                Vector3.Lerp(
+                    startPosition,
+                    endPosition,
+                    t
+                );
+
+            yield return null;
+        }
+
+        rect.localPosition =
+            endPosition;
+
+        Destroy(rect.gameObject);
+    }
+
+    IEnumerator AnimateNextAmmoDrop(
+    Sprite sprite,
+    RectTransform target)
+    {
+        if (sprite == null ||
+            target == null)
+            yield break;
+
+        // =========================================
+        // 一時Image
+        // =========================================
+
+        GameObject effectObject =
+            new GameObject("NextAmmoDropEffect");
+
+        effectObject.transform.SetParent(
+            target.parent,
+            false
+        );
+
+        Image image =
+            effectObject.AddComponent<Image>();
+
+        image.sprite =
+            sprite;
+
+        image.preserveAspect =
+            true;
+
+        RectTransform rect =
+            effectObject.GetComponent<RectTransform>();
+
+        // =========================================
+        // 少し上から
+        // =========================================
+
+        Vector3 targetPosition =
+            target.localPosition;
+
+        Vector3 startPosition =
+            targetPosition +
+            new Vector3(0f, 60f, 0f);
+
+        // =========================================
+        // 最初は少し小さく
+        // =========================================
+
+        rect.localPosition =
+            startPosition;
+
+        rect.localScale =
+            Vector3.one * 0.75f;
+
+        float timer = 0f;
+
+        float duration =
+            ammoEnterDuration;
+
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+
+            float t =
+                Mathf.Clamp01(
+                    timer / duration
+                );
+
+            t = Mathf.SmoothStep(
+                0f,
+                1f,
+                t
+            );
+
+            // 上から降りる
+            rect.localPosition =
+                Vector3.Lerp(
+                    startPosition,
+                    targetPosition,
+                    t
+                );
+
+            // 小さい → 通常サイズ
+            rect.localScale =
+                Vector3.Lerp(
+                    Vector3.one * 0.75f,
+                    Vector3.one,
+                    t
+                );
+
+            yield return null;
+        }
+
+        rect.localPosition =
+            targetPosition;
+
+        rect.localScale =
+            Vector3.one;
+
+        Destroy(effectObject);
+    }
 
 }
