@@ -6,52 +6,133 @@ public class CameraShake : MonoBehaviour
 
     [Header("ê›íË")]
     public float duration = 0.3f;
-    public float strength = 20f; // Å© âÊñ óhÇÍÇæÇ©ÇÁëÂÇ´ÇﬂÇ≈OK
+    public float strength = 20f;
 
     private float timer;
     private Vector3 originalPos;
 
+    // ÉäÉUÉãÉgÇ»Ç«Ç≈ã≠êßí‚é~Ç∑ÇÈÇΩÇﬂ
+    private bool stopped = false;
+
+
     void Awake()
     {
         Instance = this;
+
         originalPos = transform.localPosition;
     }
 
+
     void LateUpdate()
     {
+        // =====================================================
+        // ã≠êßí‚é~íÜ
+        // =====================================================
+
+        if (stopped)
+        {
+            transform.localPosition = originalPos;
+            return;
+        }
+
+
+        // =====================================================
+        // É|Å[ÉYíÜ
+        // =====================================================
+
         if (PauseMenu.IsPaused)
         {
             transform.localPosition = originalPos;
             return;
         }
 
+
+        // =====================================================
+        // ÉJÉÅÉâóhÇÍ
+        // =====================================================
+
         if (timer > 0)
         {
-            float damper = timer / duration;
+            float damper =
+                timer / duration;
 
-            float x = Random.Range(-1f, 1f) * strength * damper;
-            float y = Random.Range(-1f, 1f) * strength * damper;
+            float x =
+                Random.Range(-1f, 1f)
+                * strength
+                * damper;
 
-            transform.localPosition = originalPos + new Vector3(x, y, 0);
+            float y =
+                Random.Range(-1f, 1f)
+                * strength
+                * damper;
+
+            transform.localPosition =
+                originalPos +
+                new Vector3(x, y, 0);
 
             timer -= Time.deltaTime;
         }
         else
         {
-            transform.localPosition = originalPos;
+            transform.localPosition =
+                originalPos;
         }
     }
 
+
+    // =========================================================
+    // í èÌÇÃóhÇÍ
+    // =========================================================
+
     public void Shake()
     {
+        if (stopped)
+            return;
+
         timer = duration;
     }
 
-    public void Shake(float _duration, float _strength)
+
+    public void Shake(
+        float _duration,
+        float _strength)
     {
+        if (stopped)
+            return;
+
         duration = _duration;
         strength = _strength;
+
         timer = duration;
     }
 
+
+    // =========================================================
+    // ÉJÉÅÉâóhÇÍÇí‚é~
+    // =========================================================
+
+    public void StopShake()
+    {
+        stopped = true;
+
+        timer = 0f;
+
+        transform.localPosition =
+            originalPos;
+    }
+
+
+    // =========================================================
+    // ÉJÉÅÉâóhÇÍÇçƒäJ
+    // =========================================================
+
+    public void ResumeShake()
+    {
+        stopped = false;
+
+        timer = 0f;
+
+        transform.localPosition =
+            originalPos;
+    }
 }

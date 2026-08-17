@@ -134,7 +134,7 @@ public class GunController : MonoBehaviour
     private bool isChangingScene = false;
 
     private Coroutine ammoSlideCoroutine;
-   
+
     private int ammoSlideQueue = 0; // 弾UIスライド待ち数
 
     private bool isAmmoSlidePlaying = false;// スライドアニメーションが現在動いているか
@@ -327,7 +327,12 @@ public class GunController : MonoBehaviour
             {
                 if (!isChangingScene)
                 {
-                    StartCoroutine(OutOfAmmoAndChangeScene());
+                    isChangingScene = true;
+
+                    if (ResultManager.Instance != null)
+                    {
+                        ResultManager.Instance.ShowResult();
+                    }
                 }
 
                 return;
@@ -1073,17 +1078,17 @@ public class GunController : MonoBehaviour
     //    SceneManager.LoadScene("MainStageSkillTreeScene");
     //}
 
-    IEnumerator OutOfAmmoAndChangeScene()
-    {
-        isChangingScene = true;
+    //IEnumerator OutOfAmmoAndChangeScene()
+    //{
+    //    isChangingScene = true;
 
-        outOfAmmoTimeline.Play();
+    //    outOfAmmoTimeline.Play();
 
-        yield return new WaitForSeconds(
-            (float)outOfAmmoTimeline.duration);
+    //    yield return new WaitForSeconds(
+    //        (float)outOfAmmoTimeline.duration);
 
-        SceneManager.LoadScene("MainStageSkillTreeScene");
-    }
+    //    SceneManager.LoadScene("MainStageSkillTreeScene");
+    //}
 
     IEnumerator ProcessAmmoSlideQueue()
     {
@@ -2164,6 +2169,31 @@ public class GunController : MonoBehaviour
             Vector3.one;
 
         Destroy(effectObject);
+    }
+
+    public void RefillAmmoAfterResult()
+    {
+        isChangingScene = false;
+        isReloading = false;
+
+        currentAmmo = maxAmmo;
+
+        GenerateAmmo();
+
+        UpdateAmmoUI();
+
+        fireTimer = 0f;
+
+        ammoSlideQueue = 0;
+        isAmmoSlidePlaying = false;
+
+        if (ammoSlideCoroutine != null)
+        {
+            StopCoroutine(ammoSlideCoroutine);
+            ammoSlideCoroutine = null;
+        }
+
+        RefreshAmmoUIImmediate();
     }
 
 }
