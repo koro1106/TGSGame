@@ -22,7 +22,13 @@ public class DropBounce : MonoBehaviour
     public int addExp1 = 1;
     public int addExp2 = 0;
     public int addExp3 = 0;
+    public int addExp4 = 0;
     public int addPreExp = 0;
+
+    [Header("リザルト用ドロップ種類")]
+    public DropItemType dropItemType = DropItemType.Exp1;
+
+    public int resultItemAmount = 1;
 
     // =========================================================
     // 回収設定
@@ -359,30 +365,52 @@ public class DropBounce : MonoBehaviour
     // =========================================================
     // 回収判定
     // =========================================================
-   
+
     void CheckCollect()
     {
-        if (crosshair == null) return;
+        if (crosshair == null)
+            return;
+
+        // =====================================================
+        // GunControllerからクロスヘアのワールド座標を取得
+        // =====================================================
+
+        GunController gun =
+            FindObjectOfType<GunController>();
+
+        if (gun == null)
+            return;
 
         Vector3 crosshairWorld =
-            cam.ScreenToWorldPoint(
-                crosshair.position);
+            gun.GetCrosshairWorldPosition();
 
         crosshairWorld.z =
             transform.position.z;
 
-        // 回収範囲増加
-        collectDisTotal = collectDistance + stats.collectionRange;
-        Debug.Log(
-       $"collectDistance={collectDistance} " +
-       $"collectionRange={stats.collectionRange} " +
-       $"collectDisTotal={collectDisTotal}"
-   );
-        // 範囲内のCollider取得
+
+        // =====================================================
+        // 回収範囲
+        // =====================================================
+
+        collectDisTotal =
+            collectDistance +
+            stats.collectionRange;
+
+
+        // =====================================================
+        // クロスヘア周辺のColliderを取得
+        // =====================================================
+
         Collider2D[] hits =
             Physics2D.OverlapCircleAll(
                 crosshairWorld,
-                collectDisTotal);
+                collectDisTotal
+            );
+
+
+        // =====================================================
+        // ドロップ回収
+        // =====================================================
 
         foreach (Collider2D hit in hits)
         {
@@ -394,7 +422,6 @@ public class DropBounce : MonoBehaviour
                 drop.Collect();
             }
         }
-
     }
 
     // =========================================================
@@ -450,6 +477,25 @@ public class DropBounce : MonoBehaviour
     void FinishCollect()
     {
         Debug.Log("経験値回収");
+
+
+        // =====================================================
+        // リザルト用に回収数を記録
+        // =====================================================
+
+        if (ResultManager.Instance != null)
+        {
+            ResultManager.Instance.AddCollectedItem(
+                dropItemType,
+                resultItemAmount
+            );
+        }
+
+
+        // =====================================================
+        // 既存の経験値処理
+        // =====================================================
+
         if (playerData != null)
         {
             playerData.currentExp_1 += addExp1;
@@ -457,7 +503,22 @@ public class DropBounce : MonoBehaviour
             playerData.currentExp_3 += addExp3;
             playerData.currentPreExp += addPreExp;
         }
-        SaveManager.Save(playerData, allSkills);
+
+
+        // =====================================================
+        // セーブ
+        // =====================================================
+
+        SaveManager.Save(
+            playerData,
+            allSkills
+        );
+
+
+        // =====================================================
+        // ドロップ削除
+        // =====================================================
+
         Destroy(gameObject);
     }
 
