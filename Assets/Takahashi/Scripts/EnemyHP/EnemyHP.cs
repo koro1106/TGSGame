@@ -15,6 +15,15 @@ public class EnemyHP : MonoBehaviour
         public int chance; // ドロップ確率
     }
 
+    // ★追加：ダメージの属性（見た目の色分けに使用）
+    public enum DamageAttribute
+    {
+        Normal,    // 通常（物理弾など）
+        Poison,    // 毒（PoisonBullet）
+        Thunder,   // 雷（仮実装：まだ弾は無いが色だけ用意）
+        Explosion  // 爆発（仮実装：まだ弾は無いが色だけ用意）
+    }
+
     [Header("HP")]
     public int maxHP = 100;      // 最大HP
     public int currentHP;        // 現在HP
@@ -42,6 +51,12 @@ public class EnemyHP : MonoBehaviour
     [Header("ダメージ表示")]
     public GameObject damageText; // ダメージUI
 
+    [Header("属性ダメージカラー")]
+    public Color normalDamageColor = Color.white;
+    public Color poisonDamageColor = new Color(0.6f, 0.2f, 0.8f);    // 紫
+    public Color thunderDamageColor = new Color(0.4f, 0.9f, 1f);     // 水色（仮）
+    public Color explosionDamageColor = new Color(1f, 0.15f, 0.15f); // 赤（仮）
+
     [Header("HPバー")]
     public Slider hpSlider; //hpバー
     public Slider hpDelaySlider; //ダメージを受けた時のhpばー
@@ -63,9 +78,9 @@ public class EnemyHP : MonoBehaviour
     private Coroutine flashCoroutine; // 実行中の点滅コルーチン
 
     [Header("HPバーアニメーション設定")]
-    public float hpBarSmoothSpeed = 4f; // メインバーが現在HPに追いつく速さ
+    public float hpBarSmoothSpeed = 4f; // （現在未使用：以前のLerp方式で使っていたパラメータ）
     public float hpBarDelayTime = 0.1f; // 残像バーが追従し始めるまでの待ち時間（秒）
-    public float hpBarDelaySpeed = 2f;  // 残像バーが追いつく速さ
+    public float hpBarDelaySpeed = 2f;  // 残像バーが追いつく速さ（1秒あたりに動く割合。maxHPを掛けて実際のHP量に変換）
 
     private float displayedHP;     // メインバーが今表示している値（アニメ用）
     private float delayedHP;       // 残像バーが今表示している値（アニメ用）
@@ -150,20 +165,20 @@ public class EnemyHP : MonoBehaviour
         UpdateHPBarAnimation();
     }
 
-    // HPバーのアニメーション処理
-    // メインバー：なめらかに現在HPへ追従
-    // 残像バー：少し待ってから、ゆっくり追従（削れた量がじわっと見える）
+    // HPバーのアニメーション更新
+    // メインバー：現在HPに即座に反映（本体はガクッと減る）
+    // 残像バー：少し待ってから、一定速度で追いついていく（削れた量がじわっと見える）
     void UpdateHPBarAnimation()
     {
-        // メインバー（即時に近いがなめらか）
-        displayedHP = Mathf.Lerp(displayedHP, currentHP, Time.deltaTime * hpBarSmoothSpeed);
+        // メインバーは遅延なしで即座に現在HPを反映
+        displayedHP = currentHP;
 
         if (hpSlider != null)
         {
             hpSlider.value = displayedHP;
         }
 
-        //　残像バー（遅れて追従
+        // 残像バー（遅れて追従）
         if (delayWaiting)
         {
             // ダメージ直後はまだ動かさず、一定時間待つ
@@ -176,7 +191,17 @@ public class EnemyHP : MonoBehaviour
         }
         else
         {
-            delayedHP = Mathf.Lerp(delayedHP, currentHP, Time.deltaTime * hpBarDelaySpeed);
+            if (delayedHP > currentHP)
+            {
+                // ダメージを受けた場合：一定速度でゆっくり追いつく（Lerpではなく等速）
+                delayedHP = Mathf.MoveTowards(
+                    delayedHP, currentHP, hpBarDelaySpeed * maxHP * Time.deltaTime);
+            }
+            else
+            {
+                // 回復した場合などは即座に合わせる
+                delayedHP = currentHP;
+            }
         }
 
         if (hpDelaySlider != null)
@@ -184,8 +209,10 @@ public class EnemyHP : MonoBehaviour
             hpDelaySlider.value = delayedHP;
         }
     }
+
     // ダメージ処理
-    public void TakeDamage(int damage, bool isCritical = false)
+    // attribute：ダメージの属性（Poison/Thunder/Explosionなど）。省略時はNormal扱い
+    public void TakeDamage(int damage, bool isCritical = false, DamageAttribute attribute = DamageAttribute.Normal)
     {
         if (isDying) return;
 
@@ -202,15 +229,8 @@ public class EnemyHP : MonoBehaviour
         delayWaiting = true;
         delayTimer = 0f;
 
-        //if (hpSlider != null)
-        //{
-        //    hpSlider.value = currentHP;
-        //}
+        ShowDamage(damage, isCritical, attribute); // ダメージ表示
 
-        ShowDamage(damage, isCritical); // ダメージ表示
-                                        //UpdateScale();      // 見た目更新
-
-        // 被弾点滅
         // 被弾点滅
         if (srs.Length > 0)
         {
@@ -233,29 +253,6 @@ public class EnemyHP : MonoBehaviour
         }
     }
 
-    // HP割合でサイズ変更
-    /* void UpdateScale()
-     {
-         float ratio = 1f;
-
-         if (currentHP > maxHP * 0.75f)
-             ratio = 1f;
-         else if (currentHP > maxHP * 0.5f)
-             ratio = 0.875f;
-         else if (currentHP > maxHP * 0.25f)
-             ratio = 0.75f;
-         else
-             ratio = 0.625f;
-
-         targetScale = baseScale * ratio;
-
-         if (hpSlider != null)
-         {
-             hpSlider.maxValue = maxHP;
-             hpSlider.value = currentHP;
-         }
-     }*/
-
     // HP増加処理
     void GrowHP()
     {
@@ -263,8 +260,6 @@ public class EnemyHP : MonoBehaviour
         currentHP = Mathf.RoundToInt(currentHP * growMultiplier);
 
         currentHP = Mathf.Min(currentHP, maxHP);
-
-        //UpdateScale();
 
         if (hpSlider != null)
         {
@@ -328,8 +323,6 @@ public class EnemyHP : MonoBehaviour
     }
 
     // SliderのFill画像を「時計みたいに円形で減る」設定に自動構成する
-    // ※Image Type を Filled にしておけば、Sliderはvalueの変化に合わせて
-    //   自動でfillAmountを更新してくれるので、TakeDamage側のコードは変更不要
     void SetupRadialFill(Slider slider)
     {
         if (!useRadialFill) return;
@@ -349,12 +342,10 @@ public class EnemyHP : MonoBehaviour
     {
         if (hpBarRoot != null)
         {
-            // 親オブジェクトが設定されていればまとめて非表示
             hpBarRoot.SetActive(false);
         }
         else
         {
-            // 設定されていなければスライダーを個別に非表示
             if (hpSlider != null)
             {
                 hpSlider.gameObject.SetActive(false);
@@ -371,37 +362,28 @@ public class EnemyHP : MonoBehaviour
     // =========================================
     IEnumerator DeathSpiral()
     {
-        // 死亡フラグON
         isDying = true;
 
-        // ★追加：死亡が確定した瞬間に通知する（ボス撃破判定などに使われる）
         OnDeath?.Invoke();
 
-        // 影をすぐ消す
         EnemyMove move = GetComponent<EnemyMove>();
         if (move != null)
         {
             move.HideShadow();
         }
 
-        // 当たり判定OFF
         if (col != null)
         {
             col.enabled = false;
         }
 
-        // HPバーを非表示
         HideHPBar();
 
-        //コンボ追加
         if (ComboManager.instance != null)
         {
             ComboManager.instance.AddCombo();
         }
 
-        //=========================
-        // 撃破時に弾回復
-        //=========================
         GunController gun = FindFirstObjectByType<GunController>();
 
         if (gun != null &&
@@ -411,20 +393,14 @@ public class EnemyHP : MonoBehaviour
             gun.AddAmmo(gun.recoverAmmoAmount);
         }
 
-        // =========================
-        // ドロップ生成
-        // =========================
         for (int i = 0; i < dropCount; i++)
         {
-            // 抽選
             GameObject drop = GetRandomDrop();
 
-            // nullじゃなければ生成
             if (drop != null)
             {
                 int count = 1;
 
-                // 20%で倍率発動
                 if (Random.Range(0f, 100f) < 50f)
                 {
                     count = stats.expDroprateDouble;
@@ -447,9 +423,6 @@ public class EnemyHP : MonoBehaviour
             }
         }
 
-        // =========================
-        // 死亡アニメーション
-        // =========================
         Vector3 startScale = transform.localScale;
 
         float timer = 0f;
@@ -460,14 +433,12 @@ public class EnemyHP : MonoBehaviour
 
             float t = timer / deathDuration;
 
-            // 回転
             transform.Rotate(
                 0,
                 0,
                 rotationSpeed * Time.deltaTime
             );
 
-            // 渦移動
             float radius = Mathf.Lerp(0.3f, 0f, t);
 
             Vector3 spiral = new Vector3(
@@ -478,7 +449,6 @@ public class EnemyHP : MonoBehaviour
 
             transform.position += spiral * Time.deltaTime;
 
-            // 縮小
             float scale = Mathf.Lerp(1f, 0f, t);
 
             transform.localScale =
@@ -487,13 +457,12 @@ public class EnemyHP : MonoBehaviour
             yield return null;
         }
 
-        // 完全消滅
         Destroy(gameObject);
     }
+
     // 被弾点滅（赤く一瞬光って元の色に戻る）
     IEnumerator HitFlash()
     {
-        // 全部赤くする
         foreach (SpriteRenderer sr in srs)
         {
             if (sr != null)
@@ -504,7 +473,6 @@ public class EnemyHP : MonoBehaviour
 
         yield return new WaitForSeconds(hitFlashDuration);
 
-        // 元の色（白）に戻す
         foreach (SpriteRenderer sr in srs)
         {
             if (sr != null)
@@ -513,8 +481,10 @@ public class EnemyHP : MonoBehaviour
             }
         }
     }
+
     // ダメージUI表示
-    void ShowDamage(int damage, bool isCritical)
+    // attribute：色分けに使用する属性
+    void ShowDamage(int damage, bool isCritical, DamageAttribute attribute = DamageAttribute.Normal)
     {
         if (damageText == null) return;
 
@@ -529,12 +499,30 @@ public class EnemyHP : MonoBehaviour
         if (dmg != null)
         {
             dmg.SetDamage(damage);
-            //クリティカルなら特別表示
+
             if (isCritical)
             {
                 dmg.SetCritical();
             }
-        }
 
+            //  属性に応じた色を設定
+            dmg.SetColor(GetDamageColor(attribute));
+        }
+    }
+
+    // 属性ごとのダメージ色を返す
+    Color GetDamageColor(DamageAttribute attribute)
+    {
+        switch (attribute)
+        {
+            case DamageAttribute.Poison:
+                return poisonDamageColor;
+            case DamageAttribute.Thunder:
+                return thunderDamageColor;
+            case DamageAttribute.Explosion:
+                return explosionDamageColor;
+            default:
+                return normalDamageColor;
+        }
     }
 }
