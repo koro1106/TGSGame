@@ -93,6 +93,16 @@ public class DamageText : MonoBehaviour
         // サイズ倍率はPlayAnimation側でcriticalScaleMultiplierとして反映
     }
 
+    // ★追加：属性ごとの色を設定（EnemyHPから呼ばれる）
+    // 通常ダメージ時の色分け用。クリティカル時はSetCritical()のオレンジ色を優先したいので、
+    // EnemyHP側で「クリティカルでない時だけ」呼ぶ想定。
+    public void SetColor(Color color)
+    {
+        Color c = color;
+        c.a = baseAlpha; // 半透明の透明度は統一する
+        text.color = c;
+    }
+
     void Start()
     {
         // 左斜め上／真上／右斜め上からランダムに1つ選ぶ
