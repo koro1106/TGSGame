@@ -177,8 +177,8 @@ public class TooltipUI : MonoBehaviour
 
         // 固定オフセット（上下だけ切替）
         Vector2 offset = isUpper
-            ? new Vector2(-60, -400f)
-            : new Vector2(-60, 200f);
+            ? new Vector2(-60, -450f)
+            : new Vector2(-60, 300f);
 
         // 最終位置
         tooltipRect.position = screenPos + offset;

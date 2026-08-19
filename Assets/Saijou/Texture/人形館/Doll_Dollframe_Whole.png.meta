@@ -1,0 +1,611 @@
+fileFormatVersion: 2
+guid: 0f3e5e9d40dec2440b3c7b99c32c78ee
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7948696488999654375
+    second: Doll_Dollframe_Whole_0
+  - first:
+      213: -6335528094251315178
+    second: Doll_Dollframe_Whole_1
+  - first:
+      213: 937331147363832085
+    second: Doll_Dollframe_Whole_2
+  - first:
+      213: -7655199444988684310
+    second: Doll_Dollframe_Whole_3
+  - first:
+      213: -4303859754822714592
+    second: Doll_Dollframe_Whole_4
+  - first:
+      213: -3169944224200966435
+    second: Doll_Dollframe_Whole_5
+  - first:
+      213: 2254787663395976600
+    second: Doll_Dollframe_Whole_6
+  - first:
+      213: -8255564960648586724
+    second: Doll_Dollframe_Whole_7
+  - first:
+      213: 3233608470014602757
+    second: Doll_Dollframe_Whole_8
+  - first:
+      213: -1082030168441766705
+    second: Doll_Dollframe_Whole_9
+  - first:
+      213: -7815772782945999379
+    second: Doll_Dollframe_Whole_10
+  - first:
+      213: 8246596667393131719
+    second: Doll_Dollframe_Whole_11
+  - first:
+      213: 7923164475647211736
+    second: Doll_Dollframe_Whole_12
+  - first:
+      213: -1994201419207901954
+    second: Doll_Dollframe_Whole_13
+  - first:
+      213: -2192752410184331348
+    second: Doll_Dollframe_Whole_14
+  - first:
+      213: 80061573042542606
+    second: Doll_Dollframe_Whole_15
+  - first:
+      213: -5571740611486389056
+    second: Doll_Dollframe_Whole_16
+  - first:
+      213: -1866921872616273957
+    second: Doll_Dollframe_Whole_17
+  - first:
+      213: -7558486525875598853
+    second: Doll_Dollframe_Whole_18
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Doll_Dollframe_Whole_0
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 1116
+        width: 1953
+        height: 234
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e3183eb7517f4e60800000000000000
+      internalID: 7948696488999654375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Doll_Dollframe_Whole_1
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 614
+        width: 9
+        height: 496
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61094ade3cea318a0800000000000000
+      internalID: -6335528094251315178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Doll_Dollframe_Whole_2
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 614
+        width: 9
+        height: 496
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 511d78b56b1120d00800000000000000
+      internalID: 937331147363832085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Doll_Dollframe_Whole_3
+      rect:
+        serializedVersion: 2
+        x: 852
+        y: 614
+        width: 12
+        height: 496
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae79eace9a443c590800000000000000
+      internalID: -7655199444988684310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Doll_Dollframe_Whole_4
+      rect:
+        serializedVersion: 2
+        x: 1240
+        y: 614
+        width: 10
+        height: 496
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02b31b61b5e9544c0800000000000000
+      internalID: -4303859754822714592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Doll_Dollframe_Whole_5
+      rect:
+        serializedVersion: 2
+        x: 1629
+        y: 614
+        width: 10
+        height: 496
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dde33bee5881204d0800000000000000
+      internalID: -3169944224200966435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Doll_Dollframe_Whole_6
+      rect:
+        serializedVersion: 2
+        x: 2019
+        y: 614
+        width: 9
+        height: 496
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89576a8fe6d9a4f10800000000000000
+      internalID: 2254787663395976600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Doll_Dollframe_Whole_7
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 575
+        width: 38
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1a116c78675e6d80800000000000000
+      internalID: -8255564960648586724
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Doll_Dollframe_Whole_8
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 582
+        width: 262
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50e2ae565c510ec20800000000000000
+      internalID: 3233608470014602757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Doll_Dollframe_Whole_9
+      rect:
+        serializedVersion: 2
+        x: 452
+        y: 575
+        width: 39
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fccb5cd6b4bdbf0f0800000000000000
+      internalID: -1082030168441766705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Doll_Dollframe_Whole_10
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 582
+        width: 262
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de5665b401cc88390800000000000000
+      internalID: -7815772782945999379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Doll_Dollframe_Whole_11
+      rect:
+        serializedVersion: 2
+        x: 839
+        y: 575
+        width: 40
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c443e50afbc17270800000000000000
+      internalID: 8246596667393131719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Doll_Dollframe_Whole_12
+      rect:
+        serializedVersion: 2
+        x: 921
+        y: 582
+        width: 262
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d832f3ac1cb4fd60800000000000000
+      internalID: 7923164475647211736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Doll_Dollframe_Whole_13
+      rect:
+        serializedVersion: 2
+        x: 1227
+        y: 575
+        width: 38
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: efc788dff5c2354e0800000000000000
+      internalID: -1994201419207901954
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Doll_Dollframe_Whole_14
+      rect:
+        serializedVersion: 2
+        x: 1309
+        y: 582
+        width: 262
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cafc496fc47c191e0800000000000000
+      internalID: -2192752410184331348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Doll_Dollframe_Whole_15
+      rect:
+        serializedVersion: 2
+        x: 1615
+        y: 575
+        width: 40
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e081c55939f6c1100800000000000000
+      internalID: 80061573042542606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Doll_Dollframe_Whole_16
+      rect:
+        serializedVersion: 2
+        x: 1699
+        y: 582
+        width: 262
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0cc6cb72f633da2b0800000000000000
+      internalID: -5571740611486389056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Doll_Dollframe_Whole_17
+      rect:
+        serializedVersion: 2
+        x: 2005
+        y: 575
+        width: 38
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd7cc4fb27c5716e0800000000000000
+      internalID: -1866921872616273957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Doll_Dollframe_Whole_18
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 151
+        width: 1951
+        height: 421
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf9cb912d8cda1790800000000000000
+      internalID: -7558486525875598853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Doll_Dollframe_Whole_0: 7948696488999654375
+      Doll_Dollframe_Whole_1: -6335528094251315178
+      Doll_Dollframe_Whole_10: -7815772782945999379
+      Doll_Dollframe_Whole_11: 8246596667393131719
+      Doll_Dollframe_Whole_12: 7923164475647211736
+      Doll_Dollframe_Whole_13: -1994201419207901954
+      Doll_Dollframe_Whole_14: -2192752410184331348
+      Doll_Dollframe_Whole_15: 80061573042542606
+      Doll_Dollframe_Whole_16: -5571740611486389056
+      Doll_Dollframe_Whole_17: -1866921872616273957
+      Doll_Dollframe_Whole_18: -7558486525875598853
+      Doll_Dollframe_Whole_2: 937331147363832085
+      Doll_Dollframe_Whole_3: -7655199444988684310
+      Doll_Dollframe_Whole_4: -4303859754822714592
+      Doll_Dollframe_Whole_5: -3169944224200966435
+      Doll_Dollframe_Whole_6: 2254787663395976600
+      Doll_Dollframe_Whole_7: -8255564960648586724
+      Doll_Dollframe_Whole_8: 3233608470014602757
+      Doll_Dollframe_Whole_9: -1082030168441766705
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
