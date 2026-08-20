@@ -43,4 +43,17 @@ public class PlayerStats : ScriptableObject
 
     public bool recoveryBullet = false;            // 撃破時弾回復
 
+    public float moveSpeed = 0f;                   // 移動速度
+    public bool dash = false;                      // ダッシュ解放
+    public float dashCT = 0f;                      // ダッシュCT短縮
+    public bool oneShotDurability = false;         // 一発食らっても耐久解放
+    public bool rapidFire = false;                 // 連射解放
+    public float targetingRangeUP = 0f;            // 照準範囲拡大
+    public float increasedUP = 0f;                 // 精度上昇
+    public bool shopOpen = false;                  // 人形館解放
+    public bool shopEffectBulletDamage = false;    // 人形館で属性ダメージ上昇解放
+    public bool shopElementalBulletChance = false; // 人形館で属性属性弾確率上昇解放
+    public bool shopExpChange = false;             // 人形館で素材変化解放
+
+
 }

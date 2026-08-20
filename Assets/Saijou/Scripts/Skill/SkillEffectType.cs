@@ -44,6 +44,6 @@ public enum SkillEffectType
     IncreasedUP,           // 精度上昇
     ShopOpen,              // 人形館解放
     ShopEffectBulletDamage,// 人形館で属性ダメージ上昇解放
-    ShopElementalBulletChance,// 人形館で属性ダメージ上昇解放
+    ShopElementalBulletChance,// 人形館で属性弾確率上昇解放
     ShopExpChange,         // 人形館で素材変化解放
 }
