@@ -119,6 +119,32 @@ public class ResultManager : MonoBehaviour
 
 
         // =====================================================
+        // すでに飛んでいる弾を削除
+        // =====================================================
+
+        Bullet[] bullets =
+            FindObjectsOfType<Bullet>();
+
+        foreach (Bullet bullet in bullets)
+        {
+            Destroy(bullet.gameObject);
+        }
+
+
+        // =====================================================
+        // 現在いる敵を削除
+        // =====================================================
+
+        EnemyMove[] enemies =
+            FindObjectsOfType<EnemyMove>();
+
+        foreach (EnemyMove enemy in enemies)
+        {
+            Destroy(enemy.gameObject);
+        }
+
+
+        // =====================================================
         // 現在のTimeScaleを保存
         // =====================================================
 
@@ -402,60 +428,55 @@ public class ResultManager : MonoBehaviour
 
 
         // =====================================================
-        // 最初にPlayerを停止したままリセット
-        // =====================================================
-
-        if (playerMovement != null)
-        {
-            playerMovement.enabled = false;
-
-            playerMovement.ResetPlayerPosition();
-
-            playerMovement.ResumeAfterResult();
-        }
-
-
-        // =====================================================
-        // 弾を満タン
-        // =====================================================
-
-        if (gunController != null)
-        {
-            gunController.RefillAmmoAfterResult();
-        }
-
-
-        // =====================================================
-        // スライド開始
+        // スライドがある場合
         // =====================================================
 
         if (continueTransition != null)
         {
-            // スライドImageを表示
-            continueTransition.gameObject.SetActive(true);
+            // =================================================
+            // Inspectorで置いた開始位置
+            // =================================================
 
-
-            // Inspectorで置いた元の位置
             Vector2 startPos =
                 transitionOriginalPosition;
 
 
-            // Xプラス方向へ移動
+            // =================================================
+            // 移動先
+            // =================================================
+
             Vector2 endPos =
                 startPos + new Vector2(
-                    25000f,
+                    20000f,
                     0f
                 );
 
 
-            // 必ず元の位置から開始
+            // =================================================
+            // 開始位置へ戻す
+            // =================================================
+
             continueTransition.anchoredPosition =
                 startPos;
 
 
+            // =================================================
+            // スライド表示
+            // =================================================
+
+            continueTransition.gameObject.SetActive(true);
+
+
+            // 表示を反映
+            yield return null;
+
+
             float timer = 0f;
 
-            bool gameResumed = false;
+            bool resultClosed = false;
+
+            // ★ Playerリセット済みか
+            bool playerRestarted = false;
 
 
             // =================================================
@@ -466,12 +487,10 @@ public class ResultManager : MonoBehaviour
             {
                 timer += Time.unscaledDeltaTime;
 
-
                 float t =
                     Mathf.Clamp01(
                         timer / transitionDuration
                     );
-
 
                 float smoothT =
                     Mathf.SmoothStep(
@@ -482,7 +501,7 @@ public class ResultManager : MonoBehaviour
 
 
                 // =============================================
-                // スライド
+                // スライド移動
                 // =============================================
 
                 continueTransition.anchoredPosition =
@@ -494,50 +513,46 @@ public class ResultManager : MonoBehaviour
 
 
                 // =============================================
-                // スライド終わり頃にゲーム復帰
+                // リザルトを早めに消す
                 // =============================================
 
-                if (!gameResumed && t >= 0.1f)
+                if (!resultClosed && t >= 0.1f)
                 {
-                    gameResumed = true;
+                    resultClosed = true;
 
-
-                    // クロスヘア復帰
-                    if (crosshairController != null)
+                    if (resultPanel != null)
                     {
-                        crosshairController.enabled = true;
+                        resultPanel.SetActive(false);
                     }
 
+                    collectedItems.Clear();
 
-                    if (crosshairObject != null)
-                    {
-                        crosshairObject.SetActive(true);
-                    }
-
-
-                    // ゲーム再開
-                    Time.timeScale = 1f;
+                    ClearResultUI();
+                }
 
 
-                    // Player操作可能
+                // =============================================
+                // スライド終了少し前に
+                // Playerをリスタート状態にする
+                // =============================================
+
+                if (!playerRestarted && t >= 0.7f)
+                {
+                    playerRestarted = true;
+
                     if (playerMovement != null)
                     {
-                        playerMovement.enabled = true;
+                        playerMovement.enabled = false;
+
+                        playerMovement.ResetPlayerPosition();
+
+                        playerMovement.ResumeAfterResult();
                     }
 
-
-                    // カメラ揺れ再開
-                    if (CameraShake.Instance != null)
+                    if (gunController != null)
                     {
-                        CameraShake.Instance.ResumeShake();
+                        gunController.RefillAmmoAfterResult();
                     }
-
-
-                    // マウスカーソル非表示
-                    Cursor.visible = false;
-
-                    Cursor.lockState =
-                        CursorLockMode.Confined;
                 }
 
 
@@ -546,7 +561,7 @@ public class ResultManager : MonoBehaviour
 
 
             // =====================================================
-            // スライド終了位置
+            // 最終位置を確実にセット
             // =====================================================
 
             continueTransition.anchoredPosition =
@@ -554,66 +569,10 @@ public class ResultManager : MonoBehaviour
 
 
             // =====================================================
-            // 少しだけ最後まで表示
+            // スライド終了後、ゲーム再開
             // =====================================================
 
-            yield return new WaitForSecondsRealtime(
-                0.15f
-            );
-
-
-            // =====================================================
-            // ここでリザルトを消す
-            // =====================================================
-
-            if (resultPanel != null)
-            {
-                resultPanel.SetActive(false);
-            }
-
-
-            // =====================================================
-            // アイテムデータリセット
-            // =====================================================
-
-            collectedItems.Clear();
-
-            ClearResultUI();
-
-
-            // =====================================================
-            // Transitionを元の位置へ戻す
-            // =====================================================
-
-            continueTransition.anchoredPosition =
-                transitionOriginalPosition;
-
-
-            // =====================================================
-            // Transitionを非表示
-            // =====================================================
-
-            continueTransition.gameObject.SetActive(false);
-        }
-
-
-        // =====================================================
-        // continueTransitionがない場合
-        // =====================================================
-
-        else
-        {
-            if (resultPanel != null)
-            {
-                resultPanel.SetActive(false);
-            }
-
-
-            collectedItems.Clear();
-
-            ClearResultUI();
-
-
+            // クロスヘア復帰
             if (crosshairController != null)
             {
                 crosshairController.enabled = true;
@@ -626,25 +585,49 @@ public class ResultManager : MonoBehaviour
             }
 
 
+            // =====================================================
+            // ゲーム再開
+            // =====================================================
+
             Time.timeScale = 1f;
 
 
+            // Player操作可能
             if (playerMovement != null)
             {
                 playerMovement.enabled = true;
             }
 
 
+            // カメラ揺れ再開
             if (CameraShake.Instance != null)
             {
                 CameraShake.Instance.ResumeShake();
             }
 
 
+            // マウスカーソル非表示
             Cursor.visible = false;
 
             Cursor.lockState =
                 CursorLockMode.Confined;
+
+
+            // =====================================================
+            // 1フレーム待つ
+            // =====================================================
+
+            yield return null;
+
+
+            // =====================================================
+            // スライドを元に戻して非表示
+            // =====================================================
+
+            continueTransition.anchoredPosition =
+                startPos;
+
+            continueTransition.gameObject.SetActive(false);
         }
     }
 }

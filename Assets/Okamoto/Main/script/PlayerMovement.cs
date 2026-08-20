@@ -17,7 +17,28 @@ public class PlayerMovement : MonoBehaviour
     [Header("リザルト後に戻る位置")]
     public Transform startPoint;
 
+
+
+
     public GunController gunController;
+
+
+    // =========================================================
+    // ブリンク設定
+    // =========================================================
+
+    [Header("ブリンク設定")]
+    public float blinkMoveSpeed = 30f;
+
+    [Header("ブリンク時間")]
+    public float blinkDuration = 0.3f;
+
+    [Header("ブリンククールダウン")]
+    public float blinkCooldown = 8f;
+
+    private bool isBlinking = false;
+    private float blinkTimer = 0f;
+    private float blinkCooldownTimer = 0f;
 
     private Rigidbody2D rb;
     private Camera cam;
@@ -27,11 +48,38 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isDead = false;
 
+    // ブリンク開始時の方向
+    private Vector2 blinkDirection;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         cam = Camera.main;
     }
+
+
+    void Update()
+    {
+        // クールダウン
+        if (blinkCooldownTimer > 0f)
+        {
+            blinkCooldownTimer -= Time.deltaTime;
+        }
+
+        // 右クリックでブリンク開始
+        if (
+            Input.GetMouseButtonDown(1) &&
+            blinkCooldownTimer <= 0f &&
+            !isDead &&
+            !isBlinking
+        )
+        {
+            StartBlink();
+        }
+    }
+
+
+    
 
 
     // =========================================================
@@ -82,7 +130,36 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
+        if (isDead)
+            return;
+
+        // ブリンク中
+        if (isBlinking)
+        {
+            BlinkMove();
+            return;
+        }
+
         MoveToCrosshair();
+    }
+
+    void BlinkMove()
+    {
+        blinkTimer -= Time.fixedDeltaTime;
+
+        // 保存した方向へまっすぐ高速移動
+        rb.MovePosition(
+            rb.position +
+            blinkDirection *
+            blinkMoveSpeed *
+            Time.fixedDeltaTime
+        );
+
+        // ブリンク終了
+        if (blinkTimer <= 0f)
+        {
+            isBlinking = false;
+        }
     }
 
 
@@ -174,5 +251,42 @@ public class PlayerMovement : MonoBehaviour
         isDead = false;
 
         skipNextMove = true;
+    }
+
+
+    // =========================================================
+    // ブリンクの残りクールダウン取得
+    // =========================================================
+
+    public float GetBlinkCooldownRemaining()
+    {
+        return Mathf.Max(0f, blinkTimer);
+    }
+
+    void StartBlink()
+    {
+        if (gunController == null)
+            return;
+
+        // ブリンク開始時のクロスヘア位置
+        Vector3 crosshairPos =
+            gunController.GetCrosshairWorldPosition();
+
+        // 右クリックした瞬間の方向を保存
+        blinkDirection =
+            ((Vector2)crosshairPos - rb.position)
+            .normalized;
+
+        // クロスヘアとプレイヤーが完全に同じ位置の場合はブリンクしない
+        if (blinkDirection == Vector2.zero)
+            return;
+
+        isBlinking = true;
+
+        // ブリンク時間
+        blinkTimer = blinkDuration;
+
+        // クールダウン開始
+        blinkCooldownTimer = blinkCooldown;
     }
 }
