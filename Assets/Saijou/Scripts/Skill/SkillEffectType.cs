@@ -33,6 +33,17 @@ public enum SkillEffectType
     EnemyUnlock_C,         // 敵解放_C
     RecoveryBullet,        // 撃破時弾回復
     RecoveryBulletCount,   // 回復弾数UP
-    BulletSizeUP           // 弾の大きさUP
+    BulletSizeUP,          // 弾の大きさUP
 
+    MovementSpeed,         // 移動速度
+    Dash,                  // ダッシュ解放
+    DashCT,                // ダッシュのクールタイム短縮
+    OneShotDurability,     // 一発食らっても耐久解放
+    RapidFire,             // 連射解放
+    TargetingRangeUP,      // 照準範囲拡大
+    IncreasedUP,           // 精度上昇
+    ShopOpen,              // 人形館解放
+    ShopEffectBulletDamage,// 人形館で属性ダメージ上昇解放
+    ShopElementalBulletChance,// 人形館で属性ダメージ上昇解放
+    ShopExpChange,         // 人形館で素材変化解放
 }
