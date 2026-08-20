@@ -44,6 +44,13 @@ public class DamageText : MonoBehaviour
 
     [Header("クリティカル")]
     public float criticalScaleMultiplier = 1.4f;
+    public float criticalFontSizeMultiplier = 1.5f; // フォントサイズ自体の倍率
+
+    [Header("クリティカル画像（位置固定）")]
+    public GameObject criticalIconPrefab;   // クリティカル時に出す画像（Prefab）
+    public Vector2 criticalIconOffset = new Vector2(-80f, 0f); // 本来のTransform位置からのズレ（screenScale基準）
+    public float criticalIconScale = 1f;    // アイコンの大きさ倍率
+    public float criticalIconLifetime = 0.6f; // アイコンが出てから消えるまでの時間（秒）
 
     private bool isCritical = false;
     private Vector2 direction;
@@ -85,16 +92,43 @@ public class DamageText : MonoBehaviour
     {
         isCritical = true;
 
-        Color c = new Color(1f, 0.5f, 0f);
+        Color c = new Color(1f, 0.5f, 0f); // ★変更：黄色→オレンジ
         c.a = baseAlpha;
         text.color = c;
 
         text.fontStyle = FontStyles.Bold;
-        // サイズ倍率はPlayAnimation側でcriticalScaleMultiplierとして反映
+
+        // フォントサイズ自体も大きくする（アニメーション中のスケール倍率とは別）
+        text.fontSize = baseFontSize * criticalFontSizeMultiplier;
+
+        // クリティカル画像を「位置固定」で生成
+        // 数字（transform）の子にはせず、独立したオブジェクトとして
+        // 本来のスポーン位置＋オフセットの場所に出し、そこから動かさない
+        if (criticalIconPrefab != null)
+        {
+            float scale = ScaleFactor;
+
+            Vector3 offset = new Vector3(
+                criticalIconOffset.x * scale,
+                criticalIconOffset.y * scale,
+                0f
+            );
+
+            GameObject icon = Instantiate(
+                criticalIconPrefab,
+                transform.position + offset,
+                Quaternion.identity
+            // 親を指定しない＝数字の移動・拡縮に巻き込まれない
+            );
+
+            icon.transform.localScale = Vector3.one * criticalIconScale;
+
+            Destroy(icon, criticalIconLifetime);
+        }
     }
 
-    // ★追加：属性ごとの色を設定（EnemyHPから呼ばれる）
-    // 通常ダメージ時の色分け用。クリティカル時はSetCritical()のオレンジ色を優先したいので、
+    // 属性ごとの色を設定（EnemyHPから呼ばれる）
+    // 通常ダメージ時の色分け用。クリティカル時はSetCritical()の黄色を優先したいので、
     // EnemyHP側で「クリティカルでない時だけ」呼ぶ想定。
     public void SetColor(Color color)
     {

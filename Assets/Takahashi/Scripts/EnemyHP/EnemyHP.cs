@@ -481,7 +481,6 @@ public class EnemyHP : MonoBehaviour
             }
         }
     }
-
     // ダメージUI表示
     // attribute：色分けに使用する属性
     void ShowDamage(int damage, bool isCritical, DamageAttribute attribute = DamageAttribute.Normal)
@@ -502,11 +501,13 @@ public class EnemyHP : MonoBehaviour
 
             if (isCritical)
             {
-                dmg.SetCritical();
+                dmg.SetCritical(); // クリティカルなら黄色＋アイコン（属性色で上書きしない）
             }
-
-            //  属性に応じた色を設定
-            dmg.SetColor(GetDamageColor(attribute));
+            else
+            {
+                //  属性に応じた色を設定（クリティカルでない時だけ）
+                dmg.SetColor(GetDamageColor(attribute));
+            }
         }
     }
 

@@ -539,9 +539,13 @@ MonoBehaviour:
     chance: 50
   dropCount: 3
   damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
+  normalDamageColor: {r: 1, g: 1, b: 1, a: 1}
+  poisonDamageColor: {r: 0.6, g: 0.2, b: 0.8, a: 1}
+  thunderDamageColor: {r: 0.4, g: 0.9, b: 1, a: 1}
+  explosionDamageColor: {r: 1, g: 0.15, b: 0.15, a: 1}
   hpSlider: {fileID: 5660963032352913457}
   hpDelaySlider: {fileID: 874356276393965887}
-  useRadialFill: 1
+  useRadialFill: 0
   radialOrigin: 2
   radialClockwise: 0
   hpBarRoot: {fileID: 3419101919107931185}
@@ -775,11 +779,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2788937149780402964, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.006
+      value: 0.003
       objectReference: {fileID: 0}
     - target: {fileID: 2788937149780402964, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.006
+      value: 0.002
       objectReference: {fileID: 0}
     - target: {fileID: 2788937149780402964, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_LocalScale.z
@@ -815,11 +819,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2788937149780402964, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -1.4
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2788937149780402964, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -14.5
+      value: -14.4
       objectReference: {fileID: 0}
     - target: {fileID: 2788937149780402964, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -831,6 +835,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2788937149780402964, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2788937149780402964, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
+      propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5913239047362683599, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}

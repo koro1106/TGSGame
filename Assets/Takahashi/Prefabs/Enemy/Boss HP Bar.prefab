@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 036e3fb712afa404794e1ddfef3f61bc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bb70dbe9f1c573a42b2e54a622f6ac2a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -263,11 +263,14 @@ MonoBehaviour:
   maxHpSlider: {fileID: 142668574784420161}
   damageHpSlider: {fileID: 18159525311348676}
   bossNameText: {fileID: 0}
-  slideInDuration: 0.4
+  expandDuration: 0.4
   fillDuration: 1
   damageFollowSpeed: 2
-  hiddenPosY: 100
-  shownPosY: -60
+  barBackground: {fileID: 0}
+  edgeGlow: {fileID: 0}
+  edgeGlowPulseSpeed: 4
+  hitSparkPrefab: {fileID: 0}
+  hitSparkLifetime: 0.5
 --- !u!1 &5937342157237649409
 GameObject:
   m_ObjectHideFlags: 0
@@ -556,7 +559,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a1711b3971122f44e89726088203d2a7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f6ebfe0289426f944926a5a432fce6c8, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -631,7 +634,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 85445f5fcb6cff74ca0489439a75c17c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6a323396313834e4d9085b256856df50, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1

@@ -490,14 +490,8 @@ MonoBehaviour:
   enemies:
   - prefab: {fileID: 5658466300848699742, guid: 4451329126ffa93498ccea07ae4d06a7, type: 3}
     weight: 100
-  - prefab: {fileID: 1791151817480522782, guid: 7258712290291ef4ca007d794424fc5e, type: 3}
-    weight: 0
   - prefab: {fileID: 7801636748621657906, guid: 799c801ec8b355a48bcf47943e3e85c0, type: 3}
     weight: 100
-  - prefab: {fileID: 1514281451404711565, guid: b79716df06544bd4c942bc9f6be16c93, type: 3}
-    weight: 0
-  - prefab: {fileID: 4832302078142527342, guid: 0aba12c3835267542a9c75abdf6f3dda, type: 3}
-    weight: 0
   enemyA:
     prefab: {fileID: 0}
     weight: 0
@@ -885,7 +879,10 @@ MonoBehaviour:
   addExp1: 1
   addExp2: 0
   addExp3: 0
+  addExp4: 0
   addPreExp: 0
+  dropItemType: 0
+  resultItemAmount: 1
   collectDistance: 1
   collectDisTotal: 0
   stats: {fileID: 0}
@@ -1249,7 +1246,10 @@ MonoBehaviour:
   addExp1: 1
   addExp2: 0
   addExp3: 0
+  addExp4: 0
   addPreExp: 0
+  dropItemType: 0
+  resultItemAmount: 1
   collectDistance: 1
   collectDisTotal: 0
   stats: {fileID: 0}
@@ -1379,6 +1379,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BossEnemy
   player: {fileID: 0}
   movementScriptToDisable: {fileID: 0}
+  spawner: {fileID: 0}
   walkDirection: {x: -1, y: 0}
   walkDistance: 5
   walkSpeed: 3
@@ -1478,6 +1479,10 @@ MonoBehaviour:
   dropItems: []
   dropCount: 1
   damageText: {fileID: 0}
+  normalDamageColor: {r: 1, g: 1, b: 1, a: 1}
+  poisonDamageColor: {r: 0.6, g: 0.2, b: 0.8, a: 1}
+  thunderDamageColor: {r: 0.4, g: 0.9, b: 1, a: 1}
+  explosionDamageColor: {r: 1, g: 0.15, b: 0.15, a: 1}
   hpSlider: {fileID: 0}
   hpDelaySlider: {fileID: 0}
   useRadialFill: 1
@@ -1741,7 +1746,10 @@ MonoBehaviour:
   addExp1: 1
   addExp2: 0
   addExp3: 0
+  addExp4: 0
   addPreExp: 0
+  dropItemType: 0
+  resultItemAmount: 1
   collectDistance: 1
   collectDisTotal: 0
   stats: {fileID: 0}
@@ -1853,7 +1861,7 @@ MonoBehaviour:
   carePackagePrefab: {fileID: 4164928430599087363, guid: aa70d1370b94b0c46aceee4fb666d5f4, type: 3}
   player: {fileID: 494130003}
   safeRadius: 200
-  spawnInterval: 10
+  spawnInterval: 100
   spawnChance: 100
   spawnOffsetY: 50
   minGroundY: -400
