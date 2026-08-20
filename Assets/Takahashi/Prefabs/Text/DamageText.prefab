@@ -35,8 +35,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -144.77104, y: 4}
-  m_SizeDelta: {x: 100, y: 50}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 313, y: 153.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &6844668524495663140
 MeshRenderer:
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 256
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_characterHorizontalScale: 1
@@ -201,12 +201,17 @@ MonoBehaviour:
   diagonalSpread: 0.6
   spawnDropDistance: 0.15
   spawnScale: 0.3
-  riseUpDuration: 0.05
+  riseUpDuration: 0.07
   riseUpDistance: 20
   overshootScale: 1.3
-  settleDuration: 0.05
+  settleDuration: 0.08
   settleDistance: 3
   settleScale: 1.05
-  finalDuration: 0.2
+  finalDuration: 0.25
   finalMoveDistance: 60
   criticalScaleMultiplier: 1
+  criticalFontSizeMultiplier: 1.5
+  criticalIconPrefab: {fileID: 4773665319421822162, guid: 958eab8ebabc2694dae6e550c841970d, type: 3}
+  criticalIconOffset: {x: 0, y: 100}
+  criticalIconScale: 30
+  criticalIconLifetime: 0.4

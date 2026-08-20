@@ -669,9 +669,13 @@ MonoBehaviour:
     chance: 100
   dropCount: 3
   damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
+  normalDamageColor: {r: 1, g: 1, b: 1, a: 1}
+  poisonDamageColor: {r: 0.6, g: 0.2, b: 0.8, a: 1}
+  thunderDamageColor: {r: 0.4, g: 0.9, b: 1, a: 1}
+  explosionDamageColor: {r: 1, g: 0.15, b: 0.15, a: 1}
   hpSlider: {fileID: 896544758054549419}
   hpDelaySlider: {fileID: 5682622649206797989}
-  useRadialFill: 1
+  useRadialFill: 0
   radialOrigin: 2
   radialClockwise: 0
   hpBarRoot: {fileID: 7894240887929033643}
@@ -951,11 +955,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2788937149780402964, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.06
+      value: 0.03
       objectReference: {fileID: 0}
     - target: {fileID: 2788937149780402964, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.06
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 2788937149780402964, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_LocalScale.z
@@ -991,11 +995,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2788937149780402964, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -26.3
+      value: -18
       objectReference: {fileID: 0}
     - target: {fileID: 2788937149780402964, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -126.3
+      value: -124
       objectReference: {fileID: 0}
     - target: {fileID: 2788937149780402964, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1009,9 +1013,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2788937149780402964, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4847786337981234947, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_SortingOrder
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5913239047362683599, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6534775236774933173, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_PresetInfoIsWorld
