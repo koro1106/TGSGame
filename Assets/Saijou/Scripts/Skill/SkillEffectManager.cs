@@ -136,6 +136,51 @@ public class SkillEffectManager : MonoBehaviour
             case SkillEffectType.BulletSizeUP:
                 playerStats.bulletSize += (int)skill.effectValue;
                 break;
+
+            // 移動速度UP
+            case SkillEffectType.MovementSpeed:
+                playerStats.moveSpeed += (int)skill.effectValue;
+                break;
+            // ダッシュ解放
+            case SkillEffectType.Dash:
+                playerStats.dash = true;
+                break;
+            // ダッシュクールタイム短縮
+            case SkillEffectType.DashCT:
+                playerStats.dashCT += (int)skill.effectValue;
+                break;
+            // 一発食らっても耐久解放
+            case SkillEffectType.OneShotDurability:
+                playerStats.oneShotDurability = true;
+                break;
+            // 連射解放
+            case SkillEffectType.RapidFire:
+                playerStats.rapidFire = true;
+                break;
+            // 照準範囲拡大
+            case SkillEffectType.TargetingRangeUP:
+                playerStats.targetingRangeUP += (int)skill.effectValue;
+                break;
+            // 精度上昇
+            case SkillEffectType.IncreasedUP:
+                playerStats.increasedUP += (int)skill.effectValue;
+                break;
+            // 人形館解放
+            case SkillEffectType.ShopOpen:
+                playerStats.shopOpen = true;
+                break;
+            // 人形館で属性ダメージ上昇解放
+            case SkillEffectType.ShopEffectBulletDamage:
+                playerStats.shopEffectBulletDamage = true;
+                break;
+            // 人形館で属性属性弾確率上昇解放
+            case SkillEffectType.ShopElementalBulletChance:
+                playerStats.shopElementalBulletChance = true;
+                break;
+            // 人形館で素材変化解放
+            case SkillEffectType.ShopExpChange:
+                playerStats.shopExpChange = true;
+                break;
         }
     }
 
