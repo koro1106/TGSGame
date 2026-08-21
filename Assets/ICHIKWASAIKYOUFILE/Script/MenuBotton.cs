@@ -24,7 +24,10 @@ public class MenuButton : MonoBehaviour,
     private Quaternion defaultRotation;
     private Vector3 defaultPosition;
 
-    private bool isHover;
+    //private bool isHover; 前のやつに戻すときisFloatingをisHoverに変える
+
+    private bool isFloating;
+
 
     void Start()
     {
@@ -33,14 +36,14 @@ public class MenuButton : MonoBehaviour,
         defaultRotation = transform.rotation;
 
         // 初期状態
-        buttonImage.color = Color.black;
+        buttonImage.color = Color.white;
         buttonText.color = Color.white;
         arrow.SetActive(false);
     }
     private void Update()
     {
         // 徐々に大きくする / 元に戻す
-        Vector3 targetScale = isHover
+        Vector3 targetScale = isFloating
             ? defaultScale * 1.1f
             : defaultScale;
 
@@ -49,7 +52,7 @@ public class MenuButton : MonoBehaviour,
             targetScale,
             Time.deltaTime * scaleSpeed
         );
-        if (isHover)
+        if (isFloating)
         {
             // 上下にぷかぷか
             float y = Mathf.Sin(Time.time * floatSpeed) * floatAmount;
@@ -65,32 +68,59 @@ public class MenuButton : MonoBehaviour,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        isHover = true;
+        // シーン内のMenuButtonを全部取得
+        MenuButton[] buttons = FindObjectsByType<MenuButton>(
+            FindObjectsSortMode.None
+        );
+
+        // 他のボタンを停止
+        foreach (MenuButton button in buttons)
+        {
+            if (button != this)
+            {
+                button.StopFloating();
+            }
+        }
+
+        isFloating = true;
         
         arrow.SetActive(true);
 
         // 色変更
         buttonImage.color = Color.white;
-        buttonText.color = Color.black;
+        buttonText.color = Color.white;
 
         // 少し大きく
         //transform.localScale = defaultScale * 1.1f;
 
         // 少し傾ける
-        transform.rotation = Quaternion.Euler(0, 0, -5);
+        //transform.rotation = Quaternion.Euler(0, 0, -5);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        isHover = false;
+        //isFloating = false;
+
+        //arrow.SetActive(false);
+
+        //// 元に戻す
+        //buttonImage.color = Color.black;
+        //buttonText.color = Color.white;
+
+        // 前のやつに戻すときここから上を戻す
+
+        //transform.localScale = defaultScale;
+        //transform.rotation = defaultRotation;
+
+    }
+    public void StopFloating()
+    {
+        isFloating = false;
 
         arrow.SetActive(false);
 
-        // 元に戻す
-        buttonImage.color = Color.black;
+        // 元の色に戻す
+        buttonImage.color = Color.white;
         buttonText.color = Color.white;
-
-        //transform.localScale = defaultScale;
-        transform.rotation = defaultRotation;
     }
 }
