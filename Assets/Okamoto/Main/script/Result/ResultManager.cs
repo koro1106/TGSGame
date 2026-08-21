@@ -22,12 +22,18 @@ public class ResultManager : MonoBehaviour
     [Header("弾")]
     public GunController gunController;
 
+    [Header("敵Spawner")]
+    public EnemySpawner enemySpawner;
+
     [Header("クロスヘア")]
     public GameObject crosshairObject;
 
     [Header("停止するもの")]
     public PlayerMovement playerMovement;
     public Behaviour crosshairController;
+
+    [Header("リザルト中に停止するPlayer")]
+    public GameObject playerObject;
 
     [Header("続行時スライド演出")]
     public RectTransform continueTransition;
@@ -40,11 +46,15 @@ public class ResultManager : MonoBehaviour
     public float resultStartScale = 0.1f;
     public float resultScaleDuration = 0.25f;
 
+
+
     private Vector3 animationPanelOriginalScale;
 
     private Vector3 resultOriginalScale;
 
     private Vector2 transitionOriginalPosition;
+
+    public static bool IsResultActive = false;
 
 
 
@@ -177,12 +187,35 @@ public class ResultManager : MonoBehaviour
 
 
         // =====================================================
-        // Player停止
+        // Playerの操作・向きを停止
         // =====================================================
 
         if (playerMovement != null)
         {
             playerMovement.enabled = false;
+        }
+
+        if (gunController != null)
+        {
+            gunController.enabled = false;
+        }
+
+        // =================================================
+        // 敵の強さ・スポーン時間をリセット
+        // =================================================
+
+        if (enemySpawner != null)
+        {
+            enemySpawner.ResetEnemyGrowth();
+        }
+
+        // =====================================================
+        // Playerの向き変更も停止
+        // =====================================================
+
+        if (gunController != null)
+        {
+            gunController.enabled = false;
         }
 
 
@@ -248,6 +281,12 @@ public class ResultManager : MonoBehaviour
 
     public void ContinueExploration()
     {
+        // ===============================
+        // フィールドに残っている
+        // ドロップアイテムを全削除
+        // ===============================
+        ClearAllDropItems();
+
         StartCoroutine(
             ContinueExplorationCoroutine()
         );
@@ -552,23 +591,35 @@ public class ResultManager : MonoBehaviour
                 // =============================================
 
                 if (!playerRestarted && t >= 0.7f)
-                {
-                    playerRestarted = true;
+{
+    playerRestarted = true;
 
-                    if (playerMovement != null)
-                    {
-                        playerMovement.enabled = false;
+    // 敵のHP増加をリセット
+    if (enemySpawner != null)
+    {
+        enemySpawner.ResetEnemyHPGrowth();
+    }
 
-                        playerMovement.ResetPlayerPosition();
 
-                        playerMovement.ResumeAfterResult();
-                    }
+    // Player全体を復帰
+    UnfreezePlayer();
 
-                    if (gunController != null)
-                    {
-                        gunController.RefillAmmoAfterResult();
-                    }
-                }
+    // Player位置リセット
+    if (playerMovement != null)
+    {
+        playerMovement.enabled = false;
+
+        playerMovement.ResetPlayerPosition();
+
+        playerMovement.ResumeAfterResult();
+    }
+
+    // 弾を回復
+    if (gunController != null)
+    {
+        gunController.RefillAmmoAfterResult();
+    }
+}
 
 
                 yield return null;
@@ -613,6 +664,11 @@ public class ResultManager : MonoBehaviour
                 playerMovement.enabled = true;
             }
 
+            // GunController復帰
+            if (gunController != null)
+            {
+                gunController.enabled = true;
+            }
 
             // カメラ揺れ再開
             if (CameraShake.Instance != null)
@@ -731,5 +787,84 @@ public class ResultManager : MonoBehaviour
 
         animationPanel.localScale =
             animationPanelOriginalScale;
+    }
+
+    // =========================================================
+    // Playerと子オブジェクトのBehaviourを停止
+    // Player自体は消さない
+    // =========================================================
+
+    // =========================================================
+    // Playerの位置と回転を固定する
+    // Player自体は消さない
+    // =========================================================
+
+    private Vector3 playerFixedPosition;
+
+    private Quaternion playerFixedRotation;
+
+    private bool isPlayerFrozen = false;
+
+
+    private void FreezePlayer()
+    {
+        if (playerObject == null)
+            return;
+
+
+        // 現在位置を保存
+        playerFixedPosition =
+            playerObject.transform.position;
+
+
+        // 現在の回転を保存
+        playerFixedRotation =
+            playerObject.transform.rotation;
+
+
+        isPlayerFrozen = true;
+    }
+
+
+    private void UnfreezePlayer()
+    {
+        isPlayerFrozen = false;
+    }
+    void LateUpdate()
+    {
+        if (!isPlayerFrozen)
+            return;
+
+        if (playerObject == null)
+            return;
+
+
+        // =====================================================
+        // Playerの位置を固定
+        // =====================================================
+
+        playerObject.transform.position =
+            playerFixedPosition;
+
+
+        // =====================================================
+        // Playerの向きを固定
+        // =====================================================
+
+        playerObject.transform.rotation =
+            playerFixedRotation;
+    }
+    private void ClearAllDropItems()
+    {
+        DropBounce[] drops =
+            FindObjectsOfType<DropBounce>();
+
+        foreach (DropBounce drop in drops)
+        {
+            if (drop != null)
+            {
+                Destroy(drop.gameObject);
+            }
+        }
     }
 }

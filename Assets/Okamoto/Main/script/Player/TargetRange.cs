@@ -3,12 +3,13 @@ using UnityEngine;
 public class TargetRange : MonoBehaviour
 {
     [Header("ターゲット範囲")]
-    public float range = 5f;
+    public float range = 4000f;
 
     [Header("一番近いEnemyに表示するImage")]
     public GameObject targetImage;
 
     public PlayerStats playerStats;
+
     public Transform CurrentTarget { get; private set; }
 
     void Start()
@@ -31,7 +32,6 @@ public class TargetRange : MonoBehaviour
 
         float nearestDistance = Mathf.Infinity;
 
-        // EnemyControllerが付いているオブジェクトだけ取得
         EnemyHP[] enemies =
             FindObjectsOfType<EnemyHP>();
 
@@ -46,11 +46,18 @@ public class TargetRange : MonoBehaviour
                     enemy.transform.position
                 );
 
-            // 範囲外は無視
-            if (distance > range + playerStats.targetingRangeUP)
+            float targetRange =
+                range;
+
+            if (playerStats != null)
+            {
+                targetRange +=
+                    playerStats.targetingRangeUP;
+            }
+
+            if (distance > targetRange)
                 continue;
 
-            // 一番近いEnemyを保存
             if (distance < nearestDistance)
             {
                 nearestDistance = distance;
@@ -66,17 +73,14 @@ public class TargetRange : MonoBehaviour
         if (targetImage == null)
             return;
 
-        // 範囲内にEnemyがいない
         if (CurrentTarget == null)
         {
             targetImage.SetActive(false);
             return;
         }
 
-        // Imageを表示
         targetImage.SetActive(true);
 
-        // Enemyの位置に移動
         targetImage.transform.position =
             CurrentTarget.position;
     }

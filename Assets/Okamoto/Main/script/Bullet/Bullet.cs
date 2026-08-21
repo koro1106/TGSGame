@@ -43,7 +43,26 @@ public class Bullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        // ========================
+        // ケアパッケージ
+        // ========================
+        if (other.CompareTag("CarePackage"))
+        {
+            CarePackage package =
+                other.GetComponent<CarePackage>();
+
+            if (package != null)
+            {
+                package.TakeDamage(damage);
+            }
+
+            Destroy(gameObject);
+            return;
+        }
+
+        // ========================
         // EnemyHP取得
+        // ========================
         EnemyHP enemy =
             other.GetComponent<EnemyHP>();
 

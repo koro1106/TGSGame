@@ -49,13 +49,32 @@ public class Bulletxplosion : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        // ========================
+        // ケアパッケージ
+        // ========================
+        if (other.CompareTag("CarePackage"))
+        {
+            CarePackage package =
+                other.GetComponent<CarePackage>();
+
+            if (package != null)
+            {
+                package.TakeDamage(damage);
+            }
+
+            Destroy(gameObject);
+            return;
+        }
+
+        // ========================
+        // Enemy
+        // ========================
         EnemyHP enemy =
             other.GetComponent<EnemyHP>();
 
         if (enemy == null)
             return;
 
-        // ダメージ
         enemy.TakeDamage(damage);
 
         Debug.Log(
@@ -64,10 +83,6 @@ public class Bulletxplosion : MonoBehaviour
             damage +
             " ダメージ"
         );
-
-        //========================
-        // エフェクト生成
-        //========================
 
         if (hitEffectPrefab != null)
         {
@@ -78,14 +93,15 @@ public class Bulletxplosion : MonoBehaviour
                     Quaternion.identity
                 );
 
-            // 見た目サイズ変更
-            totalExplosionSize = explosionSize + playerStats.explosionRangeUP;
+            totalExplosionSize =
+                explosionSize +
+                playerStats.explosionRangeUP;
 
             effect.transform.localScale =
-                Vector3.one * totalExplosionSize;
+                Vector3.one *
+                totalExplosionSize;
         }
 
-        // 弾消滅
         Destroy(gameObject);
     }
 

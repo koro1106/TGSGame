@@ -21,6 +21,10 @@ public class GunController : MonoBehaviour
 
     public float fireRate = 0.1f;
     public float bulletSpeed = 15f;
+
+    [Header("射撃設定")]
+    public bool autoFire = true;
+
     public int maxAmmo = 15; // 弾数
     public float reloadTime = 1.5f;
 
@@ -322,7 +326,28 @@ public class GunController : MonoBehaviour
     {
         fireTimer += Time.deltaTime;
 
-        if (Input.GetMouseButton(0) && fireTimer >= fireRate)
+        bool shouldShoot = false;
+
+        // =========================
+        // 連射ON
+        // =========================
+        if (autoFire)
+        {
+            shouldShoot =
+                Input.GetMouseButton(0) &&
+                fireTimer >= fireRate;
+        }
+        // =========================
+        // 連射OFF
+        // =========================
+        else
+        {
+            shouldShoot =
+                Input.GetMouseButtonDown(0) &&
+                fireTimer >= fireRate;
+        }
+
+        if (shouldShoot)
         {
             // =========================
             // 弾切れチェック
@@ -411,7 +436,6 @@ public class GunController : MonoBehaviour
             {
                 bulletScript.SetDamage(stats.bulletDamage);
             }
-
             // =========================
             // 発射方向
             // =========================
@@ -1302,7 +1326,7 @@ public class GunController : MonoBehaviour
 
         while (timer < ammoSlideDuration)
         {
-            timer += Time.deltaTime;
+            timer += Time.unscaledDeltaTime;
 
             float t =
                 Mathf.Clamp01(
@@ -1467,10 +1491,6 @@ public class GunController : MonoBehaviour
             target == null)
             yield break;
 
-        // =========================================
-        // 演出用UI
-        // =========================================
-
         GameObject effectObject =
             new GameObject("NextAmmoDropEffect");
 
@@ -1488,25 +1508,11 @@ public class GunController : MonoBehaviour
         RectTransform rect =
             effectObject.GetComponent<RectTransform>();
 
-        // =========================================
-        // サイズは元の弾UIと完全に同じ
-        // =========================================
-
         rect.sizeDelta = target.sizeDelta;
-
-        // Scaleは一切変更しない
         rect.localScale = target.localScale;
-
-        // =========================================
-        // 元の位置
-        // =========================================
 
         Vector3 targetPosition =
             target.localPosition;
-
-        // =========================================
-        // 上から開始
-        // =========================================
 
         Vector3 startPosition =
             targetPosition +
@@ -1515,15 +1521,12 @@ public class GunController : MonoBehaviour
         rect.localPosition =
             startPosition;
 
-        // =========================================
-        // ① 上から下へ落ちる
-        // =========================================
-
+        // ① 落下
         float timer = 0f;
 
         while (timer < firstAmmoDropDuration)
         {
-            timer += Time.deltaTime;
+            timer += Time.unscaledDeltaTime;
 
             float t =
                 Mathf.Clamp01(
@@ -1546,10 +1549,7 @@ public class GunController : MonoBehaviour
             yield return null;
         }
 
-        // =========================================
-        // ② 少し下まで行く
-        // =========================================
-
+        // ② 下に跳ねる
         Vector3 bounceDownPosition =
             targetPosition +
             Vector3.down * firstAmmoBounceDown;
@@ -1558,7 +1558,7 @@ public class GunController : MonoBehaviour
 
         while (timer < firstAmmoBounceDuration)
         {
-            timer += Time.deltaTime;
+            timer += Time.unscaledDeltaTime;
 
             float t =
                 Mathf.Clamp01(
@@ -1581,15 +1581,12 @@ public class GunController : MonoBehaviour
             yield return null;
         }
 
-        // =========================================
-        // ③ 元の位置へ戻る
-        // =========================================
-
+        // ③ 元に戻る
         timer = 0f;
 
         while (timer < firstAmmoBounceDuration)
         {
-            timer += Time.deltaTime;
+            timer += Time.unscaledDeltaTime;
 
             float t =
                 Mathf.Clamp01(
@@ -1612,16 +1609,8 @@ public class GunController : MonoBehaviour
             yield return null;
         }
 
-        // =========================================
-        // 元の位置で終了
-        // =========================================
-
         rect.localPosition =
             targetPosition;
-
-        // =========================================
-        // 本物のNEXT弾を表示
-        // =========================================
 
         target.GetComponent<Image>().enabled = true;
 
@@ -1716,8 +1705,7 @@ public class GunController : MonoBehaviour
 
         while (timer < duration)
         {
-            timer += Time.deltaTime;
-
+            timer += Time.unscaledDeltaTime;
             float t =
                 Mathf.Clamp01(
                     timer / duration
@@ -1860,8 +1848,7 @@ public class GunController : MonoBehaviour
 
         while (timer < ammoEnterDuration)
         {
-            timer += Time.deltaTime;
-
+            timer += Time.unscaledDeltaTime;
             float t =
                 Mathf.Clamp01(
                     timer / ammoEnterDuration
@@ -2190,25 +2177,41 @@ public class GunController : MonoBehaviour
 
     public void RefillAmmoAfterResult()
     {
+        // =========================================
+        // リザルト終了後の状態リセット
+        // =========================================
+
         isChangingScene = false;
         isReloading = false;
 
+        // =========================================
+        // 弾を全回復
+        // =========================================
+
         currentAmmo = maxAmmo;
+
+        // =========================================
+        // 新しい弾の内容を生成
+        // =========================================
 
         GenerateAmmo();
 
+        // =========================================
+        // 数字UI更新
+        // =========================================
+
         UpdateAmmoUI();
+
+        // =========================================
+        // 発射タイマーリセット
+        // =========================================
 
         fireTimer = 0f;
 
-        ammoSlideQueue = 0;
-        isAmmoSlidePlaying = false;
-
-        if (ammoSlideCoroutine != null)
-        {
-            StopCoroutine(ammoSlideCoroutine);
-            ammoSlideCoroutine = null;
-        }
+        // =========================================
+        // 弾UIを現在の弾データに合わせる
+        // ※アニメーションは強制停止しない
+        // =========================================
 
         RefreshAmmoUIImmediate();
     }
