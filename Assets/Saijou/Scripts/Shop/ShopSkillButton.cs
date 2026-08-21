@@ -22,6 +22,7 @@ public class ShopSkillButton : MonoBehaviour
 
     [Header("購入済み表示")]
     [SerializeField] private GameObject unlockedObject;
+    [SerializeField] private GameObject dollNameText;
 
     [Header("仕立てるボタン")]
     [SerializeField] private GameObject makeButton;
@@ -34,6 +35,7 @@ public class ShopSkillButton : MonoBehaviour
 
     [SerializeField] ExpUIAnimation expUIAnimation;
     [SerializeField] UIAnimation uiAnimation;
+    [SerializeField] NormalExpText normalExpText;
 
     void Start()
     {
@@ -95,6 +97,7 @@ public class ShopSkillButton : MonoBehaviour
         // 見た目更新
         UpdateVisual();
         PlayExpAnimation(); // 経験値UIアニメーション
+        normalExpText.UpdateNormalExpText(); // 経験値UIアップデート
 
     }
 
@@ -106,16 +109,17 @@ public class ShopSkillButton : MonoBehaviour
         if (data.isShopUnlocked)
         {
             // 購入済み
-            if (unlockedObject != null)
-                unlockedObject.SetActive(true);
+            unlockedObject.SetActive(false);
+            dollNameText.SetActive(true);
 
             makeButton.SetActive(false); // 仕立てるボタン非表示
         }
         else
         {
             // 未購入
-            if (unlockedObject != null)
-                unlockedObject.SetActive(false);
+            unlockedObject.SetActive(true);
+            dollNameText.SetActive(false);
+
         }
     }
 
@@ -167,6 +171,11 @@ public class ShopSkillButton : MonoBehaviour
 
             case ExpType.PreExp:
                 uiAnimation.PlayBounce(expUIAnimation.preExp.rectTransform);
+                break;
+
+             case ExpType.ShopExp:
+                uiAnimation.PlayBounce(expUIAnimation.exp_2.rectTransform);
+                uiAnimation.PlayBounce(expUIAnimation.exp_3.rectTransform);
                 break;
         }
     }
