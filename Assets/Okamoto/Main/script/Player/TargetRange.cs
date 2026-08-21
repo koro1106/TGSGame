@@ -8,6 +8,7 @@ public class TargetRange : MonoBehaviour
     [Header("ˆê”Ô‹ß‚¢Enemy‚É•\Ž¦‚·‚éImage")]
     public GameObject targetImage;
 
+    public PlayerStats playerStats;
     public Transform CurrentTarget { get; private set; }
 
     void Start()
@@ -46,7 +47,7 @@ public class TargetRange : MonoBehaviour
                 );
 
             // ”ÍˆÍŠO‚Í–³Ž‹
-            if (distance > range)
+            if (distance > range + playerStats.targetingRangeUP)
                 continue;
 
             // ˆê”Ô‹ß‚¢Enemy‚ð•Û‘¶
