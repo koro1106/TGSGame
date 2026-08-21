@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
 
 
     [Header("1回だけダメージを耐える")]
-    public bool enableSurvivalDamage = false;
+   // public bool enableSurvivalDamage = false;
 
     [Header("ダメージ点滅設定")]
     public float damageBlinkDuration = 1f;
@@ -67,6 +67,8 @@ public class PlayerMovement : MonoBehaviour
     // ブリンク開始時の方向
     private Vector2 blinkDirection;
 
+    public PlayerStats playerStats;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -76,8 +78,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        // ブリンクがOFFなら即座に停止
-        if (!enableBlink)
+        // ブリンク未開放なら即座に停止
+        if (!playerStats.dash)
         {
             isBlinking = false;
             return;
@@ -205,7 +207,7 @@ public class PlayerMovement : MonoBehaviour
             Vector2.MoveTowards(
                 rb.position,
                 targetPos,
-                moveSpeed *
+                (moveSpeed + playerStats.moveSpeed) *
                 Time.fixedDeltaTime
             )
         );
@@ -254,7 +256,7 @@ public class PlayerMovement : MonoBehaviour
             return;
 
         // 1回だけ耐える
-        if (enableSurvivalDamage &&
+        if (playerStats.oneShotDurability &&
             !hasSurvivedDamage)
         {
             hasSurvivedDamage = true;
@@ -368,7 +370,8 @@ public class PlayerMovement : MonoBehaviour
         // ブリンク時間
         blinkTimer = blinkDuration;
 
+
         // クールダウン開始
-        blinkCooldownTimer = blinkCooldown;
+        blinkCooldownTimer = blinkCooldown - playerStats.dashCT;
     }
 }
