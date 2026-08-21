@@ -80,20 +80,37 @@ public class BindBullet : MonoBehaviour
         if (hasHit)
             return;
 
+        // ==============================
+        // ケアパッケージ
+        // ==============================
+        if (other.CompareTag("CarePackage"))
+        {
+            CarePackage package =
+                other.GetComponent<CarePackage>();
+
+            if (package != null)
+            {
+                // BindBulletにダメージが無い場合は
+                // 必要ならdamage変数を追加
+                package.TakeDamage(1);
+            }
+
+            Destroy(gameObject);
+            return;
+        }
+
         // Enemy以外無視
         if (!other.CompareTag("Enemy"))
             return;
 
         hasHit = true;
 
-        // EnemyHP取得
         EnemyHP firstEnemy =
-    other.GetComponent<EnemyHP>();
+            other.GetComponent<EnemyHP>();
 
         if (firstEnemy == null)
             return;
 
-        // Collider停止
         Collider2D col =
             GetComponent<Collider2D>();
 
@@ -102,7 +119,6 @@ public class BindBullet : MonoBehaviour
             col.enabled = false;
         }
 
-        // 見た目消す
         SpriteRenderer sr =
             GetComponent<SpriteRenderer>();
 
@@ -111,7 +127,6 @@ public class BindBullet : MonoBehaviour
             sr.enabled = false;
         }
 
-        // 拘束開始
         StartCoroutine(
             BindEnemies(firstEnemy)
         );

@@ -56,17 +56,38 @@ public class PoisonBullet : Bullet
         if (exploded)
             return;
 
-        // EnemyHP取得
-        EnemyHP enemy =
-            other.GetComponent<EnemyHP>();
-
-        // EnemyHP無ければ無視
-        if (enemy == null)
-            return;
-
+        // ダメージを最初に1回だけ計算
         int totalDamage =
             hitDamage +
             stats.effectBulletDamage;
+
+        // ========================
+        // ケアパッケージ
+        // ========================
+        if (other.CompareTag("CarePackage"))
+        {
+            CarePackage package =
+                other.GetComponent<CarePackage>();
+
+            if (package != null)
+            {
+                package.TakeDamage(totalDamage);
+            }
+
+            exploded = true;
+
+            Destroy(gameObject);
+            return;
+        }
+
+        // ========================
+        // EnemyHP取得
+        // ========================
+        EnemyHP enemy =
+            other.GetComponent<EnemyHP>();
+
+        if (enemy == null)
+            return;
 
         // 着弾ダメージ
         enemy.TakeDamage(totalDamage);

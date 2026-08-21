@@ -54,6 +54,7 @@ public class EnemySpawner : MonoBehaviour
     public float spawnAreaTopRatio = 0.45f;
     public float spawnAreaBottomRatio = 1.0f;
 
+
     private float timer;
 
     void Update()
@@ -175,6 +176,20 @@ public class EnemySpawner : MonoBehaviour
         Debug.Log("ボス撃破！");
     }
 
+
+    // =========================================
+    // 敵HP増加をリセット
+    // =========================================
+    public void ResetEnemyHPGrowth()
+    {
+        hpTimer = 0f;
+        hpMultiplier = 1f;
+
+        Debug.Log("敵のHP増加をリセットしました");
+    }
+
+
+
     GameObject GetRandomEnemy()
     {
         spawnList.Clear();
@@ -234,5 +249,32 @@ public class EnemySpawner : MonoBehaviour
             default:
                 return new Vector2(Random.Range(left, right), areaBottom - offset);
         }
+    }
+
+    // =====================================================
+    // リザルト後に敵の強さをリセット
+    // =====================================================
+
+    public void ResetEnemyGrowth()
+    {
+        // =========================================
+        // 敵HP成長を完全リセット
+        // =========================================
+
+        hpTimer = 0f;
+        hpMultiplier = 1f;
+
+        // 通常敵スポーンタイマー
+        timer = 0f;
+
+        // ボスタイマー
+        bossTimer = 0f;
+
+        // ボス状態
+        bossAlive = false;
+        bossWarningShown = false;
+        waitingForBossSpawn = false;
+
+        Debug.Log("敵のHP成長をリセットしました");
     }
 }

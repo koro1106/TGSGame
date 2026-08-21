@@ -29,17 +29,36 @@ public class GravityBullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // EnemyHP取得
-        EnemyHP centerEnemy =
-            other.GetComponent<EnemyHP>();
-
-        // EnemyHPが無ければ無視
-        if (centerEnemy == null)
-            return;
-
+        // ダメージを最初に1回だけ計算
         int totalDamage =
             damage +
             stats.effectBulletDamage;
+
+        // ========================
+        // ケアパッケージ
+        // ========================
+        if (other.CompareTag("CarePackage"))
+        {
+            CarePackage package =
+                other.GetComponent<CarePackage>();
+
+            if (package != null)
+            {
+                package.TakeDamage(totalDamage);
+            }
+
+            Destroy(gameObject);
+            return;
+        }
+
+        // ========================
+        // EnemyHP取得
+        // ========================
+        EnemyHP centerEnemy =
+            other.GetComponent<EnemyHP>();
+
+        if (centerEnemy == null)
+            return;
 
         // 着弾した敵にダメージ
         centerEnemy.TakeDamage(totalDamage);

@@ -273,7 +273,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &13122340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2630,6 +2630,7 @@ MonoBehaviour:
   bulletPrefabs: []
   fireRate: 0.1
   bulletSpeed: 2000
+  autoFire: 1
   maxAmmo: 10
   reloadTime: 1.5
   radius: 0.01
@@ -7072,7 +7073,6 @@ MonoBehaviour:
   canvas: {fileID: 1196287930}
   gameOverSceneName: MainStageSkillTreeScene
   startPoint: {fileID: 513238720}
-  enableSurvivalDamage: 0
   damageBlinkDuration: 1
   damageBlinkInterval: 0.1
   damageBlinkObject: {fileID: 173762201}
@@ -15966,9 +15966,11 @@ MonoBehaviour:
   continueButton: {fileID: 513383973}
   skillTreeButton: {fileID: 1548528209}
   gunController: {fileID: 173762207}
+  enemySpawner: {fileID: 1683393129}
   crosshairObject: {fileID: 360144201}
   playerMovement: {fileID: 472724072}
   crosshairController: {fileID: 0}
+  playerObject: {fileID: 173762201}
   continueTransition: {fileID: 806464384}
   transitionDuration: 1
   animationPanel: {fileID: 1687881293}
@@ -20089,6 +20091,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TargetRange
   range: 4000
   targetImage: {fileID: 13122339}
+  playerStats: {fileID: 0}
 --- !u!1 &1493139781
 GameObject:
   m_ObjectHideFlags: 0

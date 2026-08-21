@@ -44,15 +44,36 @@ public class ChainBullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        // ========================
+        // ケアパッケージ
+        // ========================
+        if (other.CompareTag("CarePackage"))
+        {
+            CarePackage package =
+                other.GetComponent<CarePackage>();
+
+            if (package != null)
+            {
+                int totalDamage =
+                    damage +
+                    stats.effectBulletDamage;
+
+                package.TakeDamage(totalDamage);
+            }
+
+            Destroy(gameObject);
+            return;
+        }
+
+        // ========================
         // EnemyHP取得
+        // ========================
         EnemyHP firstEnemy =
             other.GetComponent<EnemyHP>();
 
-        // EnemyHPが無ければ無視
         if (firstEnemy == null)
             return;
 
-        // 音
         if (hitSound != null)
         {
             AudioSource.PlayClipAtPoint(

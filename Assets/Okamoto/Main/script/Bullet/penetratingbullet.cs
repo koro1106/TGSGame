@@ -23,18 +23,37 @@ public class penetratingbullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        // ダメージを最初に1回だけ計算
+        int totalDamage =
+            damage +
+            stats.effectBulletDamage;
+
+        // ========================
+        // ケアパッケージ
+        // ========================
+        if (other.CompareTag("CarePackage"))
+        {
+            CarePackage package =
+                other.GetComponent<CarePackage>();
+
+            if (package != null)
+            {
+                package.TakeDamage(totalDamage);
+            }
+
+            // 貫通弾なので消さない
+            return;
+        }
+
+        // ========================
         // EnemyHP取得
+        // ========================
         EnemyHP enemy =
             other.GetComponent<EnemyHP>();
 
-        // EnemyHP無ければ無視
         if (enemy == null)
             return;
 
-        int totalDamage =
-            damage + stats.effectBulletDamage;
-
-        // ダメージ
         enemy.TakeDamage(totalDamage);
 
         Debug.Log(
