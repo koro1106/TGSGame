@@ -99,6 +99,7 @@ public class GunController : MonoBehaviour
     [Header("敵撃破時の弾回復")]
     public bool recoverAmmoOnKill = false;
 
+
     [Range(0f, 100f)]
     public float recoverAmmoChance = 50f; // 回復確率 %
 
@@ -149,6 +150,9 @@ public class GunController : MonoBehaviour
     public SniperController sniper;
     //ハンドガン追加
     public HandGunController handgun;
+
+    [Header("自動ターゲット")]
+    public TargetRange targetRange;
 
     public RectTransform Crosshair => crosshair;
     public Camera Cam => cam;
@@ -384,7 +388,7 @@ public class GunController : MonoBehaviour
 
             PlayMuzzleFlash();
 
-            crosshairTargetRotation += 90f;
+            //crosshairTargetRotation += 90f;
 
             if (shotgun != null && shotgun.isActive)
             {
@@ -415,11 +419,24 @@ public class GunController : MonoBehaviour
             Rigidbody2D rb =
                 bulletInstance.GetComponent<Rigidbody2D>();
 
-            Vector3 worldPos =
-                GetCrosshairWorldPosition();
+            Vector3 targetPosition;
+
+            // ターゲットしているEnemyがいる場合
+            if (targetRange != null &&
+                targetRange.CurrentTarget != null)
+            {
+                targetPosition =
+                    targetRange.CurrentTarget.position;
+            }
+            else
+            {
+                // Enemyがいなければクロスヘア方向
+                targetPosition =
+                    GetCrosshairWorldPosition();
+            }
 
             Vector2 direction =
-                (worldPos - muzzle.position).normalized;
+                (targetPosition - muzzle.position).normalized;
 
             LastShootDirection = direction;
 

@@ -33,6 +33,17 @@ public class ResultManager : MonoBehaviour
     public RectTransform continueTransition;
     public float transitionDuration = 0.5f;
 
+    [Header("アニメーションさせるPanel")]
+    public RectTransform animationPanel;
+
+    [Header("表示アニメーション")]
+    public float resultStartScale = 0.1f;
+    public float resultScaleDuration = 0.25f;
+
+    private Vector3 animationPanelOriginalScale;
+
+    private Vector3 resultOriginalScale;
+
     private Vector2 transitionOriginalPosition;
 
 
@@ -64,6 +75,13 @@ public class ResultManager : MonoBehaviour
             resultPanel.SetActive(false);
         }
 
+        // アニメーションするPanelの元サイズを保存
+        if (animationPanel != null)
+        {
+            animationPanelOriginalScale =
+                animationPanel.localScale;
+        }
+
         if (continueButton != null)
         {
             continueButton.onClick.AddListener(
@@ -78,7 +96,6 @@ public class ResultManager : MonoBehaviour
             );
         }
 
-        // ★ Inspectorで置いたImageの位置を最初に保存
         if (continueTransition != null)
         {
             transitionOriginalPosition =
@@ -213,10 +230,9 @@ public class ResultManager : MonoBehaviour
         // リザルト表示
         // =====================================================
 
-        if (resultPanel != null)
-        {
-            resultPanel.SetActive(true);
-        }
+        StartCoroutine(
+    ResultShowAnimation()
+);
 
 
         // =====================================================
@@ -343,10 +359,9 @@ public class ResultManager : MonoBehaviour
         // リザルト非表示
         // =====================================================
 
-        if (resultPanel != null)
-        {
-            resultPanel.SetActive(false);
-        }
+        StartCoroutine(
+    ResultShowAnimation()
+);
 
 
         // =====================================================
@@ -629,5 +644,92 @@ public class ResultManager : MonoBehaviour
 
             continueTransition.gameObject.SetActive(false);
         }
+    }
+    // =========================================================
+    // 指定したPanelだけ表示アニメーション
+    // 小さい → 大きい
+    // =========================================================
+
+    private IEnumerator ResultShowAnimation()
+    {
+        // リザルト全体がなければ終了
+        if (resultPanel == null)
+            yield break;
+
+
+        // =====================================================
+        // まずリザルト全体を表示
+        // =====================================================
+
+        resultPanel.SetActive(true);
+
+
+        // =====================================================
+        // アニメーションPanelが未設定なら
+        // リザルトだけ表示して終了
+        // =====================================================
+
+        if (animationPanel == null)
+            yield break;
+
+
+        // =====================================================
+        // 開始サイズ
+        // =====================================================
+
+        Vector3 startScale =
+            animationPanelOriginalScale *
+            resultStartScale;
+
+
+        // 最初は小さくする
+        animationPanel.localScale =
+            startScale;
+
+
+        float timer = 0f;
+
+
+        // =====================================================
+        // 小さい → 元のサイズ
+        // =====================================================
+
+        while (timer < resultScaleDuration)
+        {
+            timer += Time.unscaledDeltaTime;
+
+
+            float t =
+                Mathf.Clamp01(
+                    timer / resultScaleDuration
+                );
+
+
+            // なめらかに広がる
+            t = Mathf.SmoothStep(
+                0f,
+                1f,
+                t
+            );
+
+
+            animationPanel.localScale =
+                Vector3.Lerp(
+                    startScale,
+                    animationPanelOriginalScale,
+                    t
+                );
+
+
+            yield return null;
+        }
+
+
+        // =====================================================
+        // 最後は元のサイズに戻す
+        // =====================================================
+
+        animationPanel.localScale =
+            animationPanelOriginalScale;
     }
 }
