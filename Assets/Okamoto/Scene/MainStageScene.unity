@@ -7072,6 +7072,10 @@ MonoBehaviour:
   canvas: {fileID: 1196287930}
   gameOverSceneName: MainStageSkillTreeScene
   startPoint: {fileID: 513238720}
+  enableSurvivalDamage: 0
+  damageBlinkDuration: 1
+  damageBlinkInterval: 0.1
+  damageBlinkObject: {fileID: 173762201}
   gunController: {fileID: 173762207}
   enableBlink: 0
   blinkMoveSpeed: 4000
