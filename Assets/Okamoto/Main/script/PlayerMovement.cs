@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -17,6 +18,19 @@ public class PlayerMovement : MonoBehaviour
     [Header("リザルト後に戻る位置")]
     public Transform startPoint;
 
+
+    [Header("1回だけダメージを耐える")]
+    public bool enableSurvivalDamage = false;
+
+    [Header("ダメージ点滅設定")]
+    public float damageBlinkDuration = 1f;
+    public float damageBlinkInterval = 0.1f;
+
+    private bool hasSurvivedDamage = false;
+    private bool isDamageBlinking = false;
+
+    [Header("ダメージ時に点滅させるObject")]
+    public GameObject damageBlinkObject;
 
 
 
@@ -235,12 +249,71 @@ public class PlayerMovement : MonoBehaviour
         if (isDead)
             return;
 
+        // 点滅中は無敵
+        if (isDamageBlinking)
+            return;
+
+        // 1回だけ耐える
+        if (enableSurvivalDamage &&
+            !hasSurvivedDamage)
+        {
+            hasSurvivedDamage = true;
+
+            StartCoroutine(
+                DamageBlinkRoutine()
+            );
+
+            return;
+        }
+
+        // OFFの場合、または2回目以降
         isDead = true;
 
         if (ResultManager.Instance != null)
         {
             ResultManager.Instance.ShowResult();
         }
+    }
+
+    IEnumerator DamageBlinkRoutine()
+    {
+        if (damageBlinkObject == null)
+        {
+            Debug.LogWarning(
+                "点滅させるObjectが設定されていません。"
+            );
+
+            isDamageBlinking = false;
+            yield break;
+        }
+
+        isDamageBlinking = true;
+
+        float timer = 0f;
+
+        while (timer < damageBlinkDuration)
+        {
+            // 非表示
+            damageBlinkObject.SetActive(false);
+
+            yield return new WaitForSeconds(
+                damageBlinkInterval
+            );
+
+            // 表示
+            damageBlinkObject.SetActive(true);
+
+            yield return new WaitForSeconds(
+                damageBlinkInterval
+            );
+
+            timer += damageBlinkInterval * 2f;
+        }
+
+        // 最後は必ず表示状態に戻す
+        damageBlinkObject.SetActive(true);
+
+        isDamageBlinking = false;
     }
 
 
