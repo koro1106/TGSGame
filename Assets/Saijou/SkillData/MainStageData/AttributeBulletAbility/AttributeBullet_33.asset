@@ -15,11 +15,11 @@ MonoBehaviour:
   skillName: "\u7167\u6E96\u7BC4\u56F2 +50%"
   level: 0
   maxLevel: 1
-  needExp: 5
+  needExp: 300
   isUnlocked: 0
   isLevelUp: 0
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
-  expType: 0
+  expType: 1
   effectType: 35
   effectValue: 50
   addNeedExp: 0
