@@ -26,6 +26,8 @@ public class PlayerMovement : MonoBehaviour
     // =========================================================
     // ブリンク設定
     // =========================================================
+    [Header("ブリンクを有効にする")]
+    public bool enableBlink = true;
 
     [Header("ブリンク設定")]
     public float blinkMoveSpeed = 30f;
@@ -60,6 +62,13 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        // ブリンクがOFFなら即座に停止
+        if (!enableBlink)
+        {
+            isBlinking = false;
+            return;
+        }
+
         // クールダウン
         if (blinkCooldownTimer > 0f)
         {
@@ -79,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-    
+
 
 
     // =========================================================
