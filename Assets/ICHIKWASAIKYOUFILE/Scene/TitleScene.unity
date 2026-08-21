@@ -1900,6 +1900,7 @@ MonoBehaviour:
   arrow: {fileID: 22109907}
   buttonImage: {fileID: 664382340}
   buttonText: {fileID: 728392847}
+  scaleSpeed: 8
   floatAmount: 5
   floatSpeed: 3
 --- !u!1 &700473125
@@ -2892,8 +2893,8 @@ Transform:
   - {fileID: 198465110}
   - {fileID: 56703125}
   - {fileID: 22109908}
-  - {fileID: 1550884939}
   - {fileID: 1626178634}
+  - {fileID: 1550884939}
   - {fileID: 18190033}
   - {fileID: 2050665936}
   - {fileID: 168924655}
@@ -3863,7 +3864,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -231.5, y: -3.0000038}
+  m_AnchoredPosition: {x: -231.5, y: -3}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1550884940
@@ -4018,7 +4019,8 @@ MonoBehaviour:
   arrow: {fileID: 796461134}
   buttonImage: {fileID: 1550884941}
   buttonText: {fileID: 1512200453}
-  floatAmount: 5
+  scaleSpeed: 16
+  floatAmount: 1.5
   floatSpeed: 3
 --- !u!1 &1553542900
 GameObject:
@@ -4290,7 +4292,8 @@ MonoBehaviour:
   arrow: {fileID: 198465109}
   buttonImage: {fileID: 1626178636}
   buttonText: {fileID: 279375582}
-  floatAmount: 5
+  scaleSpeed: 16
+  floatAmount: 1.5
   floatSpeed: 3
 --- !u!1 &1648680931
 GameObject:
@@ -5268,7 +5271,8 @@ MonoBehaviour:
   arrow: {fileID: 56703124}
   buttonImage: {fileID: 2050665938}
   buttonText: {fileID: 2108086589}
-  floatAmount: 5
+  scaleSpeed: 16
+  floatAmount: 1.5
   floatSpeed: 3
 --- !u!1 &2064799135
 GameObject:

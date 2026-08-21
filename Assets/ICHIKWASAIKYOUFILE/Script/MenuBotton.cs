@@ -11,6 +11,9 @@ public class MenuButton : MonoBehaviour,
     public Image buttonImage;
     public TMP_Text buttonText;
 
+    //Å@ëÂÇ´Ç≠Ç»ÇÈë¨Ç≥
+    [SerializeField] private float scaleSpeed = 8f;
+
     // Ç’Ç©Ç’Ç©ÇÃëÂÇ´Ç≥
     [SerializeField] private float floatAmount = 5f;
 
@@ -36,6 +39,16 @@ public class MenuButton : MonoBehaviour,
     }
     private void Update()
     {
+        // èôÅXÇ…ëÂÇ´Ç≠Ç∑ÇÈ / å≥Ç…ñﬂÇ∑
+        Vector3 targetScale = isHover
+            ? defaultScale * 1.1f
+            : defaultScale;
+
+        transform.localScale = Vector3.Lerp(
+            transform.localScale,
+            targetScale,
+            Time.deltaTime * scaleSpeed
+        );
         if (isHover)
         {
             // è„â∫Ç…Ç’Ç©Ç’Ç©
@@ -61,7 +74,7 @@ public class MenuButton : MonoBehaviour,
         buttonText.color = Color.black;
 
         // è≠ÇµëÂÇ´Ç≠
-        transform.localScale = defaultScale * 1.1f;
+        //transform.localScale = defaultScale * 1.1f;
 
         // è≠ÇµåXÇØÇÈ
         transform.rotation = Quaternion.Euler(0, 0, -5);
@@ -77,7 +90,7 @@ public class MenuButton : MonoBehaviour,
         buttonImage.color = Color.black;
         buttonText.color = Color.white;
 
-        transform.localScale = defaultScale;
+        //transform.localScale = defaultScale;
         transform.rotation = defaultRotation;
     }
 }
