@@ -47,7 +47,17 @@ public class SkillData : ScriptableObject
 
         return 0;
     }
-   
+    public bool CanLevelUp()
+    {
+        if (expType == ExpType.ShopExp)
+        {
+            return playerData.currentExp_2 >= 100 &&
+                   playerData.currentExp_3 >= 30;
+        }
+
+        return GetCurrentExp() >= needExp;
+    }
+
     /// <summary>
     /// 経験値消費
     /// </summary>
@@ -69,6 +79,11 @@ public class SkillData : ScriptableObject
             case ExpType.PreExp:
                 playerData.currentPreExp -= value;
                 break;
+
+            case ExpType.ShopExp:
+                playerData.currentExp_2 -= 100;
+                playerData.currentExp_3 -= 30;
+                break;
         }
     }
 
@@ -78,8 +93,7 @@ public class SkillData : ScriptableObject
     public void TryLevelUp()
     {
         // レベル上限＆経験値チェック
-        if (level < maxLevel &&
-            GetCurrentExp() >= needExp)
+        if (level < maxLevel && CanLevelUp())
         {
             // 経験値消費
             ConsumeExp(needExp);

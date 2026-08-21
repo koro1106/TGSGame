@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 273875e9515bae4469b58e69f7b82692, type: 3}
-  m_Name: AttributeBullet_01
+  m_Name: OthersAbility_27
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "\u96F7\u306E\u4EBA\u5F62"
+  skillName: "\u65B0\u30A8\u30EA\u30A2\u958B\u653E"
   level: 0
   maxLevel: 1
-  needExp: 1
+  needExp: 500
   isUnlocked: 0
   isLevelUp: 0
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
-  expType: 4
-  effectType: 4
-  effectValue: 1
+  expType: 0
+  effectType: 9
+  effectValue: 15
   addNeedExp: 0
-  elementalBulletPrefab: {fileID: 6812141048282945842, guid: 422d710f4cfeb084d880cf1fcecc60f9, type: 3}
-  description: "\u96F7\u306E\u529B\u3092\u5BBF\u3057\u305F\u4EBA\u5F62"
+  elementalBulletPrefab: {fileID: 0}
+  description: 
   isShopUnlocked: 0
-  isShopButton: 1
+  isShopButton: 0
