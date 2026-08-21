@@ -43,3 +43,14 @@ MonoBehaviour:
   enemyBUnlocked: 0
   enemyCUnlocked: 0
   recoveryBullet: 0
+  moveSpeed: 0
+  dash: 0
+  dashCT: 0
+  oneShotDurability: 0
+  rapidFire: 0
+  targetingRangeUP: 0
+  increasedUP: 0
+  shopOpen: 0
+  shopEffectBulletDamage: 0
+  shopElementalBulletChance: 0
+  shopExpChange: 0

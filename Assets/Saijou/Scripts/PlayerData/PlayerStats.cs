@@ -52,8 +52,7 @@ public class PlayerStats : ScriptableObject
     public float increasedUP = 0f;                 // 精度上昇
     public bool shopOpen = false;                  // 人形館解放
     public bool shopEffectBulletDamage = false;    // 人形館で属性ダメージ上昇解放
-    public bool shopElementalBulletChance = false; // 人形館で属性属性弾確率上昇解放
+    public bool shopElementalBulletChance = false; // 人形館で属性弾確率上昇解放
     public bool shopExpChange = false;             // 人形館で素材変化解放
-
 
 }
