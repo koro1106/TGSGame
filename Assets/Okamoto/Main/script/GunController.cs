@@ -331,6 +331,11 @@ public class GunController : MonoBehaviour
         // =========================
         // ˜AŽËON
         // =========================
+        if(stats.rapidFire)
+        {
+            autoFire = true;
+        }
+
         if (autoFire)
         {
             shouldShoot =

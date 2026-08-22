@@ -2630,7 +2630,7 @@ MonoBehaviour:
   bulletPrefabs: []
   fireRate: 0.1
   bulletSpeed: 2000
-  autoFire: 1
+  autoFire: 0
   maxAmmo: 10
   reloadTime: 1.5
   radius: 0.01
