@@ -15,7 +15,8 @@ MonoBehaviour:
   skillName: "\u7CBE\u5EA6\u4E0A\u6607+10%"
   level: 0
   maxLevel: 1
-  needExp: 5
+  needExp: 10
+  initialNeedExp: 10
   isUnlocked: 0
   isLevelUp: 0
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
