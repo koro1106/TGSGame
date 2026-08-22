@@ -84,6 +84,12 @@ public class GunController : MonoBehaviour
     public Sprite penetratingAmmoSprite;
     //public Sprite ReboundAmmoSprite;
 
+    [Header("クロスヘアとPlayerの重なり判定")]
+    public float crosshairPlayerOverlapDistance = 0.5f;
+
+    private bool isCrosshairOverPlayer = false;
+
+
     [Header("マズルフラッシュ")]
     public GameObject muzzleFlash;
     public float muzzleFlashTime = 0.05f;
@@ -271,6 +277,9 @@ public class GunController : MonoBehaviour
 
         Aim();
 
+        // クロスヘアとPlayerが重なっているかチェック
+        CheckCrosshairOverPlayer();
+
         if (!isReloading)
         {
             Shoot();
@@ -322,8 +331,49 @@ public class GunController : MonoBehaviour
         gunImage.localPosition = defaultLocalPos;
     }
 
+    void CheckCrosshairOverPlayer()
+    {
+        if (crosshair == null)
+            return;
+
+        Vector3 crosshairWorldPos =
+            GetCrosshairWorldPosition();
+
+        Vector3 playerPos =
+            transform.position;
+
+        playerPos.z = 0;
+        crosshairWorldPos.z = 0;
+
+        float distance =
+            Vector2.Distance(
+                playerPos,
+                crosshairWorldPos
+            );
+
+        // Playerと重なっている
+        isCrosshairOverPlayer =
+            distance <= crosshairPlayerOverlapDistance;
+
+        // クロスヘアのImage表示切り替え
+        Image crosshairImage =
+            crosshair.GetComponent<Image>();
+
+        if (crosshairImage != null)
+        {
+            crosshairImage.enabled =
+                !isCrosshairOverPlayer;
+        }
+    }
+
     void Shoot()
     {
+        // クロスヘアがPlayerと重なっている間は撃てない
+        if (isCrosshairOverPlayer)
+        {
+            return;
+        }
+
         fireTimer += Time.deltaTime;
 
         bool shouldShoot = false;
@@ -980,103 +1030,173 @@ public class GunController : MonoBehaviour
     public void AddAmmo(int amount)
     {
         int oldAmmo = currentAmmo;
-        int targetAmmo = Mathf.Clamp(currentAmmo + amount, 0, maxAmmo);
+
+        int targetAmmo =
+            Mathf.Clamp(
+                currentAmmo + amount,
+                0,
+                maxAmmo
+            );
 
         for (int i = oldAmmo; i < targetAmmo; i++)
         {
-            if (i >= 0 && i < ammoSlots.Length)
+            if (i < 0 ||
+                i >= ammoSlots.Length ||
+                i >= ammoPrefabs.Length)
             {
-                //========================
-                // スロット取得
-                //========================
-                AmmoSlot slot = ammoSlots[i];
+                continue;
+            }
 
-                // すでに回復中なら飛ばす
-                if (slot.isRecovering)
-                    continue;
+            AmmoSlot slot = ammoSlots[i];
 
-                // 回復中フラグ
-                slot.isRecovering = true;
+            // すでに回復中なら飛ばす
+            if (slot.isRecovering)
+                continue;
 
-                //========================
-                // Sprite決定
-                //========================
-                Sprite targetSprite = normalAmmoSprite;
-                switch (slot.ammoType)
-                {
-                    case AmmoType.Normal:
-                        targetSprite = normalAmmoSprite;
-                        break;
-                    case AmmoType.Lightning:
-                        targetSprite = lightningAmmoSprite;
-                        break;
-                    case AmmoType.Gravity:
-                        targetSprite = GravityAmmoSprite;
-                        break;
-                    case AmmoType.Bind:
-                        targetSprite = BindAmmoSprite;
-                        break;
-                    case AmmoType.Poison:
-                        targetSprite = PoisonAmmoSprite;
-                        break;
-                    case AmmoType.Explosion:
-                        targetSprite = ExplosionAmmoSprite;
-                        break;
-                    case AmmoType.Penetrating:
-                        targetSprite = penetratingAmmoSprite;
-                        break;
-                }
+            slot.isRecovering = true;
 
-                // 元UI非表示
+            // =========================================
+            // 回復する弾を決定
+            // 現在の弾データに存在しなければ通常弾
+            // =========================================
+
+            AmmoType recoveredType = AmmoType.Normal;
+            Sprite recoveredSprite = normalAmmoSprite;
+
+            GameObject recoveredPrefab = null;
+
+            // 通常弾Prefab
+            if (bulletPrefabs != null &&
+                bulletPrefabs.Length > 0)
+            {
+                recoveredPrefab = bulletPrefabs[0];
+            }
+
+            // =========================================
+            // ★重要
+            // 実際の弾データも入れる
+            // =========================================
+
+            ammoTypes[i] =
+                recoveredType;
+
+            ammoSprites[i] =
+                recoveredSprite;
+
+            ammoPrefabs[i] =
+                recoveredPrefab;
+
+            // UIスロットの情報も更新
+            slot.ammoType =
+                recoveredType;
+
+            // =========================================
+            // 元UIを一旦非表示
+            // =========================================
+
+            if (slot.image != null)
+            {
                 slot.image.enabled = false;
+            }
 
-                //========================
-                // 回復演出生成
-                //========================
-                if (ammoRecoverEffectPrefab != null)
+            // =========================================
+            // 回復演出
+            // =========================================
+
+            if (ammoRecoverEffectPrefab != null &&
+                slot.image != null)
+            {
+                GameObject obj =
+                    Instantiate(
+                        ammoRecoverEffectPrefab,
+                        slot.image.canvas.transform
+                    );
+
+                slot.recoverEffectObject = obj;
+
+                AmmoRecoverEffect effect =
+                    obj.GetComponent<AmmoRecoverEffect>();
+
+                if (effect != null)
                 {
-                    GameObject obj =
-                        Instantiate(ammoRecoverEffectPrefab, slot.image.canvas.transform);
-
-                    // 演出保持
-                    slot.recoverEffectObject = obj;
-
-                    AmmoRecoverEffect effect = obj.GetComponent<AmmoRecoverEffect>();
                     effect.Init(
-                        targetSprite,
+                        recoveredSprite,
                         slot.image.transform.position,
                         slot.image.rectTransform,
                         () =>
                         {
-                            // 途中で撃たれてたら終了
-                            if (slot.recoverEffectObject == null)
-                                return;
-
                             slot.isRecovering = false;
+
+                            // 回復した弾のデータを確定
+                            slot.ammoType =
+                                recoveredType;
+
+                            slot.image.sprite =
+                                recoveredSprite;
+
+                            slot.image.enabled =
+                                true;
+
+                            slot.recoverEffectObject =
+                                null;
+
+                            // 実際の弾データも念のため再設定
+                            ammoTypes[i] =
+                                recoveredType;
+
+                            ammoSprites[i] =
+                                recoveredSprite;
+
+                            ammoPrefabs[i] =
+                                recoveredPrefab;
+
                             currentAmmo++;
 
-                            slot.image.sprite = targetSprite;
-                            slot.image.enabled = true;
-
-                            slot.recoverEffectObject = null;
-
                             UpdateAmmoUI();
-                        });
+                        }
+                    );
                 }
                 else
                 {
-                    slot.isRecovering = false;
-                    currentAmmo++;
-
-                    slot.image.sprite = targetSprite;
-                    slot.image.enabled = true;
-
-                    UpdateAmmoUI();
+                    Debug.LogError(
+                        "AmmoRecoverEffectPrefab に AmmoRecoverEffect が付いていません。"
+                    );
                 }
             }
-        }
+            else
+            {
+                // =====================================
+                // 演出なしの場合
+                // =====================================
 
-        UpdateAmmoUI();
+                slot.isRecovering = false;
+
+                slot.ammoType =
+                    recoveredType;
+
+                if (slot.image != null)
+                {
+                    slot.image.sprite =
+                        recoveredSprite;
+
+                    slot.image.enabled =
+                        true;
+                }
+
+                ammoTypes[i] =
+                    recoveredType;
+
+                ammoSprites[i] =
+                    recoveredSprite;
+
+                ammoPrefabs[i] =
+                    recoveredPrefab;
+
+                currentAmmo++;
+
+                UpdateAmmoUI();
+            }
+        }
     }
 
     void IncreaseMaxAmmo(int amount)

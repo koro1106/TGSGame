@@ -5,21 +5,21 @@ public class CursorFollower : MonoBehaviour
     [Header("Æ€")]
     public RectTransform crosshair;
 
-    [Header("‰ñ“]‚Ì’†S(Empty)")]
-    public Transform gunCenter;
+    [Header("ƒNƒƒXƒwƒA‚ª‚ ‚éCanvas")]
+    public Canvas canvas;
 
     [Header("e‰æ‘œ")]
     public Transform gunImage;
 
     private Camera cam;
-    private Vector3 defaultLocalPos;
+    private Vector3 defaultScale;
 
     void Start()
     {
         cam = Camera.main;
 
-        // e‰æ‘œ‚Ì‰ŠúˆÊ’u‚ð•Û‘¶
-        defaultLocalPos = gunImage.localPosition;
+        // Å‰‚ÌScale‚ð•Û‘¶
+        defaultScale = gunImage.localScale;
     }
 
     void Update()
@@ -29,30 +29,84 @@ public class CursorFollower : MonoBehaviour
 
     void Aim()
     {
-        // ƒNƒƒXƒwƒA‚ðƒ[ƒ‹ƒhÀ•W‚Ö•ÏŠ·
-        Vector3 worldPos = cam.ScreenToWorldPoint(crosshair.position);
-        worldPos.z = 0f;
+        // =================================
+        // ƒNƒƒXƒwƒA‚Ìƒ[ƒ‹ƒhÀ•W‚ðŽæ“¾
+        // =================================
+        Vector3 crosshairWorldPos;
 
-        // GunCenter‚©‚çƒNƒƒXƒwƒA‚Ö‚Ì•ûŒü
-        Vector3 dir = worldPos - gunCenter.position;
-
-        // ‰ñ“]Šp“x
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
-        // GunCenter‚¾‚¯‰ñ“]
-        gunCenter.rotation = Quaternion.Euler(0f, 0f, angle);
-
-        // ¶‰E”½“]
-        if (angle > 90f || angle < -90f)
+        if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
         {
-            gunImage.localScale = new Vector3(1f, -1f, 1f);
+            // Overlay‚Ìê‡
+            Vector2 screenPos =
+                RectTransformUtility.WorldToScreenPoint(
+                    null,
+                    crosshair.position
+                );
+
+            crosshairWorldPos =
+                cam.ScreenToWorldPoint(
+                    new Vector3(
+                        screenPos.x,
+                        screenPos.y,
+                        Mathf.Abs(
+                            cam.transform.position.z
+                            - gunImage.position.z
+                        )
+                    )
+                );
         }
         else
         {
-            gunImage.localScale = new Vector3(1f, 1f, 1f);
+            // Screen Space Camera / World Space‚Ìê‡
+            crosshairWorldPos =
+                crosshair.position;
         }
 
-        // e‰æ‘œ‚ÌˆÊ’u‚ðŒÅ’è
-        gunImage.localPosition = defaultLocalPos;
+        crosshairWorldPos.z = gunImage.position.z;
+
+        // =================================
+        // e‚ÌPivot ¨ ƒNƒƒXƒwƒA‚Ì•ûŒü
+        // =================================
+        Vector2 direction =
+            crosshairWorldPos - gunImage.position;
+
+        // =================================
+        // 360‹‚ÌŠp“x‚ðŽæ“¾
+        // =================================
+        float angle =
+            Mathf.Atan2(
+                direction.y,
+                direction.x
+            ) * Mathf.Rad2Deg;
+
+        // =================================
+        // ƒNƒƒXƒwƒA•ûŒü‚Ö‰ñ“]
+        // =================================
+        gunImage.rotation =
+    Quaternion.Euler(0f, 0f, angle + 180f);
+
+        // =================================
+        // ¶‰E”½“]
+        // =================================
+        if (direction.x < 0)
+        {
+            // ¶‘¤
+            gunImage.localScale =
+                new Vector3(
+                    defaultScale.x,
+                    defaultScale.y,
+                    defaultScale.z
+                );
+        }
+        else
+        {
+            // ‰E‘¤
+            gunImage.localScale =
+                new Vector3(
+                    defaultScale.x,
+                    -defaultScale.y,
+                    defaultScale.z
+                );
+        }
     }
 }
