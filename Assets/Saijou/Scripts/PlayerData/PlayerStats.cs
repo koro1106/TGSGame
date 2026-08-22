@@ -24,6 +24,7 @@ public class PlayerStats : ScriptableObject
 
     // 解放した属性弾リスト
     public GameObject[] unlockedElementalBullets;
+    [SerializeField] private GameObject defaultBulletPrefab;
 
     // 属性弾が出る確率(一旦30％なので0.3)
     [Range(0f, 2f)]
@@ -55,4 +56,58 @@ public class PlayerStats : ScriptableObject
     public bool shopElementalBulletChance = false; // 人形館で属性弾確率上昇解放
     public bool shopExpChange = false;             // 人形館で素材変化解放
 
+
+    public void ResetData()
+    {
+        bulletDamage = 10;
+        effectBulletDamage = 10;
+        maxAmmo = 10;
+        enemySpawnWeightBonus = 1;
+        criticalrate = 0;
+        criticalDamage = 0;
+        expDroprate = 0;
+        expDroprateDouble = 0;
+        collectionRange = 0;
+        preExpTime = 0;
+        lightningBulletUP = 0;
+        chainBulletUP = 0;
+        poisonRangeUP = 0;
+        explosionRangeUP = 0;
+        recoveryBulletCount = 0;
+        bulletSize = 0;
+
+        elementalBulletChance = 0.2f;
+
+        preExpDeviceUnlocked = false;
+        carePackageUnlocked = false;
+        handgunUnlocked = false;
+        handgunBulletUnlocked = false;
+        shotgunUnlocked = false;
+        shotgunBulletUnlocked = false;
+        sniperUnlocked = false;
+        sniperBulletUnlocked = false;
+
+        enemyAUnlocked = false;
+        enemyBUnlocked = false;
+        enemyCUnlocked = false;
+
+        recoveryBullet = false;
+
+        moveSpeed = 0;
+        dash = false;
+        dashCT = 0;
+        oneShotDurability = false;
+        rapidFire = false;
+        targetingRangeUP = 0;
+        increasedUP = 0;
+
+        shopOpen = false;
+        shopEffectBulletDamage = false;
+        shopElementalBulletChance = false;
+        shopExpChange = false;
+
+        // 属性弾リストも初期化
+        unlockedElementalBullets = new GameObject[1];
+        unlockedElementalBullets[0] = defaultBulletPrefab;
+    }
 }

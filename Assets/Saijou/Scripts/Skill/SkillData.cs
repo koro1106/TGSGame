@@ -9,6 +9,9 @@ public class SkillData : ScriptableObject
     public int level;         // 現在レベル
     public int maxLevel;      // 最大レベル
     public int needExp;      // 必要経験値
+    [Header("必要経験値初期値")]
+    [SerializeField] private int initialNeedExp;
+
     public bool isUnlocked = false; //　解放状態
     public bool isLevelUp = false; // レベルアップした
     public PlayerData playerData;
@@ -25,6 +28,15 @@ public class SkillData : ScriptableObject
     public string description; // ショップ用
     public bool isShopUnlocked = false; // ショップスキル解放用
     public bool isShopButton = false; // ショップボタンかどうか
+
+    public void ResetData() // リセット用
+    {
+        level = 0;
+        needExp = initialNeedExp;
+        isUnlocked = false;
+        isLevelUp = false;
+        isShopUnlocked = false;
+    }
     /// <summary>
     /// 現在の経験値取得
     /// </summary>

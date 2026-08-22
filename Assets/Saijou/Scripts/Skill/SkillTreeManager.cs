@@ -51,10 +51,5 @@ public class SkillTreeManager : MonoBehaviour
         {
             target.localScale = new Vector3(maxScale, maxScale, 1f);
         }
-
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            SaveManager.Delete();
-        }
     }
 }

@@ -16,7 +16,8 @@ MonoBehaviour:
     +15%"
   level: 0
   maxLevel: 5
-  needExp: 500
+  needExp: 9
+  initialNeedExp: 9
   isUnlocked: 0
   isLevelUp: 0
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
