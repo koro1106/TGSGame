@@ -22,14 +22,14 @@ public class UIDrag : MonoBehaviour
     [SerializeField] private Outline prestigeOutline;
     [SerializeField] private Outline shopOutline;
 
-    public bool isPrestige = false; // プレステージボタン押したか
+    public bool isPrestige = true; 
 
     [SerializeField] SkillTreeChange skillTreeChange;
     // プレステージ位置へ移動
     public void MoveToPrestige()
     {
         target.anchoredPosition = new Vector2(-16f, -4100f);
-        isPrestige = true;
+        isPrestige = false;
         UpdateButtonAlpha();
     }
 
@@ -37,7 +37,7 @@ public class UIDrag : MonoBehaviour
     public void MoveToNormal()
     {
         target.anchoredPosition = new Vector2(26f, 8f);
-        isPrestige = false;
+        isPrestige = true;
         UpdateButtonAlpha();
     }
 
@@ -97,9 +97,9 @@ public class UIDrag : MonoBehaviour
             shopImage.color = new Color32(100, 100, 100, 255);
 
             // 枠
-            skillTreeOutline.enabled = false;
-            prestigeOutline.enabled = true;
-            shopOutline.enabled = false;
+            //skillTreeOutline.enabled = false;
+            //prestigeOutline.enabled = true;
+            //shopOutline.enabled = false;
         }
         else
         {
@@ -108,9 +108,9 @@ public class UIDrag : MonoBehaviour
             shopImage.color = new Color32(100, 100, 100, 255);
 
             // 枠
-            skillTreeOutline.enabled = true;
-            prestigeOutline.enabled = false;
-            shopOutline.enabled = false;
+            //skillTreeOutline.enabled = true;
+            //prestigeOutline.enabled = false;
+            //shopOutline.enabled = false;
         }
         if(skillTreeChange.isShop)
         {
@@ -119,9 +119,9 @@ public class UIDrag : MonoBehaviour
             shopImage.color = new Color32(255, 255, 255, 255);
 
             // 枠
-            skillTreeOutline.enabled = false;
-            prestigeOutline.enabled = false;
-            shopOutline.enabled = true;
+        //    skillTreeOutline.enabled = false;
+        //    prestigeOutline.enabled = false;
+        //    shopOutline.enabled = true;
         }
     }
 }

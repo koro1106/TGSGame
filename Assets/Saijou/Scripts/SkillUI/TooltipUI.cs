@@ -19,6 +19,7 @@ public class TooltipUI : MonoBehaviour
     public TextMeshProUGUI descText;     // 説明
     public TextMeshProUGUI levelText;    // レベル
     public TextMeshProUGUI expText;      // Exp
+    public TextMeshProUGUI maxLevelText;
 
     [Header("演出")] public UIAnimation UIanim;
     [Header("データ")]public PlayerData playerData;
@@ -45,7 +46,7 @@ public class TooltipUI : MonoBehaviour
         // テキスト更新
         nameText.text = data.skillName;
         levelText.text = "レベル " +data.level + "/" + data.maxLevel;
-        expText.text = exp + "/" + data.needExp;
+        UpdateExpText(data, exp);
 
         // 位置決定
         SetPosition(eventData);
@@ -79,7 +80,7 @@ public class TooltipUI : MonoBehaviour
         // テキスト更新
         nameText.text = data.skillName;
         levelText.text = "レベル " + data.level + "/" + data.maxLevel;
-        expText.text = exp + "/" + data.needExp;
+        UpdateExpText(data, exp);
 
         // パネルアニメーション
         if (playPanelAnim)
@@ -112,7 +113,7 @@ public class TooltipUI : MonoBehaviour
     /// </summary>
     int GetCurrentExp(SkillData data)
     {
-               switch (data.expType)
+        switch (data.expType)
         {
             case ExpType.Exp1:
                 return data.playerData.currentExp_1;
@@ -177,10 +178,45 @@ public class TooltipUI : MonoBehaviour
 
         // 固定オフセット（上下だけ切替）
         Vector2 offset = isUpper
-            ? new Vector2(-60, -450f)
-            : new Vector2(-60, 300f);
+            ? new Vector2(-40, -360f)
+            : new Vector2(-40, 300f);
 
         // 最終位置
         tooltipRect.position = screenPos + offset;
+    }
+
+    void UpdateExpText(SkillData data, int exp)
+    {
+        // MAXレベル
+        if (data.IsMaxLevel())
+        {
+            // Exp表示削除
+            expText.gameObject.SetActive(false);
+
+            // 経験値アイコンを非表示
+            expIcon.gameObject.SetActive(false);
+
+            // 最大レベルを表示
+            maxLevelText.gameObject.SetActive(true);
+            return;
+        }
+
+        // MAXじゃないなら表示
+        expText.gameObject.SetActive(true);
+
+        // 最大レベル表示を消す
+        maxLevelText.gameObject.SetActive(false);
+
+        expText.text = exp + "/" + data.needExp;
+
+        // 経験値が足りなければ赤
+        if (exp < data.needExp)
+        {
+            expText.color = Color.red;
+        }
+        else
+        {
+            expText.color = Color.white;
+        }
     }
 }

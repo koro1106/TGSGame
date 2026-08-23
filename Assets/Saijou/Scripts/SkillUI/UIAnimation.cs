@@ -18,16 +18,16 @@ public class UIAnimation : MonoBehaviour
 
     IEnumerator Bounce(RectTransform rt)
     {
-        Vector3 original = Vector3.one;    // 元のサイズ
+        Vector3 original = Vector3.one * 0.8f;    // 元のサイズ
 
         // 押した瞬間（横に少し広がって縦が潰れる）
-        Vector3 small = new Vector3(1.08f, 0.2f, 1f);
+        Vector3 small = new Vector3(1.08f, 0.2f, 1f) * 0.8f;
 
         // 膨らむ（縦に少し伸びる）
-        Vector3 big = new Vector3(0.95f, 1.5f, 1f);
+        Vector3 big = new Vector3(0.95f, 1.5f, 1f) * 0.8f;
 
         // 落ち着く
-        Vector3 settle = new Vector3(1.02f, 0.98f, 1f);
+        Vector3 settle = new Vector3(1.02f, 0.98f, 1f) * 0.8f;
 
         // 回転（角度）
         Quaternion rot0 = Quaternion.identity;         // 元
@@ -78,14 +78,6 @@ public class UIAnimation : MonoBehaviour
         t = 0;
         while (t < 0.12f)
         {
-            //t += Time.unscaledDeltaTime * speed;
-            //float p = t / 0.12f;
-
-            //rt.localScale = Vector3.Lerp(big, original, p);
-            //rt.rotation = Quaternion.Lerp(rot2, rot0, p);
-
-            //yield return null;
-
             t += Time.unscaledDeltaTime * speed;
             float p = Mathf.SmoothStep(0, 1, t / 0.08f);
 
