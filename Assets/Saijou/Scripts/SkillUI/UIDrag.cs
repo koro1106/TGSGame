@@ -52,7 +52,7 @@ public class UIDrag : MonoBehaviour
 
     void Update()
     {
-        if (!isPrestige)
+        if (isPrestige)
         {
             // âüÇµÇΩèuä‘
             if (Input.GetMouseButtonDown(0))
