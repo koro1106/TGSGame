@@ -34,7 +34,7 @@ public class SkillTreeManager : MonoBehaviour
     }
     void Update()
     {
-        if (!uiDrag.isPrestige)
+        if (uiDrag.isPrestige)
         {
             scroll = Input.GetAxis("Mouse ScrollWheel");
 
