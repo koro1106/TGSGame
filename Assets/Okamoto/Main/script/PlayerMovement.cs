@@ -1,8 +1,12 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
+    // 追加：他のスクリプト（EnemyMoveなど）からはこのInstanceで参照する
+    public static PlayerMovement Instance { get; private set; }
+
     [Header("移動速度")]
     public float moveSpeed = 5f;
 
@@ -20,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
 
 
     [Header("1回だけダメージを耐える")]
-   // public bool enableSurvivalDamage = false;
+    // public bool enableSurvivalDamage = false;
 
     [Header("ダメージ点滅設定")]
     public float damageBlinkDuration = 1f;
@@ -52,6 +56,45 @@ public class PlayerMovement : MonoBehaviour
     [Header("ブリンククールダウン")]
     public float blinkCooldown = 8f;
 
+    [Header("移動方向に向ける親Object")]
+    public Transform playerImage;
+
+    [Header("実際に表示するImage")]
+    public Image playerDisplayImage;
+
+    [Header("停止時の立ち画像")]
+    public Sprite idleSprite;
+
+    [Header("歩きアニメーション画像")]
+    public Sprite[] walkFrames;
+
+    [Header("走りアニメーション画像")]
+    public Sprite[] runFrames;
+
+    [Header("走り判定速度")]
+    public float runSpeedThreshold = 300f;
+
+    [Header("歩きアニメーション速度")]
+    public float walkAnimationInterval = 0.1f;
+
+    [Header("走りアニメーション速度")]
+    public float runAnimationInterval = 0.06f;
+
+    [Header("アニメーション速度")]
+    public float animationInterval = 0.1f;
+
+    [Header("左に移動した時に反転")]
+    public bool flipWhenMovingLeft = true;
+
+    private float animationTimer = 0f;
+    private int currentFrame = 0;
+
+    // 元のScaleを保存
+    private Vector3 originalImageScale;
+
+    // 前回の位置
+    private Vector2 lastPosition;
+
     private bool isBlinking = false;
     private float blinkTimer = 0f;
     private float blinkCooldownTimer = 0f;
@@ -71,8 +114,24 @@ public class PlayerMovement : MonoBehaviour
 
     void Awake()
     {
+        Instance = this;
         rb = GetComponent<Rigidbody2D>();
         cam = Camera.main;
+
+        if (playerImage != null)
+        {
+            originalImageScale = playerImage.localScale;
+        }
+
+        lastPosition = transform.position;
+
+        if (
+     playerDisplayImage != null &&
+     idleSprite != null
+ )
+        {
+            playerDisplayImage.sprite = idleSprite;
+        }
     }
 
 
@@ -172,7 +231,6 @@ public class PlayerMovement : MonoBehaviour
     {
         blinkTimer -= Time.fixedDeltaTime;
 
-        // 保存した方向へまっすぐ高速移動
         rb.MovePosition(
             rb.position +
             blinkDirection *
@@ -180,11 +238,16 @@ public class PlayerMovement : MonoBehaviour
             Time.fixedDeltaTime
         );
 
-        // ブリンク終了
-        if (blinkTimer <= 0f)
-        {
-            isBlinking = false;
-        }
+        // ブリンク方向に画像を向ける
+        UpdatePlayerImageDirection(
+            blinkDirection
+        );
+
+        // ブリンク中もアニメーション
+        UpdatePlayerAnimation(
+     true,
+     blinkMoveSpeed
+ );
     }
 
 
@@ -203,14 +266,48 @@ public class PlayerMovement : MonoBehaviour
         targetPos.z =
             transform.position.z;
 
+        // プレイヤーからクロスヘアへの方向
+        Vector2 difference =
+            (Vector2)targetPos - rb.position;
+
+        // 移動しているか
+        bool isMoving =
+            difference.sqrMagnitude > 0.001f;
+
+        // 移動方向
+        Vector2 moveDirection =
+            difference.normalized;
+
+        // 移動速度
+        float currentMoveSpeed =
+     moveSpeed + playerStats.moveSpeed;
+
+        float moveDistance =
+            currentMoveSpeed *
+            Time.fixedDeltaTime;
+
+        // 移動
         rb.MovePosition(
             Vector2.MoveTowards(
                 rb.position,
                 targetPos,
-                (moveSpeed + playerStats.moveSpeed) *
-                Time.fixedDeltaTime
+                moveDistance
             )
         );
+
+        // 左右の向きを変更
+        if (isMoving)
+        {
+            UpdatePlayerImageDirection(
+                moveDirection
+            );
+        }
+
+        // 動いている間だけアニメーション
+        UpdatePlayerAnimation(
+    isMoving,
+    currentMoveSpeed
+);
     }
 
 
@@ -373,5 +470,116 @@ public class PlayerMovement : MonoBehaviour
 
         // クールダウン開始
         blinkCooldownTimer = blinkCooldown - playerStats.dashCT;
+    }
+
+    void UpdatePlayerImageDirection(
+    Vector2 moveDirection
+)
+    {
+        if (playerImage == null)
+            return;
+
+        // 横方向の移動がほとんどない場合は
+        // 左右の向きを変えない
+        if (Mathf.Abs(moveDirection.x) < 0.01f)
+            return;
+
+        Vector3 scale = originalImageScale;
+
+        // 右方向
+        if (moveDirection.x > 0f)
+        {
+            scale.x =
+                Mathf.Abs(originalImageScale.x);
+        }
+        // 左方向
+        else if (moveDirection.x < 0f)
+        {
+            scale.x =
+                -Mathf.Abs(originalImageScale.x);
+        }
+
+        playerImage.localScale = scale;
+    }
+
+    void UpdatePlayerAnimation(
+    bool isMoving,
+    float currentMoveSpeed
+)
+    {
+        if (playerDisplayImage == null)
+            return;
+
+        // =====================
+        // 停止中
+        // =====================
+        if (!isMoving)
+        {
+            animationTimer = 0f;
+            currentFrame = 0;
+
+            if (idleSprite != null)
+            {
+                playerDisplayImage.sprite =
+                    idleSprite;
+            }
+
+            return;
+        }
+
+        // =====================
+        // 走りか歩きか判定
+        // =====================
+        bool isRunning =
+            currentMoveSpeed >= runSpeedThreshold;
+
+        Sprite[] currentFrames;
+        float currentInterval;
+
+        // =====================
+        // 走り
+        // =====================
+        if (isRunning)
+        {
+            currentFrames = runFrames;
+            currentInterval = runAnimationInterval;
+        }
+        // =====================
+        // 歩き
+        // =====================
+        else
+        {
+            currentFrames = walkFrames;
+            currentInterval = walkAnimationInterval;
+        }
+
+        // 画像が設定されていない場合
+        if (
+            currentFrames == null ||
+            currentFrames.Length == 0
+        )
+        {
+            return;
+        }
+
+        // =====================
+        // アニメーション
+        // =====================
+        animationTimer += Time.fixedDeltaTime;
+
+        if (animationTimer >= currentInterval)
+        {
+            animationTimer = 0f;
+
+            currentFrame++;
+
+            if (currentFrame >= currentFrames.Length)
+            {
+                currentFrame = 0;
+            }
+
+            playerDisplayImage.sprite =
+                currentFrames[currentFrame];
+        }
     }
 }
