@@ -79,6 +79,10 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     public float chargeSpeed = 150f;
     [Tooltip("突進中のジャンプの高さ（通常のjumpHeightとは別に設定可）")]
     public float chargeJumpHeight = 70f;
+    [Tooltip("突進中の蓋の開閉スピード（通常のlidOpenSpeedとは別に設定可。突進は時間が短いので大きめ推奨）")]
+    public float chargeLidOpenSpeed = 20f;
+    [Tooltip("突進中の蓋の上下移動スピード（通常のlidMoveSpeedとは別に設定可。突進は時間が短いので大きめ推奨）")]
+    public float chargeLidMoveSpeed = 24f;
     [Tooltip("検知してから実際に突進するまでの予備動作（溜め）時間（秒）")]
     public float chargeTelegraphTime = 0.3f;
     [Tooltip("突進を続ける時間（秒）")]
@@ -172,6 +176,10 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     [Header("── ウサギ ───────────────────")]
     public float rabbitRiseHeight = 250f;
     public float rabbitRiseSpeed = 150f;
+    [Tooltip("突進中のウサギの飛び出し高さ（通常のrabbitRiseHeightとは別に設定可）")]
+    public float chargeRabbitRiseHeight = 350f;
+    [Tooltip("突進中のウサギが飛び出す速さ（通常のrabbitRiseSpeedとは別に設定可。突進は時間が短いので大きめ推奨）")]
+    public float chargeRabbitRiseSpeed = 500f;
 
     [Header("── 耳の揺れ ──────────────────")]
     public float earSwingAngle = 25f;
@@ -524,9 +532,9 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
 
         transform.Translate((Vector3)direction * jumpMoveSpeed * speedMultiplier * Time.deltaTime);
 
-        AnimateBodyLid(t, halfDur, jumpHeight);
+        AnimateBodyLid(t, halfDur, jumpHeight, lidOpenSpeed, lidMoveSpeed);
         AnimateEar(earSwingTimer);
-        AnimateRabbit(jumpTimer, halfDur);
+        AnimateRabbit(jumpTimer, halfDur, rabbitRiseHeight, rabbitRiseSpeed);
 
         if (jumpTimer >= jumpDuration) jumpTimer = 0f;
 
@@ -740,9 +748,9 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         // エリア内に収める（反射 + 押し戻し）
         ClampToArea();
 
-        AnimateBodyLid(t, halfDur, jumpHeight);
+        AnimateBodyLid(t, halfDur, jumpHeight, lidOpenSpeed, lidMoveSpeed);
         AnimateEar(earSwingTimer);
-        AnimateRabbit(jumpTimer, halfDur);
+        AnimateRabbit(jumpTimer, halfDur, rabbitRiseHeight, rabbitRiseSpeed);
 
         FlipSprite();
 
@@ -785,10 +793,10 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         // エリア内に収める（反射 + 押し戻し）
         ClampToArea();
 
-        // ジャンプ用の演出（箱の傾き・蓋・耳・ウサギ）をそのまま流用（高さだけ突進用に差し替え）
-        AnimateBodyLid(t, halfDur, chargeJumpHeight);
+        // ジャンプ用の演出（箱の傾き・蓋・耳・ウサギ）をそのまま流用（高さ・速さだけ突進用に差し替え）
+        AnimateBodyLid(t, halfDur, chargeJumpHeight, chargeLidOpenSpeed, chargeLidMoveSpeed);
         AnimateEar(earSwingTimer);
-        AnimateRabbit(chargeTimer, halfDur);
+        AnimateRabbit(chargeTimer, halfDur, chargeRabbitRiseHeight, chargeRabbitRiseSpeed);
 
         FlipSprite();
         UpdateShadow();
@@ -815,7 +823,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     // =========================================================
     // Body + Lid アニメーション
     // =========================================================
-    void AnimateBodyLid(float t, float halfDur, float heightOverride)
+    void AnimateBodyLid(float t, float halfDur, float heightOverride, float openSpeed, float moveSpeed)
     {
         float bodyY = Mathf.Sin(t * Mathf.PI) * heightOverride;
 
@@ -843,17 +851,17 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
 
         float openAngle = (direction.x < 0f) ? lidOpenAngle : -lidOpenAngle;
         float targetAngle = (jumpTimer < halfDur) ? openAngle : 0f;
-        lidAngle = Mathf.LerpAngle(lidAngle, targetAngle, Time.deltaTime * lidOpenSpeed);
+        lidAngle = Mathf.LerpAngle(lidAngle, targetAngle, Time.deltaTime * openSpeed);
 
-        AnimateSingleLid(lidBack, lidBackBaseLocalPos, bodyY);
-        AnimateSingleLid(lidFront, lidFrontBaseLocalPos, bodyY);
+        AnimateSingleLid(lidBack, lidBackBaseLocalPos, bodyY, moveSpeed);
+        AnimateSingleLid(lidFront, lidFrontBaseLocalPos, bodyY, moveSpeed);
     }
 
-    void AnimateSingleLid(Transform lid, Vector3 basePos, float bodyY)
+    void AnimateSingleLid(Transform lid, Vector3 basePos, float bodyY, float moveSpeed)
     {
         if (lid == null) return;
         Vector3 targetPos = basePos + Vector3.up * (bodyY + lidHeight);
-        lid.localPosition = Vector3.Lerp(lid.localPosition, targetPos, lidMoveSpeed * Time.deltaTime);
+        lid.localPosition = Vector3.Lerp(lid.localPosition, targetPos, moveSpeed * Time.deltaTime);
         lid.localEulerAngles = new Vector3(0f, 0f, lidAngle);
     }
 
@@ -874,17 +882,17 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     // =========================================================
     // ウサギ・手・耳の飛び出し（完全連動）
     // =========================================================
-    void AnimateRabbit(float currentTimer, float halfDur)
+    void AnimateRabbit(float currentTimer, float halfDur, float riseHeight, float riseSpeed)
     {
         if (rabbit == null) return;
 
-        Vector3 showPos = rabbitHideLocalPos + Vector3.up * rabbitRiseHeight;
+        Vector3 showPos = rabbitHideLocalPos + Vector3.up * riseHeight;
         Vector3 rabbitTarget = (currentTimer < halfDur) ? showPos : rabbitHideLocalPos;
         rabbit.localPosition = Vector3.MoveTowards(
-            rabbit.localPosition, rabbitTarget, rabbitRiseSpeed * Time.deltaTime);
+            rabbit.localPosition, rabbitTarget, riseSpeed * Time.deltaTime);
 
         // ウサギが基準位置からどれだけズレたかを計算し、
-        // そのズレ量をそのまま手・耳にも適用する
+        // そのズレ量をそのまま手・耳にも適用する（＝完全連動）
         Vector3 rabbitOffset = rabbit.localPosition - rabbitHideLocalPos;
 
         if (handRight != null) handRight.localPosition = handRightBaseLocalPos + rabbitOffset;
@@ -1136,7 +1144,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
 
     void SetRandomDirection()
     {
-        // デバッグ用：一旦「必ずプレイヤー方向へ向かう」動きにしています ▼▼▼
+        // ▼▼▼ デバッグ用：一旦「必ずプレイヤー方向へ向かう」動きにしています ▼▼▼
         if (player != null)
         {
             direction = ((Vector2)player.position - (Vector2)transform.position).normalized;
@@ -1147,7 +1155,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         {
             Debug.Log("[EnemyMove] player が null のためランダム方向へ移動");
         }
-        //ここまでデバッグ用
+        // ▲▲▲ ここまでデバッグ用 ▲▲▲
 
         // ランダム方向にほんの少しだけ中央寄りのバイアスをかける
         Vector2 random = Random.insideUnitCircle.normalized;

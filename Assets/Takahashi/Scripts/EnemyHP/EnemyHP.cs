@@ -69,6 +69,16 @@ public class EnemyHP : MonoBehaviour
     [Header("HPバー非表示設定")]
     public GameObject hpBarRoot; // HPバーをまとめている親オブジェクト（背景枠なども含む場合に使用。未設定ならスライダーを個別に非表示にします）
 
+    [Header("HPバー出現アニメーション")]
+    [Tooltip("HPバーが初めて表示される瞬間、一瞬これだけ拡大してから元のサイズに戻る（1=拡大なし）")]
+    public float hpBarPopupScale = 1.3f;
+    [Tooltip("出現時に一瞬これだけ傾いてから元の角度に戻る（度数。0=傾きなし）")]
+    public float hpBarPopupTiltAngle = 12f;
+    [Tooltip("拡大・傾き→元の状態に戻るまでの合計時間（秒）")]
+    public float hpBarPopupDuration = 0.15f;
+
+    private Coroutine hpBarPopupCoroutine;
+
     [Header("被弾点滅")]
     public Color hitFlashColor = Color.red; // 点滅させる色
     public float hitFlashDuration = 0.08f;  // 1回の点滅の長さ（秒）
@@ -376,17 +386,20 @@ public class EnemyHP : MonoBehaviour
     }
 
     // HPバーを表示する（初回被弾時に呼ばれる）
+    // 表示と同時に、一瞬拡大してから元のサイズへ戻る「ポン」というポップアニメーションを再生する
     void ShowHPBar()
     {
         if (hpBarRoot != null)
         {
             hpBarRoot.SetActive(true);
+            PlayHPBarPopup(hpBarRoot.transform);
         }
         else
         {
             if (hpSlider != null)
             {
                 hpSlider.gameObject.SetActive(true);
+                PlayHPBarPopup(hpSlider.transform);
             }
 
             if (hpDelaySlider != null)
@@ -394,6 +407,60 @@ public class EnemyHP : MonoBehaviour
                 hpDelaySlider.gameObject.SetActive(true);
             }
         }
+    }
+
+    // HPバー出現時のポップアニメーションを開始する
+    void PlayHPBarPopup(Transform target)
+    {
+        if (target == null) return;
+
+        if (hpBarPopupCoroutine != null)
+        {
+            StopCoroutine(hpBarPopupCoroutine);
+        }
+
+        hpBarPopupCoroutine = StartCoroutine(HPBarPopupRoutine(target));
+    }
+
+    // 一瞬 hpBarPopupScale 倍まで拡大＋hpBarPopupTiltAngle度傾く → 元の状態へ戻る、シンプルなポップアニメーション
+    IEnumerator HPBarPopupRoutine(Transform target)
+    {
+        Vector3 baseLocalScale = target.localScale;
+        Vector3 bigScale = baseLocalScale * hpBarPopupScale;
+
+        Quaternion baseRot = target.localRotation;
+        // 毎回同じ方向に傾くと単調なので、左右どちらかをランダムに選ぶ
+        float tiltSign = (Random.value < 0.5f) ? 1f : -1f;
+        Quaternion tiltRot = baseRot * Quaternion.Euler(0f, 0f, hpBarPopupTiltAngle * tiltSign);
+
+        float half = Mathf.Max(hpBarPopupDuration * 0.5f, 0.0001f);
+        float t = 0f;
+
+        // 拡大＋傾く
+        while (t < half)
+        {
+            t += Time.deltaTime;
+            float ratio = t / half;
+            target.localScale = Vector3.Lerp(baseLocalScale, bigScale, ratio);
+            target.localRotation = Quaternion.Slerp(baseRot, tiltRot, ratio);
+            yield return null;
+        }
+
+        t = 0f;
+
+        // 元のサイズ・角度へ戻す
+        while (t < half)
+        {
+            t += Time.deltaTime;
+            float ratio = t / half;
+            target.localScale = Vector3.Lerp(bigScale, baseLocalScale, ratio);
+            target.localRotation = Quaternion.Slerp(tiltRot, baseRot, ratio);
+            yield return null;
+        }
+
+        target.localScale = baseLocalScale;
+        target.localRotation = baseRot;
+        hpBarPopupCoroutine = null;
     }
 
     // 死亡確定時に即座に呼ぶ。コライダーを切り、タグを変更して
