@@ -4072,7 +4072,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TitleIdleVideo
   videoPlayer: {fileID: 64823703}
   videoObject: {fileID: 1833551735}
-  idleTime: 10
+  idleTime: 5
   rawImage: {fileID: 1833551736}
   fadeTime: 1
 --- !u!4 &1531840259
