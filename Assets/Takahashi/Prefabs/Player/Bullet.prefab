@@ -171,5 +171,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Bullet1
   speed: 800
   damage: 50
-  criticalChance: 100
+  criticalChance: 30
   criticalMultiplier: 10
