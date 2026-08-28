@@ -410,7 +410,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillTreeManager
   target: {fileID: 2058398392}
   scaleSpeed: 0.5
-  minScale: 1.2
+  minScale: 1
   maxScale: 2
   allSkills:
   - {fileID: 11400000, guid: 75fa4e22158d87149b5048c7fb81d8e7, type: 2}
@@ -11960,11 +11960,9 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 9df4b69d3f2261e4983929004b741163, type: 2}
   icon: {fileID: 1103903344}
   nextButtons:
-  - {fileID: 0}
   - {fileID: 2101759437}
   nextLines:
   - {fileID: 775206717}
-  - {fileID: 0}
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 0
   redSprite: {fileID: -1550639549644675157, guid: 3d6f3b149d5b03040b5fce6e0c8dc80b, type: 3}
