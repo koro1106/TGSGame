@@ -549,12 +549,16 @@ MonoBehaviour:
   radialOrigin: 2
   radialClockwise: 0
   hpBarRoot: {fileID: 3419101919107931185}
+  hpBarPopupScale: 1.3
+  hpBarPopupTiltAngle: 5
+  hpBarPopupDuration: 0.15
   hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
   hitFlashDuration: 0.08
   hpBarSmoothSpeed: 4
   hpBarDelayTime: 0.1
   hpBarDelaySpeed: 2
   stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
+  deadTag: Untagged
 --- !u!1 &7510935477606060614
 GameObject:
   m_ObjectHideFlags: 0
