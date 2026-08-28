@@ -1,11 +1,21 @@
 using UnityEngine;
 public class Player : MonoBehaviour
 {
+    public static Player Instance { get; private set; }
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private float fireInterval = 0.2f;
     [SerializeField] private float moveSpeed = 500f; // ˆÚ“®‘¬“x
 
     private float timer;
+
+    void Awake()
+    {
+        Instance = this;
+    }
+    void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
+    }
 
     void Start()
     {

@@ -100,6 +100,11 @@ public class EnemyHP : MonoBehaviour
 
     public PlayerStats stats; // プレイヤーステータス
 
+    [Header("死亡時のタグ変更（自動攻撃のターゲット外し用）")]
+    public string deadTag = "Untagged"; // 死亡演出中に付け替えるタグ。専用タグを作るならそれを指定してください
+
+    private bool hasTakenDamage = false; // 一度でも被弾したか（HPバー表示用）
+
     // ★追加：この敵が死亡した瞬間に発火するイベント。
     // 誰でも `enemyHP.OnDeath += 処理;` の形で購読できる。
     // ボスの場合はBossMove側でこれを購読し、EnemySpawner.BossDefeated()を呼ぶのに使う。
@@ -141,6 +146,9 @@ public class EnemyHP : MonoBehaviour
         // 点滅用のスプライトレンダラー取得
         // 点滅用（子オブジェクトも含めて取得）
         srs = GetComponentsInChildren<SpriteRenderer>();
+
+        // 被弾前はHPバーを隠しておく
+        HideHPBar();
     }
     void Update()
     {
@@ -216,6 +224,13 @@ public class EnemyHP : MonoBehaviour
     {
         if (isDying) return;
 
+        // 初回被弾でHPバーを表示する
+        if (!hasTakenDamage)
+        {
+            hasTakenDamage = true;
+            ShowHPBar();
+        }
+
         //レア敵は１ダメ
         if (isRareEnemy)
         {
@@ -249,6 +264,7 @@ public class EnemyHP : MonoBehaviour
 
         if (currentHP <= 0)
         {
+            RemoveFromTargeting(); // 自動攻撃のタゲから即座に外す
             StartCoroutine(DeathSpiral()); // 死亡処理
         }
     }
@@ -292,6 +308,7 @@ public class EnemyHP : MonoBehaviour
         if (isDying) return;
 
         currentHP = 0;
+        RemoveFromTargeting(); // 自動攻撃のタゲから即座に外す
         StartCoroutine(DeathSpiral());
     }
 
@@ -358,6 +375,39 @@ public class EnemyHP : MonoBehaviour
         }
     }
 
+    // HPバーを表示する（初回被弾時に呼ばれる）
+    void ShowHPBar()
+    {
+        if (hpBarRoot != null)
+        {
+            hpBarRoot.SetActive(true);
+        }
+        else
+        {
+            if (hpSlider != null)
+            {
+                hpSlider.gameObject.SetActive(true);
+            }
+
+            if (hpDelaySlider != null)
+            {
+                hpDelaySlider.gameObject.SetActive(true);
+            }
+        }
+    }
+
+    // 死亡確定時に即座に呼ぶ。コライダーを切り、タグを変更して
+    // タグ検索型の自動攻撃のターゲットから即座に除外する
+    void RemoveFromTargeting()
+    {
+        if (col != null)
+        {
+            col.enabled = false;
+        }
+
+        gameObject.tag = deadTag;
+    }
+
     // 死亡演出
     // =========================================
     IEnumerator DeathSpiral()
@@ -370,11 +420,6 @@ public class EnemyHP : MonoBehaviour
         if (move != null)
         {
             move.HideShadow();
-        }
-
-        if (col != null)
-        {
-            col.enabled = false;
         }
 
         HideHPBar();

@@ -604,6 +604,20 @@ MonoBehaviour:
   jumpMoveSpeed: 75
   waitTimeMin: 0.3
   waitTimeMax: 1.5
+  player: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
+  detectRadius: 200
+  chargeSpeed: 500
+  chargeJumpHeight: 70
+  chargeTelegraphTime: 0.3
+  chargeDuration: 0.4
+  chargeCooldown: 1.2
+  attackDamage: 1
+  telegraphPrefab: {fileID: 1363623088986883172, guid: 6822d838b72278b48b2ad72e84b47506, type: 3}
+  telegraphLength: 200
+  showDetectCircle: 1
+  detectCircleColor: {r: 1, g: 0.3, b: 0.3, a: 0.6}
+  circleSegments: 40
+  circleLineWidth: 1.5
   moveAreaTopRatio: 0.55
   moveAreaBottomRatio: 1
   hitSlowMultiplier: 0.3
@@ -685,6 +699,7 @@ MonoBehaviour:
   hpBarDelayTime: 0.1
   hpBarDelaySpeed: 2
   stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
+  deadTag: Untagged
 --- !u!61 &9099502976566602027
 BoxCollider2D:
   m_ObjectHideFlags: 0
