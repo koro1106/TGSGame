@@ -45,6 +45,14 @@
 ///     ├ Ear_Front  (耳_前)
 ///     ├ Lid_Front  (蓋_前)
 ///     └ DetectCircle (検知円。未設定なら自動生成)
+///
+/// 【2026/08 修正メモ】
+///   ・突進判定(検知円チェック)を UpdateWait() 内だけでなく Update() 全体で
+///     毎フレーム行うように変更。→ Jump(徘徊)中や着地演出待ちで反応が遅れる/
+///     反応しない問題を解消。
+///   ・Telegraph(溜め)中も毎フレーム狙い方向を更新し、突進開始の瞬間に
+///     最新のプレイヤー位置で方向を再確定するように変更。
+///     → 「プレイヤーがいた位置に向かって突進してしまう」問題を軽減。
 /// </summary>
 public class EnemyMove : MonoBehaviour, IHitSlowable
 {
@@ -379,7 +387,6 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     // =========================================================
     // プレイヤー取得（PlayerMovementがあれば優先、無ければPlayerを使う）
     // =========================================================
-    // ※現在PlayerMovementが編集できないため、一旦Playerのみ使用（コメントアウト中）
     void TryGetPlayer()
     {
         if (player != null) return;
@@ -474,6 +481,23 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         if (chargeCooldownTimer > 0f)
         {
             chargeCooldownTimer -= Time.deltaTime;
+        }
+
+        // ▼修正：距離チェックを Wait/Jump どちらの状態でも毎フレーム行う
+        //   （UpdateWait内だけだと、Jump中や着地演出中にプレイヤーが検知円に
+        //    入っても反応が遅れる・気づかないまま出ていってしまう問題があった）
+        if ((state == State.Wait || state == State.Jump) && chargeCooldownTimer <= 0f)
+        {
+            TryGetPlayer();
+            if (player != null)
+            {
+                float dist = Vector2.Distance(transform.position, player.position);
+                if (dist <= detectRadius)
+                {
+                    EnterTelegraph();
+                    return; // Telegraphへ切り替えたので今フレームのswitch処理は行わない
+                }
+            }
         }
 
         switch (state)
@@ -603,21 +627,9 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         // プレイヤー未取得ならここでも再試行（Enemyの生成タイミング対策）
         TryGetPlayer();
 
-        // クールダウン中でなければプレイヤーとの距離をチェックし、範囲内なら予備動作(溜め)へ
-        if (chargeCooldownTimer <= 0f && player != null)
-        {
-            float dist = Vector2.Distance(transform.position, player.position);
-            Debug.Log("[EnemyMove] player距離=" + dist + " / detectRadius=" + detectRadius);
-            if (dist <= detectRadius)
-            {
-                EnterTelegraph();
-                return; // 予備動作を開始したので通常の待機処理は行わない
-            }
-        }
-        else if (player == null)
-        {
-            Debug.Log("[EnemyMove] Wait中だがplayerがnull");
-        }
+        // ▼修正：距離チェックは Update() 側に一本化したのでここでは行わない
+        //   （以前は EnterTelegraph() の呼び出しがここにもあり、Update側と
+        //    重複していたため削除。バウンス演出のみ継続する）
 
         waitTimer += Time.deltaTime;
         PlayIdleBounce();
@@ -674,7 +686,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         state = State.Telegraph;
         telegraphTimer = 0f;
 
-        // 狙いを定めた瞬間の方向を固定する（突進もこの方向で行う。突進中に狙い直さない）
+        // 狙いの初期方向（以降 UpdateTelegraph 内で毎フレーム更新される）
         if (player != null)
         {
             telegraphDirection = ((Vector2)player.position - (Vector2)transform.position).normalized;
@@ -700,6 +712,14 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         // 待機中と同じバウンス演出で「溜めている感」を出す
         PlayIdleBounce();
 
+        // ▼修正：溜めている間もプレイヤーを追い続け、狙い方向を更新する
+        //   （以前は EnterTelegraph の瞬間の方向で固定していたため、
+        //    プレイヤーが動くと「いた位置」に突進する原因になっていた）
+        if (player != null)
+        {
+            telegraphDirection = ((Vector2)player.position - (Vector2)transform.position).normalized;
+        }
+
         // ビームを0から目標の長さまでだんだん伸ばす
         // ※Spriteのpivotが中央の場合、scaleだけ伸ばすと前後に均等に伸びてしまうため、
         //   自分の位置(origin)を起点に、伸びた分の半分だけ狙った方向へpositionもずらしている。
@@ -707,6 +727,9 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         {
             float ratio = Mathf.Clamp01(telegraphTimer / chargeTelegraphTime);
             float currentLength = telegraphLength * ratio;
+
+            float angle = Mathf.Atan2(telegraphDirection.y, telegraphDirection.x) * Mathf.Rad2Deg;
+            telegraphVisual.rotation = Quaternion.Euler(0f, 0f, angle);
 
             Vector3 baseScale = telegraphVisual.localScale;
             telegraphVisual.localScale = new Vector3(currentLength, baseScale.y, baseScale.z);
@@ -722,6 +745,8 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
 
             if (player != null)
             {
+                // ▼修正：突進開始の瞬間、最新のプレイヤー位置でもう一度方向を確定する
+                telegraphDirection = ((Vector2)player.position - (Vector2)transform.position).normalized;
                 StartCharge();
             }
             else
@@ -767,7 +792,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
         chargeTimer = 0f;
         earSwingTimer = 0f;
 
-        // 狙いを定めた瞬間（Telegraph開始時）の方向をそのまま使う。
+        // Telegraph終了時点（＝直前のUpdateTelegraphで再確定済み）の方向を使う。
         // 万が一未設定なら念のため現在のプレイヤー位置から再計算する
         chargeDirection = (telegraphDirection != Vector2.zero)
             ? telegraphDirection
