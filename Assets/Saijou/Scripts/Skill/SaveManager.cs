@@ -26,20 +26,38 @@ public static class SaveManager
         save.Preexp = playerData.currentPreExp;
 
         // スキル情報保存
-        foreach (var skill in skills)
-        {
-            save.skills.Add(
-                new SkillSaveData()
+        foreach(var skill in skills)
+        {       
+            if (skill == null)
+                continue;
+
+            SkillSaveData skillSave = new SkillSaveData();
+
+            skillSave.skillName = skill.name;
+            skillSave.level = skill.level;
+            skillSave.isUnlocked = skill.isUnlocked;
+            skillSave.isShopUnlocked = skill.isShopUnlocked;
+
+            // 必要経験値を保存
+            if (skill.requiredExps != null)
+            {
+                foreach (RequiredExp requiredExp in skill.requiredExps)
                 {
-                    // ScriptableObjectのアセット名をIDとして保存
-                    skillName = skill.name,
+                    if (requiredExp == null)
+                    {
+                        skillSave.requiredNeedExps.Add(0);
+                    }
+                    else
+                    {
+                        skillSave.requiredNeedExps.Add(
+                            requiredExp.needExp
+                        );
+                    }
+                }
+            }
 
-                    level = skill.level,
-                    isUnlocked = skill.isUnlocked,
-                    needExp = skill.needExp
-                });
+            save.skills.Add(skillSave);
         }
-
         // JSON化
         string json =
             JsonUtility.ToJson(save, true);
@@ -88,15 +106,50 @@ public static class SaveManager
         {
             foreach (var skill in skills)
             {
+                if (skill == null)
+                    continue;
+
                 // 同じ名前のスキルを探す
-                if (skill.name == saveSkill.skillName)
+                if (skill.name != saveSkill.skillName)
+                    continue;
+
+
+                // レベル復元
+                skill.level =
+                    saveSkill.level;
+
+
+                // 解放状態復元
+                skill.isUnlocked =
+                    saveSkill.isUnlocked;
+
+
+                // =========================
+                // 必要経験値復元
+                // =========================
+                if (skill.requiredExps == null ||
+                    saveSkill.requiredNeedExps == null)
                 {
-                    skill.level = saveSkill.level;
-                    skill.isUnlocked = saveSkill.isUnlocked;
-                    skill.needExp = saveSkill.needExp;
+                    continue;
+                }
+
+                int count = Mathf.Min(
+                    skill.requiredExps.Length,
+                    saveSkill.requiredNeedExps.Count
+                );
+
+                for (int i = 0; i < count; i++)
+                {
+                    RequiredExp requiredExp =
+                        skill.requiredExps[i];
+
+                    if (requiredExp == null)
+                        continue;
+
+                    requiredExp.needExp =
+                        saveSkill.requiredNeedExps[i];
                 }
             }
-          
         }
     }
 

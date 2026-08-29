@@ -127,7 +127,8 @@ public class SkillNodeUI : MonoBehaviour
     {
         Color c = icon.color;
 
-        bool hasExp = GetCurrentExp() >= data.needExp;
+        // 必要経験値をすべて満たしているか
+        bool hasExp = data.CanLevelUp();
         bool isMax = data.IsMaxLevel(); // MAXレベルかどうか
 
         if (data.isUnlocked)
@@ -179,9 +180,10 @@ public class SkillNodeUI : MonoBehaviour
         // 最大レベルなら何もしない
         if (data.IsMaxLevel()) return;
 
-        // 経験値足りないなら何もしない
-        if (GetCurrentExp() < data.needExp) return;
-        
+        // 必要経験値をすべて満たしていなければ何もしない
+        if (!data.CanLevelUp())
+            return;
+
         data.TryLevelUp();             // レベルアップ
         effectManager.ApplySkill(data);// スキル効果適用
         SEManager.Instance.PlayLevelUpSE(); // SE再生
@@ -207,23 +209,68 @@ public class SkillNodeUI : MonoBehaviour
     // 経験値UIアニメーション
     public void PlayExpAnimation()
     {
-        switch (data.expType)
+        if (data.requiredExps == null)
+            return;
+
+        // 必要経験値として設定されているものを全部アニメーション
+        foreach (RequiredExp requiredExp in data.requiredExps)
         {
-            case ExpType.Exp1:
-                uiAnimation.PlayBounce(expUIAnimation.exp_1.rectTransform);
-                break;
+            if (requiredExp == null)
+                continue;
 
-            case ExpType.Exp2:
-                uiAnimation.PlayBounce(expUIAnimation.exp_2.rectTransform);
-                break;
+            switch (requiredExp.expType)
+            {
+                case ExpType.Exp1:
 
-            case ExpType.Exp3:
-                uiAnimation.PlayBounce(expUIAnimation.exp_3.rectTransform);
-                break;
+                    if (expUIAnimation != null &&
+                        expUIAnimation.exp_1 != null)
+                    {
+                        uiAnimation.PlayBounce(
+                            expUIAnimation.exp_1.rectTransform
+                        );
+                    }
 
-            case ExpType.PreExp:
-                uiAnimation.PlayBounce(expUIAnimation.preExp.rectTransform);
-                break;
+                    break;
+
+
+                case ExpType.Exp2:
+
+                    if (expUIAnimation != null &&
+                        expUIAnimation.exp_2 != null)
+                    {
+                        uiAnimation.PlayBounce(
+                            expUIAnimation.exp_2.rectTransform
+                        );
+                    }
+
+                    break;
+
+
+                case ExpType.Exp3:
+
+                    if (expUIAnimation != null &&
+                        expUIAnimation.exp_3 != null)
+                    {
+                        uiAnimation.PlayBounce(
+                            expUIAnimation.exp_3.rectTransform
+                        );
+                    }
+
+                    break;
+
+
+                case ExpType.PreExp:
+
+                    if (expUIAnimation != null &&
+                        expUIAnimation.preExp != null)
+                    {
+                        uiAnimation.PlayBounce(
+                            expUIAnimation.preExp.rectTransform
+                        );
+                    }
+
+                    break;
+            }
         }
     }
 
@@ -254,27 +301,5 @@ public class SkillNodeUI : MonoBehaviour
         worldPos.z = 0f;
 
         Instantiate(unlockEffectPrefab, worldPos, Quaternion.identity);
-    }
-
-
-    // 経験値取得関数
-    int GetCurrentExp()
-    {
-        switch (data.expType)
-        {
-            case ExpType.Exp1:
-                return data.playerData.currentExp_1;
-
-            case ExpType.Exp2:
-                return data.playerData.currentExp_2;
-
-            case ExpType.Exp3:
-                return data.playerData.currentExp_3;
-
-            case ExpType.PreExp:
-                return data.playerData.currentPreExp;
-        }
-
-        return 0;
     }
 }

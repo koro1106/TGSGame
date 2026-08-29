@@ -1,4 +1,30 @@
 using UnityEngine;
+
+/// <summary>
+/// 必要経験値の設定
+/// </summary>
+[System.Serializable]
+public class RequiredExp
+{
+    public ExpType expType;
+
+    [Header("必要経験値初期値")]
+    public int initialNeedExp;
+
+    [Header("現在必要な経験値")]
+    public int needExp;
+
+    [Header("Lv.UPごとの増加量")]
+    public int addNeedExp;
+
+    /// <summary>
+    /// 初期状態にリセット
+    /// </summary>
+    public void ResetData()
+    {
+        needExp = initialNeedExp;
+    }
+}
 /// <summary>
 /// スキルデータ（名前や説明所持）
 /// </summary>
@@ -8,19 +34,19 @@ public class SkillData : ScriptableObject
     public string skillName;  // UI表示用スキル名
     public int level;         // 現在レベル
     public int maxLevel;      // 最大レベル
-    public int needExp;      // 必要経験値
-    [Header("必要経験値初期値")]
-    [SerializeField] private int initialNeedExp;
+
+    // 必要経験値を最大3種類設定
+    [Header("必要経験値")]
+    public RequiredExp[] requiredExps = new RequiredExp[3];
 
     public bool isUnlocked = false; //　解放状態
     public bool isLevelUp = false; // レベルアップした
+
     public PlayerData playerData;
-    public ExpType expType;
 
     public SkillEffectType effectType; // スキル効果タイプ
     public float effectValue = 1;
 
-    public int addNeedExp = 0; // Lv.UPごとに増加する必要経験値量
     // 属性弾解放用
     public GameObject elementalBulletPrefab; // UnlockElementalBullet用
 
@@ -32,15 +58,23 @@ public class SkillData : ScriptableObject
     public void ResetData() // リセット用
     {
         level = 0;
-        needExp = initialNeedExp;
+
+        foreach (RequiredExp exp in requiredExps)
+        {
+            if (exp != null)
+            {
+                exp.ResetData();
+            }
+        }
+
         isUnlocked = false;
         isLevelUp = false;
         isShopUnlocked = false;
     }
     /// <summary>
-    /// 現在の経験値取得
+    /// 指定した経験値タイプの現在経験値を取得
     /// </summary>
-    public int GetCurrentExp()
+    public int GetCurrentExp(ExpType expType)
     {
         switch (expType)
         {
@@ -59,21 +93,45 @@ public class SkillData : ScriptableObject
 
         return 0;
     }
+
+    /// <summary>
+    /// 必要経験値を満たしているか
+    /// </summary>
     public bool CanLevelUp()
     {
-        if (expType == ExpType.ShopExp)
+        // 設定されている必要経験値をすべてチェック
+        foreach (RequiredExp requiredExp in requiredExps)
         {
-            return playerData.currentExp_2 >= 100 &&
-                   playerData.currentExp_3 >= 30;
+            if (requiredExp == null)
+                continue;
+
+            if (GetCurrentExp(requiredExp.expType) < requiredExp.needExp)
+            {
+                return false;
+            }
         }
 
-        return GetCurrentExp() >= needExp;
+        return true;
     }
 
     /// <summary>
     /// 経験値消費
     /// </summary>
-    void ConsumeExp(int value)
+    void ConsumeExp()
+    {
+        foreach (RequiredExp requiredExp in requiredExps)
+        {
+            if (requiredExp == null)
+                continue;
+
+            ConsumeExp(requiredExp.expType, requiredExp.needExp);
+        }
+    }
+
+    /// <summary>
+    /// 指定した種類の経験値を消費
+    /// </summary>
+    void ConsumeExp(ExpType expType, int value)
     {
         switch (expType)
         {
@@ -88,17 +146,12 @@ public class SkillData : ScriptableObject
             case ExpType.Exp3:
                 playerData.currentExp_3 -= value;
                 break;
+
             case ExpType.PreExp:
                 playerData.currentPreExp -= value;
                 break;
-
-            case ExpType.ShopExp:
-                playerData.currentExp_2 -= 100;
-                playerData.currentExp_3 -= 30;
-                break;
         }
     }
-
     /// <summary>
     /// 経験値を消費してレベルアップ
     /// </summary>
@@ -108,7 +161,7 @@ public class SkillData : ScriptableObject
         if (level < maxLevel && CanLevelUp())
         {
             // 経験値消費
-            ConsumeExp(needExp);
+            ConsumeExp();
 
             // レベルアップ
             LevelUp();
@@ -132,8 +185,14 @@ public class SkillData : ScriptableObject
         level++;
         isLevelUp = true;
 
-        // 必要経験値増加
-        needExp = Mathf.RoundToInt(needExp + addNeedExp);
+        // 必要経験値をそれぞれ増加
+        foreach (RequiredExp requiredExp in requiredExps)
+        {
+            if (requiredExp == null)
+                continue;
+
+            requiredExp.needExp += requiredExp.addNeedExp;
+        }
 
         // 最大レベル制限
         if (level >= maxLevel)
