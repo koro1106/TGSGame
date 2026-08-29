@@ -20,6 +20,16 @@ public class SceneTransition : MonoBehaviour
 
     public void StartGame()
     {
+        // ƒƒjƒ…[‚Ì–îˆó‚ğÁ‚·
+        MenuButton[] buttons = FindObjectsByType<MenuButton>(
+            FindObjectsSortMode.None
+        );
+
+        foreach (MenuButton button in buttons)
+        {
+            button.HideArrow();
+        }
+
 
         StartCoroutine(Transition());
     }
