@@ -384,14 +384,14 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     {
         if (player != null) return;
 
-        // if (PlayerMovement.Instance != null)
-        // {
-        //     player = PlayerMovement.Instance.transform;
-        // }
-        // else if (Player.Instance != null)
-        // {
-        //     player = Player.Instance.transform;
-        // }
+        if (PlayerMovement.Instance != null)
+        {
+            player = PlayerMovement.Instance.transform;
+        }
+        else if (Player.Instance != null)
+        {
+            player = Player.Instance.transform;
+        }
 
         if (Player.Instance != null)
         {

@@ -608,13 +608,15 @@ MonoBehaviour:
   detectRadius: 200
   chargeSpeed: 500
   chargeJumpHeight: 70
+  chargeLidOpenSpeed: 20
+  chargeLidMoveSpeed: 24
   chargeTelegraphTime: 0.3
   chargeDuration: 0.4
   chargeCooldown: 1.2
   attackDamage: 1
   telegraphPrefab: {fileID: 1363623088986883172, guid: 6822d838b72278b48b2ad72e84b47506, type: 3}
   telegraphLength: 200
-  showDetectCircle: 1
+  showDetectCircle: 0
   detectCircleColor: {r: 1, g: 0.3, b: 0.3, a: 0.6}
   circleSegments: 40
   circleLineWidth: 1.5
@@ -640,6 +642,8 @@ MonoBehaviour:
   lidMoveSpeed: 12
   rabbitRiseHeight: 250
   rabbitRiseSpeed: 150
+  chargeRabbitRiseHeight: 350
+  chargeRabbitRiseSpeed: 500
   earSwingAngle: 25
   earSwingSpeed: 4.2
   earPhaseOffset: 1.5
