@@ -86,6 +86,35 @@ public class PlayerMovement : MonoBehaviour
     [Header("左に移動した時に反転")]
     public bool flipWhenMovingLeft = true;
 
+
+
+    // =========================================================
+    // Player停止切り替え
+    // =========================================================
+
+    [Header("Player停止切り替え")]
+    public bool playerMoveLocked = false;
+
+    [Header("停止状態テキスト")]
+    public GameObject playerStopText;
+
+    [Header("移動再開テキスト")]
+    public GameObject playerMoveText;
+
+    [Header("テキストスライド時間")]
+    public float textSlideDuration = 0.3f;
+
+    [Header("テキスト移動距離")]
+    public float textSlideDistance = 500f;
+
+    private Coroutine textAnimationCoroutine;
+
+    // テキスト本来の位置を保存
+    private Vector2 playerStopTextOriginalPosition;
+    private Vector2 playerMoveTextOriginalPosition;
+
+    private bool textOriginalPositionInitialized = false;
+
     private float animationTimer = 0f;
     private int currentFrame = 0;
 
@@ -132,11 +161,51 @@ public class PlayerMovement : MonoBehaviour
         {
             playerDisplayImage.sprite = idleSprite;
         }
+
+        // =========================================================
+        // テキストの元位置を保存
+        // =========================================================
+
+        if (playerStopText != null)
+        {
+            RectTransform rect =
+                playerStopText.GetComponent<RectTransform>();
+
+            if (rect != null)
+            {
+                playerStopTextOriginalPosition =
+                    rect.anchoredPosition;
+            }
+        }
+
+        if (playerMoveText != null)
+        {
+            RectTransform rect =
+                playerMoveText.GetComponent<RectTransform>();
+
+            if (rect != null)
+            {
+                playerMoveTextOriginalPosition =
+                    rect.anchoredPosition;
+            }
+        }
+
+        textOriginalPositionInitialized = true;
     }
 
 
     void Update()
     {
+        // =========================================================
+        // マウスホイールクリックでPlayer移動ON/OFF
+        // =========================================================
+
+        if (Input.GetMouseButtonDown(2))
+        {
+            TogglePlayerMovement();
+        }
+
+
         // ブリンク未開放なら即座に停止
         if (!playerStats.dash)
         {
@@ -155,7 +224,8 @@ public class PlayerMovement : MonoBehaviour
             Input.GetMouseButtonDown(1) &&
             blinkCooldownTimer <= 0f &&
             !isDead &&
-            !isBlinking
+            !isBlinking &&
+            !playerMoveLocked
         )
         {
             StartBlink();
@@ -217,14 +287,48 @@ public class PlayerMovement : MonoBehaviour
         if (isDead)
             return;
 
+
+        // =========================================================
+        // Player停止中
+        // =========================================================
+
+        if (playerMoveLocked)
+        {
+            // 念のため速度を完全に0
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+                rb.angularVelocity = 0f;
+            }
+
+            // 立ち画像にする
+            UpdatePlayerAnimation(
+                false,
+                0f
+            );
+
+            return;
+        }
+
+
+        // =========================================================
         // ブリンク中
+        // =========================================================
+
         if (isBlinking)
         {
             BlinkMove();
             return;
         }
 
+
+        // =========================================================
+        // 通常移動
+        // =========================================================
+
         MoveToCrosshair();
+
+
     }
 
     void BlinkMove()
@@ -581,5 +685,332 @@ public class PlayerMovement : MonoBehaviour
             playerDisplayImage.sprite =
                 currentFrames[currentFrame];
         }
+    }
+
+    // =========================================================
+    // Player移動 ON / OFF
+    // =========================================================
+
+    void TogglePlayerMovement()
+    {
+        // 状態変更
+        playerMoveLocked =
+            !playerMoveLocked;
+
+
+        // =========================================================
+        // Player停止
+        // =========================================================
+
+        if (playerMoveLocked)
+        {
+            if (rb != null)
+            {
+                rb.linearVelocity =
+                    Vector2.zero;
+
+                rb.angularVelocity = 0f;
+            }
+        }
+
+
+        // =========================================================
+        // 現在のテキストアニメーションを即終了
+        // =========================================================
+
+        if (textAnimationCoroutine != null)
+        {
+            StopCoroutine(
+                textAnimationCoroutine
+            );
+
+            textAnimationCoroutine = null;
+        }
+
+
+        // =========================================================
+        // 両方のテキストを一旦消す
+        // =========================================================
+
+        HideStatusText(
+            playerStopText
+        );
+
+        HideStatusText(
+            playerMoveText
+        );
+
+
+        // =========================================================
+        // 新しいテキストを即開始
+        // =========================================================
+
+        if (playerMoveLocked)
+        {
+            textAnimationCoroutine =
+                StartCoroutine(
+                    ShowStatusText(
+                        playerStopText
+                    )
+                );
+        }
+        else
+        {
+            textAnimationCoroutine =
+                StartCoroutine(
+                    ShowStatusText(
+                        playerMoveText
+                    )
+                );
+        }
+    }
+
+    // =========================================================
+    // テキストを左へスライド → 元の位置へ戻る
+    // 透明 → 濃くなる → 少し停止 → 元の位置へ戻る
+    // =========================================================
+
+    IEnumerator ShowStatusText(
+        GameObject textObject
+    )
+    {
+        if (textObject == null)
+            yield break;
+
+        RectTransform rect =
+            textObject.GetComponent<RectTransform>();
+
+        CanvasGroup canvasGroup =
+            textObject.GetComponent<CanvasGroup>();
+
+        if (rect == null)
+            yield break;
+
+        if (canvasGroup == null)
+        {
+            canvasGroup =
+                textObject.AddComponent<CanvasGroup>();
+        }
+
+
+        // =========================================================
+        // ★最初に置いてある位置を保存
+        // =========================================================
+
+        Vector2 originalPosition;
+
+        if (textObject == playerStopText)
+        {
+            originalPosition =
+                playerStopTextOriginalPosition;
+        }
+        else if (textObject == playerMoveText)
+        {
+            originalPosition =
+                playerMoveTextOriginalPosition;
+        }
+        else
+        {
+            originalPosition =
+                rect.anchoredPosition;
+        }
+
+
+        // =========================================================
+        // 左へ移動する位置
+        // =========================================================
+
+        Vector2 leftPosition =
+            originalPosition -
+            new Vector2(
+                textSlideDistance,
+                0f
+            );
+
+
+        // =========================================================
+        // 最初の状態
+        // =========================================================
+
+        rect.anchoredPosition =
+            originalPosition;
+
+        canvasGroup.alpha = 0f;
+
+        textObject.SetActive(true);
+
+
+        // =========================================================
+        // ① 現在位置 → 左へスライド
+        //    透明 → 濃くなる
+        // =========================================================
+
+        float timer = 0f;
+
+        while (timer < textSlideDuration)
+        {
+            timer +=
+                Time.unscaledDeltaTime;
+
+            float t =
+                Mathf.Clamp01(
+                    timer /
+                    textSlideDuration
+                );
+
+            float moveT =
+                Mathf.SmoothStep(
+                    0f,
+                    1f,
+                    t
+                );
+
+
+            // 左へ移動
+            rect.anchoredPosition =
+                Vector2.Lerp(
+                    originalPosition,
+                    leftPosition,
+                    moveT
+                );
+
+
+            // 透明 → 濃く
+            canvasGroup.alpha =
+                Mathf.SmoothStep(
+                    0f,
+                    1f,
+                    t
+                );
+
+            yield return null;
+        }
+
+
+        // =========================================================
+        // 左側で少し停止
+        // =========================================================
+
+        rect.anchoredPosition =
+            leftPosition;
+
+        canvasGroup.alpha = 1f;
+
+
+        float stayTimer = 0f;
+
+        while (stayTimer < 0.8f)
+        {
+            stayTimer +=
+                Time.unscaledDeltaTime;
+
+            yield return null;
+        }
+
+
+        // =========================================================
+        // ② 左 → 元の位置へ戻る
+        // =========================================================
+
+        timer = 0f;
+
+        while (timer < textSlideDuration)
+        {
+            timer +=
+                Time.unscaledDeltaTime;
+
+            float t =
+                Mathf.Clamp01(
+                    timer /
+                    textSlideDuration
+                );
+
+            float moveT =
+                Mathf.SmoothStep(
+                    0f,
+                    1f,
+                    t
+                );
+
+
+            // 元の位置へ戻る
+            rect.anchoredPosition =
+                Vector2.Lerp(
+                    leftPosition,
+                    originalPosition,
+                    moveT
+                );
+
+
+            // 戻りながら薄くする
+            canvasGroup.alpha =
+                Mathf.Lerp(
+                    1f,
+                    0f,
+                    moveT
+                );
+
+            yield return null;
+        }
+
+
+        // =========================================================
+        // 最終的に完全に元の位置へ
+        // =========================================================
+
+        rect.anchoredPosition =
+            originalPosition;
+
+        canvasGroup.alpha = 0f;
+
+        textObject.SetActive(false);
+    }
+
+
+    // =========================================================
+    // テキストを即座に非表示
+    // =========================================================
+
+    void HideStatusText(
+     GameObject textObject
+ )
+    {
+        if (textObject == null)
+            return;
+
+        RectTransform rect =
+            textObject.GetComponent<RectTransform>();
+
+        // =========================================================
+        // ★必ず本来の位置へ戻す
+        // =========================================================
+
+        if (rect != null)
+        {
+            if (textObject == playerStopText)
+            {
+                rect.anchoredPosition =
+                    playerStopTextOriginalPosition;
+            }
+            else if (textObject == playerMoveText)
+            {
+                rect.anchoredPosition =
+                    playerMoveTextOriginalPosition;
+            }
+        }
+
+        // =========================================================
+        // 透明にする
+        // =========================================================
+
+        CanvasGroup canvasGroup =
+            textObject.GetComponent<CanvasGroup>();
+
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = 0f;
+        }
+
+        textObject.SetActive(false);
     }
 }

@@ -39,14 +39,17 @@ public class TargetRange : MonoBehaviour
     [Header("コーナー移動時間")]
     public float cornerMoveDuration = 0.12f;
 
-    [Header("中央画像の角からの隙間")]
-    public float cornerOffset = 5f;
+    [Header("中央画像の角からの内側距離")]
+    public float cornerOffset = 1f;
 
     [Header("ロック後の揺れ幅")]
     public float cornerShakeAmount = 3f;
 
     [Header("ロック後の揺れ速度")]
     public float cornerShakeSpeed = 20f;
+
+    [Header("コーナーを中央へ強制的に近づける距離")]
+    public float cornerCloseDistance = 50f;
 
 
     // =====================================
@@ -129,6 +132,9 @@ public class TargetRange : MonoBehaviour
             {
                 lockTopRightImage.sprite =
                     lockCornerSprite;
+
+                // 右上コーナーを強制的に縮小
+                
 
                 // 左に90度回転
                 lockTopRightImage.rectTransform.localRotation =
@@ -417,17 +423,20 @@ public class TargetRange : MonoBehaviour
                 nearestDistance =
                     distance;
 
-
                 CurrentTarget =
                     enemy.transform;
-
 
                 currentEnemyHP =
                     enemy;
 
-
                 currentEnemyHP.OnDeath +=
                     OnCurrentTargetDeath;
+
+                // =========================
+                // 自動でターゲットになった瞬間
+                // ロックオン演出を再生
+                // =========================
+                PlayLockAnimation();
             }
         }
     }
@@ -533,12 +542,12 @@ public class TargetRange : MonoBehaviour
 
 
         // =====================================
-        // 演出がまだ終わっていない
+        // ロック演出終了後
+        // コーナーを常に揺らす
         // =====================================
 
         if (!isLockAnimationFinished)
             return;
-
 
         if (
             lockTopRightImage == null ||
@@ -550,55 +559,59 @@ public class TargetRange : MonoBehaviour
 
 
         // =====================================
-        // ロック後の小刻みな揺れ
+        // 揺れ時間
         // =====================================
 
         float time =
-            Time.time *
-            cornerShakeSpeed;
+            Time.time * cornerShakeSpeed;
 
 
-        float topRightX =
+        // =====================================
+        // 右上コーナーの揺れ
+        // =====================================
+
+        float rightX =
             Mathf.Sin(time) *
             cornerShakeAmount;
 
-        float topRightY =
+        float rightY =
             Mathf.Cos(time * 1.3f) *
             cornerShakeAmount;
 
 
-        float bottomLeftX =
-            Mathf.Sin(
-                time + Mathf.PI
-            ) *
+        // =====================================
+        // 左下コーナーの揺れ
+        // =====================================
+
+        float leftX =
+            Mathf.Sin(time + Mathf.PI) *
             cornerShakeAmount;
 
-        float bottomLeftY =
+        float leftY =
             Mathf.Cos(
-                time * 1.3f +
-                Mathf.PI
+                time * 1.3f + Mathf.PI
             ) *
             cornerShakeAmount;
 
 
         // =====================================
-        // 揺れを反映
+        // 実際に位置を動かす
         // =====================================
 
         lockTopRightImage.rectTransform.anchoredPosition =
             topRightBasePosition +
             new Vector2(
-                topRightX,
-                topRightY
+                rightX,
+                rightY
             );
-
 
         lockBottomLeftImage.rectTransform.anchoredPosition =
             bottomLeftBasePosition +
             new Vector2(
-                bottomLeftX,
-                bottomLeftY
+                leftX,
+                leftY
             );
+
     }
 
 
@@ -655,41 +668,11 @@ public class TargetRange : MonoBehaviour
 
 
         // =====================================
-        // 中央四角のWorld座標を取得
-        // =====================================
-
-        Vector3[] squareCorners =
-            new Vector3[4];
-
-
-        squareRect.GetWorldCorners(
-            squareCorners
-        );
-
-
-        // =====================================
-        // 中央画像の右上
-        // =====================================
-
-        Vector3 rightWorldPosition =
-            squareCorners[2];
-
-
-        // =====================================
-        // 中央画像の左下
-        // =====================================
-
-        Vector3 leftWorldPosition =
-            squareCorners[0];
-
-
-        // =====================================
-        // コーナー画像の親
+        // コーナーの親
         // =====================================
 
         RectTransform parentRect =
             rightRect.parent as RectTransform;
-
 
         if (parentRect == null)
         {
@@ -698,7 +681,29 @@ public class TargetRange : MonoBehaviour
 
 
         // =====================================
-        // World → 親のLocal座標
+        // 中央四角の4隅を取得
+        // =====================================
+
+        Vector3[] squareCorners =
+            new Vector3[4];
+
+        squareRect.GetWorldCorners(
+            squareCorners
+        );
+
+
+        // 右上
+        Vector3 rightWorldPosition =
+            squareCorners[2];
+
+
+        // 左下
+        Vector3 leftWorldPosition =
+            squareCorners[0];
+
+
+        // =====================================
+        // World座標 → 親のローカル座標
         // =====================================
 
         topRightBasePosition =
@@ -706,10 +711,26 @@ public class TargetRange : MonoBehaviour
                 rightWorldPosition
             );
 
-
         bottomLeftBasePosition =
             parentRect.InverseTransformPoint(
                 leftWorldPosition
+            );
+
+
+        // =====================================
+        // ★コーナーを中央方向へ強制的に近づける
+        // =====================================
+
+        topRightBasePosition +=
+            new Vector2(
+                -cornerCloseDistance,
+                -cornerCloseDistance
+            );
+
+        bottomLeftBasePosition +=
+            new Vector2(
+                cornerCloseDistance,
+                cornerCloseDistance
             );
 
 
