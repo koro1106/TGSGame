@@ -64,22 +64,9 @@ public class ShopSkillButton : MonoBehaviour
         // すでに購入済みなら何もしない
         if (data.isShopUnlocked)
             return;
-        // 経験値が足りないなら何もしない
-        if (GetCurrentExp() < data.needExp)
+        // 必要経験値が足りなければ何もしない
+        if (!data.CanLevelUp())
             return;
-
-        // ShopExpだけ特別な判定
-        if (data.expType == ExpType.ShopExp)
-        {
-            if (playerData.currentExp_2 < 100 || playerData.currentExp_3 < 30)
-                return;
-        }
-        else
-        {
-            // 通常の経験値判定
-            if (GetCurrentExp() < data.needExp)
-                return;
-        }
 
         // スキルをレベルアップ
         data.TryLevelUp();
@@ -93,11 +80,17 @@ public class ShopSkillButton : MonoBehaviour
         // セーブ
         SaveManager.Save(playerData, allSkills);
 
-
         // 見た目更新
         UpdateVisual();
-        PlayExpAnimation(); // 経験値UIアニメーション
-        normalExpText.UpdateNormalExpText(); // 経験値UIアップデート
+
+        // 経験値UIアニメーション
+        PlayExpAnimation();
+
+        // 経験値UIアップデート
+        if (normalExpText != null)
+        {
+            normalExpText.UpdateNormalExpText();
+        }
 
     }
 
@@ -123,60 +116,71 @@ public class ShopSkillButton : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 現在の経験値を取得
-    /// </summary>
-    private int GetCurrentExp()
-    {
-        switch (data.expType)
-        {
-            case ExpType.Exp1:
-                return data.playerData.currentExp_1;
-
-            case ExpType.Exp2:
-                return data.playerData.currentExp_2;
-
-            case ExpType.Exp3:
-                return data.playerData.currentExp_3;
-
-            case ExpType.PreExp:
-                return data.playerData.currentPreExp;
-
-            case ExpType.ShopExp:
-                return (data.playerData.currentExp_2 >= 100 &&
-                        data.playerData.currentExp_3 >= 30)
-                    ? data.needExp
-                    : 0;
-        }
-
-        return 0;
-    }
-
-    // 経験値UIアニメーション
+        // 経験値UIアニメーション
     void PlayExpAnimation()
     {
-        switch (data.expType)
+        if (data.requiredExps == null)
+            return;
+
+        foreach (RequiredExp requiredExp in data.requiredExps)
         {
-            case ExpType.Exp1:
-                uiAnimation.PlayBounce(expUIAnimation.exp_1.rectTransform);
-                break;
+            if (requiredExp == null)
+                continue;
 
-            case ExpType.Exp2:
-                uiAnimation.PlayBounce(expUIAnimation.exp_2.rectTransform);
-                break;
+            // 必要経験値が設定されていないものは無視
+            if (requiredExp.needExp <= 0)
+                continue;
 
-            case ExpType.Exp3:
-                uiAnimation.PlayBounce(expUIAnimation.exp_3.rectTransform);
-                break;
+            switch (requiredExp.expType)
+            {
+                case ExpType.Exp1:
 
-            case ExpType.PreExp:
-                uiAnimation.PlayBounce(expUIAnimation.preExp.rectTransform);
-                break;
+                    if (expUIAnimation.exp_1 != null)
+                    {
+                        uiAnimation.PlayBounce(
+                            expUIAnimation.exp_1.rectTransform
+                        );
+                    }
 
-             case ExpType.ShopExp:
-                uiAnimation.PlayBounce(expUIAnimation.exp_2.rectTransform);
-                uiAnimation.PlayBounce(expUIAnimation.exp_3.rectTransform);
-                break;
+                    break;
+
+
+                case ExpType.Exp2:
+
+                    if (expUIAnimation.exp_2 != null)
+                    {
+                        uiAnimation.PlayBounce(
+                            expUIAnimation.exp_2.rectTransform
+                        );
+                    }
+
+                    break;
+
+
+                case ExpType.Exp3:
+
+                    if (expUIAnimation.exp_3 != null)
+                    {
+                        uiAnimation.PlayBounce(
+                            expUIAnimation.exp_3.rectTransform
+                        );
+                    }
+
+                    break;
+
+
+                case ExpType.PreExp:
+
+                    if (expUIAnimation.preExp != null)
+                    {
+                        uiAnimation.PlayBounce(
+                            expUIAnimation.preExp.rectTransform
+                        );
+                    }
+
+                    break;
+            }
         }
+
     }
 }

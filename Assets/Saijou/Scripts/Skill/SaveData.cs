@@ -31,6 +31,10 @@ public class SkillSaveData
     // 解放済みか
     public bool isUnlocked;
 
-    // 次レベルに必要な経験値
-    public int needExp;
+    // ショップ購入済みか
+    public bool isShopUnlocked;
+
+    // 必要経験値
+    public List<int> requiredNeedExps =
+        new List<int>();
 }

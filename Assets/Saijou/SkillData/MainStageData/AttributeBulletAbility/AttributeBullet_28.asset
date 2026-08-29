@@ -15,15 +15,20 @@ MonoBehaviour:
   skillName: "\u30C0\u30C3\u30B7\u30E5CT\u77ED\u7E2E"
   level: 0
   maxLevel: 1
-  needExp: 10
-  initialNeedExp: 10
+  requiredExps:
+  - expType: 0
+    initialNeedExp: 10
+    needExp: 10
+    addNeedExp: 10
+  - expType: 1
+    initialNeedExp: 6
+    needExp: 6
+    addNeedExp: 4
   isUnlocked: 0
   isLevelUp: 0
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
-  expType: 0
   effectType: 32
   effectValue: 0.5
-  addNeedExp: 0
   elementalBulletPrefab: {fileID: 0}
   description: 
   isShopUnlocked: 0
