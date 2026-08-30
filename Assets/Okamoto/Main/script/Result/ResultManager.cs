@@ -1,8 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Collections;
 
 public class ResultManager : MonoBehaviour
 {
@@ -14,6 +15,25 @@ public class ResultManager : MonoBehaviour
     [Header("取得アイテム表示")]
     public Transform itemContent;
     public GameObject resultItemPrefab;
+
+    [Header("現在の所持アイテム")]
+    public PlayerData playerData;
+
+    // Exp1
+    public Image exp1Image;
+    public TMP_Text exp1Text;
+
+    // Exp2
+    public Image exp2Image;
+    public TMP_Text exp2Text;
+
+    // Exp3
+    public Image exp3Image;
+    public TMP_Text exp3Text;
+
+    // PreExp
+    public Image preExpImage;
+    public TMP_Text preExpText;
 
     [Header("ボタン")]
     public Button continueButton;
@@ -273,6 +293,12 @@ public class ResultManager : MonoBehaviour
         // =====================================================
 
         RefreshResultUI();
+
+        // =====================================================
+        // 現在の所持アイテム数を表示
+        // =====================================================
+
+        RefreshOwnedItemUI();
     }
 
     // =========================================================
@@ -321,8 +347,11 @@ public class ResultManager : MonoBehaviour
 
 
         // =====================================================
-        // 回収したアイテムだけ表示
+        // 表示するアイテムだけ取得
         // =====================================================
+
+        List<KeyValuePair<DropItemType, int>> displayItems =
+            new List<KeyValuePair<DropItemType, int>>();
 
         foreach (KeyValuePair<DropItemType, int> item
                  in collectedItems)
@@ -331,9 +360,36 @@ public class ResultManager : MonoBehaviour
             if (item.Value <= 0)
                 continue;
 
+            displayItems.Add(item);
+        }
+
+
+        // =====================================================
+        // アイテムの数
+        // =====================================================
+
+        int itemCount = displayItems.Count;
+
+
+        // =====================================================
+        // アイテム同士の間隔
+        // =====================================================
+
+        float spacing = 400f;
+
+
+        // =====================================================
+        // アイテムを生成
+        // =====================================================
+
+        for (int i = 0; i < itemCount; i++)
+        {
+            KeyValuePair<DropItemType, int> item =
+                displayItems[i];
+
 
             // =================================================
-            // ResultItemPrefabを生成
+            // Prefab生成
             // =================================================
 
             GameObject obj =
@@ -341,6 +397,45 @@ public class ResultManager : MonoBehaviour
                     resultItemPrefab,
                     itemContent
                 );
+
+
+            // =================================================
+            // RectTransform取得
+            // =================================================
+
+            RectTransform rect =
+                obj.GetComponent<RectTransform>();
+
+
+            if (rect != null)
+            {
+                // =================================================
+                // 中央を基準に左右へ均等配置
+                //
+                // 1個
+                //       0
+                //
+                // 2個
+                //    -85    +85
+                //
+                // 3個
+                //   -170    0    +170
+                //
+                // 4個
+                // -255   -85   +85   +255
+                // =================================================
+
+                float x =
+                    (i - (itemCount - 1) / 2f)
+                    * spacing;
+
+
+                rect.anchoredPosition =
+                    new Vector2(
+                        x,
+                        0f
+                    );
+            }
 
 
             // =================================================
@@ -591,35 +686,35 @@ public class ResultManager : MonoBehaviour
                 // =============================================
 
                 if (!playerRestarted && t >= 0.7f)
-{
-    playerRestarted = true;
+                {
+                    playerRestarted = true;
 
-    // 敵のHP増加をリセット
-    if (enemySpawner != null)
-    {
-        enemySpawner.ResetEnemyHPGrowth();
-    }
+                    // 敵のHP増加をリセット
+                    if (enemySpawner != null)
+                    {
+                        enemySpawner.ResetEnemyHPGrowth();
+                    }
 
 
-    // Player全体を復帰
-    UnfreezePlayer();
+                    // Player全体を復帰
+                    UnfreezePlayer();
 
-    // Player位置リセット
-    if (playerMovement != null)
-    {
-        playerMovement.enabled = false;
+                    // Player位置リセット
+                    if (playerMovement != null)
+                    {
+                        playerMovement.enabled = false;
 
-        playerMovement.ResetPlayerPosition();
+                        playerMovement.ResetPlayerPosition();
 
-        playerMovement.ResumeAfterResult();
-    }
+                        playerMovement.ResumeAfterResult();
+                    }
 
-    // 弾を回復
-    if (gunController != null)
-    {
-        gunController.RefillAmmoAfterResult();
-    }
-}
+                    // 弾を回復
+                    if (gunController != null)
+                    {
+                        gunController.RefillAmmoAfterResult();
+                    }
+                }
 
 
                 yield return null;
@@ -865,6 +960,60 @@ public class ResultManager : MonoBehaviour
             {
                 Destroy(drop.gameObject);
             }
+        }
+    }
+
+    // =========================================================
+    // 現在の所持アイテム数を表示
+    // =========================================================
+
+    void RefreshOwnedItemUI()
+    {
+        if (playerData == null)
+            return;
+
+
+        // =====================================================
+        // Exp1
+        // =====================================================
+
+        if (exp1Text != null)
+        {
+            exp1Text.text =
+                "×" + playerData.currentExp_1.ToString();
+        }
+
+
+        // =====================================================
+        // Exp2
+        // =====================================================
+
+        if (exp2Text != null)
+        {
+            exp2Text.text =
+                "×" + playerData.currentExp_2.ToString();
+        }
+
+
+        // =====================================================
+        // Exp3
+        // =====================================================
+
+        if (exp3Text != null)
+        {
+            exp3Text.text =
+                "×" + playerData.currentExp_3.ToString();
+        }
+
+
+        // =====================================================
+        // PreExp
+        // =====================================================
+
+        if (preExpText != null)
+        {
+            preExpText.text =
+                "×" + playerData.currentPreExp.ToString();
         }
     }
 }
