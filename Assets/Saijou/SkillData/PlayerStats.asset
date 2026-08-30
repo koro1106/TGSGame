@@ -54,4 +54,4 @@ MonoBehaviour:
   shopOpen: 0
   shopEffectBulletDamage: 0
   shopElementalBulletChance: 0
-  shopExpChange: 0
+  shopExpChange: 1

@@ -202,4 +202,33 @@ public class ExpChangeManager : MonoBehaviour
         normalExpText.UpdateNormalExpText();
         shopExpText.UpdateNormalExpText();
     }
+
+    // 最大獲得数にする
+    public void OnMaxButton()
+    {
+        if (useExp01)
+        {
+            // Exp01を100個使ってExp02を1個作る
+            getExp = playerData.currentExp_1 / needExp01;
+
+            // 必要Expを表示
+            needExpText.text = (getExp * -needExp01).ToString();
+        }
+        else if (useExp02)
+        {
+            // Exp02を10個使ってExp03を1個作る
+            getExp = playerData.currentExp_2 / needExp02;
+
+            // 必要Expを表示
+            needExpText.text = (getExp * -needExp02).ToString();
+        }
+        else
+        {
+            Debug.Log("使用するExpが選択されていません");
+            return;
+        }
+
+        // 獲得数を表示
+        UpdateGetExpText();
+    }
 }
