@@ -192,7 +192,10 @@ MonoBehaviour:
   addExp1: 0
   addExp2: 1
   addExp3: 0
+  addExp4: 0
   addPreExp: 0
+  dropItemType: 1
+  resultItemAmount: 1
   collectDistance: 90
   collectDisTotal: 0
   stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
