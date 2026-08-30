@@ -31,6 +31,7 @@ public static class SaveManager
             if (skill == null)
                 continue;
 
+
             SkillSaveData skillSave = new SkillSaveData();
 
             skillSave.skillName = skill.name;
@@ -118,7 +119,6 @@ public static class SaveManager
                 skill.level =
                     saveSkill.level;
 
-
                 // 解放状態復元
                 skill.isUnlocked =
                     saveSkill.isUnlocked;
@@ -150,7 +150,9 @@ public static class SaveManager
                         saveSkill.requiredNeedExps[i];
                 }
             }
+
         }
+
     }
 
     /// <summary>
