@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections;
 
 /// <summary>
 /// ツールチップ（説明ウィンドウ）管理
@@ -114,6 +115,25 @@ public class TooltipUI : MonoBehaviour
         {
             UIanim.PlayBounce(levelText.rectTransform);
 
+            // 新しく取得したレベル画像を演出
+            int newLevelIndex;
+
+            // 最大レベル1の場合はElement 2
+            if (data.maxLevel == 1)
+            {
+                newLevelIndex = 2;
+            }
+            else
+            {
+                // 通常はレベルに対応した画像
+                newLevelIndex = data.level - 1;
+            }
+
+            if (newLevelIndex >= 0 && newLevelIndex < levelImages.Length &&levelImages[newLevelIndex] != null)
+            {
+                StartCoroutine(LevelUpScaleAnimation(levelImages[newLevelIndex].rectTransform));
+            }
+
             // 必要経験値テキストだけアニメーション
             foreach (TextMeshProUGUI expText in expTexts)
             {
@@ -125,6 +145,78 @@ public class TooltipUI : MonoBehaviour
 
             data.isLevelUp = false;
         }
+    }
+
+    /// <summary>
+    /// レベルアップしたアイコンを
+    /// 100% → 120% → 100% に拡大する
+    /// </summary>
+    IEnumerator LevelUpScaleAnimation(RectTransform target)
+    {
+        Vector3 originalScale = target.localScale;
+        Quaternion originalRotation = target.localRotation;
+
+        Vector3 bigScale = originalScale * 1.2f;
+
+        float duration = 0.3f;
+
+        // =========================
+        // 100% → 120%
+        // Y 0° → 360°
+        // =========================
+
+        float time = 0f;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+
+            float t = time / duration;
+
+            // 拡大は今まで通り滑らか
+            float scaleT = Mathf.SmoothStep(0f, 1f, t);
+
+            target.localScale =
+                Vector3.Lerp(originalScale, bigScale,scaleT);
+
+            // 回転は徐々に減速
+            float rotationT = 1f - Mathf.Pow(1f - t, 3f);
+
+            target.localRotation =originalRotation * Quaternion.Euler(0f,360f * rotationT,0f);
+
+            yield return null;
+        }
+
+        target.localScale = bigScale;
+
+        // =========================
+        // 120% → 100%
+        // Y 360° → 720°
+        // =========================
+
+        time = 0f;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+
+            float t = time / duration;
+
+            // 縮小
+            float scaleT = Mathf.SmoothStep(0f, 1f, t);
+
+            target.localScale = Vector3.Lerp(bigScale, originalScale, scaleT);
+
+            // 回転は徐々に減速
+            float rotationT = 1f - Mathf.Pow(1f - t, 3f);
+
+            target.localRotation = originalRotation * Quaternion.Euler(0f,360f + 360f * rotationT,0f);
+
+            yield return null;
+        }
+
+        target.localScale = originalScale;
+        target.localRotation = originalRotation;
     }
 
     /// <summary>
@@ -294,12 +386,51 @@ public class TooltipUI : MonoBehaviour
 
     void UpdateLevelImages(SkillData data)
     {
+        // =========================
+        // まず全部表示状態に戻す
+        // =========================
         for (int i = 0; i < levelImages.Length; i++)
         {
             if (levelImages[i] == null)
                 continue;
 
-            // 現在のレベル以下ならON画像
+            levelImages[i].gameObject.SetActive(true);
+        }
+
+        // =========================
+        // 最大レベルが1の場合
+        // Element 2だけ使用
+        // =========================
+        if (data.maxLevel == 1)
+        {
+            for (int i = 0; i < levelImages.Length; i++)
+            {
+                if (levelImages[i] == null)
+                    continue;
+
+                // Element 2以外を非表示
+                if (i != 2)
+                {
+                    levelImages[i].gameObject.SetActive(false);
+                    continue;
+                }
+
+                // Element 2
+                levelImages[i].sprite =
+                    data.level >= 1 ? levelOnSprite : levelOffSprite;
+            }
+            return;
+        }
+
+        // =========================
+        // 通常のスキル
+        // =========================
+        for (int i = 0; i < levelImages.Length; i++)
+        {
+            if (levelImages[i] == null)
+                continue;
+
+            // 現在のレベル以下ならON
             if (i < data.level)
             {
                 levelImages[i].sprite = levelOnSprite;
