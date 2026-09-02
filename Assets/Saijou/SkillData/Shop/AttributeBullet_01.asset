@@ -13,17 +13,23 @@ MonoBehaviour:
   m_Name: AttributeBullet_01
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillName: "\u96F7\u306E\u4EBA\u5F62"
-  level: 0
+  level: 1
   maxLevel: 1
-  needExp: 1
-  isUnlocked: 0
-  isLevelUp: 0
+  requiredExps:
+  - expType: 1
+    initialNeedExp: 100
+    needExp: 100
+    addNeedExp: 0
+  - expType: 2
+    initialNeedExp: 30
+    needExp: 30
+    addNeedExp: 0
+  isUnlocked: 1
+  isLevelUp: 1
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
-  expType: 4
   effectType: 4
   effectValue: 1
-  addNeedExp: 0
   elementalBulletPrefab: {fileID: 6812141048282945842, guid: 422d710f4cfeb084d880cf1fcecc60f9, type: 3}
   description: "\u96F7\u306E\u529B\u3092\u5BBF\u3057\u305F\u4EBA\u5F62\n\u96F7\u5C5E\u6027\u5F3E\u3092\u89E3\u653E"
-  isShopUnlocked: 0
+  isShopUnlocked: 1
   isShopButton: 1
