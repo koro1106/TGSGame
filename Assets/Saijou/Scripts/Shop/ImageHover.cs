@@ -49,7 +49,11 @@ public class ImageHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
         outlineCoroutine = StartCoroutine(OutlinePulse());
 
-        ShopTooltipUI.Instance.ShowText(skillData, false);
+        // 未解放のときだけツールチップを表示
+        if (!skillData.isUnlocked)
+        {
+            ShopTooltipUI.Instance.ShowText(skillData, false);
+        }
     }
 
     // マウスカーソルがImageから離れたとき

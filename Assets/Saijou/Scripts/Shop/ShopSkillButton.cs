@@ -34,7 +34,7 @@ public class ShopSkillButton : MonoBehaviour
 
     [Header("属性弾確率上昇ボタン")]
     [SerializeField] private GameObject elementalBulletChanceButton;
-   
+
     [Header("属性ダメージ上昇ボタン")]
     [SerializeField] private GameObject effectBulletDamageButton;
 
@@ -52,14 +52,14 @@ public class ShopSkillButton : MonoBehaviour
         // 仕立て済みで属性弾確率上昇解放済みだったら表示
         if (data.isShopUnlocked && playerStats.shopElementalBulletChance)
         {
-           elementalBulletChanceButton.SetActive(true);
+            elementalBulletChanceButton.SetActive(true);
         }
         // 仕立て済みで属性ダメージ上昇解放済みだったら表示
         if (data.isShopUnlocked && playerStats.shopEffectBulletDamage)
         {
             effectBulletDamageButton.SetActive(true);
         }
-        
+
     }
     /// <summary>
     /// ショップボタンを押したとき
@@ -149,7 +149,10 @@ public class ShopSkillButton : MonoBehaviour
         }
 
         // 少し待つ
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
+
+        // ここで一瞬だけ止める
+        yield return new WaitForSeconds(0.2f);
 
         // =========================
         // unlockedObject フェード
@@ -158,7 +161,7 @@ public class ShopSkillButton : MonoBehaviour
         Graphic[] graphics =
             unlockedObject.GetComponentsInChildren<Graphic>(true);
 
-        float fadeDuration = 0.3f;
+        float fadeDuration = 0.4f;
         float fadeTime = 0f;
 
         // 最初のアルファを保存
@@ -231,7 +234,7 @@ public class ShopSkillButton : MonoBehaviour
         }
     }
 
-        // 経験値UIアニメーション
+    // 経験値UIアニメーション
     void PlayExpAnimation()
     {
         if (data.requiredExps == null)
