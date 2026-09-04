@@ -17,6 +17,9 @@ public class ShopTooltipUI : MonoBehaviour
     [SerializeField] private TMP_Text costText2;
     [SerializeField] private GameObject needImages;
 
+    [Header("最大レベル表示")]
+    [SerializeField] private GameObject maxLevelText;
+
     // 現在表示しているスキル
     private SkillData currentSkill;
 
@@ -70,6 +73,10 @@ public class ShopTooltipUI : MonoBehaviour
 
         if (needImages != null)
             needImages.gameObject.SetActive(visible);
+
+        // 最大レベル表示
+        if (maxLevelText != null)
+            maxLevelText.SetActive(!visible);
     }
 
     public void ShowText(SkillData skill, bool showCost)
