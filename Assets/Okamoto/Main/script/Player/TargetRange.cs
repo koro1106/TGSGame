@@ -196,26 +196,26 @@ public class TargetRange : MonoBehaviour
     CheckCrosshairTarget();
 
 
-    // =====================================
-    // ★ロック中の敵が死亡中ならロック解除
-    // =====================================
+        // =====================================
+        // ★ロック中の敵が死亡中ならロック解除
+        // =====================================
 
-    //if (CurrentTarget != null)
-    //{
-    //    EnemyHP hp = CurrentTarget.GetComponent<EnemyHP>();
+        if (CurrentTarget != null)
+        {
+            EnemyHP hp = CurrentTarget.GetComponent<EnemyHP>();
 
-    //    if (hp != null && hp.IsDying())
-    //    {
-    //        ClearTarget();
-    //    }
-    //}
+            if (hp != null && hp.IsDying())
+            {
+                ClearTarget();
+            }
+        }
 
 
-    // =====================================
-    // ロック中の敵が消えた
-    // =====================================
+        // =====================================
+        // ロック中の敵が消えた
+        // =====================================
 
-    if (currentEnemyHP == null && CurrentTarget != null)
+        if (currentEnemyHP == null && CurrentTarget != null)
     {
         ClearTarget();
     }

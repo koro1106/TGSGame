@@ -19,6 +19,19 @@ public class ResultManager : MonoBehaviour
     [Header("現在の所持アイテム")]
     public PlayerData playerData;
 
+    [Header("所持数カウントアップ")]
+    [Tooltip("カウントアップにかける時間")]
+    public float countUpDuration = 1.5f;
+
+    [Tooltip("数字が増えたときの拡大倍率")]
+    public float countUpPopScale = 1.35f;
+
+    [Tooltip("数字が大きくなって戻るまでの時間")]
+    public float countUpPopDuration = 0.08f;
+
+    [Header("ポーズUI")]
+    public GameObject pauseUI;
+
     // Exp1
     public Image exp1Image;
     public TMP_Text exp1Text;
@@ -164,6 +177,18 @@ public class ResultManager : MonoBehaviour
 
         resultShowing = true;
 
+        // リザルト中はポーズ画面を開けない
+        IsResultActive = true;
+
+        // =====================================================
+        // ポーズUIを閉じる
+        // =====================================================
+
+        if (pauseUI != null)
+        {
+            pauseUI.SetActive(false);
+        }
+
 
         // =====================================================
         // すでに飛んでいる弾を削除
@@ -283,9 +308,13 @@ public class ResultManager : MonoBehaviour
         // リザルト表示
         // =====================================================
 
+        // =====================================================
+        // リザルト表示アニメーション
+        // =====================================================
+
         StartCoroutine(
-    ResultShowAnimation()
-);
+            ResultShowAnimation()
+        );
 
 
         // =====================================================
@@ -295,10 +324,295 @@ public class ResultManager : MonoBehaviour
         RefreshResultUI();
 
         // =====================================================
-        // 現在の所持アイテム数を表示
+        // 現在の所持アイテム数をカウントアップ表示
         // =====================================================
 
-        RefreshOwnedItemUI();
+        StartCoroutine(
+            AnimateOwnedItemUI()
+        );
+    }
+
+    // =========================================================
+    // 所持アイテム数 カウントアップ演出
+    // =========================================================
+
+    private IEnumerator AnimateOwnedItemUI()
+    {
+        // =====================================================
+        // リザルトの表示アニメーションが終わるまで待つ
+        // =====================================================
+
+        yield return new WaitForSecondsRealtime(
+            resultScaleDuration
+        );
+
+
+        // =====================================================
+        // 最終的な所持数
+        // =====================================================
+
+        int targetExp1 = 0;
+        int targetExp2 = 0;
+        int targetExp3 = 0;
+        int targetPreExp = 0;
+
+        if (playerData != null)
+        {
+            targetExp1 = playerData.currentExp_1;
+            targetExp2 = playerData.currentExp_2;
+            targetExp3 = playerData.currentExp_3;
+            targetPreExp = playerData.currentPreExp;
+        }
+
+
+        // =====================================================
+        // カウントアップ設定
+        // =====================================================
+
+        float duration = 1.5f;
+
+        float timer = 0f;
+
+        // 現在表示している数字
+        int lastExp1 = 0;
+        int lastExp2 = 0;
+        int lastExp3 = 0;
+        int lastPreExp = 0;
+
+
+        // =====================================================
+        // 元の文字サイズを保存
+        // =====================================================
+
+        Vector3 exp1OriginalScale =
+            exp1Text != null
+            ? exp1Text.transform.localScale
+            : Vector3.one;
+
+        Vector3 exp2OriginalScale =
+            exp2Text != null
+            ? exp2Text.transform.localScale
+            : Vector3.one;
+
+        Vector3 exp3OriginalScale =
+            exp3Text != null
+            ? exp3Text.transform.localScale
+            : Vector3.one;
+
+        Vector3 preExpOriginalScale =
+            preExpText != null
+            ? preExpText.transform.localScale
+            : Vector3.one;
+
+
+        // =====================================================
+        // カウントアップ
+        // =====================================================
+
+        while (timer < duration)
+        {
+            timer += Time.unscaledDeltaTime;
+
+            float t =
+                Mathf.Clamp01(
+                    timer / duration
+                );
+
+
+            // =================================================
+            // 最初は速く → 最後はゆっくり
+            // =================================================
+
+            // EaseOutCubic
+            float smoothT =
+                1f - Mathf.Pow(1f - t, 2f);
+
+
+            // =================================================
+            // 現在の数字
+            // =================================================
+
+            int currentExp1 =
+                Mathf.RoundToInt(
+                    Mathf.Lerp(
+                        0f,
+                        targetExp1,
+                        smoothT
+                    )
+                );
+
+            int currentExp2 =
+                Mathf.RoundToInt(
+                    Mathf.Lerp(
+                        0f,
+                        targetExp2,
+                        smoothT
+                    )
+                );
+
+            int currentExp3 =
+                Mathf.RoundToInt(
+                    Mathf.Lerp(
+                        0f,
+                        targetExp3,
+                        smoothT
+                    )
+                );
+
+            int currentPreExp =
+                Mathf.RoundToInt(
+                    Mathf.Lerp(
+                        0f,
+                        targetPreExp,
+                        smoothT
+                    )
+                );
+
+
+            // =================================================
+            // 数字が変わったかチェック
+            // =================================================
+
+            bool exp1Changed =
+                currentExp1 != lastExp1;
+
+            bool exp2Changed =
+                currentExp2 != lastExp2;
+
+            bool exp3Changed =
+                currentExp3 != lastExp3;
+
+            bool preExpChanged =
+                currentPreExp != lastPreExp;
+
+
+            // =================================================
+            // テキスト更新
+            // =================================================
+
+            if (exp1Text != null)
+            {
+                exp1Text.text =
+                    "×" + currentExp1.ToString();
+            }
+
+            if (exp2Text != null)
+            {
+                exp2Text.text =
+                    "×" + currentExp2.ToString();
+            }
+
+            if (exp3Text != null)
+            {
+                exp3Text.text =
+                    "×" + currentExp3.ToString();
+            }
+
+            if (preExpText != null)
+            {
+                preExpText.text =
+                    "×" + currentPreExp.ToString();
+            }
+
+
+            // =================================================
+            // 数字が増えた瞬間に大きくする
+            // =================================================
+
+            if (exp1Changed && exp1Text != null)
+            {
+                StartCoroutine(
+                    TextPopAnimation(
+                        exp1Text.transform,
+                        exp1OriginalScale
+                    )
+                );
+            }
+
+            if (exp2Changed && exp2Text != null)
+            {
+                StartCoroutine(
+                    TextPopAnimation(
+                        exp2Text.transform,
+                        exp2OriginalScale
+                    )
+                );
+            }
+
+            if (exp3Changed && exp3Text != null)
+            {
+                StartCoroutine(
+                    TextPopAnimation(
+                        exp3Text.transform,
+                        exp3OriginalScale
+                    )
+                );
+            }
+
+            if (preExpChanged && preExpText != null)
+            {
+                StartCoroutine(
+                    TextPopAnimation(
+                        preExpText.transform,
+                        preExpOriginalScale
+                    )
+                );
+            }
+
+
+            // =================================================
+            // 前回の数字を保存
+            // =================================================
+
+            lastExp1 = currentExp1;
+            lastExp2 = currentExp2;
+            lastExp3 = currentExp3;
+            lastPreExp = currentPreExp;
+
+
+            yield return null;
+        }
+
+
+        // =====================================================
+        // 最後は確実に最終値
+        // =====================================================
+
+        if (exp1Text != null)
+        {
+            exp1Text.text =
+                "×" + targetExp1.ToString();
+
+            exp1Text.transform.localScale =
+                exp1OriginalScale;
+        }
+
+        if (exp2Text != null)
+        {
+            exp2Text.text =
+                "×" + targetExp2.ToString();
+
+            exp2Text.transform.localScale =
+                exp2OriginalScale;
+        }
+
+        if (exp3Text != null)
+        {
+            exp3Text.text =
+                "×" + targetExp3.ToString();
+
+            exp3Text.transform.localScale =
+                exp3OriginalScale;
+        }
+
+        if (preExpText != null)
+        {
+            preExpText.text =
+                "×" + targetPreExp.ToString();
+
+            preExpText.transform.localScale =
+                preExpOriginalScale;
+        }
     }
 
     // =========================================================
@@ -474,6 +788,7 @@ public class ResultManager : MonoBehaviour
 
         resultShowing = false;
 
+        IsResultActive = false;
 
         // =====================================================
         // 取得データリセット
@@ -544,7 +859,11 @@ public class ResultManager : MonoBehaviour
         // シーン移動
         // =====================================================
 
+        // ゲーム再開
         Time.timeScale = 1f;
+
+        // リザルト終了
+        IsResultActive = false;
 
         SceneManager.LoadScene(
             "MainStageSkillTreeScene"
@@ -752,6 +1071,15 @@ public class ResultManager : MonoBehaviour
 
             Time.timeScale = 1f;
 
+            // =====================================================
+            // ポーズUIを使用可能にする
+            // =====================================================
+
+            if (pauseUI != null)
+            {
+                pauseUI.SetActive(true);
+            }
+
 
             // Player操作可能
             if (playerMovement != null)
@@ -794,6 +1122,14 @@ public class ResultManager : MonoBehaviour
                 startPos;
 
             continueTransition.gameObject.SetActive(false);
+
+
+            // =====================================================
+            // ★ スライド完全終了後にポーズを許可
+            // =====================================================
+
+            IsResultActive = false;
+            PauseMenu.IsPaused = false;
         }
     }
     // =========================================================
@@ -1015,5 +1351,88 @@ public class ResultManager : MonoBehaviour
             preExpText.text =
                 "×" + playerData.currentPreExp.ToString();
         }
+    }
+    // =========================================================
+    // 数字が増えたときのポップ演出
+    // =========================================================
+
+    private IEnumerator TextPopAnimation(
+        Transform textTransform,
+        Vector3 originalScale)
+    {
+        if (textTransform == null)
+            yield break;
+
+
+        // =====================================================
+        // Inspectorから設定
+        // =====================================================
+
+        float popScale = countUpPopScale;
+        float popDuration = countUpPopDuration;
+
+
+        // =====================================================
+        // 元サイズ → 大きくする
+        // =====================================================
+
+        float timer = 0f;
+
+        Vector3 bigScale =
+            originalScale * popScale;
+
+
+        while (timer < popDuration)
+        {
+            timer += Time.unscaledDeltaTime;
+
+            float t =
+                Mathf.Clamp01(
+                    timer / popDuration
+                );
+
+            textTransform.localScale =
+                Vector3.Lerp(
+                    originalScale,
+                    bigScale,
+                    t
+                );
+
+            yield return null;
+        }
+
+
+        // =====================================================
+        // 大きい → 元サイズ
+        // =====================================================
+
+        timer = 0f;
+
+        while (timer < popDuration)
+        {
+            timer += Time.unscaledDeltaTime;
+
+            float t =
+                Mathf.Clamp01(
+                    timer / popDuration
+                );
+
+            textTransform.localScale =
+                Vector3.Lerp(
+                    bigScale,
+                    originalScale,
+                    t
+                );
+
+            yield return null;
+        }
+
+
+        // =====================================================
+        // 最後は確実に元サイズ
+        // =====================================================
+
+        textTransform.localScale =
+            originalScale;
     }
 }
