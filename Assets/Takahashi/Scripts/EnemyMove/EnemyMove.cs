@@ -132,7 +132,7 @@ public class EnemyMove : MonoBehaviour, IHitSlowable
     [Header("── 移動エリア（赤い床） ─────────")]
     // 画面上端を0、画面下端を1とした割合で指定
     // 上端（0=画面上端, 1=画面下端）
-    public float moveAreaTopRatio = 0.45f;
+    public float moveAreaTopRatio = 0.3f;
     // 下端（0=画面上端, 1=画面下端）
     public float moveAreaBottomRatio = 1.0f;
 

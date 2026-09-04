@@ -27,9 +27,13 @@ public class EyeEnemy : MonoBehaviour
     public float leftHandUpAngle = 25f;     // 左手: 上に行っている時(右手と逆)
     public float leftHandDownAngle = -25f;  // 左手: 下に行っている時(右手と逆)
 
+    // ===== ここから追加：スポーン範囲（赤い床の高さ）を他の敵と揃える =====
+    [Header("スポーンY範囲（赤い床の高さ）")]
+    public float spawnAreaTopRatio = 0.45f;
+    public float spawnAreaBottomRatio = 1.0f;
+    // ===== ここまで追加 =====
+
     private Vector2 moveDirection;
-    private float screenWidth;
-    private float screenHeight;
 
     private EnemyHP hp;
 
@@ -45,10 +49,6 @@ public class EyeEnemy : MonoBehaviour
 
     void Start()
     {
-        Camera cam = Camera.main;
-        screenHeight = cam.orthographicSize;
-        screenWidth = screenHeight * cam.aspect;
-
         hp = GetComponent<EnemyHP>();
 
         if (head != null) headSR = head;
@@ -132,8 +132,6 @@ public class EyeEnemy : MonoBehaviour
 
     void UpdateHandSway()
     {
-        // Sin波の値(-1?1)をそのまま 0?1 に変換して使うことで、
-        // 「上/下」の切り替え時に角度がカクッと変わらず連続的に動く。
         float wave = Mathf.Sin(Time.time * bounceSpeed);
         float t = (wave + 1f) * 0.5f; // 0(下) ? 1(上)
 
@@ -150,38 +148,56 @@ public class EyeEnemy : MonoBehaviour
         }
     }
 
+    // =========================================================
+    // スポーン位置・進行方向決定
+    // EnemySpawner.GetSpawnPosition() / EnemyMove.CalcAreaBounds() と
+    // 同じ考え方（カメラ位置基準＋赤い床エリア比率で範囲を絞る）に統一
+    // =========================================================
     void SetSpawnAndDirection()
     {
         Camera cam = Camera.main;
+
         float h = cam.orthographicSize;
         float w = h * cam.aspect;
-        float halfW = w;
-        float halfH = h;
-        float offset = 3f; //（画面外距離）
 
-        // 上からのスポーンは無し。右・左・下のみ。
+        float camX = cam.transform.position.x;
+        float camY = cam.transform.position.y;
+
+        float left = camX - w;
+        float right = camX + w;
+        float top = camY + h;
+        float bottom = camY - h;
+        float fullH = top - bottom;
+
+        float offset = 3f; // 画面外距離（EnemySpawnerは2fだが、元の値を踏襲）
+
+        // 赤い床エリア（Y範囲）
+        float areaTop = top - fullH * spawnAreaTopRatio;
+        float areaBottom = top - fullH * spawnAreaBottomRatio;
+
+        // 右・左・下のみ（上からのスポーンは無し）
         int side = Random.Range(0, 3);
         Vector2 spawnPos;
 
         switch (side)
         {
-            case 0: // 右(高さは画面の半分の範囲)
-                spawnPos = new Vector2(halfW + offset, Random.Range(-halfH / 2f, halfH / 2f));
+            case 0: // 右
+                spawnPos = new Vector2(right + offset, Random.Range(areaBottom, areaTop));
                 break;
-            case 1: // 左(高さは画面の半分の範囲)
-                spawnPos = new Vector2(-halfW - offset, Random.Range(-halfH / 2f, halfH / 2f));
+            case 1: // 左
+                spawnPos = new Vector2(left - offset, Random.Range(areaBottom, areaTop));
                 break;
             default: // 下
-                spawnPos = new Vector2(Random.Range(-halfW, halfW), -halfH - offset);
+                spawnPos = new Vector2(Random.Range(left, right), areaBottom - offset);
                 break;
         }
 
         transform.position = spawnPos;
 
-        // 画面内ランダム地点へ向かう
+        // 赤い床エリア内のランダム地点へ向かう
         Vector2 target = new Vector2(
-            Random.Range(-halfW, halfW),
-            Random.Range(-halfH, halfH)
+            Random.Range(left, right),
+            Random.Range(areaBottom, areaTop)
         );
         moveDirection = (target - spawnPos).normalized;
 
