@@ -21,6 +21,9 @@ public class SniperController : MonoBehaviour
     [Header("発射位置")]
     public Transform muzzle;
 
+    [Header("自動ターゲット")]
+    public TargetRange targetRange;
+
     private Camera cam;
     [SerializeField] RectTransform crosshair;
 
@@ -61,19 +64,44 @@ public class SniperController : MonoBehaviour
         ShootBullet(bulletPrefabToShoot);
     }
 
-    private void ShootBullet(GameObject prefab)
+private void ShootBullet(GameObject prefab)
     {
-        Vector3 screenPos =
-            gunController.Crosshair.position;
+        Vector3 targetPosition;
 
-        Vector3 worldPos =
-            gunController.Cam.ScreenToWorldPoint(
-                screenPos);
+        // =========================================
+        // ロックオン中の敵がいる場合
+        // =========================================
+        if (targetRange != null &&
+            targetRange.CurrentTarget != null)
+        {
+            targetPosition =
+                targetRange.CurrentTarget.position;
+        }
+        else
+        {
+            // =========================================
+            // ロックオンしていない場合
+            // クロスヘア方向へ撃つ
+            // =========================================
+            Vector3 screenPos =
+                gunController.Crosshair.position;
 
-        worldPos.z = 0;
+            targetPosition =
+                gunController.Cam.ScreenToWorldPoint(screenPos);
+
+            targetPosition.z = 0;
+        }
+
+        // =========================================
+        // 発射方向
+        // =========================================
 
         Vector2 direction =
-            (worldPos - muzzle.position).normalized;
+            (targetPosition - muzzle.position).normalized;
+
+        // =========================================
+        // 弾生成
+        // =========================================
 
         GameObject bullet =
             Instantiate(
@@ -81,8 +109,7 @@ public class SniperController : MonoBehaviour
                 muzzle.position,
                 Quaternion.identity);
 
-        bullet.transform.right =
-            direction;
+        bullet.transform.right = direction;
 
         Rigidbody2D rb =
             bullet.GetComponent<Rigidbody2D>();
@@ -93,4 +120,5 @@ public class SniperController : MonoBehaviour
                 direction * bulletSpeed;
         }
     }
+
 }

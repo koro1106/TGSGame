@@ -888,8 +888,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1964341955}
+  m_Children: []
   m_Father: {fileID: 1314571693}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2091,7 +2090,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 169.7, y: -6.9}
+  m_AnchoredPosition: {x: 14, y: -56.5}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &146054261
@@ -6317,7 +6316,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 169.7, y: -6.8}
+  m_AnchoredPosition: {x: 29, y: -56.5}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &316464925
@@ -6806,6 +6805,7 @@ GameObject:
   m_Component:
   - component: {fileID: 360144202}
   - component: {fileID: 360144204}
+  - component: {fileID: 360144205}
   - component: {fileID: 360144203}
   m_Layer: 5
   m_Name: Crosshair
@@ -6831,7 +6831,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -8, y: -7}
-  m_SizeDelta: {x: 50, y: 80}
+  m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &360144203
 MonoBehaviour:
@@ -6853,7 +6853,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2399108539190919163, guid: 3167b9ef35ffd414ca214afa05e91f9a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 56dcac60045b100478101800c3e8be73, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6871,6 +6871,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 360144201}
   m_CullTransparentMesh: 1
+--- !u!114 &360144205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 360144201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb3a9008764e1d84d80cd0d010da2da8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CrosshairTrail
+  crosshair: {fileID: 360144202}
+  trailPrefab: {fileID: 5014679904000874075, guid: 8b317232f1a30ef48951ead979f59120, type: 3}
+  canvas: {fileID: 1196287930}
+  spawnInterval: 0.7
 --- !u!1 &360386266
 GameObject:
   m_ObjectHideFlags: 0
@@ -7123,7 +7139,7 @@ RectTransform:
   m_GameObject: {fileID: 389722935}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.6, y: 1.6, z: 1.6}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2029006256}
@@ -7131,7 +7147,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1446, y: -374}
+  m_AnchoredPosition: {x: 451.00003, y: -272}
   m_SizeDelta: {x: 140, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &389722937
@@ -11717,6 +11733,7 @@ MonoBehaviour:
   muzzle: {fileID: 887336086}
   bulletSpeed: 2000
   spreadAngle: 15
+  targetRange: {fileID: 1485909830}
   gunController: {fileID: 173762207}
   crosshair: {fileID: 1929447000}
 --- !u!1 &732648406
@@ -18200,6 +18217,7 @@ RectTransform:
   m_Children:
   - {fileID: 707356388}
   - {fileID: 1891900654}
+  - {fileID: 1964341955}
   - {fileID: 1929171874}
   - {fileID: 173762202}
   - {fileID: 360144202}
@@ -19211,7 +19229,7 @@ RectTransform:
   m_GameObject: {fileID: 1247098201}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.6, y: 1.6, z: 1.6}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 146054260}
@@ -19219,7 +19237,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1446, y: -50}
+  m_AnchoredPosition: {x: -132.99997, y: -266}
   m_SizeDelta: {x: 140, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1247098203
@@ -23481,7 +23499,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -15}
+  m_AnchoredPosition: {x: 0, y: 48}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1576089624
@@ -24310,7 +24328,7 @@ RectTransform:
   m_GameObject: {fileID: 1630181921}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.6, y: 1.6, z: 1.6}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 316464924}
@@ -24318,7 +24336,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1446, y: 100}
+  m_AnchoredPosition: {x: -445, y: -261}
   m_SizeDelta: {x: 140, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1630181923
@@ -27254,6 +27272,7 @@ MonoBehaviour:
   - {fileID: 2218497407943198192, guid: d1d06472924c4cb469288fe6d48b1a23, type: 3}
   bulletSpeed: 3500
   muzzle: {fileID: 554859124}
+  targetRange: {fileID: 1485909830}
   crosshair: {fileID: 1929447000}
   gunController: {fileID: 173762207}
 --- !u!1 &1894232208
@@ -27509,7 +27528,7 @@ RectTransform:
   m_GameObject: {fileID: 1909476019}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.6, y: 1.6, z: 1.6}
+  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2068079291}
@@ -27517,7 +27536,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1446, y: -210}
+  m_AnchoredPosition: {x: 166.00003, y: -260}
   m_SizeDelta: {x: 140, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1909476021
@@ -28010,7 +28029,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1929171874
 Transform:
   m_ObjectHideFlags: 0
@@ -28532,11 +28551,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 883747543}
-  m_Father: {fileID: 66086922}
+  m_Father: {fileID: 1196287927}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -378, y: -227}
+  m_AnchoredPosition: {x: 41.799927, y: 131.19998}
   m_SizeDelta: {x: 196.3, y: 211}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1964341957
@@ -28589,7 +28608,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4dfe69070db74a4893e0fe0867d4aa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HandGunController
-  gunPivot: {fileID: 1314571693}
+  gunPivot: {fileID: 1328722430}
   muzzle: {fileID: 883747543}
   crosshair: {fileID: 360144202}
   sensitivityText: {fileID: 0}
@@ -29297,7 +29316,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 169.7, y: -5.4}
+  m_AnchoredPosition: {x: 26, y: -56.5}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2029006257
@@ -30148,7 +30167,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 169.7, y: -5.4}
+  m_AnchoredPosition: {x: 13, y: -56.5}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2068079292

@@ -50,20 +50,15 @@ public class HandGunController : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    void Start()
+void Start()
     {
         defaultLocalPos = gunImage.localPosition;
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Confined;
 
-        crosshairPos = new Vector3(
-            Screen.width / 2f,
-            Screen.height / 2f,
-            0f
-        );
-
-        crosshair.position = crosshairPos;
+        // 現在のクロスヘア位置をそのまま使用
+        crosshairPos = crosshair.position;
 
         if (sensitivityText != null)
         {
@@ -75,8 +70,6 @@ public class HandGunController : MonoBehaviour
     void Update()
     {
         if (!isActive) return;
-
-        MoveCrosshair();
 
         GameObject target = FindNearestEnemy();
 
@@ -134,19 +127,19 @@ public class HandGunController : MonoBehaviour
     }
 
     // 以下そのまま
-    void MoveCrosshair()
-    {
-        float mouseX = Input.GetAxisRaw("Mouse X");
-        float mouseY = Input.GetAxisRaw("Mouse Y");
+    //void MoveCrosshair()
+    //{
+    //    float mouseX = Input.GetAxisRaw("Mouse X");
+    //    float mouseY = Input.GetAxisRaw("Mouse Y");
 
-        crosshairPos += new Vector3(mouseX, mouseY, 0f)
-            * sensitivity * 25f;
+    //    crosshairPos += new Vector3(mouseX, mouseY, 0f)
+    //        * sensitivity * 25f;
 
-        crosshairPos.x = Mathf.Clamp(crosshairPos.x, 0, Screen.width);
-        crosshairPos.y = Mathf.Clamp(crosshairPos.y, 0, Screen.height);
+    //    crosshairPos.x = Mathf.Clamp(crosshairPos.x, 0, Screen.width);
+    //    crosshairPos.y = Mathf.Clamp(crosshairPos.y, 0, Screen.height);
 
-        crosshair.position = crosshairPos;
-    }
+    //    crosshair.position = crosshairPos;
+    //}
 
     void Aim(Transform target)
     {
