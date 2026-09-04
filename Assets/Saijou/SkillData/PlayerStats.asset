@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlayerStats
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
   bulletDamage: 10
-  effectBulletDamage: 10
+  effectBulletDamage: 20
   maxAmmo: 10
   enemySpawnWeightBonus: 1
   criticalrate: 0
@@ -31,8 +31,12 @@ MonoBehaviour:
   unlockedElementalBullets:
   - {fileID: 2218497407943198192, guid: 2943e97c84661314baf0a600180bff0d, type: 3}
   - {fileID: 6812141048282945842, guid: 422d710f4cfeb084d880cf1fcecc60f9, type: 3}
+  - {fileID: 2218497407943198192, guid: 7eccedd1dfe352d4fa83bfbac0fde328, type: 3}
+  - {fileID: 2218497407943198192, guid: 41b544c7e167987478a131581c756324, type: 3}
+  - {fileID: 2218497407943198192, guid: 182642bc087fe684ba133f2131c0527e, type: 3}
+  - {fileID: 2218497407943198192, guid: 865e9bdc7e5fde9448fd9dead0efba78, type: 3}
   defaultBulletPrefab: {fileID: 2218497407943198192, guid: 2943e97c84661314baf0a600180bff0d, type: 3}
-  elementalBulletChance: 0.2
+  elementalBulletChance: 0.3
   preExpDeviceUnlocked: 0
   carePackageUnlocked: 0
   handgunUnlocked: 0
@@ -52,7 +56,7 @@ MonoBehaviour:
   rapidFire: 0
   targetingRangeUP: 0
   increasedUP: 0
-  shopOpen: 0
+  shopOpen: 1
   shopEffectBulletDamage: 1
   shopElementalBulletChance: 1
-  shopExpChange: 1
+  shopExpChange: 0

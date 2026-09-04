@@ -42,25 +42,25 @@ public class ShopSkillButton : MonoBehaviour
     [SerializeField] UIAnimation uiAnimation;
     [SerializeField] NormalExpText normalExpText;
 
+    [Header("ロック解除エフェクト")]
+    [SerializeField] private GameObject unlockEffectPrefab;
+    [SerializeField] private Transform unlockEffectPosition;
+
+    [SerializeField]  private bool fadeFinished = false;
+
     void Start()
     {
+        // すでに購入済みなら、
+        // シーンをまたいでもフェード演出は完了済みとして扱う
+        if (data.isShopUnlocked)
+        {
+            fadeFinished = true;
+        }
+
+
         UpdateVisual();
     }
 
-    void Update()
-    {
-        // 仕立て済みで属性弾確率上昇解放済みだったら表示
-        if (data.isShopUnlocked && playerStats.shopElementalBulletChance)
-        {
-            elementalBulletChanceButton.SetActive(true);
-        }
-        // 仕立て済みで属性ダメージ上昇解放済みだったら表示
-        if (data.isShopUnlocked && playerStats.shopEffectBulletDamage)
-        {
-            effectBulletDamageButton.SetActive(true);
-        }
-
-    }
     /// <summary>
     /// ショップボタンを押したとき
     /// </summary>
@@ -105,7 +105,7 @@ public class ShopSkillButton : MonoBehaviour
     IEnumerator UnlockAnimation()
     {
         // =========================
-        // 鍵穴「カチャッ」
+        // 鍵穴演出
         // =========================
 
         if (lockImage != null)
@@ -114,7 +114,12 @@ public class ShopSkillButton : MonoBehaviour
             Quaternion originalRotation = lockImage.localRotation;
 
             float shakeTime = 0f;
-            float shakeDuration = 0.18f;
+
+            // 揺れる時間
+            float shakeDuration = 0.35f;
+
+            // 揺れる回数
+            int shakeCount = 3;
 
             while (shakeTime < shakeDuration)
             {
@@ -122,16 +127,18 @@ public class ShopSkillButton : MonoBehaviour
 
                 float t = shakeTime / shakeDuration;
 
-                // 最初は大きく、最後はすぐ止まる
-                float strength = Mathf.Lerp(3f, 0f, t);
+                // 最初は大きく、最後は小さく
+                float strength = Mathf.Lerp(4f, 0f, t);
 
-                // 左右に「カチャッ」
+                // 2～3回ブルブルする
                 float x =
-                    Mathf.Sin(shakeTime * 70f) * strength;
+                    Mathf.Sin(t * Mathf.PI * 2f * shakeCount) * strength;
 
                 // 少しだけ回転
                 float angle =
-                    Mathf.Sin(shakeTime * 70f) * strength * 1.5f;
+                    Mathf.Sin(t * Mathf.PI * 2f * shakeCount)
+                    * strength
+                    * 1.5f;
 
                 lockImage.anchoredPosition =
                     originalPosition + new Vector2(x, 0f);
@@ -148,16 +155,10 @@ public class ShopSkillButton : MonoBehaviour
             lockImage.localRotation = originalRotation;
         }
 
-        // 少し待つ
-        yield return new WaitForSeconds(0.2f);
-
-        // ここで一瞬だけ止める
-        yield return new WaitForSeconds(0.2f);
-
         // =========================
         // unlockedObject フェード
         // =========================
-
+       
         Graphic[] graphics =
             unlockedObject.GetComponentsInChildren<Graphic>(true);
 
@@ -194,6 +195,24 @@ public class ShopSkillButton : MonoBehaviour
             yield return null;
         }
 
+        // エフェクト生成
+
+        if (unlockEffectPrefab != null && unlockEffectPosition != null)
+        {
+            GameObject effect = Instantiate(
+                unlockEffectPrefab,
+                unlockEffectPosition.position,
+                unlockEffectPosition.rotation
+            );
+
+            ParticleSystem particle = effect.GetComponentInChildren<ParticleSystem>();
+
+            if (particle != null)
+            {
+                StartCoroutine(DestroyEffectAfterPlay(effect, particle));
+            }
+        }
+
         // 完全に消す
         for (int i = 0; i < graphics.Length; i++)
         {
@@ -202,14 +221,8 @@ public class ShopSkillButton : MonoBehaviour
             graphics[i].color = color;
         }
 
-        unlockedObject.SetActive(false);
-
-        // =========================
-        // 購入済み表示
-        // =========================
-
-        dollNameText.SetActive(true);
-        makeButton.SetActive(false);
+        fadeFinished = true;
+        UpdateVisual();
     }
 
     /// <summary>
@@ -217,21 +230,43 @@ public class ShopSkillButton : MonoBehaviour
     /// </summary>
     private void UpdateVisual()
     {
-        if (data.isShopUnlocked)
+        // まだフェードが完了していない
+        if (!fadeFinished)
         {
-            // 購入済み
-            unlockedObject.SetActive(false);
-            dollNameText.SetActive(true);
-
-            makeButton.SetActive(false); // 仕立てるボタン非表示
-        }
-        else
-        {
-            // 未購入
             unlockedObject.SetActive(true);
             dollNameText.SetActive(false);
 
+            makeButton.SetActive(true);
+
+            elementalBulletChanceButton.SetActive(false);
+            effectBulletDamageButton.SetActive(false);
+
+            return;
         }
+
+        // =========================
+        // フェード完了後
+        // =========================
+
+        unlockedObject.SetActive(false);
+
+        // ぬいぐるみ名を表示
+        dollNameText.SetActive(data.isShopUnlocked);
+
+        // 仕立てるボタンを非表示
+        makeButton.SetActive(false);
+
+        // 属性弾確率上昇
+        elementalBulletChanceButton.SetActive(
+            data.isShopUnlocked &&
+            playerStats.shopElementalBulletChance
+        );
+
+        // 属性ダメージ上昇
+        effectBulletDamageButton.SetActive(
+            data.isShopUnlocked &&
+            playerStats.shopEffectBulletDamage
+        );
     }
 
     // 経験値UIアニメーション
@@ -283,22 +318,28 @@ public class ShopSkillButton : MonoBehaviour
                             expUIAnimation.exp_3.rectTransform
                         );
                     }
-
                     break;
 
-
                 case ExpType.PreExp:
-
                     if (expUIAnimation.preExp != null)
                     {
                         uiAnimation.PlayBounce(
                             expUIAnimation.preExp.rectTransform
                         );
                     }
-
                     break;
             }
         }
+    }
 
+    private IEnumerator DestroyEffectAfterPlay(
+    GameObject effect,
+    ParticleSystem particle)
+    {
+        // パーティクルの再生が終わるまで待つ
+        yield return new WaitUntil(() => !particle.IsAlive(true));
+
+        // エフェクト削除
+        Destroy(effect);
     }
 }

@@ -42,6 +42,8 @@ public class ExpChangeManager : MonoBehaviour
     {
         if(playerStats.shopExpChange)
             expChangeButton.SetActive(true);
+        else
+            expChangeButton.SetActive(false);
 
         // expChangeOpeningに合わせてRaycastを切り替える
         BlackImage.raycastTarget = expChangeOpening;
