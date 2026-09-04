@@ -38,6 +38,10 @@ public class ImageHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     // マウスカーソルがImageに乗ったとき
     public void OnPointerEnter(PointerEventData eventData)
     {
+        // 解放済みなら何もしない
+        if (skillData == null || skillData.isUnlocked)
+            return;
+
         // 黄色い枠線を表示
         outline.enabled = true;
 
@@ -49,11 +53,8 @@ public class ImageHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
         outlineCoroutine = StartCoroutine(OutlinePulse());
 
-        // 未解放のときだけツールチップを表示
-        if (!skillData.isUnlocked)
-        {
-            ShopTooltipUI.Instance.ShowText(skillData, false);
-        }
+        ShopTooltipUI.Instance.ShowText(skillData, true);
+        
     }
 
     // マウスカーソルがImageから離れたとき

@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273875e9515bae4469b58e69f7b82692, type: 3}
   m_Name: BulletDamage02
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "\u5C5E\u6027\u5F3E\u30C0\u30E1\u30FC\u30B8 +10%"
+  skillName: "\u5C5E\u6027\u5F3E\u30C0\u30E1\u30FC\u30B8UP"
   level: 0
-  maxLevel: 1
+  maxLevel: 5
   requiredExps:
-  - expType: 0
-    initialNeedExp: 0
-    needExp: 0
+  - expType: 1
+    initialNeedExp: 150
+    needExp: 150
     addNeedExp: 0
-  - expType: 0
-    initialNeedExp: 0
-    needExp: 0
+  - expType: 2
+    initialNeedExp: 30
+    needExp: 30
     addNeedExp: 0
   isUnlocked: 0
   isLevelUp: 0
@@ -30,6 +30,6 @@ MonoBehaviour:
   effectType: 1
   effectValue: 10
   elementalBulletPrefab: {fileID: 0}
-  description: 
+  description: "\u5C5E\u6027\u5F3E\u30C0\u30E1\u30FC\u30B8 +10%"
   isShopUnlocked: 0
   isShopButton: 0
