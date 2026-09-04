@@ -349,6 +349,11 @@ public class EnemyHP : MonoBehaviour
         return isBind;
     }
 
+    public bool IsDying()
+    {
+        return isDying;
+    }
+
     // SliderのFill画像を「時計みたいに円形で減る」設定に自動構成する
     void SetupRadialFill(Slider slider)
     {
@@ -616,7 +621,7 @@ public class EnemyHP : MonoBehaviour
                 dmg.SetCritical(); // クリティカルなら黄色＋アイコン（属性色で上書きしない）
             }
             else
-            {
+            {if (currentHP <= 0)
                 //  属性に応じた色を設定（クリティカルでない時だけ）
                 dmg.SetColor(GetDamageColor(attribute));
             }
