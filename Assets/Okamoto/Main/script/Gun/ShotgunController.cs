@@ -25,6 +25,9 @@ public class ShotgunController : MonoBehaviour
     public float bulletSpeed = 20f;
     public float spreadAngle = 15f;
 
+    [Header("自動ターゲット")]
+    public TargetRange targetRange;
+
     [SerializeField] GunController gunController;
 
     private Camera cam;
@@ -82,39 +85,58 @@ public class ShotgunController : MonoBehaviour
             ShootBullet(prefab, spreadAngle * 2f);
         }
     }
-
-    private void ShootBullet(
-     GameObject prefab,
-     float angleOffset)
+private void ShootBullet(
+    GameObject prefab,
+    float angleOffset)
     {
-        // =========================
-        // クロスヘア位置取得
-        // =========================
+        Vector3 targetPosition;
 
-        Vector3 screenPos =
-            gunController.Crosshair.position;
+        // =========================================
+        // ロックオン中の敵がいる場合
+        // =========================================
+        if (targetRange != null &&
+            targetRange.CurrentTarget != null)
+        {
+            targetPosition =
+                targetRange.CurrentTarget.position;
+        }
+        else
+        {
+            // =========================================
+            // ロックオンしていない場合
+            // クロスヘア方向へ撃つ
+            // =========================================
+            Vector3 screenPos =
+                gunController.Crosshair.position;
 
-        Vector3 worldPos =
-            gunController.Cam.ScreenToWorldPoint(
-                screenPos);
+            targetPosition =
+                gunController.Cam.ScreenToWorldPoint(
+                    screenPos);
 
-        worldPos.z = 0;
+            targetPosition.z = 0;
+        }
 
-        // =========================
-        // クロスヘア方向
-        // =========================
+        // =========================================
+        // 敵・クロスヘアへの基本方向
+        // =========================================
 
         Vector2 baseDirection =
-            (worldPos - muzzle.position).normalized;
+            (targetPosition - muzzle.position).normalized;
 
-        // 散弾角度追加
+        // =========================================
+        // 散弾角度を追加
+        // =========================================
+
         Vector2 shootDirection =
-            Quaternion.Euler(0f, 0f, angleOffset)
-            * baseDirection;
+            Quaternion.Euler(
+                0f,
+                0f,
+                angleOffset
+            ) * baseDirection;
 
-        // =========================
+        // =========================================
         // 弾生成
-        // =========================
+        // =========================================
 
         GameObject bullet =
             Instantiate(
