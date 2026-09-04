@@ -24,7 +24,7 @@ public class ShopUPButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     [SerializeField] private SkillData[] allSkills;
 
     [Header("最大レベル表示")]
-    [SerializeField] private GameObject maxLevelText;
+    //[SerializeField] private GameObject maxLevelText;
 
     [Header("レベル表示")]
     [SerializeField] private Image[] levelImages;
@@ -41,10 +41,10 @@ public class ShopUPButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     private void Awake()
     {
-        if (maxLevelText != null)
-        {
-            maxLevelText.SetActive(false);
-        }
+        //if (maxLevelText != null)
+        //{
+        //    maxLevelText.SetActive(false);
+        //}
     }
 
     private void Start()
@@ -168,10 +168,10 @@ public class ShopUPButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     }
     private void UpdateMaxLevelText()
     {
-        if (maxLevelText == null)
-            return;
+        //if (maxLevelText == null)
+        //    return;
 
-        maxLevelText.SetActive(data != null && data.IsMaxLevel());
+        //maxLevelText.SetActive(data != null && data.IsMaxLevel());
     }
 
     /// <summary>
@@ -185,10 +185,10 @@ public class ShopUPButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         UpdateMaxLevelText();
 
         // 最大レベル表示を現在のスキルだけに合わせる
-        if (maxLevelText != null)
-        {
-            maxLevelText.SetActive(data.IsMaxLevel());
-        }
+        //if (maxLevelText != null)
+        //{
+        //    maxLevelText.SetActive(data.IsMaxLevel());
+        //}
 
         // =========================
         // まず全部表示状態に戻す
