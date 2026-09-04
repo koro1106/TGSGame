@@ -28,6 +28,10 @@ public class PauseMenu : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            // リザルト表示中はポーズ画面を開かない
+            if (ResultManager.IsResultActive)
+                return;
+
             if (isOpen)
                 CloseAll();
             else
@@ -38,6 +42,10 @@ public class PauseMenu : MonoBehaviour
     // ESCで開く
     public void OpenMenu()
     {
+        // リザルト中はポーズを開かない
+        if (ResultManager.IsResultActive)
+            return;
+
         Time.timeScale = 0f;
         isOpen = true;
         IsPaused = true;
@@ -47,7 +55,6 @@ public class PauseMenu : MonoBehaviour
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-
     }
 
     public void CloseAll()
