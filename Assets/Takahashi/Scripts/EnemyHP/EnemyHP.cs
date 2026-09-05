@@ -494,6 +494,13 @@ public class EnemyHP : MonoBehaviour
             move.HideShadow();
         }
 
+        RabitEnemyMove rabitMove = GetComponent<RabitEnemyMove>();
+        if (rabitMove != null)
+        {
+            rabitMove.HideShadow();
+        }
+
+
         HideHPBar();
 
         if (ComboManager.instance != null)
