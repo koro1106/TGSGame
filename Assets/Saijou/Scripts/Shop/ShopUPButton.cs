@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections;
 using UnityEngine.UI;
+using TMPro;
 
 /// <summary>
 /// 属性弾ダメージUP＆属性弾発生確率UP
@@ -35,21 +36,17 @@ public class ShopUPButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     // 取得済み状態
     [SerializeField] private Sprite levelOnSprite;
 
+    [Header("トータルスコア")]
+    [SerializeField] private TextMeshProUGUI totalScore;
+
     [SerializeField] ExpUIAnimation expUIAnimation;
     [SerializeField] UIAnimation uiAnimation;
     [SerializeField] NormalExpText normalExpText;
 
-    private void Awake()
-    {
-        //if (maxLevelText != null)
-        //{
-        //    maxLevelText.SetActive(false);
-        //}
-    }
-
     private void Start()
     {
         UpdateLevelImages();
+        UpdateTotalScore();
     }
 
     /// <summary>
@@ -91,6 +88,9 @@ public class ShopUPButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
         // レベル画像を更新
         UpdateLevelImages();
+
+        // トータルスコアを更新
+        UpdateTotalScore();
 
         // レベルアップしたダイヤを演出
         PlayLevelUpAnimation();
@@ -377,4 +377,17 @@ public class ShopUPButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         target.localRotation = originalRotation;
     }
 
+    /// <summary>
+    /// スキルレベルに応じてトータルスコアを更新
+    /// Lv1 = 10、Lv2 = 20、Lv3 = 30...
+    /// </summary>
+    private void UpdateTotalScore()
+    {
+        if (totalScore == null || data == null)
+            return;
+
+        int score = data.level * 10;
+
+        totalScore.text = score.ToString();
+    }
 }

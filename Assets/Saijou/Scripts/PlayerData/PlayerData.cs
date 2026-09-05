@@ -6,6 +6,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "PlayerData")]
 public class PlayerData : ScriptableObject
 {
+    // 経験値最大値
+    public const int MaxExp = 9999;
+
     public int currentExp_1; // 現在の経験値_1
     public int currentExp_2; // 現在の経験値_2
     public int currentExp_3; // 現在の経験値_3

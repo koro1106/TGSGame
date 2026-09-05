@@ -511,10 +511,13 @@ public class DropBounce : MonoBehaviour
 
         if (playerData != null)
         {
-            playerData.currentExp_1 += addExp1;
-            playerData.currentExp_2 += addExp2;
-            playerData.currentExp_3 += addExp3;
-            playerData.currentPreExp += addPreExp;
+            playerData.currentExp_1 = Mathf.Min(playerData.currentExp_1 + addExp1,PlayerData.MaxExp);
+
+            playerData.currentExp_2 = Mathf.Min(playerData.currentExp_2 + addExp2,PlayerData.MaxExp);
+
+            playerData.currentExp_3 = Mathf.Min(playerData.currentExp_3 + addExp3,PlayerData.MaxExp);
+
+            playerData.currentPreExp = Mathf.Min(playerData.currentPreExp + addPreExp, PlayerData.MaxExp);
         }
 
 
