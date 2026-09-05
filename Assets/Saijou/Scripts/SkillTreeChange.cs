@@ -15,13 +15,13 @@ public class SkillTreeChange : MonoBehaviour
 
     public bool isShop = false; // ショップが開かれているか
 
-    [SerializeField] UIDrag uIDrag;
-
     public void OnSkilTreeChangeButton()
     {
         // セーブ
         SaveManager.Save(playerData, allSkills);
-        StartCoroutine(PlayAnimationAndLoad());
+        //StartCoroutine(PlayAnimationAndLoad());
+        // シーン移動
+        SceneManager.LoadScene(sceneName);
     }
 
     // ショップに移動
@@ -29,9 +29,10 @@ public class SkillTreeChange : MonoBehaviour
     {
         // セーブ
         SaveManager.Save(playerData, allSkills);
-        StartCoroutine(PlayAnimationAndLoad());
+        //StartCoroutine(PlayAnimationAndLoad());
+        // シーン移動
+        SceneManager.LoadScene(sceneName);
         isShop = true;
-        uIDrag.UpdateButtonAlpha();
     }
     IEnumerator PlayAnimationAndLoad()
     {

@@ -11,7 +11,7 @@ public class MouseFollow : MonoBehaviour
         canvas = GetComponentInParent<Canvas>();
 
         Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     private void Update()
@@ -21,7 +21,8 @@ public class MouseFollow : MonoBehaviour
 
         Vector2 localPosition;
 
-        RectTransform canvasRect = canvas.GetComponent<RectTransform>();
+        RectTransform canvasRect =
+            canvas.GetComponent<RectTransform>();
 
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvasRect,

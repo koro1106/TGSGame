@@ -5264,6 +5264,7 @@ GameObject:
   - component: {fileID: 521492879}
   - component: {fileID: 521492878}
   - component: {fileID: 521492877}
+  - component: {fileID: 521492881}
   m_Layer: 5
   m_Name: SkillTreeBackButton
   m_TagString: Untagged
@@ -5306,7 +5307,7 @@ MonoBehaviour:
   uiAnimation: {fileID: 2102264109}
   targetButton: {fileID: 521492876}
   sceneName: MainStageSkillTreeScene
-  animationTime: 0.2
+  animationTime: 0.5
   allSkills:
   - {fileID: 11400000, guid: 3df914e848c3dad4dabfd87295df0bf3, type: 2}
   - {fileID: 11400000, guid: 80e45135463560e449951842958b6499, type: 2}
@@ -5410,7 +5411,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 92039174e1cbd2348b24805394535c42, type: 2}
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   isShop: 0
-  uIDrag: {fileID: 0}
 --- !u!114 &521492878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5505,6 +5505,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 521492875}
   m_CullTransparentMesh: 1
+--- !u!114 &521492881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 521492875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a29acbca5c71f89499885655e498cfc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverEffect
+  hoverScale: 1.1
+  speed: 25
 --- !u!1 &524347084
 GameObject:
   m_ObjectHideFlags: 0
@@ -10410,7 +10424,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 92039174e1cbd2348b24805394535c42, type: 2}
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   isShop: 0
-  uIDrag: {fileID: 0}
 --- !u!114 &887848048
 MonoBehaviour:
   m_ObjectHideFlags: 0

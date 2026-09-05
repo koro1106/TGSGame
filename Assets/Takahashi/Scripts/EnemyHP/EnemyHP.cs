@@ -302,9 +302,10 @@ public class EnemyHP : MonoBehaviour
 
         foreach (DropItem item in dropItems)
         {
-            float finalChance = item.chance + stats.expDroprate;
+            float finalChance = item.chance ;
             total += finalChance;
 
+            Debug.Log("トータル経験値ドロップ率" + total);
             if (rand <= total)
             {
                 return item.prefab;
@@ -523,7 +524,7 @@ public class EnemyHP : MonoBehaviour
 
             if (drop != null)
             {
-                int count = 1;
+                int count = stats.expDroprate;
 
                 if (Random.Range(0f, 100f) < 50f)
                 {

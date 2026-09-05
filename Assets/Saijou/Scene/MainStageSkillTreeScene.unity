@@ -229,7 +229,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &20106984
 RectTransform:
   m_ObjectHideFlags: 0
@@ -246,7 +246,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 384, y: -69}
+  m_AnchoredPosition: {x: 163, y: -69}
   m_SizeDelta: {x: 235, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &20106986
@@ -609,8 +609,9 @@ MonoBehaviour:
   skillTreeOutline: {fileID: 812543380}
   prestigeOutline: {fileID: 20106990}
   shopOutline: {fileID: 2055902823}
-  isPrestige: 0
+  isPrestige: 1
   skillTreeChange: {fileID: 2055902822}
+  dragSpeed: 0.5
 --- !u!114 &26492056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4043,14 +4044,14 @@ RectTransform:
   m_GameObject: {fileID: 366041530}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
+  m_LocalScale: {x: 1.2000002, y: 1.2000002, z: 1.2000002}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 863517693}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -87, y: -50}
+  m_AnchoredPosition: {x: -87.000015, y: -50}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &366041533
@@ -9378,7 +9379,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &812543375
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9948,8 +9949,8 @@ RectTransform:
   - {fileID: 2055902817}
   - {fileID: 307618406}
   - {fileID: 1008782215}
-  - {fileID: 1523687444}
   - {fileID: 366041531}
+  - {fileID: 1523687444}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -14020,7 +14021,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3df914e848c3dad4dabfd87295df0bf3, type: 2}
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   isShop: 0
-  uIDrag: {fileID: 0}
 --- !u!114 &1182972335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24305,7 +24305,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2055902817
 RectTransform:
   m_ObjectHideFlags: 0
@@ -24322,7 +24322,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -277.96497, y: 474}
+  m_AnchoredPosition: {x: -480, y: 474}
   m_SizeDelta: {x: 230, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2055902818
@@ -24448,7 +24448,7 @@ MonoBehaviour:
   uiAnimation: {fileID: 26492057}
   targetButton: {fileID: 2055902817}
   sceneName: ShopScene
-  animationTime: 0.3
+  animationTime: 0.5
   allSkills:
   - {fileID: 11400000, guid: 3df914e848c3dad4dabfd87295df0bf3, type: 2}
   - {fileID: 11400000, guid: 80e45135463560e449951842958b6499, type: 2}
@@ -24552,7 +24552,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 92039174e1cbd2348b24805394535c42, type: 2}
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   isShop: 0
-  uIDrag: {fileID: 26492055}
 --- !u!114 &2055902823
 MonoBehaviour:
   m_ObjectHideFlags: 0
