@@ -193,12 +193,20 @@ public class ExpChangeManager : MonoBehaviour
         if (useExp01)
         {
             playerData.currentExp_1 -= getExp * 100;
-            playerData.currentExp_2 += getExp;
+
+            // Exp02は9999を上限にする
+            playerData.currentExp_2 = Mathf.Min(
+                playerData.currentExp_2 + getExp,
+                PlayerData.MaxExp);
         }
         else if (useExp02)
         {
             playerData.currentExp_2 -= getExp * 10;
-            playerData.currentExp_3 += getExp;
+
+            // Exp03は9999を上限にする
+            playerData.currentExp_3 = Mathf.Min(
+                playerData.currentExp_3 + getExp,
+                PlayerData.MaxExp);
         }
 
         normalExpText.UpdateNormalExpText();
