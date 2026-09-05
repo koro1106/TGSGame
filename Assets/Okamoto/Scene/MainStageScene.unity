@@ -24787,13 +24787,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemies:
   - prefab: {fileID: 7801636748621657906, guid: 799c801ec8b355a48bcf47943e3e85c0, type: 3}
-    weight: 70
+    weight: 100
   enemyA:
     prefab: {fileID: 5658466300848699742, guid: 4451329126ffa93498ccea07ae4d06a7, type: 3}
-    weight: 50
+    weight: 70
   enemyB:
     prefab: {fileID: 1514281451404711565, guid: b79716df06544bd4c942bc9f6be16c93, type: 3}
-    weight: 30
+    weight: 50
   enemyC:
     prefab: {fileID: 4832302078142527342, guid: 0aba12c3835267542a9c75abdf6f3dda, type: 3}
     weight: 40

@@ -65,7 +65,7 @@ public class PlayerStats : ScriptableObject
         enemySpawnWeightBonus = 1;
         criticalrate = 0;
         criticalDamage = 0;
-        expDroprate = 0;
+        expDroprate = 1;
         expDroprateDouble = 0;
         collectionRange = 0;
         preExpTime = 0;

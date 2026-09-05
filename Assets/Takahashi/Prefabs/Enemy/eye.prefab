@@ -511,6 +511,8 @@ MonoBehaviour:
   rightHandDownAngle: 25
   leftHandUpAngle: 15
   leftHandDownAngle: -15
+  spawnAreaTopRatio: 0.45
+  spawnAreaBottomRatio: 1
 --- !u!114 &6318681889434942323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -534,9 +536,9 @@ MonoBehaviour:
   rotationSpeed: 1080
   dropItems:
   - prefab: {fileID: 4247095691041555197, guid: 26d748848edfdd6449eec78b67fa87f4, type: 3}
-    chance: 70
+    chance: 80
   - prefab: {fileID: 4694620910833782341, guid: 46de89cdb13085c408ca2d94137493c2, type: 3}
-    chance: 60
+    chance: 70
   dropCount: 6
   damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
   normalDamageColor: {r: 1, g: 1, b: 1, a: 1}

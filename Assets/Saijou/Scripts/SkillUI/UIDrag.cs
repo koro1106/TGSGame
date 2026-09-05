@@ -25,12 +25,15 @@ public class UIDrag : MonoBehaviour
     public bool isPrestige = true; 
 
     [SerializeField] SkillTreeChange skillTreeChange;
+
+    [SerializeField] private float dragSpeed = 0.5f;
     // プレステージ位置へ移動
     public void MoveToPrestige()
     {
         target.anchoredPosition = new Vector2(-16f, -4100f);
         isPrestige = false;
-        UpdateButtonAlpha();
+        skillTreeButon.SetActive(true);
+        prestigeButon.SetActive(false);
     }
 
     // 通常位置へ移動
@@ -38,7 +41,8 @@ public class UIDrag : MonoBehaviour
     {
         target.anchoredPosition = new Vector2(26f, 8f);
         isPrestige = true;
-        UpdateButtonAlpha();
+        skillTreeButon.SetActive(false);
+        prestigeButon.SetActive(true);
     }
 
     void Start()
@@ -46,8 +50,6 @@ public class UIDrag : MonoBehaviour
         skillTreeImage = skillTreeButon.GetComponent<Image>();
         prestigeImage = prestigeButon.GetComponent<Image>();
         shopImage = shopButon.GetComponent<Image>();
-
-        UpdateButtonAlpha();
     }
 
     void Update()
@@ -85,43 +87,6 @@ public class UIDrag : MonoBehaviour
 
                 lastMousePos = currentMousePos;
             }
-        }
-    }
-
-    public void UpdateButtonAlpha()
-    {
-        if (isPrestige)
-        {
-            skillTreeImage.color = new Color32(100, 100, 100, 255);
-            prestigeImage.color = new Color32(255, 255, 255, 255);
-            shopImage.color = new Color32(100, 100, 100, 255);
-
-            // 枠
-            //skillTreeOutline.enabled = false;
-            //prestigeOutline.enabled = true;
-            //shopOutline.enabled = false;
-        }
-        else
-        {
-            skillTreeImage.color = new Color32(255, 255, 255, 255);
-            prestigeImage.color = new Color32(100, 100, 100, 255);
-            shopImage.color = new Color32(100, 100, 100, 255);
-
-            // 枠
-            //skillTreeOutline.enabled = true;
-            //prestigeOutline.enabled = false;
-            //shopOutline.enabled = false;
-        }
-        if(skillTreeChange.isShop)
-        {
-            skillTreeImage.color = new Color32(100, 100, 100, 255);
-            prestigeImage.color = new Color32(100, 100, 100, 255);
-            shopImage.color = new Color32(255, 255, 255, 255);
-
-            // 枠
-        //    skillTreeOutline.enabled = false;
-        //    prestigeOutline.enabled = false;
-        //    shopOutline.enabled = true;
         }
     }
 }
