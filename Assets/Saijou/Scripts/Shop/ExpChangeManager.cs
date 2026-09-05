@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,6 +39,12 @@ public class ExpChangeManager : MonoBehaviour
     // 変換に使用するExp
     private bool useExp01 = false;
     private bool useExp02 = false;
+
+    [Header("ウィンドウアニメーション")]
+    [SerializeField] private RectTransform expChangeWindowRect;
+
+    [SerializeField] private float openDuration = 0.2f;
+    [SerializeField] private float closeDuration = 0.15f;
     void Update()
     {
         if(playerStats.shopExpChange)
@@ -52,23 +59,32 @@ public class ExpChangeManager : MonoBehaviour
     // 素材変換閉じる
     public void OnClose()
     {
-        expChangeWindow.SetActive(false);
+        if (windowAnimationCoroutine != null)
+            StopCoroutine(windowAnimationCoroutine);
+
         expChangeOpening = false;
 
         Color color = BlackImage.color;
         color.a = 0f;
         BlackImage.color = color;
+
+        windowAnimationCoroutine = StartCoroutine(CloseWindowAnimation());
     }
 
     // 素材変換開ける
     public void OnExpChangeOpen()
     {
+        if (windowAnimationCoroutine != null)
+            StopCoroutine(windowAnimationCoroutine);
+
         expChangeWindow.SetActive(true);
         expChangeOpening = true;
 
         Color color = BlackImage.color;
         color.a = 0.7f;
         BlackImage.color = color;
+
+        windowAnimationCoroutine = StartCoroutine(OpenWindowAnimation());
     }
 
     // =========================
@@ -240,5 +256,64 @@ public class ExpChangeManager : MonoBehaviour
 
         // 獲得数を表示
         UpdateGetExpText();
+    }
+
+    private Coroutine windowAnimationCoroutine;
+
+    private IEnumerator OpenWindowAnimation()
+    {
+        float time = 0f;
+
+        // 最初は少し小さく
+        expChangeWindowRect.localScale = Vector3.one * 0.8f;
+
+        while (time < openDuration)
+        {
+            time += Time.unscaledDeltaTime;
+
+            float t = Mathf.Clamp01(time / openDuration);
+
+            // 最初速く、最後ゆっくり
+            t = 1f - Mathf.Pow(1f - t, 3f);
+
+            expChangeWindowRect.localScale = Vector3.Lerp(
+                Vector3.one * 0.8f,
+                Vector3.one,
+                t
+            );
+
+            yield return null;
+        }
+
+        expChangeWindowRect.localScale = Vector3.one;
+    }
+
+    private IEnumerator CloseWindowAnimation()
+    {
+        float time = 0f;
+
+        Vector3 startScale = expChangeWindowRect.localScale;
+
+        while (time < closeDuration)
+        {
+            time += Time.unscaledDeltaTime;
+
+            float t = Mathf.Clamp01(time / closeDuration);
+
+            // 閉じるときは少し速め
+            t = t * t;
+
+            expChangeWindowRect.localScale = Vector3.Lerp(
+                startScale,
+                Vector3.one * 0.8f,
+                t
+            );
+
+            yield return null;
+        }
+
+        expChangeWindowRect.localScale = Vector3.one * 0.8f;
+
+        expChangeWindow.SetActive(false);
     }
 }

@@ -55,6 +55,8 @@ public class SkillData : ScriptableObject
     public bool isShopUnlocked = false; // ショップスキル解放用
     public bool isShopButton = false; // ショップボタンかどうか
 
+    [Header("ショップ人形画像")]
+    public Sprite dollImage;
     public void ResetData() // リセット用
     {
         level = 0;

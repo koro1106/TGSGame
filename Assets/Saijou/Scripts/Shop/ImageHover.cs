@@ -13,8 +13,8 @@ public class ImageHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     // ImageのRectTransform
     private RectTransform rectTransform;
 
-    // 元の大きさを保存しておく
-    private Vector3 originalScale;
+    [Header("通常サイズ")]
+    [SerializeField] private Vector3 originalScale = Vector3.one;
 
     // ホバー時の拡大率（1.1 = 110%）
     [SerializeField] private float hoverScale = 1.1f;
@@ -25,13 +25,15 @@ public class ImageHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private void Awake()
     {
-        // RectTransformを取得
+        //// RectTransformを取得
+        //rectTransform = GetComponent<RectTransform>();
+        //// 元のサイズを保存
+        //originalScale = rectTransform.localScale;
+        //// 最初は枠線を非表示にする
+        //outline.enabled = false;
+
         rectTransform = GetComponent<RectTransform>();
 
-        // 元のサイズを保存
-        originalScale = rectTransform.localScale;
-
-        // 最初は枠線を非表示にする
         outline.enabled = false;
     }
 
