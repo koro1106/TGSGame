@@ -33,3 +33,4 @@ MonoBehaviour:
   description: "\u9396\u306E\u529B\u3092\u5BBF\u3057\u305F\u4EBA\u5F62\n\u9396\u5C5E\u6027\u5F3E\u3092\u89E3\u653E"
   isShopUnlocked: 0
   isShopButton: 1
+  dollImage: {fileID: 4013705921653316064, guid: 5a66d506708f36c48926e83e2c2d9fa5, type: 3}

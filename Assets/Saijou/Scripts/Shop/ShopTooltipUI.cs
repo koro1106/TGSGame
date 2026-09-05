@@ -1,6 +1,7 @@
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 /// <summary>
 /// ショップツールチップUI
 /// </summary>
@@ -19,6 +20,9 @@ public class ShopTooltipUI : MonoBehaviour
 
     [Header("最大レベル表示")]
     [SerializeField] private GameObject maxLevelText;
+
+    [Header("人形画像")]
+    [SerializeField] private Image dollImage;
 
     // 現在表示しているスキル
     private SkillData currentSkill;
@@ -93,7 +97,38 @@ public class ShopTooltipUI : MonoBehaviour
         // 必要素材を表示
         UpdateCostText(skill, showCost);
 
+        // 人形画像を変更
+        if (dollImage != null)
+        {
+            dollImage.sprite = skill.dollImage;
+            dollImage.gameObject.SetActive(skill.dollImage != null);
+        }
+
         gameObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// スキルごとに人形画像を切り替える
+    /// </summary>
+    private void UpdateDollImage(SkillData skill)
+    {
+        if (dollImage == null)
+            return;
+
+        // 現在表示している人形を削除
+        foreach (Transform child in dollImage.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // スキルに設定された人形を生成
+        if (skill.dollImage != null)
+        {
+            Instantiate(
+                skill.dollImage,
+                dollImage.transform
+            );
+        }
     }
 
     /// <summary>
