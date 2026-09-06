@@ -612,6 +612,7 @@ MonoBehaviour:
   isPrestige: 1
   skillTreeChange: {fileID: 2055902822}
   dragSpeed: 0.5
+  playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
 --- !u!114 &26492056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -694,6 +695,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopManager
   playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   shopButton: {fileID: 2055902816}
+  fadeSpeed: 1.35
+  popScale: 1.2
+  popDuration: 0.05
+  shopImage: {fileID: 2055902819}
+  isClicked: 0
 --- !u!114 &26492061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -823,6 +829,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PrestigeManager
   playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   prestigeButton: {fileID: 20106983}
+  fadeSpeed: 1.35
+  popScale: 1.2
+  popDuration: 0.05
+  prestigeImage: {fileID: 20106987}
 --- !u!1 &26498240
 GameObject:
   m_ObjectHideFlags: 0
@@ -2556,8 +2566,8 @@ Transform:
   m_GameObject: {fileID: 229777660}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0082, y: 0.0053, z: 0}
-  m_LocalScale: {x: 0.94, y: 0.94, z: 0.94}
+  m_LocalPosition: {x: -0.0082, y: -0.034, z: 0}
+  m_LocalScale: {x: 0.94, y: 0.9764296, z: 0.94}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -14021,6 +14031,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3df914e848c3dad4dabfd87295df0bf3, type: 2}
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   isShop: 0
+  shopManager: {fileID: 0}
 --- !u!114 &1182972335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24552,6 +24563,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 92039174e1cbd2348b24805394535c42, type: 2}
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   isShop: 0
+  shopManager: {fileID: 26492060}
 --- !u!114 &2055902823
 MonoBehaviour:
   m_ObjectHideFlags: 0
