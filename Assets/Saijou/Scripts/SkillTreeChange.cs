@@ -15,11 +15,11 @@ public class SkillTreeChange : MonoBehaviour
 
     public bool isShop = false; // ショップが開かれているか
 
+    [SerializeField] private ShopManager shopManager;
     public void OnSkilTreeChangeButton()
     {
         // セーブ
         SaveManager.Save(playerData, allSkills);
-        //StartCoroutine(PlayAnimationAndLoad());
         // シーン移動
         SceneManager.LoadScene(sceneName);
     }
@@ -27,22 +27,16 @@ public class SkillTreeChange : MonoBehaviour
     // ショップに移動
     public void MoveToShop()
     {
+        //// ショップボタンの点滅を止める
+        if (shopManager != null)
+        {
+            shopManager.OnShopButtonClick();
+        }
         // セーブ
         SaveManager.Save(playerData, allSkills);
-        //StartCoroutine(PlayAnimationAndLoad());
         // シーン移動
         SceneManager.LoadScene(sceneName);
+              
         isShop = true;
-    }
-    IEnumerator PlayAnimationAndLoad()
-    {
-        // バウンド演出再生
-        uiAnimation.PlayBounce(targetButton);
-
-        // アニメーション終了待ち
-        yield return new WaitForSecondsRealtime(animationTime);
-
-        // シーン移動
-        SceneManager.LoadScene(sceneName);
     }
 }

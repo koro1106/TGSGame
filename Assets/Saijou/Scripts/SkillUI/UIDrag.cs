@@ -27,6 +27,7 @@ public class UIDrag : MonoBehaviour
     [SerializeField] SkillTreeChange skillTreeChange;
 
     [SerializeField] private float dragSpeed = 0.5f;
+    [SerializeField] PlayerStats playerStats;
     // プレステージ位置へ移動
     public void MoveToPrestige()
     {
@@ -34,6 +35,8 @@ public class UIDrag : MonoBehaviour
         isPrestige = false;
         skillTreeButon.SetActive(true);
         prestigeButon.SetActive(false);
+        // プレステージボタンを一度押したことにする
+        playerStats.prestigeButtonClicked = true;
     }
 
     // 通常位置へ移動

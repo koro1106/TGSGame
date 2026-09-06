@@ -56,7 +56,8 @@ public class PlayerStats : ScriptableObject
     public bool shopElementalBulletChance = false; // 人形館で属性弾確率上昇解放
     public bool shopExpChange = false;             // 人形館で素材変化解放
 
-
+    public bool shopButtonClicked = false;
+    public bool prestigeButtonClicked = false;
     public void ResetData()
     {
         bulletDamage = 10;
@@ -106,6 +107,8 @@ public class PlayerStats : ScriptableObject
         shopElementalBulletChance = false;
         shopExpChange = false;
 
+        shopButtonClicked = false;
+        prestigeButtonClicked = false;
         // 属性弾リストも初期化
         unlockedElementalBullets = new GameObject[1];
         unlockedElementalBullets[0] = defaultBulletPrefab;
