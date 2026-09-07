@@ -2989,6 +2989,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3367bd5547d5a0c40b3fb1c5c434ea6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunController
+  crosshairTopLimit: 200
   gunPivot: {fileID: 1328722430}
   muzzle: {fileID: 1936952536}
   bulletPrefabs: []
@@ -8059,7 +8060,7 @@ MonoBehaviour:
   damageBlinkInterval: 0.1
   damageBlinkObject: {fileID: 173762201}
   gunController: {fileID: 173762207}
-  enableBlink: 0
+  enableBlink: 1
   blinkMoveSpeed: 4000
   blinkDuration: 0.07
   blinkCooldown: 2

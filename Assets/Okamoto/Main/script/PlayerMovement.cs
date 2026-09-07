@@ -143,6 +143,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Awake()
     {
+
+        blinkCooldownTimer = 0f;
         Instance = this;
         rb = GetComponent<Rigidbody2D>();
         cam = Camera.main;
@@ -197,30 +199,23 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // =========================================================
-        // マウスホイールクリックでPlayer移動ON/OFF
+        // ブリンク
         // =========================================================
-
-        if (Input.GetMouseButtonDown(2))
-        {
-            TogglePlayerMovement();
-        }
-
-
-        // ブリンク未開放なら即座に停止
-        if (!playerStats.dash)
-        {
-            isBlinking = false;
-            return;
-        }
 
         // クールダウン
         if (blinkCooldownTimer > 0f)
         {
             blinkCooldownTimer -= Time.deltaTime;
+
+            if (blinkCooldownTimer < 0f)
+            {
+                blinkCooldownTimer = 0f;
+            }
         }
 
         // 右クリックでブリンク開始
         if (
+            enableBlink &&
             Input.GetMouseButtonDown(1) &&
             blinkCooldownTimer <= 0f &&
             !isDead &&
@@ -231,7 +226,6 @@ public class PlayerMovement : MonoBehaviour
             StartBlink();
         }
     }
-
 
 
 
@@ -335,6 +329,20 @@ public class PlayerMovement : MonoBehaviour
     {
         blinkTimer -= Time.fixedDeltaTime;
 
+        // ブリンク終了
+        if (blinkTimer <= 0f)
+        {
+            blinkTimer = 0f;
+            isBlinking = false;
+
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector2.zero;
+            }
+
+            return;
+        }
+
         rb.MovePosition(
             rb.position +
             blinkDirection *
@@ -349,9 +357,9 @@ public class PlayerMovement : MonoBehaviour
 
         // ブリンク中もアニメーション
         UpdatePlayerAnimation(
-     true,
-     blinkMoveSpeed
- );
+            true,
+            blinkMoveSpeed
+        );
     }
 
 
@@ -550,7 +558,13 @@ public class PlayerMovement : MonoBehaviour
 
     void StartBlink()
     {
+        if (!enableBlink)
+            return;
+
         if (gunController == null)
+            return;
+
+        if (rb == null)
             return;
 
         // ブリンク開始時のクロスヘア位置
@@ -571,9 +585,12 @@ public class PlayerMovement : MonoBehaviour
         // ブリンク時間
         blinkTimer = blinkDuration;
 
-
         // クールダウン開始
-        blinkCooldownTimer = blinkCooldown - playerStats.dashCT;
+        blinkCooldownTimer =
+            Mathf.Max(
+                0f,
+                blinkCooldown - playerStats.dashCT
+            );
     }
 
     void UpdatePlayerImageDirection(

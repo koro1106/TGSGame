@@ -268,7 +268,7 @@ public class TargetRange : MonoBehaviour
 
 
             // ƒNƒƒXƒwƒA”»’è”ÍˆÍ
-            if (distance > 50f)
+            if (distance > 130f)
                 continue;
 
 
