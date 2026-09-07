@@ -21269,7 +21269,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 739, y: -279.63}
+  m_AnchoredPosition: {x: 888, y: -273}
   m_SizeDelta: {x: 550, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1385113745
@@ -24790,10 +24790,10 @@ MonoBehaviour:
     weight: 100
   enemyA:
     prefab: {fileID: 5658466300848699742, guid: 4451329126ffa93498ccea07ae4d06a7, type: 3}
-    weight: 70
+    weight: 80
   enemyB:
-    prefab: {fileID: 1514281451404711565, guid: b79716df06544bd4c942bc9f6be16c93, type: 3}
-    weight: 50
+    prefab: {fileID: 4832302078142527342, guid: 0aba12c3835267542a9c75abdf6f3dda, type: 3}
+    weight: 70
   enemyC:
     prefab: {fileID: 4832302078142527342, guid: 0aba12c3835267542a9c75abdf6f3dda, type: 3}
     weight: 40

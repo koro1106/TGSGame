@@ -84,7 +84,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.49023342, g: 0.8679245, b: 0.26610893, a: 1}
+  m_Color: {r: 0.79578245, g: 1, b: 0.6745283, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -192,7 +192,10 @@ MonoBehaviour:
   addExp1: 0
   addExp2: 0
   addExp3: 0
+  addExp4: 0
   addPreExp: 1
+  dropItemType: 0
+  resultItemAmount: 1
   collectDistance: 90
   collectDisTotal: 0
   stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
