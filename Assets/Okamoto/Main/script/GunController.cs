@@ -8,6 +8,10 @@ using UnityEngine.Playables;
 
 public class GunController : MonoBehaviour
 {
+
+    [Header("クロスヘア移動範囲")]
+    public float crosshairTopLimit = 200f;
+
     public Transform gunPivot;
     public Transform muzzle;
 
@@ -836,8 +840,17 @@ public class GunController : MonoBehaviour
 
         crosshairPos += new Vector3(mouseX, mouseY, 0f) * sensitivity * 25f;
 
-        crosshairPos.x = Mathf.Clamp(crosshairPos.x, 0, Screen.width);
-        crosshairPos.y = Mathf.Clamp(crosshairPos.y, 0, Screen.height);
+        crosshairPos.x = Mathf.Clamp(
+     crosshairPos.x,
+     0,
+     Screen.width
+ );
+
+        crosshairPos.y = Mathf.Clamp(
+            crosshairPos.y,
+            0,
+            Screen.height - crosshairTopLimit
+        );
 
         UpdateCrosshairPosition(); // ★ World/Overlay両対応の反映処理に変更
 
