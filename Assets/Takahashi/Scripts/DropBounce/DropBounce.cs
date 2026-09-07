@@ -139,6 +139,9 @@ public class DropBounce : MonoBehaviour
 
     private bool finished;
 
+    [Header("素材の価値")]
+    public bool isValuable = false;
+    [SerializeField] private GameObject valuableChild;
     // =========================================================
     // Start
     // =========================================================
@@ -607,6 +610,19 @@ public class DropBounce : MonoBehaviour
         if (shadow != null)
         {
             Destroy(shadow.gameObject);
+        }
+    }
+
+    public void SetValuable(bool value)
+    {
+        isValuable = value;
+
+        // 高価値素材は10個分の価値
+        resultItemAmount = value ? 10 : 1;
+
+        if (valuableChild != null)
+        {
+            valuableChild.SetActive(isValuable);
         }
     }
 }

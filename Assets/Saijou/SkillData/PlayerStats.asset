@@ -18,7 +18,7 @@ MonoBehaviour:
   enemySpawnWeightBonus: 1
   criticalrate: 0
   criticalDamage: 0
-  expDroprate: 1
+  expDroprate: 15
   expDroprateDouble: 0
   collectionRange: 0
   preExpTime: 0
@@ -40,7 +40,7 @@ MonoBehaviour:
   shotgunBulletUnlocked: 0
   sniperUnlocked: 0
   sniperBulletUnlocked: 0
-  enemyAUnlocked: 0
+  enemyAUnlocked: 1
   enemyBUnlocked: 0
   enemyCUnlocked: 0
   recoveryBullet: 0
@@ -55,3 +55,5 @@ MonoBehaviour:
   shopEffectBulletDamage: 0
   shopElementalBulletChance: 0
   shopExpChange: 0
+  shopButtonClicked: 0
+  prestigeButtonClicked: 0

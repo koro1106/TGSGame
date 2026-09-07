@@ -174,25 +174,29 @@ MonoBehaviour:
   rotationSpeed: 1080
   dropItems:
   - prefab: {fileID: 5214269435395224199, guid: 804cf549acb99c949910006ff076e73f, type: 3}
-    chance: 70
-  - prefab: {fileID: 4694620910833782341, guid: 46de89cdb13085c408ca2d94137493c2, type: 3}
-    chance: 50
-  - prefab: {fileID: 4247095691041555197, guid: 26d748848edfdd6449eec78b67fa87f4, type: 3}
-    chance: 40
+    chance: 100
   dropCount: 3
   damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
+  normalDamageColor: {r: 1, g: 1, b: 1, a: 1}
+  poisonDamageColor: {r: 0.6, g: 0.2, b: 0.8, a: 1}
+  thunderDamageColor: {r: 0.4, g: 0.9, b: 1, a: 1}
+  explosionDamageColor: {r: 1, g: 0.15, b: 0.15, a: 1}
   hpSlider: {fileID: 7221829426392492471}
   hpDelaySlider: {fileID: 2779994332043503801}
   useRadialFill: 1
   radialOrigin: 2
   radialClockwise: 0
   hpBarRoot: {fileID: 8917478143029826477, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
+  hpBarPopupScale: 1.3
+  hpBarPopupTiltAngle: 12
+  hpBarPopupDuration: 0.15
   hitFlashColor: {r: 1, g: 0.5660378, b: 0.5660378, a: 1}
   hitFlashDuration: 0.08
   hpBarSmoothSpeed: 8
   hpBarDelayTime: 0.1
   hpBarDelaySpeed: 2.5
   stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
+  deadTag: Untagged
 --- !u!1001 &9080655910590193178
 PrefabInstance:
   m_ObjectHideFlags: 0
