@@ -70,10 +70,7 @@ public class PoisonBullet : Bullet
             return;
 
         // ダメージ
-        int totalDamage =
-    hitDamage +
-    stats.bulletDamage +
-    stats.effectBulletDamage;
+        int totalDamage =(hitDamage +stats.bulletDamage + stats.effectBulletDamage);
 
         // ========================
         // ケアパッケージ

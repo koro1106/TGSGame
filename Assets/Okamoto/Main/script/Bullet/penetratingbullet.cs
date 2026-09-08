@@ -24,10 +24,7 @@ public class penetratingbullet : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         // ダメージを最初に1回だけ計算
-        int totalDamage =
-    damage +
-    stats.bulletDamage +
-    stats.effectBulletDamage;
+        int totalDamage =(damage + stats.bulletDamage + stats.effectBulletDamage);
 
         // ========================
         // ケアパッケージ
