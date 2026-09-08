@@ -3671,8 +3671,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::OptionMenu
   animator: {fileID: 970463151}
   menuSelector: {fileID: 1421987730}
-  volumeProfile: {fileID: 0}
-  vignetteMoveTime: 0.3
 --- !u!95 &970463151
 Animator:
   serializedVersion: 7
@@ -3709,8 +3707,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::OptionMenu
   animator: {fileID: 970463151}
   menuSelector: {fileID: 1421987730}
-  volumeProfile: {fileID: 0}
-  vignetteMoveTime: 0.3
 --- !u!1001 &977857893
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3968,9 +3964,9 @@ Transform:
   m_GameObject: {fileID: 1093775042}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -280.24277, y: -74.69642, z: -3756.3748}
-  m_LocalScale: {x: 41.737495, y: 41.737495, z: 41.737495}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: -280.24277, y: -54.4, z: -3756.3748}
+  m_LocalScale: {x: 30.11, y: 30.11, z: 30.11}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 970463149}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5193,7 +5189,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -188.3, y: -33.6}
+  m_AnchoredPosition: {x: -185.4, y: -15}
   m_SizeDelta: {x: 252.45, y: 68.15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1550884940
@@ -5396,7 +5392,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -211.1, y: -73.1}
+  m_AnchoredPosition: {x: -210.1, y: -52.9}
   m_SizeDelta: {x: 277.56, y: 84.29}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1626178635
@@ -6624,7 +6620,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -221.7, y: -110.9}
+  m_AnchoredPosition: {x: -221.7, y: -91.6}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2050665937

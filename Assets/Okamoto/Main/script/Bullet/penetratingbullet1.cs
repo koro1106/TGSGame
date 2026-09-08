@@ -29,10 +29,7 @@ public class penetratingbullet1 : MonoBehaviour
         if (enemy == null)
             return;
 
-        int totalDamage =
-    damage +
-    stats.bulletDamage +
-    stats.effectBulletDamage;
+        int totalDamage =(damage + stats.bulletDamage + stats.effectBulletDamage);
 
         // É_ÉÅÅ[ÉW
         enemy.TakeDamage(totalDamage);

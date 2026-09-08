@@ -54,10 +54,7 @@ public class ChainBullet : MonoBehaviour
 
             if (package != null)
             {
-                int totalDamage =
-    damage +
-    stats.bulletDamage +
-    stats.effectBulletDamage;
+                int totalDamage =(damage +stats.bulletDamage +stats.effectBulletDamage);
 
                 package.TakeDamage(totalDamage);
             }
@@ -93,9 +90,7 @@ public class ChainBullet : MonoBehaviour
         List<EnemyHP> hitEnemies =
             new List<EnemyHP>();
 
-        int totalDamage =
-            damage +
-            stats.effectBulletDamage;
+        int totalDamage =(damage +stats.effectBulletDamage);
 
         // ç≈èâÇÃìG
         hitEnemies.Add(startEnemy);
