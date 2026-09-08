@@ -429,11 +429,25 @@ public class GunController : MonoBehaviour
             // =========================
             // 弾データチェック
             // =========================
-            if (ammoPrefabs == null ||
-                ammoPrefabs.Length == 0 ||
-                ammoPrefabs[0] == null)
+            if (ammoPrefabs == null)
             {
-                Debug.LogError("撃つ弾データがありません。");
+                Debug.LogError("ammoPrefabs が null です。");
+                return;
+            }
+
+            if (ammoPrefabs.Length == 0)
+            {
+                Debug.LogError("ammoPrefabs の長さが0です。");
+                return;
+            }
+
+            if (ammoPrefabs[0] == null)
+            {
+                Debug.LogError(
+                    "ammoPrefabs[0] が null です。currentAmmo = "
+                    + currentAmmo
+                );
+
                 return;
             }
 
@@ -587,7 +601,7 @@ public class GunController : MonoBehaviour
             if (!isAmmoSlidePlaying)
             {
                 ammoSlideCoroutine =
-                    StartCoroutine(ProcessAmmoSlideQueue());
+                    StartCoroutine(PlaySingleAmmoSlideAnimation());
             }
 
             // =========================
@@ -1051,26 +1065,32 @@ public class GunController : MonoBehaviour
                 maxAmmo
             );
 
-        for (int i = oldAmmo; i < targetAmmo; i++)
+        int recoverCount = targetAmmo - oldAmmo;
+
+        currentAmmo = targetAmmo;
+
+        for (int index = oldAmmo; index < targetAmmo; index++)
         {
-            if (i < 0 ||
-                i >= ammoSlots.Length ||
-                i >= ammoPrefabs.Length)
+            if (index < 0 ||
+                index >= ammoSlots.Length ||
+                index >= ammoPrefabs.Length)
             {
                 continue;
             }
 
-            AmmoSlot slot = ammoSlots[i];
+            // ★重要
+            // for文のindexをそのままラムダ式で使わない
+            int slotIndex = index;
 
-            // すでに回復中なら飛ばす
+            AmmoSlot slot = ammoSlots[slotIndex];
+
             if (slot.isRecovering)
                 continue;
 
             slot.isRecovering = true;
 
             // =========================================
-            // 回復する弾を決定
-            // 現在の弾データに存在しなければ通常弾
+            // 回復する弾
             // =========================================
 
             AmmoType recoveredType = AmmoType.Normal;
@@ -1078,7 +1098,6 @@ public class GunController : MonoBehaviour
 
             GameObject recoveredPrefab = null;
 
-            // 通常弾Prefab
             if (bulletPrefabs != null &&
                 bulletPrefabs.Length > 0)
             {
@@ -1086,25 +1105,80 @@ public class GunController : MonoBehaviour
             }
 
             // =========================================
-            // ★重要
-            // 実際の弾データも入れる
+            // ★回復する弾にも属性弾を抽選
             // =========================================
 
-            ammoTypes[i] =
-                recoveredType;
+            bool canElement =
+                stats != null &&
+                stats.unlockedElementalBullets != null &&
+                stats.unlockedElementalBullets.Length > 0;
 
-            ammoSprites[i] =
-                recoveredSprite;
+            if (canElement &&
+                Random.value < stats.elementalBulletChance)
+            {
+                GameObject randomPrefab =
+                    stats.unlockedElementalBullets[
+                        Random.Range(
+                            0,
+                            stats.unlockedElementalBullets.Length
+                        )
+                    ];
 
-            ammoPrefabs[i] =
-                recoveredPrefab;
+                if (randomPrefab != null)
+                {
+                    string bulletName = randomPrefab.name;
 
-            // UIスロットの情報も更新
-            slot.ammoType =
-                recoveredType;
+                    if (bulletName.Contains("Lightning"))
+                    {
+                        recoveredType = AmmoType.Lightning;
+                        recoveredSprite = lightningAmmoSprite;
+                        recoveredPrefab = randomPrefab;
+                    }
+                    else if (bulletName.Contains("Gravity"))
+                    {
+                        recoveredType = AmmoType.Gravity;
+                        recoveredSprite = GravityAmmoSprite;
+                        recoveredPrefab = randomPrefab;
+                    }
+                    else if (bulletName.Contains("Bind"))
+                    {
+                        recoveredType = AmmoType.Bind;
+                        recoveredSprite = BindAmmoSprite;
+                        recoveredPrefab = randomPrefab;
+                    }
+                    else if (bulletName.Contains("Poison"))
+                    {
+                        recoveredType = AmmoType.Poison;
+                        recoveredSprite = PoisonAmmoSprite;
+                        recoveredPrefab = randomPrefab;
+                    }
+                    else if (bulletName.Contains("Explosion"))
+                    {
+                        recoveredType = AmmoType.Explosion;
+                        recoveredSprite = ExplosionAmmoSprite;
+                        recoveredPrefab = randomPrefab;
+                    }
+                    else if (bulletName.Contains("Penetrating"))
+                    {
+                        recoveredType = AmmoType.Penetrating;
+                        recoveredSprite = penetratingAmmoSprite;
+                        recoveredPrefab = randomPrefab;
+                    }
+                }
+            }
 
             // =========================================
-            // 元UIを一旦非表示
+            // ★回復する弾のデータを先に入れる
+            // =========================================
+
+            ammoTypes[slotIndex] = recoveredType;
+            ammoSprites[slotIndex] = recoveredSprite;
+            ammoPrefabs[slotIndex] = recoveredPrefab;
+
+            slot.ammoType = recoveredType;
+
+            // =========================================
+            // UIを一旦非表示
             // =========================================
 
             if (slot.image != null)
@@ -1132,38 +1206,37 @@ public class GunController : MonoBehaviour
 
                 if (effect != null)
                 {
+                    // ★ここでもslotIndexを使う
                     effect.Init(
                         recoveredSprite,
                         slot.image.transform.position,
                         slot.image.rectTransform,
                         () =>
                         {
+                            // =================================
+                            // 回復完了
+                            // =================================
+
                             slot.isRecovering = false;
 
-                            // 回復した弾のデータを確定
-                            slot.ammoType =
-                                recoveredType;
+                            // UI
+                            if (slot.image != null)
+                            {
+                                slot.image.sprite = recoveredSprite;
+                                slot.image.enabled = true;
+                            }
 
-                            slot.image.sprite =
-                                recoveredSprite;
+                            slot.ammoType = recoveredType;
 
-                            slot.image.enabled =
-                                true;
+                            // 実弾データ
+                            ammoTypes[slotIndex] = recoveredType;
+                            ammoSprites[slotIndex] = recoveredSprite;
+                            ammoPrefabs[slotIndex] = recoveredPrefab;
 
-                            slot.recoverEffectObject =
-                                null;
+                            slot.recoverEffectObject = null;
 
-                            // 実際の弾データも念のため再設定
-                            ammoTypes[i] =
-                                recoveredType;
-
-                            ammoSprites[i] =
-                                recoveredSprite;
-
-                            ammoPrefabs[i] =
-                                recoveredPrefab;
-
-                            currentAmmo++;
+                            // 弾数
+                            //currentAmmo++;
 
                             UpdateAmmoUI();
                         }
@@ -1174,36 +1247,42 @@ public class GunController : MonoBehaviour
                     Debug.LogError(
                         "AmmoRecoverEffectPrefab に AmmoRecoverEffect が付いていません。"
                     );
+
+                    // 演出がない扱いにして回復完了
+                    slot.isRecovering = false;
+
+                    if (slot.image != null)
+                    {
+                        slot.image.sprite = recoveredSprite;
+                        slot.image.enabled = true;
+                    }
+
+                    ammoTypes[slotIndex] = recoveredType;
+                    ammoSprites[slotIndex] = recoveredSprite;
+                    ammoPrefabs[slotIndex] = recoveredPrefab;
+
+                    currentAmmo++;
+
+                    UpdateAmmoUI();
                 }
             }
             else
             {
-                // =====================================
-                // 演出なしの場合
-                // =====================================
+                // =========================================
+                // 演出なし
+                // =========================================
 
                 slot.isRecovering = false;
 
-                slot.ammoType =
-                    recoveredType;
-
                 if (slot.image != null)
                 {
-                    slot.image.sprite =
-                        recoveredSprite;
-
-                    slot.image.enabled =
-                        true;
+                    slot.image.sprite = recoveredSprite;
+                    slot.image.enabled = true;
                 }
 
-                ammoTypes[i] =
-                    recoveredType;
-
-                ammoSprites[i] =
-                    recoveredSprite;
-
-                ammoPrefabs[i] =
-                    recoveredPrefab;
+                ammoTypes[slotIndex] = recoveredType;
+                ammoSprites[slotIndex] = recoveredSprite;
+                ammoPrefabs[slotIndex] = recoveredPrefab;
 
                 currentAmmo++;
 
@@ -1211,6 +1290,7 @@ public class GunController : MonoBehaviour
             }
         }
     }
+
 
     void IncreaseMaxAmmo(int amount)
     {
@@ -2068,7 +2148,12 @@ public class GunController : MonoBehaviour
         Sprite sprite = targetImage.sprite;
 
         if (sprite == null)
-            yield break;
+        {
+            Debug.LogWarning(
+                "AmmoRecoverEffect に渡されたSpriteがnullです。"
+            );
+        }
+        yield break;
 
         // 元の位置
         Vector3 targetPosition =
@@ -2315,41 +2400,27 @@ public class GunController : MonoBehaviour
 
     public void RefillAmmoAfterResult()
     {
-        // =========================================
-        // リザルト終了後の状態リセット
-        // =========================================
-
         isChangingScene = false;
         isReloading = false;
 
-        // =========================================
-        // 弾を全回復
-        // =========================================
-
         currentAmmo = maxAmmo;
 
-        // =========================================
-        // 新しい弾の内容を生成
-        // =========================================
+        // ★残っている弾UIアニメーションをリセット
+        ammoSlideQueue = 0;
+
+        if (ammoSlideCoroutine != null)
+        {
+            StopCoroutine(ammoSlideCoroutine);
+            ammoSlideCoroutine = null;
+        }
+
+        isAmmoSlidePlaying = false;
 
         GenerateAmmo();
 
-        // =========================================
-        // 数字UI更新
-        // =========================================
-
         UpdateAmmoUI();
 
-        // =========================================
-        // 発射タイマーリセット
-        // =========================================
-
         fireTimer = 0f;
-
-        // =========================================
-        // 弾UIを現在の弾データに合わせる
-        // ※アニメーションは強制停止しない
-        // =========================================
 
         RefreshAmmoUIImmediate();
     }

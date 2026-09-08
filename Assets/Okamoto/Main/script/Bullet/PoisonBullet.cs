@@ -26,6 +26,9 @@ public class PoisonBullet : Bullet
 
     public float poisonDuration = 5f;
 
+    // 実際に生成した毒エフェクト
+    private GameObject poisonEffect;
+
     // =========================
     // 毒エフェクト
     // =========================
@@ -40,30 +43,42 @@ public class PoisonBullet : Bullet
     private bool exploded = false;
 
     public PlayerStats stats;
-    private Vector3 defaultScale = new Vector3(210.7f, 95.8f, 144.1f);
+
+    private Vector3 defaultScale =
+        new Vector3(210.7f, 95.8f, 144.1f);
+
+    // =========================
+    // 開始
+    // =========================
 
     private void Start()
     {
-        transform.localScale = defaultScale + Vector3.one * stats.bulletSize;
+        transform.localScale =
+            defaultScale +
+            Vector3.one * stats.bulletSize;
     }
+
     // =========================
     // 敵に当たった
     // =========================
 
-    protected new void OnTriggerEnter2D(Collider2D other)
+    protected new void OnTriggerEnter2D(
+        Collider2D other)
     {
         // 多重発動防止
         if (exploded)
             return;
 
-        // ダメージを最初に1回だけ計算
+        // ダメージ
         int totalDamage =
-            hitDamage +
-            stats.effectBulletDamage;
+    hitDamage +
+    stats.bulletDamage +
+    stats.effectBulletDamage;
 
         // ========================
         // ケアパッケージ
         // ========================
+
         if (other.CompareTag("CarePackage"))
         {
             CarePackage package =
@@ -77,25 +92,35 @@ public class PoisonBullet : Bullet
             exploded = true;
 
             Destroy(gameObject);
+
             return;
         }
 
         // ========================
         // EnemyHP取得
         // ========================
+
         EnemyHP enemy =
             other.GetComponent<EnemyHP>();
 
         if (enemy == null)
             return;
 
+        // ========================
         // 着弾ダメージ
+        // ========================
+
         enemy.TakeDamage(totalDamage);
 
+        // ========================
         // 毒エリア開始
-        StartCoroutine(PoisonArea());
+        // ========================
 
         exploded = true;
+
+        StartCoroutine(
+            PoisonArea()
+        );
     }
 
     // =========================
@@ -104,11 +129,13 @@ public class PoisonBullet : Bullet
 
     IEnumerator PoisonArea()
     {
+        // =========================
         // Rigidbody取得
+        // =========================
+
         Rigidbody2D rb =
             GetComponent<Rigidbody2D>();
 
-        // 停止
         if (rb != null)
         {
             rb.linearVelocity =
@@ -117,7 +144,10 @@ public class PoisonBullet : Bullet
             rb.simulated = false;
         }
 
+        // =========================
         // Sprite消す
+        // =========================
+
         SpriteRenderer sr =
             GetComponent<SpriteRenderer>();
 
@@ -126,7 +156,10 @@ public class PoisonBullet : Bullet
             sr.enabled = false;
         }
 
+        // =========================
         // Collider消す
+        // =========================
+
         Collider2D col =
             GetComponent<Collider2D>();
 
@@ -136,36 +169,47 @@ public class PoisonBullet : Bullet
         }
 
         // =========================
-        // 毒エフェクト
+        // 毒エフェクト生成
         // =========================
 
-        GameObject effect = null;
         if (poisonEffectPrefab != null)
         {
-            effect = Instantiate(
-                poisonEffectPrefab,
-                transform.position,
-                Quaternion.identity
-            );
+            poisonEffect =
+                Instantiate(
+                    poisonEffectPrefab,
+                    transform.position,
+                    Quaternion.identity
+                );
 
-            effect.transform.localScale =
-                Vector3.one *
-                effectSize;
+            poisonEffect.transform.localScale =
+                Vector3.one * effectSize;
         }
+
+        // =========================
+        // 毒範囲
+        // =========================
+
+        totalPoisonRadius =
+            poisonRadius +
+            stats.poisonRangeUP;
+
+        Debug.Log(
+            "合計" +
+            totalPoisonRadius
+        );
 
         // =========================
         // 毒継続
         // =========================
 
         float timer = 0f;
-        totalPoisonRadius = poisonRadius + stats.poisonRangeUP;
-        Debug.Log("合計"+totalPoisonRadius);
+
         while (timer < poisonDuration)
         {
             Collider2D[] hits =
                 Physics2D.OverlapCircleAll(
                     transform.position,
-                    totalPoisonRadius 
+                    totalPoisonRadius
                 );
 
             foreach (Collider2D hit in hits)
@@ -176,7 +220,9 @@ public class PoisonBullet : Bullet
                 if (enemy == null)
                     continue;
 
-                enemy.TakeDamage(poisonDamage);
+                enemy.TakeDamage(
+                    poisonDamage
+                );
             }
 
             yield return new WaitForSeconds(
@@ -186,7 +232,31 @@ public class PoisonBullet : Bullet
             timer += poisonInterval;
         }
 
+        // =========================
         // 毒終了
+        // =========================
+
+        ClearEffect();
+
+        // =========================
+        // 毒弾本体削除
+        // =========================
+
+        Destroy(gameObject);
+    }
+
+    // =========================
+    // リザルト時などに
+    // 毒エフェクトを強制削除
+    // =========================
+
+    public void ClearEffect()
+    {
+        if (poisonEffect != null)
+        {
+            Destroy(poisonEffect);
+            poisonEffect = null;
+        }
         Destroy(gameObject);
     }
 
@@ -197,7 +267,18 @@ public class PoisonBullet : Bullet
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
-        totalPoisonRadius = poisonRadius + stats.poisonRangeUP;
+
+        if (stats != null)
+        {
+            totalPoisonRadius =
+                poisonRadius +
+                stats.poisonRangeUP;
+        }
+        else
+        {
+            totalPoisonRadius =
+                poisonRadius;
+        }
 
         Gizmos.DrawWireSphere(
             transform.position,

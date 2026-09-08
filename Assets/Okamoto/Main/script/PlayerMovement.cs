@@ -199,6 +199,16 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // =========================================================
+        // ★ マウスホイールクリックでPlayer移動 ON / OFF
+        // =========================================================
+
+        if (Input.GetMouseButtonDown(2))
+        {
+            TogglePlayerMovement();
+        }
+
+
+        // =========================================================
         // ブリンク
         // =========================================================
 
@@ -213,7 +223,11 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+
+        // =========================================================
         // 右クリックでブリンク開始
+        // =========================================================
+
         if (
             enableBlink &&
             Input.GetMouseButtonDown(1) &&
@@ -329,7 +343,10 @@ public class PlayerMovement : MonoBehaviour
     {
         blinkTimer -= Time.fixedDeltaTime;
 
+        // =========================================================
         // ブリンク終了
+        // =========================================================
+
         if (blinkTimer <= 0f)
         {
             blinkTimer = 0f;
@@ -343,6 +360,11 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
+
+        // =========================================================
+        // ブリンク移動
+        // =========================================================
+
         rb.MovePosition(
             rb.position +
             blinkDirection *
@@ -350,16 +372,20 @@ public class PlayerMovement : MonoBehaviour
             Time.fixedDeltaTime
         );
 
+
+        // =========================================================
         // ブリンク方向に画像を向ける
+        // ※向きだけ変更
+        // =========================================================
+
         UpdatePlayerImageDirection(
             blinkDirection
         );
 
-        // ブリンク中もアニメーション
-        UpdatePlayerAnimation(
-            true,
-            blinkMoveSpeed
-        );
+
+        // =========================================================
+        // ★ ブリンク中はアニメーションを触らない
+        // =========================================================
     }
 
 

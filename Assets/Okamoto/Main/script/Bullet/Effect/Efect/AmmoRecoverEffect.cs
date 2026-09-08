@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,112 +16,176 @@ public class AmmoRecoverEffect : MonoBehaviour
 
     [Header("エフェクト位置補正")]
     [SerializeField]
-    Vector2 effectOffset =
-    new Vector2(0f, -100f);
+    Vector2 effectOffset = new Vector2(0f, -100f);
 
     [SerializeField] float effectLifeTime = 2.5f;
 
-    RectTransform rect;
+    private RectTransform rect;
+    private Image image;
 
-    Vector3 targetPos;
+    private Vector3 targetPos;
+    private RectTransform targetRect;
 
-    RectTransform targetRect;
-
-    bool arrived = false;
-
-    System.Action onArrive;
-
-    bool effectPlayed = false;
+    private bool arrived = false;
+    private System.Action onArrive;
 
     void Awake()
     {
         rect = GetComponent<RectTransform>();
+        image = GetComponent<Image>();
+
+        if (image == null)
+        {
+            Debug.LogError(
+                "AmmoRecoverEffect に Image がありません。"
+            );
+        }
     }
 
     public void Init(
- Sprite sprite,
- Vector3 target,
- RectTransform targetUI,
- System.Action callback)
+        Sprite sprite,
+        Vector3 target,
+        RectTransform targetUI,
+        System.Action callback)
     {
-        GetComponent<Image>().sprite = sprite;
+        // =========================================
+        // Spriteチェック
+        // =========================================
+
+        if (sprite == null)
+        {
+            Debug.LogError(
+                "AmmoRecoverEffect に渡されたSpriteがnullです。"
+            );
+
+            Destroy(gameObject);
+            return;
+        }
+
+        if (image == null)
+        {
+            Debug.LogError(
+                "AmmoRecoverEffect の Image が取得できません。"
+            );
+
+            Destroy(gameObject);
+            return;
+        }
+
+        // =========================================
+        // ★重要
+        // 回復する弾のSpriteを設定
+        // =========================================
+
+        image.sprite = sprite;
+        image.enabled = true;
+        image.preserveAspect = true;
+
+        // =========================================
+        // 情報保存
+        // =========================================
 
         targetPos = target;
         targetRect = targetUI;
         onArrive = callback;
 
+        // =========================================
+        // 初期位置
+        // =========================================
+
         rect.position =
             target + Vector3.up * 90f;
 
-        arrived = false;
-        effectPlayed = false;
+        rect.localScale =
+            Vector3.one;
 
-        // ここで即表示
-        if (arriveEffectPrefab != null && targetRect != null)
+        arrived = false;
+
+        // =========================================
+        // 到着エフェクト
+        // =========================================
+
+        if (arriveEffectPrefab != null &&
+            targetRect != null)
         {
-            GameObject fx = Instantiate(arriveEffectPrefab);
+            GameObject fx =
+                Instantiate(arriveEffectPrefab);
 
             fx.transform.position =
                 targetRect.position +
-                new Vector3(effectOffset.x, effectOffset.y, 0f);
+                new Vector3(
+                    effectOffset.x,
+                    effectOffset.y,
+                    0f
+                );
 
-            Destroy(fx, effectLifeTime);
+            Destroy(
+                fx,
+                effectLifeTime
+            );
         }
     }
 
     void Update()
     {
-        if (arrived) return;
+        if (arrived)
+            return;
 
+        // =========================================
         // UIが動いても追従
+        // =========================================
+
         if (targetRect != null)
         {
-            targetPos = targetRect.position;
+            targetPos =
+                targetRect.position;
         }
 
-        rect.position = Vector3.MoveTowards(
-            rect.position,
-            targetPos,
-            fallSpeed * Time.deltaTime
-        );
+        rect.position =
+            Vector3.MoveTowards(
+                rect.position,
+                targetPos,
+                fallSpeed * Time.deltaTime
+            );
 
-        float dist = Vector3.Distance(rect.position, targetPos);
+        float dist =
+            Vector3.Distance(
+                rect.position,
+                targetPos
+            );
 
-        //// 少し手前でParticle表示
-        //if (!effectPlayed && dist < 30000f)
-        //{
-        //    effectPlayed = true;
-
-        //    if (arriveEffectPrefab != null && targetRect != null)
-        //    {
-        //        GameObject fx = Instantiate(arriveEffectPrefab);
-
-        //        fx.transform.position =
-        //            targetRect.position +
-        //            new Vector3(effectOffset.x, effectOffset.y, 0f);
-
-        //        Destroy(fx, effectLifeTime);
-        //    }
-        //}
-
+        // =========================================
         // 到着
+        // =========================================
+
         if (dist < 50f)
         {
             arrived = true;
 
-            rect.position = targetPos;
+            rect.position =
+                targetPos;
+
+            // =====================================
+            // ★先に回復処理
+            // =====================================
 
             onArrive?.Invoke();
 
-            StartCoroutine(BounceAnimation());
+            // =====================================
+            // その後ぼよん
+            // =====================================
+
+            StartCoroutine(
+                BounceAnimation()
+            );
         }
     }
 
     System.Collections.IEnumerator BounceAnimation()
     {
-        Vector3 normalScale = Vector3.one;
+        Vector3 normalScale =
+            Vector3.one;
 
-        // 潰れ形
         Vector3 squishScale =
             new Vector3(
                 1f + squishAmount,
@@ -128,26 +193,32 @@ public class AmmoRecoverEffect : MonoBehaviour
                 1f
             );
 
-        Vector3 startPos = rect.position;
+        Vector3 startPos =
+            rect.position;
 
-        // 少し沈む
         Vector3 squishPos =
-            startPos + Vector3.down * 20f;
+            startPos +
+            Vector3.down * 20f;
 
         float t = 0f;
 
-        //=====================
+        // =========================================
         // 潰れる
-        //=====================
+        // =========================================
 
         while (t < squishTime)
         {
             t += Time.deltaTime;
 
-            float p = t / squishTime;
+            float p =
+                Mathf.Clamp01(
+                    t / squishTime
+                );
 
-            // 柔らかい感じ
-            p = Mathf.Sin(p * Mathf.PI * 0.5f);
+            p =
+                Mathf.Sin(
+                    p * Mathf.PI * 0.5f
+                );
 
             rect.localScale =
                 Vector3.Lerp(
@@ -166,20 +237,27 @@ public class AmmoRecoverEffect : MonoBehaviour
             yield return null;
         }
 
-        t = 0f;
-
-        //=====================
+        // =========================================
         // 戻る
-        //=====================
+        // =========================================
+
+        t = 0f;
 
         while (t < squishTime * 1.5f)
         {
             t += Time.deltaTime;
 
-            float p = t / (squishTime * 1.5f);
+            float p =
+                Mathf.Clamp01(
+                    t / (squishTime * 1.5f)
+                );
 
-            // ぷるん感
-            p = 1f - Mathf.Pow(1f - p, 3f);
+            p =
+                1f -
+                Mathf.Pow(
+                    1f - p,
+                    3f
+                );
 
             rect.localScale =
                 Vector3.Lerp(
@@ -198,34 +276,11 @@ public class AmmoRecoverEffect : MonoBehaviour
             yield return null;
         }
 
-        //=====================
-        // エフェクト
-        //=====================
+        rect.localScale =
+            normalScale;
 
-        //if (arriveEffectPrefab != null && targetRect != null)
-        //{
-        //    GameObject fx = Instantiate(arriveEffectPrefab);
-
-        //    fx.transform.position =
-        //        targetRect.position +
-        //        new Vector3(effectOffset.x, effectOffset.y, 0f);
-
-        //    Destroy(fx, effectLifeTime);
-
-            //RectTransform fxRect =
-            //    fx.GetComponent<RectTransform>();
-
-            //if (fxRect != null)
-            //{
-            //    fxRect.position = targetRect.position;
-
-            //    fxRect.anchoredPosition += effectOffset;
-
-            //    fxRect.localScale = Vector3.one;
-            //}
-
-        //    Destroy(fx, effectLifeTime);
-        //}
+        rect.position =
+            startPos;
 
         Destroy(gameObject);
     }

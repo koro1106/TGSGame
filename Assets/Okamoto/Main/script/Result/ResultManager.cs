@@ -191,15 +191,131 @@ public class ResultManager : MonoBehaviour
 
 
         // =====================================================
-        // Ç∑Ç≈Ç…îÚÇÒÇ≈Ç¢ÇÈíeÇçÌèú
+        // Ç∑Ç≈Ç…îÚÇÒÇ≈Ç¢ÇÈíeÇëSïîçÌèú
         // =====================================================
 
+        // í èÌíe
         Bullet[] bullets =
             FindObjectsOfType<Bullet>();
 
         foreach (Bullet bullet in bullets)
         {
-            Destroy(bullet.gameObject);
+            if (bullet != null)
+            {
+                Destroy(bullet.gameObject);
+            }
+        }
+
+        // çΩíe
+        BindBullet[] bindBullets =
+            FindObjectsOfType<BindBullet>();
+
+        foreach (BindBullet bullet in bindBullets)
+        {
+            if (bullet != null)
+            {
+                Destroy(bullet.gameObject);
+            }
+        }
+
+        // ägéUíe
+        dispersionBullet[] dispersionBullets =
+            FindObjectsOfType<dispersionBullet>();
+
+        foreach (dispersionBullet bullet in dispersionBullets)
+        {
+            if (bullet != null)
+            {
+                Destroy(bullet.gameObject);
+            }
+        }
+
+        // îöî≠íe
+        Bulletxplosion[] explosionBullets =
+            FindObjectsOfType<Bulletxplosion>();
+
+        foreach (Bulletxplosion bullet in explosionBullets)
+        {
+            if (bullet != null)
+            {
+                Destroy(bullet.gameObject);
+            }
+        }
+
+        // èdóÕíe
+        GravityBullet[] gravityBullets =
+            FindObjectsOfType<GravityBullet>();
+
+        foreach (GravityBullet bullet in gravityBullets)
+        {
+            if (bullet != null)
+            {
+                Destroy(bullet.gameObject);
+            }
+        }
+
+        // óãíe
+        ChainBullet[] chainBullets =
+            FindObjectsOfType<ChainBullet>();
+
+        foreach (ChainBullet bullet in chainBullets)
+        {
+            if (bullet != null)
+            {
+                Destroy(bullet.gameObject);
+            }
+        }
+
+        // ä—í íe
+        penetratingbullet[] penetratingBullets =
+            FindObjectsOfType<penetratingbullet>();
+
+        foreach (penetratingbullet bullet in penetratingBullets)
+        {
+            if (bullet != null)
+            {
+                Destroy(bullet.gameObject);
+            }
+        }
+
+        // ä—í íe1
+        penetratingbullet1[] penetratingBullets1 =
+            FindObjectsOfType<penetratingbullet1>();
+
+        foreach (penetratingbullet1 bullet in penetratingBullets1)
+        {
+            if (bullet != null)
+            {
+                Destroy(bullet.gameObject);
+            }
+        }
+
+        // ì≈íe
+        PoisonBullet[] poisonBullets =
+            FindObjectsOfType<PoisonBullet>();
+
+        foreach (PoisonBullet bullet in poisonBullets)
+        {
+            if (bullet != null)
+            {
+                // ì≈ÉGÉtÉFÉNÉgÇêÊÇ…çÌèú
+                bullet.ClearEffect();
+
+                // ì≈íeñ{ëÃÇçÌèú
+                Destroy(bullet.gameObject);
+            }
+        }
+
+        // îΩéÀíe
+        Reboundbullet[] reboundBullets =
+            FindObjectsOfType<Reboundbullet>();
+
+        foreach (Reboundbullet bullet in reboundBullets)
+        {
+            if (bullet != null)
+            {
+                Destroy(bullet.gameObject);
+            }
         }
 
 
@@ -207,12 +323,32 @@ public class ResultManager : MonoBehaviour
         // åªç›Ç¢ÇÈìGÇçÌèú
         // =====================================================
 
+        // í èÌÇÃìG
         EnemyMove[] enemies =
             FindObjectsOfType<EnemyMove>();
 
         foreach (EnemyMove enemy in enemies)
         {
-            Destroy(enemy.gameObject);
+            if (enemy != null)
+            {
+                Destroy(enemy.gameObject);
+            }
+        }
+
+
+        // =====================================================
+        // EyeEnemyÇ‡çÌèú
+        // =====================================================
+
+        EyeEnemy[] eyeEnemies =
+            FindObjectsOfType<EyeEnemy>();
+
+        foreach (EyeEnemy eyeEnemy in eyeEnemies)
+        {
+            if (eyeEnemy != null)
+            {
+                Destroy(eyeEnemy.gameObject);
+            }
         }
 
 
@@ -1008,12 +1144,15 @@ public class ResultManager : MonoBehaviour
                 {
                     playerRestarted = true;
 
+                    // Åö ÉXÉâÉCÉhíÜÇ…ÉtÉBÅ[ÉãÉhè„ÇÃëSíeÇçÌèú
+                    ClearAllBullets();
+                    ClearAllBulletEffects();
+
                     // ìGÇÃHPëùâ¡ÇÉäÉZÉbÉg
                     if (enemySpawner != null)
                     {
                         enemySpawner.ResetEnemyHPGrowth();
                     }
-
 
                     // PlayerëSëÃÇïúãA
                     UnfreezePlayer();
@@ -1434,5 +1573,150 @@ public class ResultManager : MonoBehaviour
 
         textTransform.localScale =
             originalScale;
+    }
+
+    private void ClearAllBullets()
+    {
+        // í èÌíeÅEì≈íe
+        Bullet[] bullets =
+            FindObjectsOfType<Bullet>();
+
+        foreach (Bullet bullet in bullets)
+        {
+            if (bullet != null)
+            {
+                Destroy(bullet.gameObject);
+            }
+
+        }
+
+        // çΩíe
+        BindBullet[] bindBullets =
+            FindObjectsOfType<BindBullet>();
+
+        foreach (BindBullet bullet in bindBullets)
+        {
+            if (bullet != null)
+            {
+                Destroy(bullet.gameObject);
+            }
+        }
+
+
+        // ägéUíe
+        dispersionBullet[] dispersionBullets =
+            FindObjectsOfType<dispersionBullet>();
+
+        foreach (dispersionBullet bullet in dispersionBullets)
+        {
+            if (bullet != null)
+            {
+                Destroy(bullet.gameObject);
+            }
+        }
+
+        // îöî≠íe
+        Bulletxplosion[] explosionBullets =
+            FindObjectsOfType<Bulletxplosion>();
+
+        foreach (Bulletxplosion bullet in explosionBullets)
+        {
+            if (bullet != null)
+            {
+                Destroy(bullet.gameObject);
+            }
+        }
+
+        // èdóÕíe
+        GravityBullet[] gravityBullets =
+            FindObjectsOfType<GravityBullet>();
+
+        foreach (GravityBullet bullet in gravityBullets)
+        {
+            if (bullet != null)
+            {
+                Destroy(bullet.gameObject);
+            }
+        }
+
+        // óãíe
+        ChainBullet[] chainBullets =
+            FindObjectsOfType<ChainBullet>();
+
+        foreach (ChainBullet bullet in chainBullets)
+        {
+            if (bullet != null)
+            {
+                Destroy(bullet.gameObject);
+            }
+        }
+
+        // ä—í íe
+        penetratingbullet[] penetratingBullets =
+            FindObjectsOfType<penetratingbullet>();
+
+        foreach (penetratingbullet bullet in penetratingBullets)
+        {
+            if (bullet != null)
+            {
+                Destroy(bullet.gameObject);
+            }
+        }
+
+        // ä—í íe1
+        penetratingbullet1[] penetratingBullets1 =
+            FindObjectsOfType<penetratingbullet1>();
+
+        foreach (penetratingbullet1 bullet in penetratingBullets1)
+        {
+            if (bullet != null)
+            {
+                Destroy(bullet.gameObject);
+            }
+        }
+
+        // îΩéÀíe
+        Reboundbullet[] reboundBullets =
+            FindObjectsOfType<Reboundbullet>();
+
+        foreach (Reboundbullet bullet in reboundBullets)
+        {
+            if (bullet != null)
+            {
+                Destroy(bullet.gameObject);
+            }
+        }
+
+    }
+    private static List<GameObject> activeEffects =
+    new List<GameObject>();
+
+    public static void RegisterEffect(GameObject effect)
+    {
+        if (effect != null && !activeEffects.Contains(effect))
+        {
+            activeEffects.Add(effect);
+        }
+    }
+
+    public static void UnregisterEffect(GameObject effect)
+    {
+        if (activeEffects.Contains(effect))
+        {
+            activeEffects.Remove(effect);
+        }
+    }
+
+    private void ClearAllBulletEffects()
+    {
+        for (int i = activeEffects.Count - 1; i >= 0; i--)
+        {
+            if (activeEffects[i] != null)
+            {
+                Destroy(activeEffects[i]);
+            }
+        }
+
+        activeEffects.Clear();
     }
 }

@@ -86,12 +86,12 @@ public class Bulletxplosion : MonoBehaviour
 
         if (hitEffectPrefab != null)
         {
-            ParticleSystem effect =
-                Instantiate(
-                    hitEffectPrefab,
-                    transform.position,
-                    Quaternion.identity
-                );
+            ParticleSystem effect = Instantiate(
+    hitEffectPrefab,
+    transform.position,
+    Quaternion.identity,
+    transform
+);
 
             totalExplosionSize =
                 explosionSize +

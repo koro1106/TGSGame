@@ -71,34 +71,44 @@ public class EyeEnemy : MonoBehaviour
         ResetBlinkTimer();
     }
 
-    void Update()
+void Update()
     {
+        // =====================================================
+        // ポーズ中・リザルト中は完全停止
+        // =====================================================
+        if (PauseMenu.IsPaused || ResultManager.IsResultActive)
+        {
+            return;
+        }
+
         if (hp != null && hp.IsBind())
         {
             return;
         }
+
         if (hp == null) return;
 
         float hpRate = (float)hp.currentHP / hp.maxHP;
 
-        // 移動 
+        // 移動
         transform.Translate(
             moveDirection * moveSpeed * Time.deltaTime,
             Space.World
         );
 
-        //  ぴょんぴょん 
+        // ぴょんぴょん
         float currentBounce = bounceHeight * hpRate;
         Vector3 pos = transform.position;
         pos.y += Mathf.Sin(Time.time * bounceSpeed) * currentBounce;
         transform.position = pos;
 
-        // まばたき 
+        // まばたき
         UpdateBlink();
 
-        // 手の開閉(上昇中は内側、下降中は外側) 
+        // 手の開閉
         UpdateHandSway();
     }
+
 
     void ResetBlinkTimer()
     {
