@@ -11,6 +11,9 @@ public class MenuButton : MonoBehaviour,
     public Image buttonImage;
     public TMP_Text buttonText;
 
+    [SerializeField] private GameObject topLine;    //  上のライン
+    [SerializeField] private GameObject bottomLine;  // 下のライン
+
     //　大きくなる速さ
     [SerializeField] private float scaleSpeed = 8f;
 
@@ -23,6 +26,7 @@ public class MenuButton : MonoBehaviour,
     private Vector3 defaultScale;
     private Quaternion defaultRotation;
     private Vector3 defaultPosition;
+
 
     //private bool isHover; 前のやつに戻すときisFloatingをisHoverに変える
 
@@ -38,7 +42,15 @@ public class MenuButton : MonoBehaviour,
         // 初期状態
         buttonImage.color = Color.white;
         buttonText.color = Color.white;
+
         arrow.SetActive(false);
+
+        // 線を消す
+        if (topLine != null)
+            topLine.SetActive(false);
+
+        if (bottomLine != null)
+            bottomLine.SetActive(false);
     }
     private void Update()
     {
@@ -52,6 +64,7 @@ public class MenuButton : MonoBehaviour,
             targetScale,
             Time.deltaTime * scaleSpeed
         );
+
         if (isFloating)
         {
             // 上下にぷかぷか
@@ -86,6 +99,13 @@ public class MenuButton : MonoBehaviour,
         
         arrow.SetActive(true);
 
+        // 線を表示
+        if (topLine != null)
+            topLine.SetActive(true);
+
+        if (bottomLine != null)
+            bottomLine.SetActive(true);
+
         // 色変更
         buttonImage.color = Color.white;
         buttonText.color = Color.white;
@@ -118,6 +138,13 @@ public class MenuButton : MonoBehaviour,
         isFloating = false;
 
         arrow.SetActive(false);
+
+        // 線を消す
+        if (topLine != null)
+            topLine.SetActive(false);
+
+        if (bottomLine != null)
+            bottomLine.SetActive(false);
 
         // 元の色に戻す
         buttonImage.color = Color.white;

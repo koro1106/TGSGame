@@ -18,6 +18,9 @@ public class SceneTransition : MonoBehaviour
 
     [SerializeField] private float waitTime = 0.5f;
 
+    // OptionMenu
+    [SerializeField] private OptionMenu optionMenu;
+
     public void StartGame()
     {
         // メニューの矢印を消す
@@ -31,30 +34,99 @@ public class SceneTransition : MonoBehaviour
         }
 
 
-        StartCoroutine(Transition());
+        StartCoroutine(Transition("MainStageScene"));
     }
 
-    IEnumerator Transition()
+    // オプション
+    public void OpenOption()
     {
+        // メニューの矢印を消す
+        MenuButton[] buttons = FindObjectsByType<MenuButton>(
+            FindObjectsSortMode.None
+        );
+
+        foreach (MenuButton button in buttons)
+        {
+            button.HideArrow();
+        }
+
+        StartCoroutine(Transition("OptionScene"));
+    }
+
+    // オプション用カーテン
+    private IEnumerator OptionTransition()
+    {
+        // カーテンを右側へ
         fadeImage.anchoredPosition = startPos;
 
-        float t = 0;
+        float time = 0f;
 
-        while (t < slideTime)
+        // 右 → 中央
+        while (time < slideTime)
         {
-            t += Time.deltaTime;
+            time += Time.deltaTime;
+
+            float t = time / slideTime;
 
             fadeImage.anchoredPosition =
-                Vector2.Lerp(startPos, endPos, t / slideTime);
+                Vector2.Lerp(startPos, endPos, t);
 
             yield return null;
         }
 
-        loadingEnemy.SetActive(true);
+        fadeImage.anchoredPosition = endPos;
+
+        // カーテンが画面を覆っている間にオプションを開く
+        if (optionMenu != null)
+        {
+            optionMenu.OpenOption();
+        }
 
         // 少し待つ
         yield return new WaitForSeconds(waitTime);
 
-        SceneManager.LoadScene("MainStageScene");
+        // カーテンを左側へ移動
+        Vector2 leftPos = new Vector2(-1920, 0);
+
+        time = 0f;
+
+        while (time < slideTime)
+        {
+            time += Time.deltaTime;
+
+            float t = time / slideTime;
+
+            fadeImage.anchoredPosition =
+                Vector2.Lerp(endPos, leftPos, t);
+
+            yield return null;
+        }
+
+        fadeImage.anchoredPosition = startPos;
+    }
+
+    private IEnumerator Transition(string sceneName)
+    {
+        float time = 0f;
+
+        fadeImage.anchoredPosition = startPos;
+
+        while (time < slideTime)
+        {
+            time += Time.deltaTime;
+
+            float t = time / slideTime;
+
+            fadeImage.anchoredPosition =
+                Vector2.Lerp(startPos, endPos, t);
+
+            yield return null;
+        }
+
+        fadeImage.anchoredPosition = endPos;
+
+        yield return new WaitForSeconds(waitTime);
+
+        SceneManager.LoadScene(sceneName);
     }
 }
