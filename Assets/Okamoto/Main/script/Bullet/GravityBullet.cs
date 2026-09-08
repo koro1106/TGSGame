@@ -31,8 +31,9 @@ public class GravityBullet : MonoBehaviour
     {
         // ダメージを最初に1回だけ計算
         int totalDamage =
-            damage +
-            stats.effectBulletDamage;
+    damage +
+    stats.bulletDamage +
+    stats.effectBulletDamage;
 
         // ========================
         // ケアパッケージ

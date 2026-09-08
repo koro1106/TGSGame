@@ -55,8 +55,9 @@ public class ChainBullet : MonoBehaviour
             if (package != null)
             {
                 int totalDamage =
-                    damage +
-                    stats.effectBulletDamage;
+    damage +
+    stats.bulletDamage +
+    stats.effectBulletDamage;
 
                 package.TakeDamage(totalDamage);
             }

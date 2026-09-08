@@ -46,7 +46,14 @@ public class PauseMenu : MonoBehaviour
         if (ResultManager.IsResultActive)
             return;
 
+        // =========================
+        // ƒQ[ƒ€’â~
+        // =========================
         Time.timeScale = 0f;
+
+        // 2D•¨—‚àŠ®‘S’â~
+        Physics2D.simulationMode = SimulationMode2D.Script;
+
         isOpen = true;
         IsPaused = true;
 
@@ -59,7 +66,8 @@ public class PauseMenu : MonoBehaviour
 
     public void CloseAll()
     {
-        if (currentAnim != null) StopCoroutine(currentAnim);
+        if (currentAnim != null)
+            StopCoroutine(currentAnim);
 
         foreach (var panel in panels)
         {
@@ -69,7 +77,14 @@ public class PauseMenu : MonoBehaviour
 
         currentPanel = null;
 
+        // =========================
+        // ƒQ[ƒ€ÄŠJ
+        // =========================
         Time.timeScale = 1f;
+
+        // 2D•¨—‚ğ’Êí‚É–ß‚·
+        Physics2D.simulationMode = SimulationMode2D.FixedUpdate;
+
         isOpen = false;
         IsPaused = false;
 
