@@ -129,6 +129,13 @@ public class EnemySpawner : MonoBehaviour
         {
             rush.player = player;
         }
+
+        // ★追加：WarpEnemy（プレイヤーへ向かって移動する敵）にもプレイヤーを渡す
+        WarpEnemy warp = enemy.GetComponent<WarpEnemy>();
+        if (warp != null)
+        {
+            warp.player = player;
+        }
     }
 
     // HPバーの予告演出が終わった瞬間に呼ばれるメソッド
