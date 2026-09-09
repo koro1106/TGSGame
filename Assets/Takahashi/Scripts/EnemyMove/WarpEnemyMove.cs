@@ -1,48 +1,71 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections;
 public class WarpEnemyMove : MonoBehaviour, IHitSlowable
 {
-    [Header("ˆÚ“®")]
+    [Header("ç§»å‹•")]
     public float moveSpeed = 3f;
-    [Tooltip("player‚ª–¢İ’è‚Ìê‡‚Ég‚¤ƒtƒH[ƒ‹ƒoƒbƒN•ûŒü")]
+    [Tooltip("playerãŒæœªè¨­å®šã®å ´åˆã«ä½¿ã†ãƒ•ã‚©ãƒ¼ãƒ«ãƒãƒƒã‚¯æ–¹å‘")]
     public Vector2 moveDirection = Vector2.left;
 
-    [Header("ƒvƒŒƒCƒ„[")]
-    [Tooltip("–¢İ’è‚È‚çStart‚Å©“®æ“¾‚ğ‚İ‚Ü‚·iEnemySpawner‚©‚ç“n‚³‚ê‚é‚Ì‚Å‚à‰Âj")]
+    [Header("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼")]
+    [Tooltip("æœªè¨­å®šãªã‚‰Startã§è‡ªå‹•å–å¾—ã‚’è©¦ã¿ã¾ã™ï¼ˆEnemySpawnerã‹ã‚‰æ¸¡ã•ã‚Œã‚‹ã®ã§ã‚‚å¯ï¼‰")]
     public Transform player;
 
-    // ÀÛ‚ÉˆÚ“®‚Ég‚Á‚Ä‚¢‚é•ûŒüiƒvƒŒƒCƒ„[‚ª‚¢‚ê‚Î‚»‚¿‚çA‚¢‚È‚¯‚ê‚ÎmoveDirectionj
+    // å®Ÿéš›ã«ç§»å‹•ã«ä½¿ã£ã¦ã„ã‚‹æ–¹å‘ï¼ˆãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã„ã‚Œã°ãã¡ã‚‰ã€ã„ãªã‘ã‚Œã°moveDirectionï¼‰
     private Vector2 currentDirection;
 
-    [Header("Œ©‚½–Úi‰æ‘œƒAƒjƒ[ƒVƒ‡ƒ“j")]
-    [Tooltip("Ä¶‚µ‚½‚¢‰æ‘œ‚ğ‡”Ô’Ê‚è‚É‚±‚±‚Öƒhƒ‰ƒbƒO•ƒhƒƒbƒv‚µ‚Ä‚­‚¾‚³‚¢")]
+    [Header("è¦‹ãŸç›®ï¼ˆç”»åƒã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ï¼‰")]
+    [Tooltip("å†ç”Ÿã—ãŸã„ç”»åƒã‚’é †ç•ªé€šã‚Šã«ã“ã“ã¸ãƒ‰ãƒ©ãƒƒã‚°ï¼†ãƒ‰ãƒ­ãƒƒãƒ—ã—ã¦ãã ã•ã„")]
     public Sprite[] frames;
-    [Tooltip("1•bŠÔ‚É‰½ƒRƒ}Ø‚è‘Ö‚¦‚é‚©")]
+    [Tooltip("1ç§’é–“ã«ä½•ã‚³ãƒåˆ‡ã‚Šæ›¿ãˆã‚‹ã‹")]
     public float frameRate = 24f;
-    [Tooltip("–¢İ’è‚È‚ç©•ª‚ÌGameObject‚©‚ç©“®æ“¾‚µ‚Ü‚·")]
+    [Tooltip("æœªè¨­å®šãªã‚‰è‡ªåˆ†ã®GameObjectã‹ã‚‰è‡ªå‹•å–å¾—ã—ã¾ã™")]
     public SpriteRenderer spriteRenderer;
-    [Tooltip("Œ³‰æ‘œ‚ª‰EŒü‚«‚ÉŒ©‚¦‚éê‡‚Íƒ`ƒFƒbƒN‚ğ“ü‚ê‚Ä‚­‚¾‚³‚¢i¶Œü‚«‚ªŠî€‚È‚çOFF‚Ì‚Ü‚Üj")]
+    [Tooltip("å…ƒç”»åƒãŒå³å‘ãã«è¦‹ãˆã‚‹å ´åˆã¯ãƒã‚§ãƒƒã‚¯ã‚’å…¥ã‚Œã¦ãã ã•ã„ï¼ˆå·¦å‘ããŒåŸºæº–ãªã‚‰OFFã®ã¾ã¾ï¼‰")]
     public bool spriteFacesRightByDefault = false;
 
     private int currentFrame = 0;
     private float frameTimer = 0f;
 
-    [Header("‰ei”CˆÓj")]
-    public GameObject shadowObject; // ‰eƒIƒuƒWƒFƒNƒg‚ª‚ ‚ê‚Îİ’èB–³‚¯‚ê‚Î‹ó‚Ì‚Ü‚Ü‚ÅOK
+    [Header("å½±ï¼ˆä»»æ„ï¼‰")]
+    public GameObject shadowObject; // å½±ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒã‚ã‚Œã°è¨­å®šã€‚ç„¡ã‘ã‚Œã°ç©ºã®ã¾ã¾ã§OK
 
-    [Header("”í’e‚Ì“İ‰»")]
-    public float hitSlowMultiplier = 0.3f; // “İ‰»’†‚Ì‘¬“x”{—¦i1f‚Å“İ‰»‚È‚µA0f‚ÅŠ®‘S’â~j
-    public float hitSlowDuration = 0.5f;   // “İ‰»‚ª‘±‚­ŠÔi•bj
+    [Header("è¢«å¼¾æ™‚ã®éˆåŒ–")]
+    public float hitSlowMultiplier = 0.3f; // éˆåŒ–ä¸­ã®é€Ÿåº¦å€ç‡ï¼ˆ1fã§éˆåŒ–ãªã—ã€0fã§å®Œå…¨åœæ­¢ï¼‰
+    public float hitSlowDuration = 0.5f;   // éˆåŒ–ãŒç¶šãæ™‚é–“ï¼ˆç§’ï¼‰
 
-    private float slowTimer = 0f;          // “İ‰»‚Ìc‚èŠÔ
-    private float speedMultiplier = 1f;    // Œ»İ‚Ì‘¬“x”{—¦i“İ‰»’†‚Í1–¢–‚É‚È‚éj
+    private float slowTimer = 0f;          // éˆåŒ–ã®æ®‹ã‚Šæ™‚é–“
+    private float speedMultiplier = 1f;    // ç¾åœ¨ã®é€Ÿåº¦å€ç‡ï¼ˆéˆåŒ–ä¸­ã¯1æœªæº€ã«ãªã‚‹ï¼‰
 
-    private bool isAnimating = true; // false‚É‚·‚é‚ÆƒRƒ}‘—‚è‚ª~‚Ü‚éi€–S‚È‚Ç‚Ég—pj
+    private bool isAnimating = true; // falseã«ã™ã‚‹ã¨ã‚³ãƒé€ã‚ŠãŒæ­¢ã¾ã‚‹ï¼ˆæ­»äº¡æ™‚ãªã©ã«ä½¿ç”¨ï¼‰
 
-    //========================
-    // S‘©
-    //========================
+    // =========================================================
+    // â˜…è¿½åŠ ï¼šé‡ãªã‚Šé †ï¼ˆç‚¹æ»…å¯¾ç­–ï¼‰
+    //   RabitEnemyMove / EnemyMove ã¨åŒã˜å•é¡Œï¼ˆYåº§æ¨™ã«å€ç‡ã‚’æ›ã‘ã‚‹ã¨
+    //   ãƒã‚¤ãƒŠã‚¹ã‚„ç•°å¸¸å€¤ã«ãªã£ã¦ä¸å®‰å®šï¼‰ã‚’é˜²ããŸã‚ã€ç§»å‹•ã‚¨ãƒªã‚¢å†…ã§ã®
+    //   ç›¸å¯¾ä½ç½®(0ã€œ1)ã‹ã‚‰ä¸€å®šç¯„å›²ã®sortingOrderã‚’è¨ˆç®—ã™ã‚‹æ–¹å¼ã‚’è¿½åŠ ã€‚
+    // =========================================================
+    [Header("â”€â”€ é‡ãªã‚Šé †ï¼ˆç‚¹æ»…å¯¾ç­–ï¼‰ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€")]
+    [Tooltip("ONã«ã™ã‚‹ã¨ç”»é¢å†…ã®Yä½ç½®ã«å¿œã˜ã¦Sorting Orderã‚’è‡ªå‹•è¨ˆç®—ã—ã€æ•µåŒå£«ãŒé‡ãªã£ãŸæ™‚ã®ç‚¹æ»…ï¼ˆæç”»é †ã®å…¥ã‚Œæ›¿ã‚ã‚Šï¼‰ã‚’é˜²ãã¾ã™")]
+    public bool autoSortByY = true;
 
+    [Tooltip("Sorting Orderã®åŸºæº–å€¤ã€‚å¸¸ã«ã“ã®å€¤ä»¥ä¸Šã«ãªã‚Šã¾ã™ï¼ˆä¾‹ï¼š100ï¼‰")]
+    public int sortingOrderBase = 100;
+
+    [Tooltip("Sorting Orderã®å¤‰å‹•å¹…ã€‚sortingOrderBase ã€œ sortingOrderBase+sortingOrderRange ã®ç¯„å›²ã«åã¾ã‚Šã¾ã™ï¼ˆä¾‹ï¼šrange=100ãªã‚‰100ã€œ200ï¼‰ã€‚ã»ã¼å›ºå®šã«ã—ãŸã„å ´åˆã¯ã“ã®å€¤ã‚’å°ã•ãï¼ˆä¾‹ï¼š10ã€œ20ï¼‰ã—ã¦ãã ã•ã„")]
+    public int sortingOrderRange = 100;
+
+    [Tooltip("Sorting Orderã®è¨ˆç®—ã«ä½¿ã†ç”»é¢ä¸Šä¸‹ã®ç¯„å›²ã€‚0=ç”»é¢ä¸Šç«¯ã€1=ç”»é¢ä¸‹ç«¯ã€‚EnemyMoveã®ç§»å‹•ã‚¨ãƒªã‚¢è¨­å®šã¨åˆã‚ã›ã¦ãŠãã¨æ•µåŒå£«ã®ä¸¦ã³é †ã®åŸºæº–ãŒæƒã„ã¾ã™")]
+    public float sortAreaTopRatio = 0.3f;
+    public float sortAreaBottomRatio = 1.0f;
+
+    // sortAreaTopRatio/BottomRatioã‹ã‚‰è¨ˆç®—ã•ã‚Œã‚‹ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ï¼ˆStartã§ä¸€åº¦ã ã‘è¨ˆç®—ï¼‰
+    private float sortAreaTop;
+    private float sortAreaBottom;
+
+    // =========================================================
+    // æ‹˜æŸ
+    // =========================================================
     private Coroutine bindCoroutine;
     private bool isBind = false;
 
@@ -50,22 +73,22 @@ public class WarpEnemyMove : MonoBehaviour, IHitSlowable
 
     void Start()
     {
-        // EnemyHP‚ğæ“¾‚µAS‘©ƒ`ƒFƒbƒN‚Æ€–SƒCƒxƒ“ƒg‚Ì—¼•û‚Ég‚¤
+        // EnemyHPã‚’å–å¾—ã—ã€æ‹˜æŸãƒã‚§ãƒƒã‚¯ã¨æ­»äº¡ã‚¤ãƒ™ãƒ³ãƒˆã®ä¸¡æ–¹ã«ä½¿ã†
         enemyHP = GetComponent<EnemyHP>();
 
         if (enemyHP != null)
         {
-            // €–S‚É©•ª‚Å‰e‚ğÁ‚·iEnemyHP‘¤‚ÍˆêØ•ÏX•s—vj
+            // æ­»äº¡æ™‚ã«è‡ªåˆ†ã§å½±ã‚’æ¶ˆã™ï¼ˆEnemyHPå´ã¯ä¸€åˆ‡å¤‰æ›´ä¸è¦ï¼‰
             enemyHP.OnDeath += HideShadow;
         }
 
-        // EnemySpawner‚©‚ç“n‚³‚ê‚Ä‚¢‚È‚¯‚ê‚Î©—Í‚Åæ“¾‚ğ‚İ‚é
+        // EnemySpawnerã‹ã‚‰æ¸¡ã•ã‚Œã¦ã„ãªã‘ã‚Œã°è‡ªåŠ›ã§å–å¾—ã‚’è©¦ã¿ã‚‹
         TryGetPlayer();
 
-        // Œ©‚½–Ú‚Ü‚í‚è‚Ì©“®æ“¾
+        // è¦‹ãŸç›®ã¾ã‚ã‚Šã®è‡ªå‹•å–å¾—
         if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
 
-        // Å‰‚ÌƒRƒ}EŒü‚«‚ğ”½‰f‚µ‚Ä‚¨‚­
+        // æœ€åˆã®ã‚³ãƒãƒ»å‘ãã‚’åæ˜ ã—ã¦ãŠã
         if (frames != null && frames.Length > 0 && spriteRenderer != null)
         {
             spriteRenderer.sprite = frames[0];
@@ -73,6 +96,9 @@ public class WarpEnemyMove : MonoBehaviour, IHitSlowable
 
         currentDirection = moveDirection.normalized;
         FlipSprite();
+
+        // â˜…è¿½åŠ ï¼šSorting Orderè¨ˆç®—ç”¨ã®ç”»é¢ä¸Šä¸‹ç¯„å›²ã‚’ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã§ç¢ºå®šã—ã¦ãŠã
+        CalcSortAreaBounds();
     }
 
     void OnDestroy()
@@ -84,8 +110,8 @@ public class WarpEnemyMove : MonoBehaviour, IHitSlowable
     }
 
     // =========================================================
-    // ƒvƒŒƒCƒ„[©“®æ“¾iPlayerMovement—DæA–³‚¯‚ê‚ÎPlayerj
-    // EnemyMove‚Æ“¯‚¶l‚¦•ûBEnemySpawner‚©‚ç‚·‚Å‚É“n‚³‚ê‚Ä‚¢‚ê‚Î‰½‚à‚µ‚È‚¢
+    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼è‡ªå‹•å–å¾—ï¼ˆPlayerMovementå„ªå…ˆã€ç„¡ã‘ã‚Œã°Playerï¼‰
+    // EnemyMoveã¨åŒã˜è€ƒãˆæ–¹ã€‚EnemySpawnerã‹ã‚‰ã™ã§ã«æ¸¡ã•ã‚Œã¦ã„ã‚Œã°ä½•ã‚‚ã—ãªã„
     // =========================================================
     void TryGetPlayer()
     {
@@ -101,10 +127,29 @@ public class WarpEnemyMove : MonoBehaviour, IHitSlowable
         }
     }
 
+    // =========================================================
+    // â˜…è¿½åŠ ï¼šSorting Orderè¨ˆç®—ç”¨ã®ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ç¯„å›²ã‚’è¨ˆç®—
+    //   EnemyMove.CalcAreaBounds() ã¨åŒã˜è€ƒãˆæ–¹ã§ã€
+    //   ã‚«ãƒ¡ãƒ©ã®orthographicSizeã‹ã‚‰ç”»é¢ã®ä¸Šç«¯ãƒ»ä¸‹ç«¯ã‚’ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã§æ±‚ã‚ã‚‹
+    // =========================================================
+    void CalcSortAreaBounds()
+    {
+        Camera cam = Camera.main;
+        if (cam == null) return;
+
+        float h = cam.orthographicSize;
+        float camY = cam.transform.position.y;
+        float fullH = h * 2f;
+
+        // topRatio=0â†’ç”»é¢ä¸Šç«¯ã€topRatio=1â†’ç”»é¢ä¸‹ç«¯ ã¨ã„ã†æ¯”ç‡ã®è€ƒãˆæ–¹ã‚’EnemyMoveã«åˆã‚ã›ã‚‹
+        sortAreaTop = (camY + h) - fullH * sortAreaTopRatio;
+        sortAreaBottom = (camY + h) - fullH * sortAreaBottomRatio;
+    }
+
     void Update()
     {
         //========================
-        // S‘©’†’â~
+        // æ‹˜æŸä¸­åœæ­¢
         //========================
 
         if (enemyHP != null &&
@@ -113,16 +158,16 @@ public class WarpEnemyMove : MonoBehaviour, IHitSlowable
             return;
         }
 
-        // ƒvƒŒƒCƒ„[–¢æ“¾‚È‚ç‚±‚±‚Å‚àÄsi¶¬ƒ^ƒCƒ~ƒ“ƒO‘Îôj
+        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æœªå–å¾—ãªã‚‰ã“ã“ã§ã‚‚å†è©¦è¡Œï¼ˆç”Ÿæˆã‚¿ã‚¤ãƒŸãƒ³ã‚°å¯¾ç­–ï¼‰
         if (player == null)
         {
             TryGetPlayer();
         }
 
-        // ”í’e“İ‰»‚ÌXV
+        // è¢«å¼¾éˆåŒ–ã®æ›´æ–°
         UpdateHitSlow();
 
-        // ƒvƒŒƒCƒ„[‚ª‚¢‚ê‚ÎƒvƒŒƒCƒ„[•ûŒü‚ÖA‚¢‚È‚¯‚ê‚ÎmoveDirection‚ÖˆÚ“®
+        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã„ã‚Œã°ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æ–¹å‘ã¸ã€ã„ãªã‘ã‚Œã°moveDirectionã¸ç§»å‹•
         if (player != null)
         {
             currentDirection = ((Vector2)player.position - (Vector2)transform.position).normalized;
@@ -136,12 +181,33 @@ public class WarpEnemyMove : MonoBehaviour, IHitSlowable
 
         FlipSprite();
 
-        // ‰æ‘œ‚ÌƒRƒ}‘—‚è
+        // ç”»åƒã®ã‚³ãƒé€ã‚Š
         UpdateFrameAnimation();
     }
 
     // =========================================================
-    // ‰æ‘œ‚ÌƒRƒ}‘—‚èiAnimator‚ğg‚í‚¸©‘O‚ÅØ‚è‘Ö‚¦‚éj
+    //  ï¼šLateUpdate ã§ Sorting Order ã‚’æ¯ãƒ•ãƒ¬ãƒ¼ãƒ æ›´æ–°
+    //   RabitEnemyMoveã¨åŒã˜æ–¹å¼ï¼šãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã®Yã‚’ãã®ã¾ã¾å€ç‡ã§
+    //   æ›ã‘ã‚‹ã¨ãƒã‚¤ãƒŠã‚¹ã‚„ç•°å¸¸å€¤ã«ãªã‚Šä¸å®‰å®šãªãŸã‚ã€
+    //   sortAreaTopã€œsortAreaBottomå†…ã§ã®Yä½ç½®ã‚’0ã€œ1ã«æ­£è¦åŒ–ã—ã¦ã‹ã‚‰
+    //   sortingOrderBaseã€œsortingOrderBase+sortingOrderRange ã®ç¯„å›²ã«åã‚ã‚‹ã€‚
+    // =========================================================
+    void LateUpdate()
+    {
+        if (autoSortByY && spriteRenderer != null)
+        {
+            // sortAreaTopï¼ˆç”»é¢å¥¥å´ï¼‰ã®ã¨ã0ã€sortAreaBottomï¼ˆç”»é¢æ‰‹å‰å´ï¼‰ã®ã¨ã1ã«ãªã‚‹ã‚ˆã†æ­£è¦åŒ–
+            // â€»ç¯„å›²å¤–ã®å€¤ãŒæ¥ã¦ã‚‚ InverseLerp ã¯è‡ªå‹•ã§0ã€œ1ã«ã‚¯ãƒ©ãƒ³ãƒ—ã•ã‚Œã‚‹
+            float normalizedY = Mathf.InverseLerp(sortAreaTop, sortAreaBottom, transform.position.y);
+
+            // æ‰‹å‰ï¼ˆç”»é¢ä¸‹ï¼normalizedYãŒå¤§ãã„ï¼‰ã»ã©OrderãŒå¤§ãããªã‚‹ï¼æ‰‹å‰ã«æç”»ã•ã‚Œã‚‹
+            int order = sortingOrderBase + Mathf.RoundToInt(normalizedY * sortingOrderRange);
+            spriteRenderer.sortingOrder = order;
+        }
+    }
+
+    // =========================================================
+    // ç”»åƒã®ã‚³ãƒé€ã‚Šï¼ˆAnimatorã‚’ä½¿ã‚ãšè‡ªå‰ã§åˆ‡ã‚Šæ›¿ãˆã‚‹ï¼‰
     // =========================================================
     void UpdateFrameAnimation()
     {
@@ -162,7 +228,7 @@ public class WarpEnemyMove : MonoBehaviour, IHitSlowable
     }
 
     // =========================================================
-    // ¶‰E”½“]iÀÛ‚ÉˆÚ“®‚µ‚Ä‚¢‚é•ûŒücurrentDirection‚É‡‚í‚¹‚éj
+    // å·¦å³åè»¢ï¼ˆå®Ÿéš›ã«ç§»å‹•ã—ã¦ã„ã‚‹æ–¹å‘ï¼currentDirectionã«åˆã‚ã›ã‚‹ï¼‰
     // =========================================================
     void FlipSprite()
     {
@@ -171,11 +237,11 @@ public class WarpEnemyMove : MonoBehaviour, IHitSlowable
 
         bool movingRight = currentDirection.x > 0f;
 
-        // Œ³‰æ‘œ‚ª¶Œü‚«Šî€‚È‚çmovingRight‚ÉflipA‰EŒü‚«Šî€‚È‚ç‹t‚É‚·‚é
+        // å…ƒç”»åƒãŒå·¦å‘ãåŸºæº–ãªã‚‰movingRightæ™‚ã«flipã€å³å‘ãåŸºæº–ãªã‚‰é€†ã«ã™ã‚‹
         spriteRenderer.flipX = spriteFacesRightByDefault ? !movingRight : movingRight;
     }
 
-    // €–S‚ÉŒÄ‚Î‚ê‚éiEnemyHP‚ÌOnDeathƒCƒxƒ“ƒg‚©‚çj
+    // æ­»äº¡æ™‚ã«å‘¼ã°ã‚Œã‚‹ï¼ˆEnemyHPã®OnDeathã‚¤ãƒ™ãƒ³ãƒˆã‹ã‚‰ï¼‰
     public void HideShadow()
     {
         if (shadowObject != null)
@@ -183,18 +249,18 @@ public class WarpEnemyMove : MonoBehaviour, IHitSlowable
             shadowObject.SetActive(false);
         }
 
-        // ƒRƒ}‘—‚è‚à~‚ß‚Ä‚¨‚­i€–S‰‰o’†‚ÉŒÄ‹zƒ‹[ƒv‚ª‘±‚©‚È‚¢‚æ‚¤‚Éj
+        // ã‚³ãƒé€ã‚Šã‚‚æ­¢ã‚ã¦ãŠãï¼ˆæ­»äº¡æ¼”å‡ºä¸­ã«å‘¼å¸ãƒ«ãƒ¼ãƒ—ãŒç¶šã‹ãªã„ã‚ˆã†ã«ï¼‰
         isAnimating = false;
     }
 
-    // ”í’e‚ÉŒÄ‚ÔiEnemyHP‘¤‚©‚ç‚ÌŒÄ‚Ño‚µ—pj
+    // è¢«å¼¾æ™‚ã«å‘¼ã¶ï¼ˆEnemyHPå´ã‹ã‚‰ã®å‘¼ã³å‡ºã—ç”¨ï¼‰
     public void ApplyHitSlow()
     {
         slowTimer = hitSlowDuration;
         speedMultiplier = hitSlowMultiplier;
     }
 
-    // “İ‰»ƒ^ƒCƒ}[‚ÌŒo‰ßˆ—
+    // éˆåŒ–ã‚¿ã‚¤ãƒãƒ¼ã®çµŒéå‡¦ç†
     void UpdateHitSlow()
     {
         if (slowTimer <= 0f)
@@ -207,11 +273,11 @@ public class WarpEnemyMove : MonoBehaviour, IHitSlowable
 
         if (slowTimer <= 0f)
         {
-            speedMultiplier = 1f; // “İ‰»I—¹A’Êí‘¬“x‚É–ß‚·
+            speedMultiplier = 1f; // éˆåŒ–çµ‚äº†ã€é€šå¸¸é€Ÿåº¦ã«æˆ»ã™
         }
         else
         {
-            speedMultiplier = hitSlowMultiplier; // “İ‰»Œp‘±’†
+            speedMultiplier = hitSlowMultiplier; // éˆåŒ–ç¶™ç¶šä¸­
         }
     }
 }

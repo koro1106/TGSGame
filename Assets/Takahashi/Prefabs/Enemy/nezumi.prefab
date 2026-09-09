@@ -83,7 +83,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 98539e34292732b438953ec3519448c3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -154,7 +154,7 @@ MonoBehaviour:
   spiralSpeed: 20
   rotationSpeed: 1080
   dropItems:
-  - prefab: {fileID: 4247095691041555197, guid: 26d748848edfdd6449eec78b67fa87f4, type: 3}
+  - prefab: {fileID: 0}
     chance: 100
   dropCount: 1
   damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}

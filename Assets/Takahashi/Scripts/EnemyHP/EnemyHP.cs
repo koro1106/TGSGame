@@ -678,8 +678,10 @@ public class EnemyHP : MonoBehaviour
                 dmg.SetCritical(); // クリティカルなら黄色＋アイコン（属性色で上書きしない）
             }
             else
-            {if (currentHP <= 0)
-                //  属性に応じた色を設定（クリティカルでない時だけ）
+            {
+                //   不要だった「if (currentHP <= 0)」を削除。
+                //   これがあると、とどめの一撃の時しか属性色が付かなかった。
+                //   通常の被弾すべてで属性色を反映させる。
                 dmg.SetColor(GetDamageColor(attribute));
             }
         }

@@ -346,7 +346,7 @@ MonoBehaviour:
   detectCircleColor: {r: 1, g: 0.3, b: 0.3, a: 0.6}
   circleSegments: 50
   circleLineWidth: 1
-  moveAreaTopRatio: 0.3
+  moveAreaTopRatio: 0.05
   moveAreaBottomRatio: 1
   hitSlowMultiplier: 0.3
   hitSlowDuration: 0.5
