@@ -28,6 +28,15 @@
 /// 3. Inspector の "Frames" に enemy_jump_001〜040 を順番通りにドラッグ
 /// 4. Player Transform（未設定なら PlayerMovement / Player から自動取得）
 /// 5. 各種パラメータ（速度・検知半径・突進など）を調整
+///
+/// 【2026/09 修正メモ】
+///   ・Sorting Order の自動計算方式を変更。
+///     以前は「Y座標 × 倍率」で直接計算していたため、ワールド座標の値次第で
+///     マイナスになったり数万という異常な値になったりして安定しなかった。
+///     → 移動エリア(areaTop〜areaBottom)内でのY位置を0〜1に正規化してから
+///        sortingOrderBase〜sortingOrderBase+sortingOrderRange の範囲に
+///        収めるように変更。これで常に一定範囲（デフォルト100〜200）に収まり、
+///        マイナスや異常値には絶対にならない。
 /// </summary>
 [RequireComponent(typeof(SpriteRenderer))]
 public class RabitEnemyMove : MonoBehaviour, IHitSlowable
@@ -55,13 +64,21 @@ public class RabitEnemyMove : MonoBehaviour, IHitSlowable
     public float bodyTiltSpeed = 12f;
     private float currentBodyTilt = 0f;
 
+    // =========================================================
+    // ★変更：重なり順（点滅対策）
+    //   ワールド座標のYをそのまま倍率で掛けるとマイナスや異常値になって
+    //   不安定だったため、移動エリア内での相対位置(0〜1)から
+    //   一定範囲のsortingOrderを計算する方式に変更。
+    // =========================================================
     [Header("── 重なり順（点滅対策） ──────────")]
-    [Tooltip("ONにするとY座標に応じてSorting Orderを自動計算し、敵同士が重なった時の点滅（描画順の入れ替わり）を防ぎます")]
+    [Tooltip("ONにすると移動エリア内のY位置に応じてSorting Orderを自動計算し、敵同士が重なった時の点滅（描画順の入れ替わり）を防ぎます")]
     public bool autoSortByY = true;
-    [Tooltip("Y座標をSorting Orderに変換する際の倍率。値が大きいほど細かい差でも順序が変わります")]
-    public float sortingOrderMultiplier = 100f;
-    [Tooltip("この値を基準の順序に足す（他の描画物との前後関係を調整したい時に使用）")]
-    public int sortingOrderOffset = 0;
+
+    [Tooltip("Sorting Orderの基準値。常にこの値以上になります（例：100）")]
+    public int sortingOrderBase = 100;
+
+    [Tooltip("Sorting Orderの変動幅。sortingOrderBase 〜 sortingOrderBase+sortingOrderRange の範囲に収まります（例：range=100なら100〜200）。ほぼ固定にしたい場合はこの値を小さく（例：10〜20）してください")]
+    public int sortingOrderRange = 100;
 
     private SpriteRenderer sr;
     private int frameIndex;
@@ -208,11 +225,20 @@ public class RabitEnemyMove : MonoBehaviour, IHitSlowable
 
     void LateUpdate()
     {
-        // Y座標が低い（画面下＝手前）ほど大きいSorting Orderになるようにして、
-        // 敵同士が重なった時にどちらが手前か毎フレーム安定させる（点滅防止）
+        // ★変更：ワールド座標のYに倍率を掛ける方式（-∞〜+∞になり得て不安定）をやめ、
+        //   移動エリア(areaTop〜areaBottom)内でのY位置を0〜1に正規化してから
+        //   sortingOrderBase〜sortingOrderBase+sortingOrderRange の範囲に収める方式に変更。
+        //   これにより sortingOrder は必ず一定範囲に収まり、
+        //   マイナスや数万といった異常な値には絶対にならない。
         if (autoSortByY && sr != null)
         {
-            sr.sortingOrder = Mathf.RoundToInt(-transform.position.y * sortingOrderMultiplier) + sortingOrderOffset;
+            // areaTop（画面奥側）のとき0、areaBottom（画面手前側）のとき1になるように正規化
+            // ※範囲外の値が来ても InverseLerp は自動で0〜1にクランプしてくれる
+            float normalizedY = Mathf.InverseLerp(areaTop, areaBottom, transform.position.y);
+
+            // 手前（画面下＝normalizedYが大きい）ほどOrderが大きくなる＝手前に描画される
+            int order = sortingOrderBase + Mathf.RoundToInt(normalizedY * sortingOrderRange);
+            sr.sortingOrder = order;
         }
     }
 
