@@ -172,6 +172,12 @@ public class GunController : MonoBehaviour
     public Camera Cam => cam;
     public Vector2 LastShootDirection { get; private set; }
 
+    [Header("èeÇÃê∏ìx")]
+    [Range(0f, 100f)]
+    public float accuracy = 100f;
+
+    public float maxSpreadAngle = 15f;
+
 
 
     void Start()
@@ -533,7 +539,19 @@ public class GunController : MonoBehaviour
             }
 
             Vector2 direction =
-                (targetPosition - muzzle.position).normalized;
+     (targetPosition - muzzle.position).normalized;
+
+            // ê∏ìxÇ…ÇÊÇÈÉuÉå
+            float accuracyRate = 1f - (accuracy / 100f);
+
+            float spread =
+                Random.Range(
+                    -maxSpreadAngle * accuracyRate,
+                    maxSpreadAngle * accuracyRate
+                );
+
+            direction =
+                Quaternion.Euler(0f, 0f, spread) * direction;
 
             LastShootDirection = direction;
 

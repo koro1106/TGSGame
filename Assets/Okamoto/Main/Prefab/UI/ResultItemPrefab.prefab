@@ -193,7 +193,7 @@ MonoBehaviour:
   exp1Sprite: {fileID: 21300000, guid: 176685f4c2f88364ea55055b6f2a8b70, type: 3}
   exp2Sprite: {fileID: 21300000, guid: 904692b4bd23f1f4eb1f0ea7bb7a80c5, type: 3}
   exp3Sprite: {fileID: 21300000, guid: 416d3956b8457184586baf39bbb63e3b, type: 3}
-  exp4Sprite: {fileID: 21300000, guid: 0699021a67dad2141b7d85b446920ed0, type: 3}
+  preExpSprite: {fileID: 21300000, guid: 0699021a67dad2141b7d85b446920ed0, type: 3}
 --- !u!222 &7570508982221385277
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -7,6 +7,13 @@ public class TargetRange : MonoBehaviour
     [Header("ターゲット範囲")]
     public float range = 4000f;
 
+
+    // =========================================================
+    // 通常ロック
+    // =========================================================
+
+    [Header("========== 通常ロック ==========")]
+
     [Header("ロック演出の親")]
     public GameObject targetImage;
 
@@ -25,13 +32,37 @@ public class TargetRange : MonoBehaviour
     [Header("コーナーに使用するSprite")]
     public Sprite lockCornerSprite;
 
+
+    // =========================================================
+    // クロスヘア
+    // =========================================================
+
+    [Header("========== クロスヘア ==========")]
+
     [Header("クロスヘア")]
     public RectTransform crosshair;
 
     public PlayerStats playerStats;
 
+
+    // =========================================================
+    // ロック設定
+    // =========================================================
+
+    [Header("========== ロック設定 ==========")]
+
     [Header("ロック変更時間")]
-    public float changeTargetTime = 2f;
+    public float changeTargetTime = 0.5f;
+
+    [Header("範囲内クロスヘア判定")]
+    public float crosshairRange = 130f;
+
+
+    // =========================================================
+    // コーナー演出
+    // =========================================================
+
+    [Header("========== コーナー演出 ==========")]
 
     [Header("コーナー開始距離")]
     public float cornerStartDistance = 150f;
@@ -52,9 +83,43 @@ public class TargetRange : MonoBehaviour
     public float cornerCloseDistance = 50f;
 
 
-    // =====================================
+    // =========================================================
+    // 範囲外ロック
+    // =========================================================
+
+    [Header("========== 範囲外ロック ==========")]
+
+    [Header("範囲外ロックの親")]
+    public GameObject outOfRangeTargetImage;
+
+    [Header("範囲外 中央ロックImage")]
+    public Image outRangeLockSquareImage;
+
+    [Header("範囲外 中央ロックSprite")]
+    public Sprite outRangeLockSquareSprite;
+
+    [Header("範囲外 右上コーナーImage")]
+    public Image outRangeLockTopRightImage;
+
+    [Header("範囲外 左下コーナーImage")]
+    public Image outRangeLockBottomLeftImage;
+
+    [Header("範囲外 右上コーナーSprite")]
+    public Sprite outRangeLockTopRightSprite;
+
+    [Header("範囲外 左下コーナーSprite")]
+    public Sprite outRangeLockBottomLeftSprite;
+
+    [Header("範囲外ロック時間")]
+    public float outRangeChangeTargetTime = 0.5f;
+
+    [Header("範囲外クロスヘア判定")]
+    public float outOfRangeCrosshairRange = 30f;
+
+
+    // =========================================================
     // ターゲット
-    // =====================================
+    // =========================================================
 
     private EnemyHP aimingEnemy;
 
@@ -64,50 +129,56 @@ public class TargetRange : MonoBehaviour
 
     private EnemyHP currentEnemyHP;
 
+    private bool wasTargetInRange = false;
 
-    // =====================================
+    private bool isOutOfRangeTarget = false;
+
+
+    // =========================================================
     // ロック演出
-    // =====================================
+    // =========================================================
 
     private Coroutine lockAnimationCoroutine;
 
+    // 通常ロック用
     private Vector2 topRightBasePosition;
     private Vector2 bottomLeftBasePosition;
+
+    // 範囲外ロック用
+    private Vector2 outRangeTopRightBasePosition;
+    private Vector2 outRangeBottomLeftBasePosition;
 
     private bool isLockAnimationFinished = false;
 
 
-    // =====================================
+    // =========================================================
     // Start
-    // =====================================
+    // =========================================================
 
     void Start()
     {
-        // =========================
-        // Sprite設定
-        // =========================
+        // =====================================================
+        // 通常ロック Sprite設定
+        // =====================================================
 
-        if (
-            lockSquareImage != null &&
-            lockSquareSprite != null
-        )
+        if (lockSquareImage != null &&
+            lockSquareSprite != null)
         {
             lockSquareImage.sprite =
                 lockSquareSprite;
         }
 
 
-        if (
-            lockTopRightImage != null &&
-            lockCornerSprite != null
-        )
+        if (lockTopRightImage != null &&
+            lockCornerSprite != null)
         {
             lockTopRightImage.sprite =
                 lockCornerSprite;
         }
 
 
-        if (lockBottomLeftImage != null)
+        if (lockBottomLeftImage != null &&
+            lockCornerSprite != null)
         {
             lockBottomLeftImage.sprite =
                 lockCornerSprite;
@@ -127,111 +198,142 @@ public class TargetRange : MonoBehaviour
                     0f,
                     90f
                 );
-
-            if (lockTopRightImage != null)
-            {
-                lockTopRightImage.sprite =
-                    lockCornerSprite;
-
-                // 右上コーナーを強制的に縮小
-                
-
-                // 左に90度回転
-                lockTopRightImage.rectTransform.localRotation =
-                    Quaternion.Euler(
-                        0f,
-                        0f,
-                        90f
-                    );
-            }
         }
 
-
-        // =========================
-        // 最初は非表示
-        // =========================
-
-        if (targetImage != null)
-        {
-            targetImage.SetActive(false);
-        }
-
-        if (lockSquareImage != null)
-        {
-            lockSquareImage.gameObject.SetActive(false);
-        }
 
         if (lockTopRightImage != null)
         {
-            lockTopRightImage.gameObject.SetActive(false);
+            lockTopRightImage.rectTransform.localRotation =
+                Quaternion.Euler(
+                    0f,
+                    0f,
+                    90f
+                );
         }
 
-        if (lockBottomLeftImage != null)
+
+        // =====================================================
+        // 範囲外ロック Sprite設定
+        // =====================================================
+
+        if (outRangeLockSquareImage != null &&
+            outRangeLockSquareSprite != null)
         {
-            lockBottomLeftImage.gameObject.SetActive(false);
+            outRangeLockSquareImage.sprite =
+                outRangeLockSquareSprite;
         }
+
+
+        if (outRangeLockTopRightImage != null &&
+            outRangeLockTopRightSprite != null)
+        {
+            outRangeLockTopRightImage.sprite =
+                outRangeLockTopRightSprite;
+
+            outRangeLockTopRightImage.rectTransform.localRotation =
+                Quaternion.Euler(
+                    0f,
+                    0f,
+                    90f
+                );
+        }
+
+
+        if (outRangeLockBottomLeftImage != null &&
+            outRangeLockBottomLeftSprite != null)
+        {
+            outRangeLockBottomLeftImage.sprite =
+                outRangeLockBottomLeftSprite;
+
+            // 左下用に反転
+            outRangeLockBottomLeftImage.rectTransform.localScale =
+                new Vector3(
+                    -1f,
+                    -1f,
+                    1f
+                );
+
+            outRangeLockBottomLeftImage.rectTransform.localRotation =
+                Quaternion.Euler(
+                    0f,
+                    0f,
+                    90f
+                );
+        }
+
+
+        // =====================================================
+        // 最初は全部非表示
+        // =====================================================
+
+        HideNormalLockUI();
+
+        HideOutRangeLockUI();
     }
 
 
-    // =====================================
+    // =========================================================
     // Update
-    // =====================================
+    // =========================================================
 
     void Update()
-{
-    // =====================================
-    // まだターゲットがいない場合
-    // =====================================
-
-    if (CurrentTarget == null)
     {
-        FindNearestEnemy();
-    }
+        // =====================================================
+        // まだターゲットがいない
+        // =====================================================
+
+        if (CurrentTarget == null)
+        {
+            FindNearestEnemy();
+        }
 
 
-    // =====================================
-    // クロスヘアで敵を狙っているか確認
-    // =====================================
+        // =====================================================
+        // クロスヘアで敵を狙っているか
+        // =====================================================
 
-    CheckCrosshairTarget();
+        CheckCrosshairTarget();
 
 
-        // =====================================
-        // ★ロック中の敵が死亡中ならロック解除
-        // =====================================
+        // =====================================================
+        // ロック中の敵が死亡中
+        // =====================================================
 
         if (CurrentTarget != null)
         {
-            EnemyHP hp = CurrentTarget.GetComponent<EnemyHP>();
+            EnemyHP hp =
+                CurrentTarget.GetComponent<EnemyHP>();
 
-            if (hp != null && hp.IsDying())
+            if (hp != null &&
+                hp.IsDying())
             {
                 ClearTarget();
             }
         }
 
 
-        // =====================================
+        // =====================================================
         // ロック中の敵が消えた
-        // =====================================
+        // =====================================================
 
-        if (currentEnemyHP == null && CurrentTarget != null)
-    {
-        ClearTarget();
+        if (currentEnemyHP == null &&
+            CurrentTarget != null)
+        {
+            ClearTarget();
+        }
+
+
+        // =====================================================
+        // ロックUI更新
+        // =====================================================
+
+        UpdateTargetImage();
     }
 
 
-    // =====================================
-    // ロックUI更新
-    // =====================================
-
-    UpdateTargetImage();
-}
-
-
-    // =====================================
+    // =========================================================
     // クロスヘアで敵を狙っているか
-    // =====================================
+    // =========================================================
 
     void CheckCrosshairTarget()
     {
@@ -249,9 +351,32 @@ public class TargetRange : MonoBehaviour
             Mathf.Infinity;
 
 
+        // =====================================================
+        // プレイヤーからのターゲット範囲
+        // =====================================================
+
+        float targetRange =
+            range;
+
+        if (playerStats != null)
+        {
+            targetRange +=
+                playerStats.targetingRangeUP;
+        }
+
+
+        // =====================================================
+        // 敵をチェック
+        // =====================================================
+
         foreach (EnemyHP enemy in enemies)
         {
             if (enemy == null)
+                continue;
+
+
+            // 死亡中は対象外
+            if (enemy.IsDying())
                 continue;
 
 
@@ -260,30 +385,82 @@ public class TargetRange : MonoBehaviour
                 continue;
 
 
-            float distance =
+            // =================================================
+            // プレイヤーから敵までの距離
+            // =================================================
+
+            float enemyDistanceFromPlayer =
+                Vector2.Distance(
+                    transform.position,
+                    enemy.transform.position
+                );
+
+
+            bool isInRange =
+                enemyDistanceFromPlayer <=
+                targetRange;
+
+
+            // =================================================
+            // クロスヘアから敵までの距離
+            // =================================================
+
+            float distanceFromCrosshair =
                 Vector2.Distance(
                     crosshair.position,
                     enemy.transform.position
                 );
 
 
-            // クロスヘア判定範囲
-            if (distance > 130f)
-                continue;
+            // =================================================
+            // 範囲内
+            // =================================================
 
-
-            if (distance < closestDistance)
+            if (isInRange)
             {
-                closestDistance = distance;
+                // 通常は130以内
+                if (distanceFromCrosshair >
+                    crosshairRange)
+                {
+                    continue;
+                }
+            }
 
-                closestToCrosshair = enemy;
+
+            // =================================================
+            // 範囲外
+            // =================================================
+
+            else
+            {
+                // 範囲外はかなり精度を下げる
+                if (distanceFromCrosshair >
+                    outOfRangeCrosshairRange)
+                {
+                    continue;
+                }
+            }
+
+
+            // =================================================
+            // 一番クロスヘアに近い敵
+            // =================================================
+
+            if (distanceFromCrosshair <
+                closestDistance)
+            {
+                closestDistance =
+                    distanceFromCrosshair;
+
+                closestToCrosshair =
+                    enemy;
             }
         }
 
 
-        // =====================================
-        // 敵に合っていない
-        // =====================================
+        // =====================================================
+        // 敵にカーソルが合っていない
+        // =====================================================
 
         if (closestToCrosshair == null)
         {
@@ -295,13 +472,15 @@ public class TargetRange : MonoBehaviour
         }
 
 
-        // =====================================
-        // 同じ敵を狙い続けている
-        // =====================================
+        // =====================================================
+        // 同じ敵を狙っている
+        // =====================================================
 
-        if (aimingEnemy == closestToCrosshair)
+        if (aimingEnemy ==
+            closestToCrosshair)
         {
-            aimingTimer += Time.deltaTime;
+            aimingTimer +=
+                Time.deltaTime;
         }
         else
         {
@@ -312,11 +491,38 @@ public class TargetRange : MonoBehaviour
         }
 
 
-        // =====================================
-        // 2秒狙った
-        // =====================================
+        // =====================================================
+        // ロック対象の範囲判定
+        // =====================================================
 
-        if (aimingTimer >= changeTargetTime)
+        float aimingEnemyDistance =
+            Vector2.Distance(
+                transform.position,
+                aimingEnemy.transform.position
+            );
+
+
+        bool aimingEnemyIsOutOfRange =
+            aimingEnemyDistance >
+            targetRange;
+
+
+        // =====================================================
+        // ロックに必要な時間
+        // =====================================================
+
+        float requiredLockTime =
+            aimingEnemyIsOutOfRange
+                ? outRangeChangeTargetTime
+                : changeTargetTime;
+
+
+        // =====================================================
+        // ロック完了
+        // =====================================================
+
+        if (aimingTimer >=
+            requiredLockTime)
         {
             ChangeTarget(
                 aimingEnemy
@@ -329,9 +535,9 @@ public class TargetRange : MonoBehaviour
     }
 
 
-    // =====================================
+    // =========================================================
     // ターゲット変更
-    // =====================================
+    // =========================================================
 
     void ChangeTarget(EnemyHP newTarget)
     {
@@ -339,7 +545,10 @@ public class TargetRange : MonoBehaviour
             return;
 
 
+        // =====================================================
         // 古いイベント解除
+        // =====================================================
+
         if (currentEnemyHP != null)
         {
             currentEnemyHP.OnDeath -=
@@ -354,22 +563,58 @@ public class TargetRange : MonoBehaviour
             newTarget.transform;
 
 
+        // =====================================================
+        // 範囲判定
+        // =====================================================
+
+        float targetRange =
+            range;
+
+        if (playerStats != null)
+        {
+            targetRange +=
+                playerStats.targetingRangeUP;
+        }
+
+
+        float distance =
+            Vector2.Distance(
+                transform.position,
+                newTarget.transform.position
+            );
+
+
+        isOutOfRangeTarget =
+            distance > targetRange;
+
+
+        // =====================================================
+        // 範囲状態を記録
+        // =====================================================
+
+        wasTargetInRange =
+            !isOutOfRangeTarget;
+
+
+        // =====================================================
         // 死亡イベント登録
+        // =====================================================
+
         currentEnemyHP.OnDeath +=
             OnCurrentTargetDeath;
 
 
-        // =====================================
-        // ★ここでロック演出開始
-        // =====================================
+        // =====================================================
+        // ロック演出開始
+        // =====================================================
 
         PlayLockAnimation();
     }
 
 
-    // =====================================
+    // =========================================================
     // ロック演出開始
-    // =====================================
+    // =========================================================
 
     void PlayLockAnimation()
     {
@@ -381,16 +626,26 @@ public class TargetRange : MonoBehaviour
         }
 
 
-        lockAnimationCoroutine =
-            StartCoroutine(
-                LockAnimationRoutine()
-            );
+        if (isOutOfRangeTarget)
+        {
+            lockAnimationCoroutine =
+                StartCoroutine(
+                    OutRangeLockAnimationRoutine()
+                );
+        }
+        else
+        {
+            lockAnimationCoroutine =
+                StartCoroutine(
+                    LockAnimationRoutine()
+                );
+        }
     }
 
 
-    // =====================================
+    // =========================================================
     // 一番近い敵を取得
-    // =====================================
+    // =========================================================
 
     void FindNearestEnemy()
     {
@@ -402,9 +657,23 @@ public class TargetRange : MonoBehaviour
             FindObjectsOfType<EnemyHP>();
 
 
+        float targetRange =
+            range;
+
+        if (playerStats != null)
+        {
+            targetRange +=
+                playerStats.targetingRangeUP;
+        }
+
+
         foreach (EnemyHP enemy in enemies)
         {
             if (enemy == null)
+                continue;
+
+
+            if (enemy.IsDying())
                 continue;
 
 
@@ -415,48 +684,49 @@ public class TargetRange : MonoBehaviour
                 );
 
 
-            float targetRange =
-                range;
-
-
-            if (playerStats != null)
+            if (distance >
+                targetRange)
             {
-                targetRange +=
-                    playerStats.targetingRangeUP;
+                continue;
             }
 
 
-            if (distance > targetRange)
-                continue;
-
-
-            if (distance < nearestDistance)
+            if (distance <
+                nearestDistance)
             {
                 nearestDistance =
                     distance;
 
+
                 CurrentTarget =
                     enemy.transform;
+
 
                 currentEnemyHP =
                     enemy;
 
+
+                isOutOfRangeTarget =
+                    false;
+
+
+                wasTargetInRange =
+                    true;
+
+
                 currentEnemyHP.OnDeath +=
                     OnCurrentTargetDeath;
 
-                // =========================
-                // 自動でターゲットになった瞬間
-                // ロックオン演出を再生
-                // =========================
+
                 PlayLockAnimation();
             }
         }
     }
 
 
-    // =====================================
+    // =========================================================
     // 敵が死亡
-    // =====================================
+    // =========================================================
 
     void OnCurrentTargetDeath()
     {
@@ -464,9 +734,9 @@ public class TargetRange : MonoBehaviour
     }
 
 
-    // =====================================
+    // =========================================================
     // ターゲット解除
-    // =====================================
+    // =========================================================
 
     void ClearTarget()
     {
@@ -481,9 +751,15 @@ public class TargetRange : MonoBehaviour
 
         currentEnemyHP = null;
 
+        aimingEnemy = null;
 
-        isLockAnimationFinished =
-            false;
+        aimingTimer = 0f;
+
+        isLockAnimationFinished = false;
+
+        isOutOfRangeTarget = false;
+
+        wasTargetInRange = false;
 
 
         if (lockAnimationCoroutine != null)
@@ -492,10 +768,23 @@ public class TargetRange : MonoBehaviour
                 lockAnimationCoroutine
             );
 
-            lockAnimationCoroutine = null;
+            lockAnimationCoroutine =
+                null;
         }
 
 
+        HideNormalLockUI();
+
+        HideOutRangeLockUI();
+    }
+
+
+    // =========================================================
+    // 通常ロックUIを非表示
+    // =========================================================
+
+    void HideNormalLockUI()
+    {
         if (targetImage != null)
         {
             targetImage.SetActive(false);
@@ -521,125 +810,327 @@ public class TargetRange : MonoBehaviour
     }
 
 
-    // =====================================
+    // =========================================================
+    // 範囲外ロックUIを非表示
+    // =========================================================
+
+    void HideOutRangeLockUI()
+    {
+        if (outOfRangeTargetImage != null)
+        {
+            outOfRangeTargetImage.SetActive(false);
+        }
+
+
+        if (outRangeLockSquareImage != null)
+        {
+            outRangeLockSquareImage.gameObject.SetActive(false);
+        }
+
+
+        if (outRangeLockTopRightImage != null)
+        {
+            outRangeLockTopRightImage.gameObject.SetActive(false);
+        }
+
+
+        if (outRangeLockBottomLeftImage != null)
+        {
+            outRangeLockBottomLeftImage.gameObject.SetActive(false);
+        }
+    }
+
+
+    // =========================================================
     // ロックUI更新
-    // =====================================
+    // =========================================================
 
     void UpdateTargetImage()
     {
-        if (targetImage == null)
-            return;
-
-
-        // =====================================
-        // ロックしていない
-        // =====================================
-
         if (CurrentTarget == null)
         {
-            targetImage.SetActive(false);
+            HideNormalLockUI();
+
+            HideOutRangeLockUI();
 
             return;
         }
 
 
-        // =====================================
-        // 敵の位置へ追従
-        // =====================================
+        // =====================================================
+        // ターゲット範囲
+        // =====================================================
+
+        float targetRange =
+            range;
+
+        if (playerStats != null)
+        {
+            targetRange +=
+                playerStats.targetingRangeUP;
+        }
+
+
+        // =====================================================
+        // 敵との距離
+        // =====================================================
+
+        float enemyDistance =
+            Vector2.Distance(
+                transform.position,
+                CurrentTarget.position
+            );
+
+
+        bool isInRange =
+            enemyDistance <= targetRange;
+
+
+        // =====================================================
+        // 範囲外 → 範囲内
+        // =====================================================
+
+        if (isInRange &&
+            !wasTargetInRange)
+        {
+            isOutOfRangeTarget = false;
+
+            wasTargetInRange = true;
+
+            HideOutRangeLockUI();
+
+            PlayLockAnimation();
+        }
+
+
+        // =====================================================
+        // 範囲内 → 範囲外
+        // =====================================================
+
+        if (!isInRange &&
+            wasTargetInRange)
+        {
+            isOutOfRangeTarget = true;
+
+            wasTargetInRange = false;
+
+            HideNormalLockUI();
+
+            PlayLockAnimation();
+        }
+
+
+        // =====================================================
+        // 範囲内
+        // =====================================================
+
+        if (isInRange)
+        {
+            UpdateNormalLockUI();
+
+            return;
+        }
+
+
+        // =====================================================
+        // 範囲外
+        // =====================================================
+
+        UpdateOutRangeLockUI();
+    }
+
+
+    // =========================================================
+    // 通常ロックUI更新
+    // =========================================================
+
+    void UpdateNormalLockUI()
+    {
+        HideOutRangeLockUI();
+
+
+        if (targetImage == null)
+            return;
+
 
         targetImage.SetActive(true);
+
 
         targetImage.transform.position =
             CurrentTarget.position;
 
 
-        // =====================================
-        // ロック演出終了後
-        // コーナーを常に揺らす
-        // =====================================
-
+        // 演出中
         if (!isLockAnimationFinished)
             return;
 
-        if (
-            lockTopRightImage == null ||
-            lockBottomLeftImage == null
-        )
+
+        if (lockTopRightImage == null ||
+            lockBottomLeftImage == null)
         {
             return;
         }
 
 
-        // =====================================
-        // 揺れ時間
-        // =====================================
+        // =====================================================
+        // 揺れ
+        // =====================================================
 
         float time =
-            Time.time * cornerShakeSpeed;
+            Time.time *
+            cornerShakeSpeed;
 
-
-        // =====================================
-        // 右上コーナーの揺れ
-        // =====================================
 
         float rightX =
             Mathf.Sin(time) *
             cornerShakeAmount;
 
+
         float rightY =
-            Mathf.Cos(time * 1.3f) *
-            cornerShakeAmount;
-
-
-        // =====================================
-        // 左下コーナーの揺れ
-        // =====================================
-
-        float leftX =
-            Mathf.Sin(time + Mathf.PI) *
-            cornerShakeAmount;
-
-        float leftY =
             Mathf.Cos(
-                time * 1.3f + Mathf.PI
+                time * 1.3f
             ) *
             cornerShakeAmount;
 
 
-        // =====================================
-        // 実際に位置を動かす
-        // =====================================
+        float leftX =
+            Mathf.Sin(
+                time + Mathf.PI
+            ) *
+            cornerShakeAmount;
 
-        lockTopRightImage.rectTransform.anchoredPosition =
+
+        float leftY =
+            Mathf.Cos(
+                time * 1.3f +
+                Mathf.PI
+            ) *
+            cornerShakeAmount;
+
+
+        lockTopRightImage
+            .rectTransform
+            .anchoredPosition =
             topRightBasePosition +
             new Vector2(
                 rightX,
                 rightY
             );
 
-        lockBottomLeftImage.rectTransform.anchoredPosition =
+
+        lockBottomLeftImage
+            .rectTransform
+            .anchoredPosition =
             bottomLeftBasePosition +
             new Vector2(
                 leftX,
                 leftY
             );
-
     }
 
 
-    // =====================================
-    // ロック演出
-    // =====================================
+    // =========================================================
+    // 範囲外ロックUI更新
+    // =========================================================
+
+    void UpdateOutRangeLockUI()
+    {
+        HideNormalLockUI();
+
+
+        if (outOfRangeTargetImage != null)
+        {
+            outOfRangeTargetImage.SetActive(true);
+
+            outOfRangeTargetImage.transform.position =
+                CurrentTarget.position;
+        }
+
+
+        // 演出中
+        if (!isLockAnimationFinished)
+            return;
+
+
+        if (outRangeLockTopRightImage == null ||
+            outRangeLockBottomLeftImage == null)
+        {
+            return;
+        }
+
+
+        // =====================================================
+        // 範囲外コーナーの揺れ
+        // =====================================================
+
+        float time =
+            Time.time *
+            cornerShakeSpeed;
+
+
+        float rightX =
+            Mathf.Sin(time) *
+            cornerShakeAmount;
+
+
+        float rightY =
+            Mathf.Cos(
+                time * 1.3f
+            ) *
+            cornerShakeAmount;
+
+
+        float leftX =
+            Mathf.Sin(
+                time + Mathf.PI
+            ) *
+            cornerShakeAmount;
+
+
+        float leftY =
+            Mathf.Cos(
+                time * 1.3f +
+                Mathf.PI
+            ) *
+            cornerShakeAmount;
+
+
+        outRangeLockTopRightImage
+            .rectTransform
+            .anchoredPosition =
+            outRangeTopRightBasePosition +
+            new Vector2(
+                rightX,
+                rightY
+            );
+
+
+        outRangeLockBottomLeftImage
+            .rectTransform
+            .anchoredPosition =
+            outRangeBottomLeftBasePosition +
+            new Vector2(
+                leftX,
+                leftY
+            );
+    }
+
+
+    // =========================================================
+    // 通常ロック演出
+    // =========================================================
 
     IEnumerator LockAnimationRoutine()
     {
-        isLockAnimationFinished =
-            false;
+        isLockAnimationFinished = false;
 
 
-        // =====================================
-        // UI表示
-        // =====================================
+        // =====================================================
+        // 通常UI表示
+        // =====================================================
+
+        HideOutRangeLockUI();
+
 
         if (targetImage != null)
         {
@@ -665,9 +1156,19 @@ public class TargetRange : MonoBehaviour
         }
 
 
-        // =====================================
-        // RectTransform取得
-        // =====================================
+        if (lockSquareImage == null ||
+            lockTopRightImage == null ||
+            lockBottomLeftImage == null)
+        {
+            isLockAnimationFinished = true;
+
+            yield break;
+        }
+
+
+        // =====================================================
+        // RectTransform
+        // =====================================================
 
         RectTransform squareRect =
             lockSquareImage.rectTransform;
@@ -679,12 +1180,9 @@ public class TargetRange : MonoBehaviour
             lockBottomLeftImage.rectTransform;
 
 
-        // =====================================
-        // コーナーの親
-        // =====================================
-
         RectTransform parentRect =
             rightRect.parent as RectTransform;
+
 
         if (parentRect == null)
         {
@@ -692,36 +1190,36 @@ public class TargetRange : MonoBehaviour
         }
 
 
-        // =====================================
-        // 中央四角の4隅を取得
-        // =====================================
+        // =====================================================
+        // 中央四角
+        // =====================================================
 
         Vector3[] squareCorners =
             new Vector3[4];
+
 
         squareRect.GetWorldCorners(
             squareCorners
         );
 
 
-        // 右上
         Vector3 rightWorldPosition =
             squareCorners[2];
 
 
-        // 左下
         Vector3 leftWorldPosition =
             squareCorners[0];
 
 
-        // =====================================
-        // World座標 → 親のローカル座標
-        // =====================================
+        // =====================================================
+        // World → Local
+        // =====================================================
 
         topRightBasePosition =
             parentRect.InverseTransformPoint(
                 rightWorldPosition
             );
+
 
         bottomLeftBasePosition =
             parentRect.InverseTransformPoint(
@@ -729,15 +1227,16 @@ public class TargetRange : MonoBehaviour
             );
 
 
-        // =====================================
-        // ★コーナーを中央方向へ強制的に近づける
-        // =====================================
+        // =====================================================
+        // 中央方向へ近づける
+        // =====================================================
 
         topRightBasePosition +=
             new Vector2(
                 -cornerCloseDistance,
                 -cornerCloseDistance
             );
+
 
         bottomLeftBasePosition +=
             new Vector2(
@@ -746,9 +1245,9 @@ public class TargetRange : MonoBehaviour
             );
 
 
-        // =====================================
-        // 少し外側へ
-        // =====================================
+        // =====================================================
+        // 少し内側
+        // =====================================================
 
         topRightBasePosition +=
             new Vector2(
@@ -764,9 +1263,9 @@ public class TargetRange : MonoBehaviour
             );
 
 
-        // =====================================
+        // =====================================================
         // 外側の開始位置
-        // =====================================
+        // =====================================================
 
         Vector2 rightStart =
             topRightBasePosition +
@@ -787,28 +1286,38 @@ public class TargetRange : MonoBehaviour
         rightRect.anchoredPosition =
             rightStart;
 
+
         leftRect.anchoredPosition =
             leftStart;
 
 
-        // =====================================
-        // コーナーを高速移動
-        // =====================================
+        // =====================================================
+        // コーナー移動
+        // =====================================================
 
         float timer = 0f;
 
-        while (timer < cornerMoveDuration)
+
+        while (timer <
+               cornerMoveDuration)
         {
-            timer += Time.deltaTime;
+            timer +=
+                Time.deltaTime;
+
 
             float t =
                 Mathf.Clamp01(
-                    timer / cornerMoveDuration
+                    timer /
+                    cornerMoveDuration
                 );
 
-            // 最初は一気に加速して
-            // 最後だけ少し減速
-            t = 1f - Mathf.Pow(1f - t, 4f);
+
+            t =
+                1f -
+                Mathf.Pow(
+                    1f - t,
+                    4f
+                );
 
 
             rightRect.anchoredPosition =
@@ -831,30 +1340,269 @@ public class TargetRange : MonoBehaviour
         }
 
 
-        // =====================================
+        // =====================================================
         // 最終位置
-        // =====================================
+        // =====================================================
 
         rightRect.anchoredPosition =
             topRightBasePosition;
+
 
         leftRect.anchoredPosition =
             bottomLeftBasePosition;
 
 
-        // =====================================
-        // 移動完了
-        // 揺れ開始
-        // =====================================
-
-        isLockAnimationFinished =
-            true;
+        isLockAnimationFinished = true;
     }
 
 
-    // =====================================
+    // =========================================================
+    // 範囲外ロック演出
+    // =========================================================
+
+    IEnumerator OutRangeLockAnimationRoutine()
+    {
+        isLockAnimationFinished = false;
+
+
+        // =====================================================
+        // 通常UI OFF
+        // =====================================================
+
+        HideNormalLockUI();
+
+
+        // =====================================================
+        // 範囲外UI ON
+        // =====================================================
+
+        if (outOfRangeTargetImage != null)
+        {
+            outOfRangeTargetImage.SetActive(true);
+        }
+
+
+        if (outRangeLockSquareImage != null)
+        {
+            outRangeLockSquareImage.gameObject.SetActive(true);
+        }
+
+
+        if (outRangeLockTopRightImage != null)
+        {
+            outRangeLockTopRightImage.gameObject.SetActive(true);
+        }
+
+
+        if (outRangeLockBottomLeftImage != null)
+        {
+            outRangeLockBottomLeftImage.gameObject.SetActive(true);
+        }
+
+
+        if (outRangeLockSquareImage == null ||
+            outRangeLockTopRightImage == null ||
+            outRangeLockBottomLeftImage == null)
+        {
+            isLockAnimationFinished = true;
+
+            yield break;
+        }
+
+
+        // =====================================================
+        // RectTransform
+        // =====================================================
+
+        RectTransform squareRect =
+            outRangeLockSquareImage.rectTransform;
+
+        RectTransform rightRect =
+            outRangeLockTopRightImage.rectTransform;
+
+        RectTransform leftRect =
+            outRangeLockBottomLeftImage.rectTransform;
+
+
+        RectTransform parentRect =
+            rightRect.parent as RectTransform;
+
+
+        if (parentRect == null)
+        {
+            yield break;
+        }
+
+
+        // =====================================================
+        // 中央四角
+        // =====================================================
+
+        Vector3[] squareCorners =
+            new Vector3[4];
+
+
+        squareRect.GetWorldCorners(
+            squareCorners
+        );
+
+
+        Vector3 rightWorldPosition =
+            squareCorners[2];
+
+
+        Vector3 leftWorldPosition =
+            squareCorners[0];
+
+
+        // =====================================================
+        // World → Local
+        // =====================================================
+
+        outRangeTopRightBasePosition =
+            parentRect.InverseTransformPoint(
+                rightWorldPosition
+            );
+
+
+        outRangeBottomLeftBasePosition =
+            parentRect.InverseTransformPoint(
+                leftWorldPosition
+            );
+
+
+        // =====================================================
+        // 中央方向へ近づける
+        // =====================================================
+
+        outRangeTopRightBasePosition +=
+            new Vector2(
+                -cornerCloseDistance,
+                -cornerCloseDistance
+            );
+
+
+        outRangeBottomLeftBasePosition +=
+            new Vector2(
+                cornerCloseDistance,
+                cornerCloseDistance
+            );
+
+
+        // =====================================================
+        // 少し内側
+        // =====================================================
+
+        outRangeTopRightBasePosition +=
+            new Vector2(
+                cornerOffset,
+                cornerOffset
+            );
+
+
+        outRangeBottomLeftBasePosition -=
+            new Vector2(
+                cornerOffset,
+                cornerOffset
+            );
+
+
+        // =====================================================
+        // 外側の開始位置
+        // =====================================================
+
+        Vector2 rightStart =
+            outRangeTopRightBasePosition +
+            new Vector2(
+                cornerStartDistance,
+                cornerStartDistance
+            );
+
+
+        Vector2 leftStart =
+            outRangeBottomLeftBasePosition -
+            new Vector2(
+                cornerStartDistance,
+                cornerStartDistance
+            );
+
+
+        rightRect.anchoredPosition =
+            rightStart;
+
+
+        leftRect.anchoredPosition =
+            leftStart;
+
+
+        // =====================================================
+        // コーナー移動
+        // =====================================================
+
+        float timer = 0f;
+
+
+        while (timer <
+               cornerMoveDuration)
+        {
+            timer +=
+                Time.deltaTime;
+
+
+            float t =
+                Mathf.Clamp01(
+                    timer /
+                    cornerMoveDuration
+                );
+
+
+            t =
+                1f -
+                Mathf.Pow(
+                    1f - t,
+                    4f
+                );
+
+
+            rightRect.anchoredPosition =
+                Vector2.Lerp(
+                    rightStart,
+                    outRangeTopRightBasePosition,
+                    t
+                );
+
+
+            leftRect.anchoredPosition =
+                Vector2.Lerp(
+                    leftStart,
+                    outRangeBottomLeftBasePosition,
+                    t
+                );
+
+
+            yield return null;
+        }
+
+
+        // =====================================================
+        // 最終位置
+        // =====================================================
+
+        rightRect.anchoredPosition =
+            outRangeTopRightBasePosition;
+
+
+        leftRect.anchoredPosition =
+            outRangeBottomLeftBasePosition;
+
+
+        isLockAnimationFinished = true;
+    }
+
+
+    // =========================================================
     // Destroy
-    // =====================================
+    // =========================================================
 
     void OnDestroy()
     {

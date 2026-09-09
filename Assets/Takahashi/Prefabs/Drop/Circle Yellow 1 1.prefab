@@ -288,7 +288,7 @@ MonoBehaviour:
   addPreExp: 0
   dropItemType: 2
   resultItemAmount: 1
-  collectDistance: 90
+  collectDistance: 230
   collectDisTotal: 0
   stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   collectMoveSpeed: 15
