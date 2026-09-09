@@ -485,8 +485,8 @@ MonoBehaviour:
   enemies:
   - prefab: {fileID: 5658466300848699742, guid: 4451329126ffa93498ccea07ae4d06a7, type: 3}
     weight: 100
-  - prefab: {fileID: 7801636748621657906, guid: 799c801ec8b355a48bcf47943e3e85c0, type: 3}
-    weight: 0
+  - prefab: {fileID: 6737240972690251372, guid: 7322b40b35c85b0478ffa94edeb4b561, type: 3}
+    weight: 100
   - prefab: {fileID: 5100497116774911822, guid: 6b6f368167eaea047a26e7c3744d25c9, type: 3}
     weight: 100
   enemyA:
@@ -895,6 +895,8 @@ MonoBehaviour:
   minRotateTime: 0.3
   maxRotateTime: 2
   shadowPrefab: {fileID: 0}
+  isValuable: 0
+  valuableChild: {fileID: 0}
 --- !u!114 &1164858314 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1454097836927600559, guid: 7bce92ffa8315aa4cae0e0a34f0b17e5, type: 3}
@@ -1262,6 +1264,8 @@ MonoBehaviour:
   minRotateTime: 0.3
   maxRotateTime: 2
   shadowPrefab: {fileID: 0}
+  isValuable: 0
+  valuableChild: {fileID: 0}
 --- !u!1001 &1591813833
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1758,6 +1762,8 @@ MonoBehaviour:
   minRotateTime: 0.3
   maxRotateTime: 2
   shadowPrefab: {fileID: 0}
+  isValuable: 0
+  valuableChild: {fileID: 0}
 --- !u!212 &2099353091
 SpriteRenderer:
   serializedVersion: 2
