@@ -83,6 +83,9 @@ public class TargetRange : MonoBehaviour
     public float cornerCloseDistance = 50f;
 
 
+
+
+
     // =========================================================
     // 範囲外ロック
     // =========================================================
@@ -115,6 +118,18 @@ public class TargetRange : MonoBehaviour
 
     [Header("範囲外クロスヘア判定")]
     public float outOfRangeCrosshairRange = 30f;
+
+    // =====================================================
+    // 範囲外ロックの揺れ
+    // =====================================================
+
+    [Header("========== 範囲外ロック揺れ ==========")]
+
+    [Header("範囲外ロック後の揺れ幅")]
+    public float outRangeShakeAmount = 5f;
+
+    [Header("範囲外ロック後の揺れ速度")]
+    public float outRangeShakeSpeed = 35f;
 
 
     // =========================================================
@@ -224,20 +239,29 @@ public class TargetRange : MonoBehaviour
         }
 
 
+        // =====================================================
+        // 範囲外 右上
+        // =====================================================
+
         if (outRangeLockTopRightImage != null &&
             outRangeLockTopRightSprite != null)
         {
             outRangeLockTopRightImage.sprite =
                 outRangeLockTopRightSprite;
 
+            // 右上：＋90°
             outRangeLockTopRightImage.rectTransform.localRotation =
                 Quaternion.Euler(
                     0f,
                     0f,
-                    90f
+                    0f
                 );
         }
 
+
+        // =====================================================
+        // 範囲外 左下
+        // =====================================================
 
         if (outRangeLockBottomLeftImage != null &&
             outRangeLockBottomLeftSprite != null)
@@ -245,7 +269,27 @@ public class TargetRange : MonoBehaviour
             outRangeLockBottomLeftImage.sprite =
                 outRangeLockBottomLeftSprite;
 
-            // 左下用に反転
+            // 左下：－90°
+            outRangeLockBottomLeftImage.rectTransform.localRotation =
+                Quaternion.Euler(
+                    0f,
+                    0f,
+                    0f
+                );
+        }
+
+
+        // -----------------------------------------------------
+        // 範囲外 左下
+        // -----------------------------------------------------
+
+        if (outRangeLockBottomLeftImage != null &&
+            outRangeLockBottomLeftSprite != null)
+        {
+            outRangeLockBottomLeftImage.sprite =
+                outRangeLockBottomLeftSprite;
+
+            // 通常ロックと同じ反転
             outRangeLockBottomLeftImage.rectTransform.localScale =
                 new Vector3(
                     -1f,
@@ -253,11 +297,12 @@ public class TargetRange : MonoBehaviour
                     1f
                 );
 
+            // 通常ロックと同じ回転
             outRangeLockBottomLeftImage.rectTransform.localRotation =
                 Quaternion.Euler(
                     0f,
                     0f,
-                    90f
+                    180f
                 );
         }
 
@@ -1065,34 +1110,30 @@ public class TargetRange : MonoBehaviour
 
         float time =
             Time.time *
-            cornerShakeSpeed;
+            outRangeShakeSpeed;
 
 
         float rightX =
             Mathf.Sin(time) *
-            cornerShakeAmount;
-
+            outRangeShakeAmount;
 
         float rightY =
-            Mathf.Cos(
-                time * 1.3f
-            ) *
-            cornerShakeAmount;
+            Mathf.Sin(time * 1.7f) *
+            outRangeShakeAmount;
 
 
         float leftX =
             Mathf.Sin(
                 time + Mathf.PI
             ) *
-            cornerShakeAmount;
-
+            outRangeShakeAmount;
 
         float leftY =
-            Mathf.Cos(
-                time * 1.3f +
+            Mathf.Sin(
+                time * 1.7f +
                 Mathf.PI
             ) *
-            cornerShakeAmount;
+            outRangeShakeAmount;
 
 
         outRangeLockTopRightImage
@@ -1116,11 +1157,11 @@ public class TargetRange : MonoBehaviour
     }
 
 
-    // =========================================================
-    // 通常ロック演出
-    // =========================================================
+        // =========================================================
+        // 通常ロック演出
+        // =========================================================
 
-    IEnumerator LockAnimationRoutine()
+        IEnumerator LockAnimationRoutine()
     {
         isLockAnimationFinished = false;
 
