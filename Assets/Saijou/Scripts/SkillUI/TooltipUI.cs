@@ -37,6 +37,10 @@ public class TooltipUI : MonoBehaviour
     [Header("レベル表示")]
     [SerializeField] Image[] levelImages;
 
+    [Header("レベルアップ演出順")]
+    [SerializeField]
+    private int[] levelUpOrder ={0, 5, 1, 6, 2, 7, 3, 9, 4};
+
     // 未取得状態
     [SerializeField] Sprite levelOffSprite;
 
@@ -123,13 +127,29 @@ public class TooltipUI : MonoBehaviour
             {
                 newLevelIndex = 2;
             }
+            else if (data.maxLevel == 10)
+            {
+                // 最大レベル10の場合は指定した順番で演出
+                int orderIndex = data.level - 1;
+
+                if (orderIndex >= 0 && orderIndex < levelUpOrder.Length)
+                {
+                    newLevelIndex = levelUpOrder[orderIndex];
+                }
+                else
+                {
+                    newLevelIndex = -1;
+                }
+            }
             else
             {
-                // 通常はレベルに対応した画像
+                // 最大レベル10以外は通常通り
                 newLevelIndex = data.level - 1;
             }
 
-            if (newLevelIndex >= 0 && newLevelIndex < levelImages.Length &&levelImages[newLevelIndex] != null)
+            if (newLevelIndex >= 0 &&
+                newLevelIndex < levelImages.Length &&
+                levelImages[newLevelIndex] != null)
             {
                 StartCoroutine(LevelUpScaleAnimation(levelImages[newLevelIndex].rectTransform));
             }
@@ -289,7 +309,6 @@ public class TooltipUI : MonoBehaviour
             int currentExp =
                 data.GetCurrentExp(requiredExp.expType);
 
-
             // =========================
             // アイコン表示
             // =========================
@@ -421,7 +440,76 @@ public class TooltipUI : MonoBehaviour
             }
             return;
         }
+        // =========================
+        // 最大レベルが5の場合
+        // 最初の5個だけ使用
+        // Element 0～4を表示
+        // Element 5以降を非表示
+        // =========================
+        if (data.maxLevel == 5)
+        {
+            for (int i = 0; i < levelImages.Length; i++)
+            {
+                if (levelImages[i] == null)
+                    continue;
 
+                // 最初の5個だけ表示
+                if (i < 5)
+                {
+                    levelImages[i].gameObject.SetActive(true);
+
+                    // 現在のレベルに応じてON/OFF
+                    if (i < data.level)
+                    {
+                        levelImages[i].sprite = levelOnSprite;
+                    }
+                    else
+                    {
+                        levelImages[i].sprite = levelOffSprite;
+                    }
+                }
+                else
+                {
+                    // 6個目以降は非表示
+                    levelImages[i].gameObject.SetActive(false);
+                }
+            }
+
+            return;
+        }
+        // =========================
+        // 最大レベル10の場合
+        // 指定した順番でONにする
+        // =========================
+        if (data.maxLevel == 10)
+        {
+            // いったん全部OFF
+            for (int i = 0; i < levelImages.Length; i++)
+            {
+                if (levelImages[i] == null)
+                    continue;
+
+                levelImages[i].sprite = levelOffSprite;
+            }
+
+            // 現在のレベルまでON
+            for (int level = 0; level < data.level; level++)
+            {
+                if (level >= levelUpOrder.Length)
+                    break;
+
+                int imageIndex = levelUpOrder[level];
+
+                if (imageIndex >= 0 &&
+                    imageIndex < levelImages.Length &&
+                    levelImages[imageIndex] != null)
+                {
+                    levelImages[imageIndex].sprite = levelOnSprite;
+                }
+            }
+
+            return;
+        }
         // =========================
         // 通常のスキル
         // =========================
