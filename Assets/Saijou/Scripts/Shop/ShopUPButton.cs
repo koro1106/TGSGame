@@ -85,6 +85,7 @@ public class ShopUPButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
         // スキルをレベルアップ
         data.TryLevelUp();
+        SEManager.Instance.PlayLevelUpSE(); // SE再生
 
         // レベル画像を更新
         UpdateLevelImages();
@@ -92,7 +93,7 @@ public class ShopUPButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         // トータルスコアを更新
         UpdateTotalScore();
 
-        // レベルアップしたダイヤを演出
+        // レベルアップしたダイヤ演出
         PlayLevelUpAnimation();
 
         // スキル効果を適用

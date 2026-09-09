@@ -32,4 +32,5 @@ MonoBehaviour:
   elementalBulletPrefab: {fileID: 0}
   description: "\u5C5E\u6027\u5F3E\u306E\u767A\u751F\u78BA\u7387 +10%"
   isShopUnlocked: 0
-  isShopButton: 0
+  isShopButton: 1
+  dollImage: {fileID: 0}

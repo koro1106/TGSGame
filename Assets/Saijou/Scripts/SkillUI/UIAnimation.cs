@@ -20,8 +20,8 @@ public class UIAnimation : MonoBehaviour
 
     IEnumerator Bounce(RectTransform rt)
     {
-        // 元のサイズ
-        Vector3 original = Vector3.one * 0.8f;
+        // 現在のScaleをそのまま元サイズとして保存
+        Vector3 original = rt.localScale;
 
         // 押した瞬間
         Vector3 press = new Vector3(1.08f, 0.72f, 1f) * 0.8f;
