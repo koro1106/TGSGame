@@ -371,45 +371,27 @@ public class DropBounce : MonoBehaviour
 
     void CheckCollect()
     {
-        if (crosshair == null)
-            return;
-
         // =====================================================
-        // GunControllerからクロスヘアのワールド座標を取得
-        // =====================================================
-
-        GunController gun =
-            FindObjectOfType<GunController>();
-
-        if (gun == null)
-            return;
-
-        Vector3 crosshairWorld =
-            gun.GetCrosshairWorldPosition();
-
-        crosshairWorld.z =
-            transform.position.z;
-
-
-        // =====================================================
-        // 回収範囲
+        // Playerを基準に回収する
         // =====================================================
 
         collectDisTotal =
             collectDistance +
             stats.collectionRange;
 
+        // Playerの位置を回収中心にする
+        Vector2 playerPosition =
+            PlayerMovement.Instance.transform.position;
 
         // =====================================================
-        // クロスヘア周辺のColliderを取得
+        // Player周辺のColliderを取得
         // =====================================================
 
         Collider2D[] hits =
             Physics2D.OverlapCircleAll(
-                crosshairWorld,
+                playerPosition,
                 collectDisTotal
             );
-
 
         // =====================================================
         // ドロップ回収

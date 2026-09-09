@@ -11,7 +11,7 @@ public class ResultItemUI : MonoBehaviour
     public Sprite exp1Sprite;
     public Sprite exp2Sprite;
     public Sprite exp3Sprite;
-    public Sprite exp4Sprite;
+    public Sprite preExpSprite;
 
 
     public void SetItem(
@@ -41,8 +41,8 @@ public class ResultItemUI : MonoBehaviour
                 itemImage.sprite = exp3Sprite;
                 break;
 
-            case DropItemType.Exp4:
-                itemImage.sprite = exp4Sprite;
+            case DropItemType.PreExp:
+                itemImage.sprite = preExpSprite;
                 break;
         }
     }
