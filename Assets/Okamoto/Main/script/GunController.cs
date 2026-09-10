@@ -175,7 +175,7 @@ public class GunController : MonoBehaviour
     [Header("èeÇÃê∏ìx")]
     [Range(0f, 100f)]
     public float accuracy = 100f;
-
+    [SerializeField] float totalaccuracy = 0f;
     public float maxSpreadAngle = 15f;
 
 
@@ -542,7 +542,8 @@ public class GunController : MonoBehaviour
      (targetPosition - muzzle.position).normalized;
 
             // ê∏ìxÇ…ÇÊÇÈÉuÉå
-            float accuracyRate = 1f - (accuracy / 100f);
+            totalaccuracy = accuracy + stats.increasedUP;
+            float accuracyRate = 1f - (totalaccuracy / 100f);
 
             float spread =
                 Random.Range(
