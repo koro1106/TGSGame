@@ -335,6 +335,35 @@ public class ResultManager : MonoBehaviour
             }
         }
 
+        // WarpEnemyMoveを削除
+        WarpEnemyMove[] warpEnemies = FindObjectsOfType<WarpEnemyMove>();
+
+        foreach (WarpEnemyMove warp in warpEnemies)
+        {
+            if (warp != null)
+            {
+                Destroy(warp.gameObject);
+            }
+        }
+
+        // =====================================================
+        // RabitEnemyMoveも削除
+        // =====================================================
+
+        RabitEnemyMove[] rabitEnemies =
+            FindObjectsOfType<RabitEnemyMove>();
+
+        foreach (RabitEnemyMove rabit in rabitEnemies)
+        {
+            if (rabit != null)
+            {
+                // 影や突進ビームなどの子オブジェクトも含めて削除
+                rabit.HideShadow();
+
+                Destroy(rabit.gameObject);
+            }
+        }
+
 
         // =====================================================
         // EyeEnemyも削除
