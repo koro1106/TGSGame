@@ -1647,9 +1647,9 @@ MonoBehaviour:
   nextLines: []
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 0
-  redSprite: {fileID: -3510657305014012909, guid: 84c4def9fc72eef42bfab0c58608fd10, type: 3}
-  greenSprite: {fileID: -3510657305014012909, guid: 84c4def9fc72eef42bfab0c58608fd10, type: 3}
-  yellowSprite: {fileID: -3510657305014012909, guid: 59e0dc0ca2cab234d80920fa67a39a47, type: 3}
+  redSprite: {fileID: -7347586854899604040, guid: f54e2e603847b9c49a30ec05c708d18d, type: 3}
+  greenSprite: {fileID: -7347586854899604040, guid: f54e2e603847b9c49a30ec05c708d18d, type: 3}
+  yellowSprite: {fileID: -357066845295433867, guid: 3a938e31513275445b4654c0607d57c9, type: 3}
   effectManager: {fileID: 1593656332}
   normalExpText: {fileID: 2127618005}
   expUIAnimation: {fileID: 26492058}
@@ -1850,7 +1850,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -3510657305014012909, guid: 84c4def9fc72eef42bfab0c58608fd10, type: 3}
+  m_Sprite: {fileID: -7347586854899604040, guid: f54e2e603847b9c49a30ec05c708d18d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6065,9 +6065,9 @@ MonoBehaviour:
   - {fileID: 613823521}
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 0
-  redSprite: {fileID: 3412380342060348239, guid: a8dfeb79bf99ccb4e9ca515c33fdc845, type: 3}
-  greenSprite: {fileID: 3412380342060348239, guid: a8dfeb79bf99ccb4e9ca515c33fdc845, type: 3}
-  yellowSprite: {fileID: 3412380342060348239, guid: 60f8d2c34c3859c4a959f8e1393fae4f, type: 3}
+  redSprite: {fileID: -257594271286534373, guid: 7eee13e1d55f5f74c966de4cdddbefc2, type: 3}
+  greenSprite: {fileID: -257594271286534373, guid: 7eee13e1d55f5f74c966de4cdddbefc2, type: 3}
+  yellowSprite: {fileID: -257594271286534373, guid: 6f81afaeb3de90c4baae9dc6ae90f1ae, type: 3}
   effectManager: {fileID: 1593656332}
   normalExpText: {fileID: 2127618005}
   expUIAnimation: {fileID: 26492058}
@@ -6268,7 +6268,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 3412380342060348239, guid: a8dfeb79bf99ccb4e9ca515c33fdc845, type: 3}
+  m_Sprite: {fileID: -257594271286534373, guid: 7eee13e1d55f5f74c966de4cdddbefc2, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8847,9 +8847,9 @@ MonoBehaviour:
   nextLines: []
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 0
-  redSprite: {fileID: 6805799587784515038, guid: 54d7da4514df1a94e8ff4e1e90b3a015, type: 3}
-  greenSprite: {fileID: 6805799587784515038, guid: 54d7da4514df1a94e8ff4e1e90b3a015, type: 3}
-  yellowSprite: {fileID: 6805799587784515038, guid: 1df162c2fcf1e77459b5d7fea1f4063b, type: 3}
+  redSprite: {fileID: 6805799587784515038, guid: 876c7175869e2d341b1035ff090d1b9e, type: 3}
+  greenSprite: {fileID: 6805799587784515038, guid: 876c7175869e2d341b1035ff090d1b9e, type: 3}
+  yellowSprite: {fileID: 6805799587784515038, guid: 1d79c1e46c51b8c4395b5d2dadb4d573, type: 3}
   effectManager: {fileID: 1593656332}
   normalExpText: {fileID: 2127618005}
   expUIAnimation: {fileID: 26492058}
@@ -9050,7 +9050,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 6805799587784515038, guid: 54d7da4514df1a94e8ff4e1e90b3a015, type: 3}
+  m_Sprite: {fileID: 6805799587784515038, guid: 876c7175869e2d341b1035ff090d1b9e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9482,9 +9482,9 @@ MonoBehaviour:
   - {fileID: 854735943}
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 0
-  redSprite: {fileID: 926978208597442654, guid: 17133db5a4161a44a8782f749cbd654c, type: 3}
-  greenSprite: {fileID: 926978208597442654, guid: 17133db5a4161a44a8782f749cbd654c, type: 3}
-  yellowSprite: {fileID: 926978208597442654, guid: ea1cd1c55ecb55249af6e2bfa03dbb3b, type: 3}
+  redSprite: {fileID: 926978208597442654, guid: b2e999ecc6a0525468ba5fee4ee7a972, type: 3}
+  greenSprite: {fileID: 926978208597442654, guid: b2e999ecc6a0525468ba5fee4ee7a972, type: 3}
+  yellowSprite: {fileID: 926978208597442654, guid: 40a69a9fd1ad5d242b17685a51a7f4da, type: 3}
   effectManager: {fileID: 1593656332}
   normalExpText: {fileID: 2127618005}
   expUIAnimation: {fileID: 26492058}
@@ -9685,7 +9685,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 926978208597442654, guid: 17133db5a4161a44a8782f749cbd654c, type: 3}
+  m_Sprite: {fileID: 926978208597442654, guid: b2e999ecc6a0525468ba5fee4ee7a972, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -10354,9 +10354,9 @@ MonoBehaviour:
   - {fileID: 204162148}
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 0
-  redSprite: {fileID: -2818749609554429212, guid: 212ddb9016d7ed440bab1a1ad9329f58, type: 3}
-  greenSprite: {fileID: -2818749609554429212, guid: 212ddb9016d7ed440bab1a1ad9329f58, type: 3}
-  yellowSprite: {fileID: -2818749609554429212, guid: 9ecdfb0508875ab46ae7a08d6431cbba, type: 3}
+  redSprite: {fileID: -2818749609554429212, guid: a3fbb956409e4b74cb31c54987bc3a4c, type: 3}
+  greenSprite: {fileID: -2818749609554429212, guid: a3fbb956409e4b74cb31c54987bc3a4c, type: 3}
+  yellowSprite: {fileID: -2818749609554429212, guid: 51e81e0551acdcc47ae6c1cb8ca12d32, type: 3}
   effectManager: {fileID: 1593656332}
   normalExpText: {fileID: 2127618005}
   expUIAnimation: {fileID: 26492058}
@@ -10557,7 +10557,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -2818749609554429212, guid: 212ddb9016d7ed440bab1a1ad9329f58, type: 3}
+  m_Sprite: {fileID: -2818749609554429212, guid: a3fbb956409e4b74cb31c54987bc3a4c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -10995,9 +10995,9 @@ MonoBehaviour:
   - {fileID: 435908298}
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 0
-  redSprite: {fileID: -3510657305014012909, guid: 84c4def9fc72eef42bfab0c58608fd10, type: 3}
-  greenSprite: {fileID: -3510657305014012909, guid: 84c4def9fc72eef42bfab0c58608fd10, type: 3}
-  yellowSprite: {fileID: -3510657305014012909, guid: 59e0dc0ca2cab234d80920fa67a39a47, type: 3}
+  redSprite: {fileID: -7347586854899604040, guid: f54e2e603847b9c49a30ec05c708d18d, type: 3}
+  greenSprite: {fileID: -7347586854899604040, guid: f54e2e603847b9c49a30ec05c708d18d, type: 3}
+  yellowSprite: {fileID: -357066845295433867, guid: 3a938e31513275445b4654c0607d57c9, type: 3}
   effectManager: {fileID: 1593656332}
   normalExpText: {fileID: 2127618005}
   expUIAnimation: {fileID: 26492058}
@@ -11198,7 +11198,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -3510657305014012909, guid: 84c4def9fc72eef42bfab0c58608fd10, type: 3}
+  m_Sprite: {fileID: -7347586854899604040, guid: f54e2e603847b9c49a30ec05c708d18d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -12415,9 +12415,9 @@ MonoBehaviour:
   - {fileID: 537562763}
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 0
-  redSprite: {fileID: 389244257011038748, guid: 1f5aa7f04a4ab8d48bc7596be637e2a1, type: 3}
-  greenSprite: {fileID: 389244257011038748, guid: 1f5aa7f04a4ab8d48bc7596be637e2a1, type: 3}
-  yellowSprite: {fileID: 389244257011038748, guid: 915e08c7ad4958a4f83e1eb9dca59fc4, type: 3}
+  redSprite: {fileID: 389244257011038748, guid: 3b60b4b9d1ebf66499a1f4f4065cb2d1, type: 3}
+  greenSprite: {fileID: 389244257011038748, guid: 3b60b4b9d1ebf66499a1f4f4065cb2d1, type: 3}
+  yellowSprite: {fileID: 389244257011038748, guid: a41352219227c0842806d074edc5842b, type: 3}
   effectManager: {fileID: 1593656332}
   normalExpText: {fileID: 2127618005}
   expUIAnimation: {fileID: 26492058}
@@ -12618,7 +12618,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 389244257011038748, guid: 1f5aa7f04a4ab8d48bc7596be637e2a1, type: 3}
+  m_Sprite: {fileID: 389244257011038748, guid: 3b60b4b9d1ebf66499a1f4f4065cb2d1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -12975,9 +12975,9 @@ MonoBehaviour:
   - {fileID: 775206717}
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 0
-  redSprite: {fileID: -1550639549644675157, guid: 3d6f3b149d5b03040b5fce6e0c8dc80b, type: 3}
-  greenSprite: {fileID: -1550639549644675157, guid: 3d6f3b149d5b03040b5fce6e0c8dc80b, type: 3}
-  yellowSprite: {fileID: -1550639549644675157, guid: b6c3153322aaf4e4aab164eebc7ec343, type: 3}
+  redSprite: {fileID: -1550639549644675157, guid: c84e229502b563b47ba5925a038b205d, type: 3}
+  greenSprite: {fileID: -1550639549644675157, guid: c84e229502b563b47ba5925a038b205d, type: 3}
+  yellowSprite: {fileID: -1550639549644675157, guid: 226adbd1b72e1c64aa9c788dae8ad4e7, type: 3}
   effectManager: {fileID: 1593656332}
   normalExpText: {fileID: 2127618005}
   expUIAnimation: {fileID: 26492058}
@@ -13178,7 +13178,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1550639549644675157, guid: 3d6f3b149d5b03040b5fce6e0c8dc80b, type: 3}
+  m_Sprite: {fileID: -1550639549644675157, guid: c84e229502b563b47ba5925a038b205d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -17365,7 +17365,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1523687444
 RectTransform:
   m_ObjectHideFlags: 0
@@ -20931,9 +20931,9 @@ MonoBehaviour:
   nextLines: []
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 0
-  redSprite: {fileID: -1550639549644675157, guid: 3d6f3b149d5b03040b5fce6e0c8dc80b, type: 3}
-  greenSprite: {fileID: -1550639549644675157, guid: 3d6f3b149d5b03040b5fce6e0c8dc80b, type: 3}
-  yellowSprite: {fileID: -1550639549644675157, guid: b6c3153322aaf4e4aab164eebc7ec343, type: 3}
+  redSprite: {fileID: -1550639549644675157, guid: c84e229502b563b47ba5925a038b205d, type: 3}
+  greenSprite: {fileID: -1550639549644675157, guid: c84e229502b563b47ba5925a038b205d, type: 3}
+  yellowSprite: {fileID: -1550639549644675157, guid: 226adbd1b72e1c64aa9c788dae8ad4e7, type: 3}
   effectManager: {fileID: 1593656332}
   normalExpText: {fileID: 2127618005}
   expUIAnimation: {fileID: 26492058}
@@ -21134,7 +21134,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1550639549644675157, guid: 3d6f3b149d5b03040b5fce6e0c8dc80b, type: 3}
+  m_Sprite: {fileID: -1550639549644675157, guid: c84e229502b563b47ba5925a038b205d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -26718,9 +26718,9 @@ MonoBehaviour:
   - {fileID: 1539813568}
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 0
-  redSprite: {fileID: 6805799587784515038, guid: 54d7da4514df1a94e8ff4e1e90b3a015, type: 3}
-  greenSprite: {fileID: 6805799587784515038, guid: 54d7da4514df1a94e8ff4e1e90b3a015, type: 3}
-  yellowSprite: {fileID: 6805799587784515038, guid: 1df162c2fcf1e77459b5d7fea1f4063b, type: 3}
+  redSprite: {fileID: 6805799587784515038, guid: 876c7175869e2d341b1035ff090d1b9e, type: 3}
+  greenSprite: {fileID: 6805799587784515038, guid: 876c7175869e2d341b1035ff090d1b9e, type: 3}
+  yellowSprite: {fileID: 6805799587784515038, guid: 1d79c1e46c51b8c4395b5d2dadb4d573, type: 3}
   effectManager: {fileID: 1593656332}
   normalExpText: {fileID: 2127618005}
   expUIAnimation: {fileID: 26492058}
@@ -26921,7 +26921,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 6805799587784515038, guid: 54d7da4514df1a94e8ff4e1e90b3a015, type: 3}
+  m_Sprite: {fileID: 6805799587784515038, guid: 876c7175869e2d341b1035ff090d1b9e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

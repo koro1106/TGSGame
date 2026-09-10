@@ -79,7 +79,7 @@ public class ResultManager : MonoBehaviour
     public float resultStartScale = 0.1f;
     public float resultScaleDuration = 0.25f;
 
-
+    public SkillData[] allSkills;
 
     private Vector3 animationPanelOriginalScale;
 
@@ -128,14 +128,14 @@ public class ResultManager : MonoBehaviour
         if (continueButton != null)
         {
             continueButton.onClick.AddListener(
-                ContinueExploration
+                OnContinueButtonClicked
             );
         }
 
         if (skillTreeButton != null)
         {
             skillTreeButton.onClick.AddListener(
-                GoToSkillTree
+                OnSkillTreeButtonClicked
             );
         }
 
@@ -1728,5 +1728,27 @@ public class ResultManager : MonoBehaviour
         }
 
         activeEffects.Clear();
+    }
+
+    /// 探索続行ボタン
+    /// セーブしてから続行
+    private void OnContinueButtonClicked()
+    {
+        // セーブ
+        SaveManager.Save(playerData, allSkills);
+
+        // 探索続行
+        ContinueExploration();
+    }
+
+    /// スキルツリーボタン
+    /// セーブしてからスキルツリーへ
+    private void OnSkillTreeButtonClicked()
+    {
+        // セーブ
+        SaveManager.Save(playerData, allSkills);
+
+        // スキルツリーへ
+        GoToSkillTree();
     }
 }
