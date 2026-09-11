@@ -57,10 +57,10 @@ public class OptionCurtain : MonoBehaviour
         }
 
         // ’†‰›‚Å~‚ß‚é
-        fadeImage.anchoredPosition = endPos;
+        //fadeImage.anchoredPosition = endPos;
 
         // ­‚µ‘Ò‚Â
-        yield return new WaitForSeconds(waitTime);
+       // yield return new WaitForSeconds(waitTime);
 
         time = 0f;
 

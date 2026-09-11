@@ -11,6 +11,8 @@ public class CurtainSceneManager : MonoBehaviour
     [SerializeField]
     private float closeTime = 1f;
 
+    [SerializeField] private float slideTime = 0.5f;
+
     private static CurtainSceneManager instance;
 
     private void Awake()
