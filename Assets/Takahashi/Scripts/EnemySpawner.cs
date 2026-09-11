@@ -54,8 +54,19 @@ public class EnemySpawner : MonoBehaviour
     public float spawnAreaTopRatio = 0.45f;
     public float spawnAreaBottomRatio = 1.0f;
 
+    [Header("ゲーム開始時の初期配置")]
+    [Tooltip("ゲーム開始時にランダム配置する敵の数")]
+    public int initialEnemyCount = 3;
+    [Tooltip("初期配置時、プレイヤーからこの距離以上離れた場所に出す")]
+    public float initialEnemyMinDistanceFromPlayer = 3f;
+
 
     private float timer;
+
+    void Start()
+    {
+        SpawnInitialEnemies();
+    }
 
     void Update()
     {
@@ -110,10 +121,26 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    // ゲーム開始時に、プレイヤーから離れた位置へランダムに敵を配置する
+    void SpawnInitialEnemies()
+    {
+        for (int i = 0; i < initialEnemyCount; i++)
+        {
+            Vector2 spawnPos = GetRandomPositionAwayFromPlayer(initialEnemyMinDistanceFromPlayer);
+            SpawnEnemyAt(spawnPos);
+        }
+    }
+
     void SpawnEnemy()
     {
-        GameObject prefab = GetRandomEnemy();
         Vector2 spawnPos = GetSpawnPosition();
+        SpawnEnemyAt(spawnPos);
+    }
+
+    // 指定した座標に敵を1体生成する（通常スポーン・初期配置の両方から呼ばれる共通処理）
+    void SpawnEnemyAt(Vector2 spawnPos)
+    {
+        GameObject prefab = GetRandomEnemy();
 
         GameObject enemy = Instantiate(prefab, spawnPos, Quaternion.identity);
 
@@ -256,6 +283,45 @@ public class EnemySpawner : MonoBehaviour
             default:
                 return new Vector2(Random.Range(left, right), areaBottom - offset);
         }
+    }
+
+    // ゲーム開始時の初期配置用：画面内の「赤い床」エリアからランダムな座標を選び、
+    // プレイヤーから一定距離以上離れるまで（最大20回まで）再抽選する。
+    // 全部失敗しても進行が止まらないよう、最後に選んだ座標をそのまま返す。
+    Vector2 GetRandomPositionAwayFromPlayer(float minDistance)
+    {
+        Camera cam = Camera.main;
+
+        float h = cam.orthographicSize;
+        float w = h * cam.aspect;
+
+        float camX = cam.transform.position.x;
+        float camY = cam.transform.position.y;
+
+        float left = camX - w;
+        float right = camX + w;
+        float top = camY + h;
+        float bottom = camY - h;
+        float fullH = top - bottom;
+
+        float areaTop = top - fullH * spawnAreaTopRatio;
+        float areaBottom = top - fullH * spawnAreaBottomRatio;
+
+        const int maxAttempts = 20;
+        Vector2 candidate = Vector2.zero;
+
+        for (int i = 0; i < maxAttempts; i++)
+        {
+            candidate = new Vector2(Random.Range(left, right), Random.Range(areaBottom, areaTop));
+
+            if (player == null || Vector2.Distance(candidate, player.position) >= minDistance)
+            {
+                return candidate;
+            }
+        }
+
+        // 何度試してもプレイヤーの近くにしかならなかった場合は、最後の候補をそのまま使う
+        return candidate;
     }
 
     // =====================================================

@@ -326,22 +326,34 @@ MonoBehaviour:
   bodyTiltAngle: 0
   bodyTiltSpeed: 0
   autoSortByY: 1
-  sortingOrderMultiplier: 100
-  sortingOrderOffset: 0
+  sortingOrderBase: 100
+  sortingOrderRange: 100
   jumpMoveSpeed: 100
   jumpHeightVisualScale: 1.5
   waitTimeMin: 0
   waitTimeMax: 0
   jumpDuration: 1
+  exclamationPrefab: {fileID: 0}
+  exclamationFrames:
+  - {fileID: 21300000, guid: f110f1f0112ab2746a5748e424c49e99, type: 3}
+  - {fileID: 21300000, guid: ec69844758b3efb4aa62bde1b2c7256f, type: 3}
+  - {fileID: 21300000, guid: e7ef3756aea55794883682babe8eb843, type: 3}
+  - {fileID: 21300000, guid: 9b637421db583aa4ea87def2c6b8202c, type: 3}
+  - {fileID: 21300000, guid: 405423e5643a364468ce5d4b25720096, type: 3}
+  exclamationFps: 12
+  exclamationHoldDuration: 0.15
+  exclamationSortingOrder: 50
+  exclamationSize: {x: 15, y: 15, z: 15}
+  exclamationOffset: {x: 0, y: 150}
+  alertDuration: 0.35
+  exclamationPopScale: 1
+  exclamationPopDuration: 0
   player: {fileID: 0}
   detectRadius: 250
   chargeSpeed: 400
-  chargeTelegraphTime: 0.3
   chargeDuration: 0.4
   chargeCooldown: 1.2
   attackDamage: 1
-  telegraphPrefab: {fileID: 1363623088986883172, guid: 6822d838b72278b48b2ad72e84b47506, type: 3}
-  telegraphLength: 250
   showDetectCircle: 0
   detectCircleColor: {r: 1, g: 0.3, b: 0.3, a: 0.6}
   circleSegments: 50
