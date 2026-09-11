@@ -52,9 +52,9 @@ MonoBehaviour:
   bindTime: 3
   searchRadius: 5000
   bindCount: 3
-  chainPrefab: {fileID: 7654511789779395103, guid: 31d4e812ce510b24583d4a5082395297, type: 3}
+  chainPrefab: {fileID: 7630586307687527792, guid: 944212acaa5ff2049970955f4576f618, type: 3}
   chainScale: 20
-  spacingMultiplier: 0.95
+  spacingMultiplier: 2.5
   enemyOffset: 0.1
   minChainSpacing: 0.0001
   chainExtendLength: 5000

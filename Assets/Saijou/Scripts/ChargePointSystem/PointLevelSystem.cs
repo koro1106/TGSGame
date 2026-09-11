@@ -12,9 +12,6 @@ public class PointLevelSystem : MonoBehaviour
     [Header("経験値ゲージ")]
     public Slider expSlider;
 
-    [Header("プレイヤーデータ")]
-    public PlayerData playerData;
-
     [Header("経験値プレハブ")]
     public GameObject expPrefab;
 

@@ -143,6 +143,9 @@ public class BindBullet : MonoBehaviour
         GameObject chainRoot =
             new GameObject("ChainRoot");
 
+        // リザルト時に鎖エフェクトを削除するため登録
+        ResultManager.RegisterEffect(chainRoot);
+
         Vector3 hitPoint =
             firstEnemy.transform.position;
 
@@ -240,27 +243,12 @@ public class BindBullet : MonoBehaviour
         }
 
         //==============================
-        // Sprite情報
+        // ParticleSystem鎖の間隔
         //==============================
 
-        SpriteRenderer spriteRenderer =
-            chainPrefab.GetComponent<SpriteRenderer>();
-
-        Sprite sprite =
-            spriteRenderer.sprite;
-
-        float spriteWidth =
-            sprite.rect.width /
-            sprite.pixelsPerUnit;
-
         float spacing =
-            spriteWidth *
-            chainScale *
-            spacingMultiplier;
-
-        spacing =
             Mathf.Max(
-                spacing,
+                chainScale * spacingMultiplier,
                 minChainSpacing
             );
 
@@ -359,9 +347,9 @@ public class BindBullet : MonoBehaviour
                 //==============================
 
                 while (
-                    chains.Count <
-                    chainCount
-                )
+     chains.Count <
+     chainCount
+ )
                 {
                     GameObject chain =
                         Instantiate(chainPrefab);
@@ -370,6 +358,23 @@ public class BindBullet : MonoBehaviour
                         chainRoot.transform,
                         true
                     );
+
+
+                    // ParticleSystemを取得
+                    ParticleSystem particle =
+                        chain.GetComponentInChildren<ParticleSystem>();
+
+                    if (particle != null)
+                    {
+                        // ParticleSystemを最初から再生
+                        particle.Play(true);
+
+                        // 1フレーム後に停止する
+                        StartCoroutine(PauseChainParticle(particle));
+                    }
+
+                    // リザルト時にParticleSystemを含む鎖エフェクトを削除
+                    ResultManager.RegisterEffect(chain);
 
                     chains.Add(chain);
                 }
@@ -432,13 +437,71 @@ public class BindBullet : MonoBehaviour
 
                     chains[j]
                         .transform.localScale =
-                        Vector3.one *
+                        chainPrefab.transform.localScale *
                         chainScale;
                 }
             }
 
             yield return null;
         }
+
+        //==============================
+        // 拘束終了
+        //==============================
+
+        // 拘束終了後にParticleSystemを再生
+        for (int i = 0; i < allChains.Count; i++)
+        {
+            for (int j = 0; j < allChains[i].Count; j++)
+            {
+                GameObject chain =
+                    allChains[i][j];
+
+                if (chain == null)
+                    continue;
+
+                ParticleSystem particle =
+                    chain.GetComponentInChildren<ParticleSystem>();
+
+                if (particle != null)
+                {
+                    // 拘束終了
+                    // ここから鎖アニメーションを再生
+                    particle.Play();
+                }
+            }
+        }
+
+        //==============================
+        // 拘束終了後の鎖アニメーション再生
+        //==============================
+
+        for (int i = 0; i < allChains.Count; i++)
+        {
+            for (int j = 0; j < allChains[i].Count; j++)
+            {
+                GameObject chain =
+                    allChains[i][j];
+
+                if (chain == null)
+                    continue;
+
+                ParticleSystem particle =
+                    chain.GetComponentInChildren<ParticleSystem>();
+
+                if (particle != null)
+                {
+                    // 拘束終了後に再度再生
+                    particle.Play(true);
+                }
+            }
+        }
+
+        //==============================
+        // エフェクトが少し動くまで待つ
+        //==============================
+
+        yield return new WaitForSeconds(0.3f);
 
         //==============================
         // 鎖削除
@@ -459,27 +522,50 @@ public class BindBullet : MonoBehaviour
 
         allChains.Clear();
 
+        //==============================
         // Root削除
+        //==============================
+
         if (chainRoot != null)
         {
             Destroy(chainRoot);
         }
 
+        //==============================
         // 弾削除
+        //==============================
+
         Destroy(gameObject);
-    }
 
-    //==============================
-    // 範囲表示
-    //==============================
+        //==============================
+        // 範囲表示
+        //==============================
 
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.cyan;
+        void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.cyan;
 
-        Gizmos.DrawWireSphere(
-            transform.position,
-            searchRadius
-        );
+            Gizmos.DrawWireSphere(
+                transform.position,
+                searchRadius
+            );
+        }
+        //==============================
+        // 鎖ParticleSystem停止
+        //==============================
+
+        IEnumerator PauseChainParticle(
+            ParticleSystem particle
+        )
+        {
+            // 1フレーム待つ
+            yield return null;
+
+            if (particle == null)
+                yield break;
+
+            // 現在の状態で停止
+            particle.Pause(true);
+        }
     }
 }

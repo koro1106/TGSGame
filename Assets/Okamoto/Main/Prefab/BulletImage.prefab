@@ -50,15 +50,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9fdf0b5897f8874db4dd2c8ed716521, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AmmoDropUI
-  lifeTime: 1.5
-  gravity: 1500
-  minX: -400
-  maxX: 400
-  minY: 700
-  maxY: 400
-  minRotateSpeed: 400
+  lifeTime: 3
+  gravity: 1200
+  minX: 400
+  maxX: 300
+  minY: 0
+  maxY: 200
+  minRotateSpeed: -1000
   maxRotateSpeed: 1000
-  minRotateAccel: 400
+  minRotateAccel: -2000
   maxRotateAccel: 2000
   drag: 0.99
 --- !u!222 &3302720655613419686

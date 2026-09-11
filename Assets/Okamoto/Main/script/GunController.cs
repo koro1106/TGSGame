@@ -49,8 +49,10 @@ public class GunController : MonoBehaviour
     private bool playFirstAmmoLoadEffect = false;
 
 
-    [Range(0.1f, 10f)]
-    public float sensitivity = 1f;
+    [Range(0.1f, 50f)]
+    public float sensitivity = 25f;
+
+    [SerializeField] private PlayerData playerData;
 
     [SerializeField]
     private PlayableDirector outOfAmmoTimeline;
@@ -180,6 +182,8 @@ public class GunController : MonoBehaviour
 
 
 
+
+
     void Start()
     {
         crosshairPos = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
@@ -242,6 +246,17 @@ public class GunController : MonoBehaviour
 
     void Awake()
     {
+
+        // PlayerDataから感度を読み込む
+        if (playerData != null)
+        {
+            sensitivity = playerData.sensitivity;
+        }
+
+        sensitivityText.text =
+            "感度 : " + sensitivity.ToString("F1");
+
+
         cam = Camera.main;
         sr = GetComponent<SpriteRenderer>();
 
@@ -391,7 +406,7 @@ public class GunController : MonoBehaviour
         // =========================
         // 連射ON
         // =========================
-        if(stats.rapidFire)
+        if (stats.rapidFire)
         {
             autoFire = true;
         }
@@ -508,12 +523,27 @@ public class GunController : MonoBehaviour
             // ダメージ
             // =========================
 
+            // 通常弾
             Bullet bulletScript =
                 bulletInstance.GetComponent<Bullet>();
 
             if (bulletScript != null)
             {
                 bulletScript.SetDamage(stats.bulletDamage);
+            }
+
+            // 爆発弾
+            Bulletxplosion explosionBullet =
+                bulletInstance.GetComponent<Bulletxplosion>();
+
+            if (explosionBullet != null)
+            {
+                // 通常弾ダメージ + 属性弾ダメージ
+                int totalDamage =
+                    stats.bulletDamage +
+                    stats.effectBulletDamage;
+
+                explosionBullet.SetDamage(totalDamage);
             }
             // =========================
             // 発射方向
@@ -871,7 +901,7 @@ public class GunController : MonoBehaviour
         float mouseX = Input.GetAxisRaw("Mouse X");
         float mouseY = Input.GetAxisRaw("Mouse Y");
 
-        crosshairPos += new Vector3(mouseX, mouseY, 0f) * sensitivity * 25f;
+        crosshairPos += new Vector3(mouseX, mouseY, 0f) * sensitivity * 2f;
 
         crosshairPos.x = Mathf.Clamp(
      crosshairPos.x,
@@ -1024,7 +1054,15 @@ public class GunController : MonoBehaviour
     public void SetSensitivity(float value)
     {
         sensitivity = value;
-        sensitivityText.text = "感度 : " + sensitivity.ToString("F1");
+
+        // PlayerDataに感度を保存
+        if (playerData != null)
+        {
+            playerData.sensitivity = value;
+        }
+
+        sensitivityText.text =
+            "感度 : " + sensitivity.ToString("F1");
     }
 
     /// <summary>
