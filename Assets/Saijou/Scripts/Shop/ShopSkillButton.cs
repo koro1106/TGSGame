@@ -27,6 +27,9 @@ public class ShopSkillButton : MonoBehaviour
     [SerializeField] private GameObject doolObject;
     [SerializeField] private GameObject dollNameText;
 
+    [Header("非表示にするオブジェクト")]
+    [SerializeField] private GameObject hideObjects;
+
     [Header("ロック演出")]
     [SerializeField] private RectTransform lockImage;
 
@@ -237,6 +240,7 @@ public class ShopSkillButton : MonoBehaviour
             unlockedObject.SetActive(true);
             doolObject.SetActive(true);
             dollNameText.SetActive(false);
+            hideObjects.SetActive(false);
 
             makeButton.SetActive(true);
 
@@ -252,6 +256,7 @@ public class ShopSkillButton : MonoBehaviour
 
         unlockedObject.SetActive(false);
         doolObject.SetActive(false);
+        hideObjects.SetActive(true);
 
         // ぬいぐるみ名を表示
         dollNameText.SetActive(data.isShopUnlocked);

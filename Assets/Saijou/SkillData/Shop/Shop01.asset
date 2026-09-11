@@ -32,5 +32,5 @@ MonoBehaviour:
   elementalBulletPrefab: {fileID: 6812141048282945842, guid: 422d710f4cfeb084d880cf1fcecc60f9, type: 3}
   description: "\u96F7\u306E\u529B\u3092\u5BBF\u3057\u305F\u4EBA\u5F62\n\u96F7\u5C5E\u6027\u5F3E\u3092\u89E3\u653E"
   isShopUnlocked: 0
-  isShopButton: 1
-  dollImage: {fileID: 1236869191659170260, guid: f9657be9bc9c1a248b7072aa421cf11d, type: 3}
+  isShopButton: 0
+  dollImage: {fileID: 21300000, guid: b2ed97a21873dc94c9631f4513e71d58, type: 3}

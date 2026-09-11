@@ -48,6 +48,7 @@ public class ShopTooltipUI : MonoBehaviour
         if (currentSkill.level >= currentSkill.maxLevel)
         {
             SetMaxLevelTextVisible(false);
+            dollImage.gameObject.SetActive(false);
             return;
         }
 
