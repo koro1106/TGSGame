@@ -150,10 +150,18 @@ public class MenuButton : MonoBehaviour,
         buttonImage.color = Color.white;
         buttonText.color = Color.white;
     }
-    //@–îˆóÁ‚·‚â‚Â
     public void HideArrow()
     {
+        // –îˆó‚ğÁ‚·
         arrow.SetActive(false);
+
+        // ã‰º‚Ìü‚ğÁ‚·
+        if (topLine != null)
+            topLine.SetActive(false);
+
+        if (bottomLine != null)
+            bottomLine.SetActive(false);
     }
+
 
 }
