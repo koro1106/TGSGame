@@ -324,7 +324,7 @@ MonoBehaviour:
   autoSortByY: 1
   sortingOrderBase: 100
   sortingOrderRange: 100
-  jumpMoveSpeed: 100
+  jumpMoveSpeed: 70
   jumpHeightVisualScale: 1.5
   waitTimeMin: 0
   waitTimeMax: 0

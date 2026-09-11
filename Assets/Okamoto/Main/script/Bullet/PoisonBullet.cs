@@ -26,7 +26,10 @@ public class PoisonBullet : Bullet
 
     public float poisonDuration = 5f;
 
+    // =========================
     // 実際に生成した毒エフェクト
+    // =========================
+
     private GameObject poisonEffect;
 
     // =========================
@@ -37,7 +40,29 @@ public class PoisonBullet : Bullet
 
     public GameObject poisonEffectPrefab;
 
-    public float effectSize = 1f;
+    // エフェクトの大きさ
+    public float effectSize = 2f;
+
+    // =========================
+    // エフェクト位置調整
+    // =========================
+
+    [Header("エフェクト位置調整")]
+
+    // 敵に当たった位置からの調整
+    public Vector3 effectOffset =
+        new Vector3(0f, -0.5f, 0f);
+
+    // =========================
+    // エフェクト速度
+    // =========================
+
+    [Header("エフェクトアニメーション速度")]
+
+    // 1 = 通常
+    // 0.5 = 半分の速度
+    // 0.25 = かなりゆっくり
+    public float effectSimulationSpeed = 0.5f;
 
     // 着弾済み判定
     private bool exploded = false;
@@ -70,7 +95,10 @@ public class PoisonBullet : Bullet
             return;
 
         // ダメージ
-        int totalDamage =(hitDamage +stats.bulletDamage + stats.effectBulletDamage);
+        int totalDamage =
+            hitDamage +
+            stats.bulletDamage +
+            stats.effectBulletDamage;
 
         // ========================
         // ケアパッケージ
@@ -116,7 +144,7 @@ public class PoisonBullet : Bullet
         exploded = true;
 
         StartCoroutine(
-            PoisonArea()
+            PoisonArea(other)
         );
     }
 
@@ -124,7 +152,7 @@ public class PoisonBullet : Bullet
     // 毒エリア
     // =========================
 
-    IEnumerator PoisonArea()
+    IEnumerator PoisonArea(Collider2D hitCollider)
     {
         // =========================
         // Rigidbody取得
@@ -171,15 +199,24 @@ public class PoisonBullet : Bullet
 
         if (poisonEffectPrefab != null)
         {
+            // 当たったObjectの中心位置
+            Vector3 effectPosition =
+                hitCollider.bounds.center +
+                effectOffset;
+
             poisonEffect =
                 Instantiate(
                     poisonEffectPrefab,
-                    transform.position,
+                    effectPosition,
                     Quaternion.identity
                 );
 
+            // エフェクトを大きくする
             poisonEffect.transform.localScale =
                 Vector3.one * effectSize;
+
+            // エフェクトをゆっくり再生
+            SetEffectSpeed(poisonEffect);
         }
 
         // =========================
@@ -243,17 +280,43 @@ public class PoisonBullet : Bullet
     }
 
     // =========================
+    // エフェクト再生速度変更
+    // =========================
+
+    void SetEffectSpeed(GameObject effectObject)
+    {
+        if (effectObject == null)
+            return;
+
+        ParticleSystem[] particles =
+            effectObject.GetComponentsInChildren<ParticleSystem>(
+                true
+            );
+
+        foreach (ParticleSystem particle in particles)
+        {
+            var main =
+                particle.main;
+
+            main.simulationSpeed =
+                effectSimulationSpeed;
+        }
+    }
+
+    // =========================
     // リザルト時などに
     // 毒エフェクトを強制削除
     // =========================
 
     public void ClearEffect()
     {
+        // 毒エフェクト削除
         if (poisonEffect != null)
         {
             Destroy(poisonEffect);
             poisonEffect = null;
         }
+
         Destroy(gameObject);
     }
 
