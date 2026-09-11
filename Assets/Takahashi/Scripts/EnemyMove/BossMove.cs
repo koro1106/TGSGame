@@ -20,6 +20,14 @@
 /// 【速度】
 ///   通常（侵入・追尾） → walkSpeed
 ///   突進              → chargeSpeed
+///
+/// 【2026/09 修正メモ】
+///   ・ボス撃破の通知（EnemySpawner.BossDefeated()の呼び出し）が
+///     EnemyHP.OnDeathイベントの発火だけに依存していたため、
+///     何らかの理由でイベントが発火しない場合に通常敵が二度と
+///     湧かなくなる不具合があった。
+///     → OnDestroy()でも念のため同じ通知処理を呼ぶフェイルセーフを追加。
+///        hasNotifiedDefeatフラグで二重通知は防止済み。
 /// </summary>
 [RequireComponent(typeof(EnemyHP))]
 [RequireComponent(typeof(SpriteRenderer))]
@@ -140,6 +148,13 @@ public class BossMove : MonoBehaviour, IHitSlowable
     private EnemyHP enemyHP;
 
     // =========================================================
+    // ★追加：ボス撃破通知の二重呼び出し防止フラグ
+    //   EnemyHP.OnDeath経由の通知とOnDestroy()のフェイルセーフ通知が
+    //   両方とも発火した場合に、BossDefeated()が2回呼ばれないようにする
+    // =========================================================
+    private bool hasNotifiedDefeat = false;
+
+    // =========================================================
     // 影
     // =========================================================
     [Header("── 影 ──────────────────────")]
@@ -198,6 +213,10 @@ public class BossMove : MonoBehaviour, IHitSlowable
 
     void HandleBossDeath()
     {
+        // ★変更：二重通知を防ぐガードを追加
+        if (hasNotifiedDefeat) return;
+        hasNotifiedDefeat = true;
+
         if (spawner != null)
         {
             spawner.BossDefeated();
@@ -665,6 +684,13 @@ public class BossMove : MonoBehaviour, IHitSlowable
     {
         if (shadow != null) Destroy(shadow.gameObject);
         if (telegraphVisual != null) Destroy(telegraphVisual.gameObject);
+
+        // ★追加：フェイルセーフ。
+        // 何らかの理由でEnemyHP.OnDeathが発火せずHandleBossDeath()が
+        // 呼ばれないまま、ボスのGameObjectが破棄されてしまった場合の保険。
+        // これがあれば「ボスは消えたのに通常敵が二度と湧かない」という
+        // 事態を確実に防げる（hasNotifiedDefeatで二重通知も防止済み）。
+        HandleBossDeath();
     }
 
     // =========================================================

@@ -293,36 +293,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RabitEnemyMove
   frames:
-  - {fileID: 21300000, guid: 3b4573a02a5028e49b46b9455d1d2f1d, type: 3}
-  - {fileID: 21300000, guid: 448074304c10cbf428eb91cde7846938, type: 3}
-  - {fileID: 21300000, guid: 2dd08ce157dec1c4ebc09c58193a91f5, type: 3}
-  - {fileID: 21300000, guid: 1c8fcdc63bc68ca4e8d7bec502d8b981, type: 3}
-  - {fileID: 21300000, guid: aa431b2e8a97aa5479923bc1a26a5c30, type: 3}
-  - {fileID: 21300000, guid: 56003b06fc5ba204e866dda57ab07c36, type: 3}
-  - {fileID: 21300000, guid: 2f79e099a65007f4a8685a02c293e981, type: 3}
-  - {fileID: 21300000, guid: 188ab64b89b6f8b47ac24ee0f1b5495e, type: 3}
-  - {fileID: 21300000, guid: 57dad2104672c9d46b7f7c3ecd3963ff, type: 3}
-  - {fileID: 21300000, guid: 463bca2e31ecb654d9bf310570721a5e, type: 3}
-  - {fileID: 21300000, guid: 0a89f468f28ff724a8d092cec769b1b1, type: 3}
-  - {fileID: 21300000, guid: 3da4e0d3c4ac6ca4888de87eb86b99ad, type: 3}
-  - {fileID: 21300000, guid: 5094dfa1e9b246b4c89749aeb2b0e4f5, type: 3}
-  - {fileID: 21300000, guid: 90b88deb126762a43ba05f7b75523681, type: 3}
-  - {fileID: 21300000, guid: 3eede1b2d3be0ef44990d8458101b844, type: 3}
-  - {fileID: 21300000, guid: a6baa10d072b89f4e9a47017b4cffabc, type: 3}
-  - {fileID: 21300000, guid: ea0188e700916734896e195867a370af, type: 3}
-  - {fileID: 21300000, guid: c9e30c9739e547944a78df70bf5f02c8, type: 3}
-  - {fileID: 21300000, guid: 1fe5163905ae8114ebb7ecd796fbe427, type: 3}
-  - {fileID: 21300000, guid: 3fef8ce105ba4b14c84c4621ed67e995, type: 3}
-  - {fileID: 21300000, guid: 8d2f9efac4fd17341be57f24ada72720, type: 3}
-  - {fileID: 21300000, guid: f0c5deb79a50887479d7bf7bfb783b8c, type: 3}
-  - {fileID: 21300000, guid: 42060966e3784df4884507e6b2d3db05, type: 3}
-  - {fileID: 21300000, guid: 077bdf7b3ad261347875915db32ab7a4, type: 3}
-  - {fileID: 21300000, guid: 982678e006c4749498f14f2b11960a08, type: 3}
-  - {fileID: 21300000, guid: 008f2cd11261758478da09ed1aae1cee, type: 3}
-  - {fileID: 21300000, guid: 70a831e692e1a0149aad2a7249918c29, type: 3}
-  idleFps: 35
-  jumpFps: 35
-  chargeFps: 35
+  - {fileID: 21300000, guid: b5b0d8a1bd71844489ce950b8941fe5c, type: 3}
+  - {fileID: 21300000, guid: 332cc6ab1da2bab478a071b6aeb792c0, type: 3}
+  - {fileID: 21300000, guid: 27726d689c9382f44844debd7c805b88, type: 3}
+  - {fileID: 21300000, guid: dc2bb3ed54167134c9d79eed18bd9215, type: 3}
+  - {fileID: 21300000, guid: 6b8be02aa919f0346ba5bacd2af04348, type: 3}
+  - {fileID: 21300000, guid: 837a430bb19ebe74389fb68c70f543c7, type: 3}
+  - {fileID: 21300000, guid: 443402f95e7f7d04d9ef4e98924b513b, type: 3}
+  - {fileID: 21300000, guid: 9fa7f667d30cf7443ba4e7718576a18a, type: 3}
+  - {fileID: 21300000, guid: 7db81da41b11de440b7bde6f4e405e68, type: 3}
+  - {fileID: 21300000, guid: e31277f175a62b048b8e128cbee4355d, type: 3}
+  - {fileID: 21300000, guid: 9e6c849f3e38a0347bebabf3262ba8bc, type: 3}
+  - {fileID: 21300000, guid: 905a18157c2b6724d83cd84d0108d0d4, type: 3}
+  - {fileID: 21300000, guid: 6ee77e79c8d75164ca5c3c9aaf9f3014, type: 3}
+  - {fileID: 21300000, guid: 8ae34a83bb1b8444985302f4d1362fd0, type: 3}
+  - {fileID: 21300000, guid: 55f12c5fa27c43d469ee9b7cd10427aa, type: 3}
+  - {fileID: 21300000, guid: 38585c767bfedb744998b7dabb18b863, type: 3}
+  - {fileID: 21300000, guid: d3eebc0d4802b424385dc992b9650e23, type: 3}
+  - {fileID: 21300000, guid: 911d8542eb6ecc644bc1f9cda5a5632f, type: 3}
+  - {fileID: 21300000, guid: 006ac5421c8c73e449f1841dd4b28c61, type: 3}
+  - {fileID: 21300000, guid: d1ddceb6a1134ef4b8e740a4508293ac, type: 3}
+  - {fileID: 21300000, guid: 7338aabc4176ca34cb5098277c6f2a9b, type: 3}
+  - {fileID: 21300000, guid: 7a0a964663c4272458058c6feb84674d, type: 3}
+  - {fileID: 21300000, guid: 822b95866e0e3534a830254977d94076, type: 3}
+  idleFps: 25
+  jumpFps: 25
+  chargeFps: 25
   bodyTiltAngle: 0
   bodyTiltSpeed: 0
   autoSortByY: 1
@@ -365,7 +361,7 @@ MonoBehaviour:
   debugTriggerKey: 108
   landDuration: 0.2
   shadowPrefab: {fileID: 1354215260935572172, guid: 536db39859af53a47928bcbe00400608, type: 3}
-  shadowOffset: {x: 0, y: -125}
+  shadowOffset: {x: 0, y: -85}
   shadowBaseScale: {x: 10, y: 3}
   shadowAirScale: {x: 10, y: 3}
 --- !u!61 &6442273705567357776
