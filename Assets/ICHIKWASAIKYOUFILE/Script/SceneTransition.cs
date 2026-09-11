@@ -39,7 +39,7 @@ public class SceneTransition : MonoBehaviour
     private IEnumerator Transition(string sceneName)
     {
         // カーテンを最前面にする
-        fadeImage.SetAsLastSibling();
+        //fadeImage.SetAsLastSibling();
 
         float time = 0f;
 
@@ -58,6 +58,8 @@ public class SceneTransition : MonoBehaviour
         }
 
         fadeImage.anchoredPosition = endPos;
+
+        loadingEnemy.SetActive(true);
 
         yield return new WaitForSeconds(waitTime);
 

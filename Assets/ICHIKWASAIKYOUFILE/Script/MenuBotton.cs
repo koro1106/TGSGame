@@ -11,7 +11,7 @@ public class MenuButton : MonoBehaviour,
     public Image buttonImage;
     public TMP_Text buttonText;
 
-    [SerializeField] private GameObject topLine;    //  上のライン
+   // [SerializeField] private GameObject topLine;    //  上のライン
     [SerializeField] private GameObject bottomLine;  // 下のライン
 
     //　大きくなる速さ
@@ -40,14 +40,13 @@ public class MenuButton : MonoBehaviour,
         defaultRotation = transform.rotation;
 
         // 初期状態
-        buttonImage.color = Color.white;
-        buttonText.color = Color.white;
+       // buttonImage.color = Color.white;
+       // buttonText.color = Color.white;
 
         arrow.SetActive(false);
 
         // 線を消す
-        if (topLine != null)
-            topLine.SetActive(false);
+        
 
         if (bottomLine != null)
             bottomLine.SetActive(false);
@@ -100,15 +99,14 @@ public class MenuButton : MonoBehaviour,
         arrow.SetActive(true);
 
         // 線を表示
-        if (topLine != null)
-            topLine.SetActive(true);
+        
 
         if (bottomLine != null)
             bottomLine.SetActive(true);
 
         // 色変更
-        buttonImage.color = Color.white;
-        buttonText.color = Color.white;
+        //buttonImage.color = Color.white;
+       // buttonText.color = Color.white;
 
         // 少し大きく
         //transform.localScale = defaultScale * 1.1f;
@@ -140,15 +138,13 @@ public class MenuButton : MonoBehaviour,
         arrow.SetActive(false);
 
         // 線を消す
-        if (topLine != null)
-            topLine.SetActive(false);
-
+       
         if (bottomLine != null)
             bottomLine.SetActive(false);
 
         // 元の色に戻す
-        buttonImage.color = Color.white;
-        buttonText.color = Color.white;
+       // buttonImage.color = Color.white;
+      //  buttonText.color = Color.white;
     }
     public void HideArrow()
     {
@@ -156,8 +152,7 @@ public class MenuButton : MonoBehaviour,
         arrow.SetActive(false);
 
         // 上下の線を消す
-        if (topLine != null)
-            topLine.SetActive(false);
+        
 
         if (bottomLine != null)
             bottomLine.SetActive(false);
