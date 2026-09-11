@@ -1371,24 +1371,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossEnemy
   player: {fileID: 0}
-  movementScriptToDisable: {fileID: 0}
   spawner: {fileID: 0}
-  walkDirection: {x: -1, y: 0}
-  walkDistance: 5
+  frames: []
+  idleFps: 12
+  walkFps: 18
+  chargeFps: 30
+  bodyTiltAngle: 8
+  bodyTiltSpeed: 10
   walkSpeed: 3
+  landDuration: 0.2
   telegraphPrefab: {fileID: 0}
   telegraphLength: 8
   aimDuration: 1
+  detectRadius: 5
   chargeSpeed: 18
   chargeDuration: 0.6
+  chargeCooldown: 1.5
   chargeDamage: 20
   playerLayer:
     serializedVersion: 2
     m_Bits: 0
   chargeHitRadius: 0.6
-  appearDelay: 10
-  attackInterval: 4
+  showDetectCircle: 1
+  detectCircleColor: {r: 1, g: 0.3, b: 0.3, a: 0.6}
+  circleSegments: 40
+  circleLineWidth: 1.5
+  moveAreaTopRatio: 0.3
+  moveAreaBottomRatio: 1
+  hitSlowMultiplier: 0.3
+  hitSlowDuration: 0.5
   debugTriggerKey: 116
+  shadowPrefab: {fileID: 0}
+  shadowOffset: {x: 0, y: -0.1}
+  shadowBaseScale: {x: 1, y: 0.3}
+  shadowAirScale: {x: 0.5, y: 0.15}
 --- !u!212 &1609810721
 SpriteRenderer:
   serializedVersion: 2
