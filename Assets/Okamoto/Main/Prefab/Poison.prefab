@@ -52,14 +52,17 @@ MonoBehaviour:
   damage: 11
   ammoDropPrefab: {fileID: 0}
   ammoUISprite: {fileID: 0}
+  stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   hitDamage: 0
-  poisonRadius: 300
+  poisonRadius: 130
   totalPoisonRadius: 0
   poisonDamage: 5
   poisonInterval: 0.5
   poisonDuration: 5
-  poisonEffectPrefab: {fileID: 1793556059686151916, guid: 721a3194ec1aaeb4abb9756475a050fd, type: 3}
-  effectSize: 40
+  poisonEffectPrefab: {fileID: 7685418010954426004, guid: d8f330f468ff8f94e8ac39d12e412461, type: 3}
+  effectSize: 80
+  effectOffset: {x: 100, y: -100, z: 0}
+  effectSimulationSpeed: 0.5
   stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
 --- !u!212 &6253829430372542568
 SpriteRenderer:

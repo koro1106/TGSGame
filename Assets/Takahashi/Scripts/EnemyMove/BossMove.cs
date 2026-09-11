@@ -165,6 +165,7 @@ public class BossMove : MonoBehaviour, IHitSlowable
 
     private Transform shadow;
     private SpriteRenderer shadowSR;
+    private bool isResettingByResult;
 
     // =========================================================
     // Start
@@ -680,18 +681,69 @@ public class BossMove : MonoBehaviour, IHitSlowable
         }
     }
 
+
+    // =========================================================
+    // ★追加：リザルトによるリセット削除
+    // =========================================================
+    public void ResetForResult()
+    {
+        // リザルトによる削除であることを記録
+        isResettingByResult = true;
+
+        // 念のため撃破通知済みにする
+        hasNotifiedDefeat = true;
+
+        // 影を削除
+        if (shadow != null)
+        {
+            Destroy(shadow.gameObject);
+            shadow = null;
+        }
+
+        // 赤いビームを削除
+        if (telegraphVisual != null)
+        {
+            Destroy(telegraphVisual.gameObject);
+            telegraphVisual = null;
+        }
+    }
+
+
+    // =========================================================
+    // OnDestroy
+    // =========================================================
     void OnDestroy()
     {
         if (shadow != null) Destroy(shadow.gameObject);
         if (telegraphVisual != null) Destroy(telegraphVisual.gameObject);
 
-        // ★追加：フェイルセーフ。
-        // 何らかの理由でEnemyHP.OnDeathが発火せずHandleBossDeath()が
-        // 呼ばれないまま、ボスのGameObjectが破棄されてしまった場合の保険。
-        // これがあれば「ボスは消えたのに通常敵が二度と湧かない」という
-        // 事態を確実に防げる（hasNotifiedDefeatで二重通知も防止済み）。
+        // =====================================================
+        // ★追加：リザルトによるリセット削除の場合
+        // 撃破扱いにしない
+        // =====================================================
+
+        if (isResettingByResult)
+            return;
+
+        // ★フェイルセーフ
+        // 通常の破棄・撃破の場合だけBossDefeated()を呼ぶ
         HandleBossDeath();
     }
+
+
+    //void OnDestroy()
+    //{
+    //    if (shadow != null) Destroy(shadow.gameObject);
+    //    if (telegraphVisual != null) Destroy(telegraphVisual.gameObject);
+
+    //    // ★追加：フェイルセーフ。
+    //    // 何らかの理由でEnemyHP.OnDeathが発火せずHandleBossDeath()が
+    //    // 呼ばれないまま、ボスのGameObjectが破棄されてしまった場合の保険。
+    //    // これがあれば「ボスは消えたのに通常敵が二度と湧かない」という
+    //    // 事態を確実に防げる（hasNotifiedDefeatで二重通知も防止済み）。
+    //    HandleBossDeath();
+    //}
+
 
     // =========================================================
     // 編集モードでもSceneビューで検知円のサイズを確認できるギズモ

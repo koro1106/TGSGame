@@ -89,6 +89,12 @@ public class ResultManager : MonoBehaviour
 
     public static bool IsResultActive = false;
 
+    // =========================================================
+    // ★追加：リザルトによる削除かどうか
+    // リザルトで削除した場合はBossDefeated()を呼ばない
+    // =========================================================
+    private bool isResettingByResult = false;
+
 
 
     // =========================================================
@@ -379,6 +385,8 @@ public class ResultManager : MonoBehaviour
                 Destroy(eyeEnemy.gameObject);
             }
         }
+
+
 
 
         // =====================================================
@@ -1780,4 +1788,6 @@ public class ResultManager : MonoBehaviour
         // スキルツリーへ
         GoToSkillTree();
     }
+
+   
 }
