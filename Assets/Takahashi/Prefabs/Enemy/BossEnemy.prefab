@@ -312,7 +312,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   chargeHitRadius: 0.6
-  showDetectCircle: 1
+  showDetectCircle: 0
   detectCircleColor: {r: 1, g: 0.3, b: 0.3, a: 0.6}
   circleSegments: 40
   circleLineWidth: 1.5
