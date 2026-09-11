@@ -62,6 +62,8 @@ public class Bulletxplosion : MonoBehaviour
                 package.TakeDamage(damage);
             }
 
+            // エフェクトを出したい場合はここにも追加可能
+
             Destroy(gameObject);
             return;
         }
@@ -84,14 +86,16 @@ public class Bulletxplosion : MonoBehaviour
             " ダメージ"
         );
 
+        // ========================
+        // 爆発エフェクト
+        // ========================
         if (hitEffectPrefab != null)
         {
             ParticleSystem effect = Instantiate(
-    hitEffectPrefab,
-    transform.position,
-    Quaternion.identity,
-    transform
-);
+                hitEffectPrefab,
+                transform.position,
+                Quaternion.identity
+            );
 
             totalExplosionSize =
                 explosionSize +

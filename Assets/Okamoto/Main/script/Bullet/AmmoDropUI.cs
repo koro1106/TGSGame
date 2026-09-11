@@ -6,11 +6,15 @@ public class AmmoDropUI : MonoBehaviour
     [SerializeField] float lifeTime = 1.2f;
 
     [Header("Gravity")]
+    // 左方向へ働く重力
     [SerializeField] float gravity = 1200f;
 
     [Header("Initial Velocity")]
-    [SerializeField] float minX = -400f;
-    [SerializeField] float maxX = 400f;
+    // 最初の横方向速度
+    [SerializeField] float minX = 0f;
+    [SerializeField] float maxX = 0f;
+
+    // 最初の縦方向速度
     [SerializeField] float minY = 350f;
     [SerializeField] float maxY = 600f;
 
@@ -26,6 +30,7 @@ public class AmmoDropUI : MonoBehaviour
     [SerializeField] float drag = 0.99f;
 
     Vector2 velocity;
+
     float rotateSpeed;
     float rotateAccel;
 
@@ -38,6 +43,7 @@ public class AmmoDropUI : MonoBehaviour
         // 初速
         float x = Random.Range(minX, maxX);
         float y = Random.Range(minY, maxY);
+
         velocity = new Vector2(x, y);
 
         // 回転
@@ -53,11 +59,8 @@ public class AmmoDropUI : MonoBehaviour
     {
         float dt = Time.deltaTime;
 
-        // 重力
-        velocity.y -= gravity * dt;
-
-        // 空気抵抗
-        velocity.x *= drag;
+        // 重力を右方向へ
+        velocity.x += gravity * dt;
 
         // 移動
         rect.anchoredPosition += velocity * dt;
