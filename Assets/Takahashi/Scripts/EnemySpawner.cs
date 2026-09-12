@@ -237,14 +237,14 @@ public class EnemySpawner : MonoBehaviour
 
         float total = 0;
         foreach (var e in spawnList)
-            total += e.weight + playerStats.enemySpawnWeightBonus;
+            total += e.weight - playerStats.enemySpawnWeightBonus;
 
         float r = Random.Range(0, total);
         float sum = 0;
 
         foreach (var e in spawnList)
         {
-            sum += e.weight + playerStats.enemySpawnWeightBonus;
+            sum += e.weight - playerStats.enemySpawnWeightBonus;
             if (r < sum) return e.prefab;
         }
 

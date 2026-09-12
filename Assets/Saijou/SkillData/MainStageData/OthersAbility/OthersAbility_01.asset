@@ -24,8 +24,9 @@ MonoBehaviour:
   isLevelUp: 0
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   effectType: 5
-  effectValue: 0.01
+  effectValue: 0.1
   elementalBulletPrefab: {fileID: 0}
   description: 
   isShopUnlocked: 0
   isShopButton: 0
+  dollImage: {fileID: 0}
