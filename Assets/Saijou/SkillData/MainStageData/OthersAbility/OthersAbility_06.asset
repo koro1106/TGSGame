@@ -17,8 +17,8 @@ MonoBehaviour:
   maxLevel: 5
   requiredExps:
   - expType: 0
-    initialNeedExp: 40
-    needExp: 40
+    initialNeedExp: 30
+    needExp: 30
     addNeedExp: 15
   isUnlocked: 0
   isLevelUp: 0
