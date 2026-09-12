@@ -45,12 +45,12 @@ public class ShopTooltipUI : MonoBehaviour
             return;
 
         // 最大レベルなら基本テキスト・素材テキストを非表示
-        if (currentSkill.level >= currentSkill.maxLevel)
-        {
-            SetMaxLevelTextVisible(false);
-            dollImage.gameObject.SetActive(false);
-            return;
-        }
+        //if (currentSkill.level >= currentSkill.maxLevel)
+        //{
+        //    SetMaxLevelTextVisible(false);
+        //    dollImage.gameObject.SetActive(false);
+        //    return;
+        //}
 
         // 最大レベルではない場合は表示
         SetMaxLevelTextVisible(true);
@@ -101,8 +101,19 @@ public class ShopTooltipUI : MonoBehaviour
         // 人形画像を変更
         if (dollImage != null)
         {
-            dollImage.sprite = skill.dollImage;
-            dollImage.gameObject.SetActive(skill.dollImage != null);
+            if (skill.isShopUnlocked)
+            {
+                // 解放済み → 本物の人形
+                dollImage.sprite = skill.dollImage;
+            }
+            else
+            {
+                // 未解放 → シルエット
+                dollImage.sprite = skill.dollSilhouette;
+            }
+
+            // 画像が設定されている場合だけ表示
+            dollImage.gameObject.SetActive(dollImage.sprite != null);
         }
 
         gameObject.SetActive(true);

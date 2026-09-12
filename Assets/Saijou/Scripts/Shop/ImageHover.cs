@@ -25,13 +25,6 @@ public class ImageHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private void Awake()
     {
-        //// RectTransformを取得
-        //rectTransform = GetComponent<RectTransform>();
-        //// 元のサイズを保存
-        //originalScale = rectTransform.localScale;
-        //// 最初は枠線を非表示にする
-        //outline.enabled = false;
-
         rectTransform = GetComponent<RectTransform>();
 
         outline.enabled = false;
@@ -41,8 +34,8 @@ public class ImageHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public void OnPointerEnter(PointerEventData eventData)
     {
         // 解放済みなら何もしない
-        if (skillData == null || skillData.isUnlocked)
-            return;
+        //if (skillData == null || skillData.isUnlocked)
+        //    return;
 
         // 黄色い枠線を表示
         outline.enabled = true;
