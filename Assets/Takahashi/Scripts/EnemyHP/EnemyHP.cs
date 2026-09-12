@@ -531,7 +531,7 @@ public class EnemyHP : MonoBehaviour
                 if (stats.expDroprateDouble > 0 &&
                     Random.Range(0f, 100f) < 50f)
                 {
-                    count = stats.expDroprateDouble;
+                    count = stats.expDroprate;
                 }
 
                 // --------------------------------

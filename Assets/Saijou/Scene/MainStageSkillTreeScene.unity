@@ -16370,14 +16370,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SkillNodeUI
   data: {fileID: 11400000, guid: 3eb295374bd1244458ae8a1c093d8e42, type: 2}
   icon: {fileID: 1396807291}
-  nextButtons:
-  - {fileID: 0}
-  - {fileID: 513240899}
-  - {fileID: 552354535}
-  nextLines:
-  - {fileID: 638529357}
-  - {fileID: 1912497908}
-  - {fileID: 1770450790}
+  nextButtons: []
+  nextLines: []
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 0
   redSprite: {fileID: -8944233008454120225, guid: 522430a9fc27fe34e9a490a975c41b9b, type: 3}
