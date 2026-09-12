@@ -19251,10 +19251,6 @@ MonoBehaviour:
   animationPanel: {fileID: 890782915}
   resultStartScale: 0.1
   resultScaleDuration: 0.25
-  slideEndImage: {fileID: 0}
-  guideImages: []
-  nextImageButton: {fileID: 0}
-  previousImageButton: {fileID: 0}
   allSkills:
   - {fileID: 11400000, guid: 3df914e848c3dad4dabfd87295df0bf3, type: 2}
   - {fileID: 11400000, guid: 80e45135463560e449951842958b6499, type: 2}
