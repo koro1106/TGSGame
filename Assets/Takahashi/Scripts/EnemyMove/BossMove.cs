@@ -28,6 +28,11 @@
 ///     湧かなくなる不具合があった。
 ///     → OnDestroy()でも念のため同じ通知処理を呼ぶフェイルセーフを追加。
 ///        hasNotifiedDefeatフラグで二重通知は防止済み。
+///   ・Telegraph（赤いビームで狙いを定めている）最中にボスが死亡すると、
+///     Update()がenemyHP.IsDying()で即returnしてしまうため
+///     UpdateTelegraph()内のビーム非表示処理が実行されず、
+///     赤いビームが画面に残り続けてしまう不具合があった。
+///     → HandleBossDeath()内で即座にtelegraphVisualを非表示にする処理を追加。
 /// </summary>
 [RequireComponent(typeof(EnemyHP))]
 [RequireComponent(typeof(SpriteRenderer))]
@@ -213,6 +218,15 @@ public class BossMove : MonoBehaviour, IHitSlowable
 
     void HandleBossDeath()
     {
+        // ★追加：死亡した瞬間に赤いチャージ（狙いビーム）が残らないよう即座に非表示にする
+        //   Telegraph状態の途中で死亡すると、Update()がenemyHP.IsDying()で
+        //   即returnしてしまいUpdateTelegraph()側の非表示処理が実行されないため、
+        //   ここで確実に消す。
+        if (telegraphVisual != null)
+        {
+            telegraphVisual.gameObject.SetActive(false);
+        }
+
         // ★変更：二重通知を防ぐガードを追加
         if (hasNotifiedDefeat) return;
         hasNotifiedDefeat = true;
