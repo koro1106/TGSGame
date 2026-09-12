@@ -250,7 +250,7 @@ MonoBehaviour:
   hpBarRoot: {fileID: 0}
   hpBarPopupScale: 1.3
   hpBarPopupTiltAngle: 12
-  hpBarPopupDuration: 0.15
+  hpBarPopupDuration: 19.73
   hitFlashColor: {r: 1, g: 1, b: 1, a: 1}
   hitFlashDuration: 0.08
   hpBarSmoothSpeed: 8
