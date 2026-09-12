@@ -17,8 +17,8 @@ MonoBehaviour:
   maxLevel: 1
   requiredExps:
   - expType: 0
-    initialNeedExp: 110
-    needExp: 110
+    initialNeedExp: 100
+    needExp: 100
     addNeedExp: 0
   isUnlocked: 0
   isLevelUp: 0
@@ -29,3 +29,4 @@ MonoBehaviour:
   description: 
   isShopUnlocked: 0
   isShopButton: 0
+  dollImage: {fileID: 0}

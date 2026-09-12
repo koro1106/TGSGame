@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Pre_01
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillName: "\u30D4\u30B9\u30C8\u30EB\u89E3\u653E"
-  level: 1
+  level: 0
   maxLevel: 1
   requiredExps:
   - expType: 3
-    initialNeedExp: 5
-    needExp: 5
+    initialNeedExp: 10
+    needExp: 10
     addNeedExp: 0
   isUnlocked: 0
   isLevelUp: 0
@@ -29,3 +29,4 @@ MonoBehaviour:
   description: 
   isShopUnlocked: 0
   isShopButton: 0
+  dollImage: {fileID: 0}
