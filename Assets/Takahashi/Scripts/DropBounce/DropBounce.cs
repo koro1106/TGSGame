@@ -455,11 +455,11 @@ public class DropBounce : MonoBehaviour
 
     }
 
-    // =========================================================
-    // 回収完了
-    // =========================================================
+// =========================================================
+// 回収完了
+// =========================================================
 
-    void FinishCollect()
+void FinishCollect()
     {
         Debug.Log("経験値回収");
 
@@ -496,23 +496,91 @@ public class DropBounce : MonoBehaviour
 
         if (playerData != null)
         {
-            playerData.currentExp_1 = Mathf.Min(playerData.currentExp_1 + addExp1,PlayerData.MaxExp);
+            // =================================================
+            // 素材1個分の経験値 × 素材の価値
+            //
+            // 通常素材
+            // resultItemAmount = 1
+            //
+            // 高価値素材
+            // resultItemAmount = 10
+            // =================================================
 
-            playerData.currentExp_2 = Mathf.Min(playerData.currentExp_2 + addExp2,PlayerData.MaxExp);
+            int totalExp1 =
+                addExp1 * resultItemAmount;
 
-            playerData.currentExp_3 = Mathf.Min(playerData.currentExp_3 + addExp3,PlayerData.MaxExp);
+            int totalExp2 =
+                addExp2 * resultItemAmount;
 
-            playerData.currentPreExp = Mathf.Min(playerData.currentPreExp + addPreExp, PlayerData.MaxExp);
+            int totalExp3 =
+                addExp3 * resultItemAmount;
+
+            int totalPreExp =
+                addPreExp * resultItemAmount;
+
+
+            // =================================================
+            // Exp1
+            // =================================================
+
+            playerData.currentExp_1 =
+                Mathf.Min(
+                    playerData.currentExp_1 + totalExp1,
+                    PlayerData.MaxExp
+                );
+
+
+            // =================================================
+            // Exp2
+            // =================================================
+
+            playerData.currentExp_2 =
+                Mathf.Min(
+                    playerData.currentExp_2 + totalExp2,
+                    PlayerData.MaxExp
+                );
+
+
+            // =================================================
+            // Exp3
+            // =================================================
+
+            playerData.currentExp_3 =
+                Mathf.Min(
+                    playerData.currentExp_3 + totalExp3,
+                    PlayerData.MaxExp
+                );
+
+
+            // =================================================
+            // PreExp
+            // =================================================
+
+            playerData.currentPreExp =
+                Mathf.Min(
+                    playerData.currentPreExp + totalPreExp,
+                    PlayerData.MaxExp
+                );
         }
 
+
+        // =====================================================
+        // セーブ
+        // =====================================================
 
         SaveManager.Save(
             playerData,
             allSkills
         );
 
+
+        // =====================================================
+        // ドロップ削除
+        // =====================================================
+
         Destroy(gameObject);
     }
+
 
     // =========================================================
     // 影更新
