@@ -321,7 +321,7 @@ MonoBehaviour:
   hitSlowMultiplier: 0.3
   hitSlowDuration: 0.5
   debugTriggerKey: 116
-  shadowPrefab: {fileID: 1354215260935572172, guid: 536db39859af53a47928bcbe00400608, type: 3}
-  shadowOffset: {x: 30, y: -175}
-  shadowBaseScale: {x: 21, y: 7}
-  shadowAirScale: {x: 21, y: 7}
+  shadowPrefab: {fileID: 0}
+  shadowOffset: {x: 0, y: -0.1}
+  shadowBaseScale: {x: 1, y: 0.3}
+  shadowAirScale: {x: 0.5, y: 0.15}
