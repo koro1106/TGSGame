@@ -511,7 +511,7 @@ MonoBehaviour:
   spawnAreaTopRatio: 0.55
   spawnAreaBottomRatio: 1
   initialEnemyCount: 3
-  initialEnemyMinDistanceFromPlayer: 500
+  initialEnemyMinDistanceFromPlayer: 3
 --- !u!4 &497528188
 Transform:
   m_ObjectHideFlags: 0
@@ -782,6 +782,11 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 7913375375496377276, guid: c8274a27b4b218d488953cd78bbc47e3, type: 3}
   m_PrefabInstance: {fileID: 2074679340889761844}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1051430376 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
+  m_PrefabInstance: {fileID: 1591813833}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1153155034
 GameObject:
@@ -1379,6 +1384,10 @@ MonoBehaviour:
   chargeFps: 30
   bodyTiltAngle: 8
   bodyTiltSpeed: 10
+  frameColliders: []
+  defaultColliderOffset: {x: 0, y: 0}
+  defaultColliderSize: {x: 1, y: 1}
+  invertOffsetXOnFlip: 1
   walkSpeed: 3
   landDuration: 0.2
   telegraphPrefab: {fileID: 0}
@@ -1906,7 +1915,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarePackageSpawner
   carePackagePrefab: {fileID: 4164928430599087363, guid: aa70d1370b94b0c46aceee4fb666d5f4, type: 3}
-  player: {fileID: 0}
+  player: {fileID: 1051430376}
   safeRadius: 200
   spawnInterval: 100
   spawnChance: 100

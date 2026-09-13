@@ -34,7 +34,7 @@ public class EnemySpawner : MonoBehaviour
 
     public GameObject bossPrefab;
 
-    // ★変更：時間ではなく「コンボ数」でボスを呼ぶようにする
+    // 時間ではなく「コンボ数」でボスを呼ぶ
     [Header("ボス出現条件（コンボ数）")]
     [Tooltip("このコンボ数に到達したらボス出現の予告演出が始まる")]
     public int bossComboThreshold = 50;
@@ -56,11 +56,10 @@ public class EnemySpawner : MonoBehaviour
     public float spawnAreaBottomRatio = 1.0f;
 
     [Header("ゲーム開始時の初期配置")]
-    [Tooltip("ゲーム開始時にランダム配置する敵の数")]
+    [Tooltip("ゲーム開始時に生成する敵の数（敵の選ばれ方は通常スポーンと同じ。出現位置だけプレイヤーから離れた場所になる）")]
     public int initialEnemyCount = 3;
     [Tooltip("初期配置時、プレイヤーからこの距離以上離れた場所に出す")]
     public float initialEnemyMinDistanceFromPlayer = 3f;
-
 
     private float timer;
 
@@ -79,7 +78,7 @@ public class EnemySpawner : MonoBehaviour
             hpMultiplier *= hpGrowMultiplier;
         }
 
-        // ===== ボス管理（コンボ数トリガーに変更） =====
+        // ===== ボス管理（コンボ数トリガー） =====
         // waitingForBossSpawn 中は判定を止めておく
         // （予告演出→コールバックでの出現待ちの間、二重発火を防ぐ）
         if (!bossAlive && !waitingForBossSpawn)
@@ -120,7 +119,9 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    // ゲーム開始時に、プレイヤーから離れた位置へランダムに敵を配置する
+    // ★変更：ゲーム開始時の初期配置。
+    //   出現位置はプレイヤーから離れた場所（GetRandomPositionAwayFromPlayer）に戻し、
+    //   敵の選ばれ方（GetRandomEnemy経由）は通常スポーンと完全に同じSpawnEnemyAtを使う。
     void SpawnInitialEnemies()
     {
         for (int i = 0; i < initialEnemyCount; i++)
@@ -137,6 +138,7 @@ public class EnemySpawner : MonoBehaviour
     }
 
     // 指定した座標に敵を1体生成する（通常スポーン・初期配置の両方から呼ばれる共通処理）
+    // ★ここで使われるGetRandomEnemy()は初期配置・通常スポーンどちらも完全に同じロジック
     void SpawnEnemyAt(Vector2 spawnPos)
     {
         GameObject prefab = GetRandomEnemy();
@@ -156,7 +158,7 @@ public class EnemySpawner : MonoBehaviour
             rush.player = player;
         }
 
-        // ★追加：WarpEnemy（プレイヤーへ向かって移動する敵）にもプレイヤーを渡す
+        // WarpEnemy（プレイヤーへ向かって移動する敵）にもプレイヤーを渡す
         WarpEnemyMove warp = enemy.GetComponent<WarpEnemyMove>();
         if (warp != null)
         {
@@ -206,7 +208,7 @@ public class EnemySpawner : MonoBehaviour
         if (bossHPBar != null)
             bossHPBar.Hide();
 
-        // ★追加：ボス撃破時にコンボをリセットし、次のボスまた0からコンボを貯める形にする
+        // ボス撃破時にコンボをリセットし、次のボスまた0からコンボを貯める形にする
         if (ComboManager.instance != null)
             ComboManager.instance.ResetCombo();
 
@@ -348,7 +350,7 @@ public class EnemySpawner : MonoBehaviour
         bossWarningShown = false;
         waitingForBossSpawn = false;
 
-        // ★追加：コンボもリセット（次周回でまた0から50を目指す形にする）
+        // コンボもリセット（次周回でまた0から50を目指す形にする）
         if (ComboManager.instance != null)
             ComboManager.instance.ResetCombo();
 

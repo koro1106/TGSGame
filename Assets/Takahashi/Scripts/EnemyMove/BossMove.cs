@@ -33,6 +33,8 @@
 ///     UpdateTelegraph()内のビーム非表示処理が実行されず、
 ///     赤いビームが画面に残り続けてしまう不具合があった。
 ///     → HandleBossDeath()内で即座にtelegraphVisualを非表示にする処理を追加。
+///   ・★追加：Rabitと同様に、フレーム（コマ）ごとにCollider2D（BoxCollider2D）の
+///     サイズ・オフセットを切り替えられるようにした。
 /// </summary>
 [RequireComponent(typeof(EnemyHP))]
 [RequireComponent(typeof(SpriteRenderer))]
@@ -67,6 +69,42 @@ public class BossMove : MonoBehaviour, IHitSlowable
     public float bodyTiltAngle = 8f;
     public float bodyTiltSpeed = 10f;
     private float currentBodyTilt = 0f;
+
+    // =========================================================
+    // ★追加：フレームごとの当たり判定（Rabitと同じ仕組み）
+    // =========================================================
+    [System.Serializable]
+    public class FrameColliderData
+    {
+        [Tooltip("何番目のフレームに適用するか（framesのインデックス、0始まり）")]
+        public int frameIndex;
+
+        [Tooltip("そのフレームでのCollider2Dのサイズ")]
+        public Vector2 size = Vector2.one;
+
+        [Tooltip("そのフレームでのCollider2Dのオフセット（中心位置のズレ）。反転時のX自動反転はinvertOffsetXOnFlipの設定に従う")]
+        public Vector2 offset = Vector2.zero;
+    }
+
+    [Header("── フレームごとの当たり判定 ──────────")]
+    [Tooltip("特定のフレーム番号のときだけColliderのサイズ・位置を変える設定。ここに無いフレームはdefaultColliderSize/defaultColliderOffsetのままになる")]
+    public FrameColliderData[] frameColliders;
+
+    [Tooltip("frameCollidersに該当が無いフレームで使う、通常時のCollider設定")]
+    public Vector2 defaultColliderOffset = Vector2.zero;
+    public Vector2 defaultColliderSize = new Vector2(1f, 1f);
+
+    [Tooltip("ONにすると、スプライトが左右反転（flipX）しているときにColliderのoffset.xも自動で反転させる。見た目とColliderのズレを防ぐ")]
+    public bool invertOffsetXOnFlip = true;
+
+    private BoxCollider2D col;
+
+    // frameIndex検索を毎フレームループしなくて済むように、Startで辞書化しておく
+    private System.Collections.Generic.Dictionary<int, FrameColliderData> colliderMap;
+
+    // 直前に適用したフレーム番号と反転状態（無駄な再適用を防ぐため）
+    private int lastAppliedFrameIndex = -1;
+    private bool lastAppliedFlipX = false;
 
     private SpriteRenderer sr;
     private int frameIndex;
@@ -153,7 +191,7 @@ public class BossMove : MonoBehaviour, IHitSlowable
     private EnemyHP enemyHP;
 
     // =========================================================
-    // ★追加：ボス撃破通知の二重呼び出し防止フラグ
+    // ボス撃破通知の二重呼び出し防止フラグ
     //   EnemyHP.OnDeath経由の通知とOnDestroy()のフェイルセーフ通知が
     //   両方とも発火した場合に、BossDefeated()が2回呼ばれないようにする
     // =========================================================
@@ -182,9 +220,25 @@ public class BossMove : MonoBehaviour, IHitSlowable
         // ボスのHPが0になって死亡演出が始まった瞬間、スポナーへ通知する
         enemyHP.OnDeath += HandleBossDeath;
 
+        // ★追加：Collider取得とフレーム対応表（辞書）の作成
+        col = GetComponent<BoxCollider2D>();
+        colliderMap = new System.Collections.Generic.Dictionary<int, FrameColliderData>();
+        if (frameColliders != null)
+        {
+            foreach (var data in frameColliders)
+            {
+                // 同じframeIndexが複数登録されていた場合は最初のものを優先
+                if (!colliderMap.ContainsKey(data.frameIndex))
+                {
+                    colliderMap.Add(data.frameIndex, data);
+                }
+            }
+        }
+
         if (frames != null && frames.Length > 0)
         {
             sr.sprite = frames[0];
+            ApplyColliderForFrame(0); // ★追加：最初のフレームのColliderを反映
         }
 
         CalcAreaBounds();
@@ -218,7 +272,7 @@ public class BossMove : MonoBehaviour, IHitSlowable
 
     void HandleBossDeath()
     {
-        // ★追加：死亡した瞬間に赤いチャージ（狙いビーム）が残らないよう即座に非表示にする
+        // 死亡した瞬間に赤いチャージ（狙いビーム）が残らないよう即座に非表示にする
         //   Telegraph状態の途中で死亡すると、Update()がenemyHP.IsDying()で
         //   即returnしてしまいUpdateTelegraph()側の非表示処理が実行されないため、
         //   ここで確実に消す。
@@ -227,7 +281,7 @@ public class BossMove : MonoBehaviour, IHitSlowable
             telegraphVisual.gameObject.SetActive(false);
         }
 
-        // ★変更：二重通知を防ぐガードを追加
+        // 二重通知を防ぐガードを追加
         if (hasNotifiedDefeat) return;
         hasNotifiedDefeat = true;
 
@@ -546,6 +600,9 @@ public class BossMove : MonoBehaviour, IHitSlowable
             frameTimer -= frameDuration;
             frameIndex = (frameIndex + 1) % frames.Length;
             sr.sprite = frames[frameIndex];
+
+            // ★追加：フレームが切り替わったタイミングでColliderも更新
+            ApplyColliderForFrame(frameIndex);
         }
     }
 
@@ -556,6 +613,46 @@ public class BossMove : MonoBehaviour, IHitSlowable
         float targetTilt = tiltDir * bodyTiltAngle;
         currentBodyTilt = Mathf.LerpAngle(currentBodyTilt, targetTilt, Time.deltaTime * bodyTiltSpeed);
         transform.eulerAngles = new Vector3(0f, 0f, currentBodyTilt);
+    }
+
+    // =========================================================
+    // ★追加：フレームごとのCollider適用（Rabitと同じロジック）
+    // =========================================================
+    void ApplyColliderForFrame(int index)
+    {
+        if (col == null) return;
+
+        // 現在の反転状態（flipX）も見て、フレーム番号・反転状態のどちらも
+        // 前回と同じなら何もしない（毎フレームの無駄な代入を防ぐ）
+        bool currentFlip = sr != null && sr.flipX;
+        if (index == lastAppliedFrameIndex && currentFlip == lastAppliedFlipX) return;
+
+        lastAppliedFrameIndex = index;
+        lastAppliedFlipX = currentFlip;
+
+        Vector2 size;
+        Vector2 offset;
+
+        if (colliderMap != null && colliderMap.TryGetValue(index, out FrameColliderData data))
+        {
+            size = data.size;
+            offset = data.offset;
+        }
+        else
+        {
+            // 該当設定が無いフレームはデフォルトに戻す
+            size = defaultColliderSize;
+            offset = defaultColliderOffset;
+        }
+
+        // 左右反転時にoffset.xを反転させ、見た目とColliderのズレを防ぐ
+        if (invertOffsetXOnFlip && currentFlip)
+        {
+            offset.x = -offset.x;
+        }
+
+        col.size = size;
+        col.offset = offset;
     }
 
     // =========================================================
@@ -579,7 +676,14 @@ public class BossMove : MonoBehaviour, IHitSlowable
     void FlipSprite()
     {
         if (direction == Vector2.zero) return;
-        sr.flipX = direction.x > 0f;
+
+        bool newFlip = direction.x > 0f;
+        if (sr.flipX != newFlip)
+        {
+            sr.flipX = newFlip;
+            // ★追加：反転状態が変わったらCollider側も反映（offset.xの反転のため）
+            ApplyColliderForFrame(frameIndex);
+        }
     }
 
     // =========================================================
@@ -699,7 +803,7 @@ public class BossMove : MonoBehaviour, IHitSlowable
         if (shadow != null) Destroy(shadow.gameObject);
         if (telegraphVisual != null) Destroy(telegraphVisual.gameObject);
 
-        // ★追加：フェイルセーフ。
+        // フェイルセーフ。
         // 何らかの理由でEnemyHP.OnDeathが発火せずHandleBossDeath()が
         // 呼ばれないまま、ボスのGameObjectが破棄されてしまった場合の保険。
         // これがあれば「ボスは消えたのに通常敵が二度と湧かない」という
