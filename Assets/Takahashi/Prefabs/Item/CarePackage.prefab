@@ -127,11 +127,11 @@ MonoBehaviour:
   shadowOffset: {x: 0, y: -115}
   rewards:
   - rewardType: 0
-    chance: 33
+    chance: 0
   - rewardType: 1
-    chance: 33
+    chance: 0
   - rewardType: 2
-    chance: 33
+    chance: 100
 --- !u!61 &4737241381771015983
 BoxCollider2D:
   m_ObjectHideFlags: 0
