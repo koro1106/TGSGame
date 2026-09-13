@@ -34,32 +34,32 @@ public class EnemySpawner : MonoBehaviour
 
     public GameObject bossPrefab;
 
-    public float bossSpawnTime = 10f;
-
-    private float bossTimer;
+    // 時間ではなく「コンボ数」でボスを呼ぶ
+    [Header("ボス出現条件（コンボ数）")]
+    [Tooltip("このコンボ数に到達したらボス出現の予告演出が始まる")]
+    public int bossComboThreshold = 50;
 
     private bool bossAlive = false;
 
     [Header("ボスHPバー")]
     public BossHPBar bossHPBar;
 
-    [Header("ボス予告演出")]
-    public float bossWarningTime = 3f;   // ボス出現サイクル中、予告演出を開始するタイミング
-    private bool bossWarningShown = false;
-
     // 予告演出が終わってボスがまだ出ていない待機中かどうかのフラグ
     private bool waitingForBossSpawn = false;
+
+    // ボス出現条件（コンボ）をすでに満たして予告演出を出したかどうかのフラグ
+    // → コンボが50を超え続けている間、何度も予告が走らないようにするためのガード
+    private bool bossWarningShown = false;
 
     [Header("スポーンY範囲（赤い床の高さ）")]
     public float spawnAreaTopRatio = 0.45f;
     public float spawnAreaBottomRatio = 1.0f;
 
     [Header("ゲーム開始時の初期配置")]
-    [Tooltip("ゲーム開始時にランダム配置する敵の数")]
+    [Tooltip("ゲーム開始時に生成する敵の数（敵の選ばれ方は通常スポーンと同じ。出現位置だけプレイヤーから離れた場所になる）")]
     public int initialEnemyCount = 3;
     [Tooltip("初期配置時、プレイヤーからこの距離以上離れた場所に出す")]
     public float initialEnemyMinDistanceFromPlayer = 3f;
-
 
     private float timer;
 
@@ -78,15 +78,16 @@ public class EnemySpawner : MonoBehaviour
             hpMultiplier *= hpGrowMultiplier;
         }
 
-        // ===== ボス管理 =====
-        // waitingForBossSpawn 中はタイマーを進めない
-        // （予告演出→コールバックでの出現待ちの間、時間経過処理を止めておく）
+        // ===== ボス管理（コンボ数トリガー） =====
+        // waitingForBossSpawn 中は判定を止めておく
+        // （予告演出→コールバックでの出現待ちの間、二重発火を防ぐ）
         if (!bossAlive && !waitingForBossSpawn)
         {
-            bossTimer += Time.deltaTime;
-
-            // ボス出現の bossWarningTime 秒前になったら予告表示を開始
-            if (!bossWarningShown && bossTimer >= bossSpawnTime - bossWarningTime)
+            // まだ予告を出していない、かつComboManagerが存在し、
+            // 現在のコンボ数が閾値（bossComboThreshold）に到達していたら予告演出を開始
+            if (!bossWarningShown
+                && ComboManager.instance != null
+                && ComboManager.instance.Combo >= bossComboThreshold)
             {
                 bossWarningShown = true;
                 waitingForBossSpawn = true; // 演出完了待ち状態に入る
@@ -103,9 +104,6 @@ public class EnemySpawner : MonoBehaviour
                     SpawnBoss();
                 }
             }
-
-            // 以前あった「bossTimer >= bossSpawnTime で SpawnBoss」の直接呼び出しは撤去済み。
-            // 今は ShowWarning の演出完了コールバック経由でのみ SpawnBoss が呼ばれる。
         }
 
         // ボス中は通常敵を止める
@@ -121,7 +119,9 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    // ゲーム開始時に、プレイヤーから離れた位置へランダムに敵を配置する
+    // ★変更：ゲーム開始時の初期配置。
+    //   出現位置はプレイヤーから離れた場所（GetRandomPositionAwayFromPlayer）に戻し、
+    //   敵の選ばれ方（GetRandomEnemy経由）は通常スポーンと完全に同じSpawnEnemyAtを使う。
     void SpawnInitialEnemies()
     {
         for (int i = 0; i < initialEnemyCount; i++)
@@ -138,6 +138,7 @@ public class EnemySpawner : MonoBehaviour
     }
 
     // 指定した座標に敵を1体生成する（通常スポーン・初期配置の両方から呼ばれる共通処理）
+    // ★ここで使われるGetRandomEnemy()は初期配置・通常スポーンどちらも完全に同じロジック
     void SpawnEnemyAt(Vector2 spawnPos)
     {
         GameObject prefab = GetRandomEnemy();
@@ -157,7 +158,7 @@ public class EnemySpawner : MonoBehaviour
             rush.player = player;
         }
 
-        // ★追加：WarpEnemy（プレイヤーへ向かって移動する敵）にもプレイヤーを渡す
+        // WarpEnemy（プレイヤーへ向かって移動する敵）にもプレイヤーを渡す
         WarpEnemyMove warp = enemy.GetComponent<WarpEnemyMove>();
         if (warp != null)
         {
@@ -180,7 +181,7 @@ public class EnemySpawner : MonoBehaviour
         if (move != null)
         {
             move.player = player;
-            move.spawner = this; // ★追加：ボス撃破の通知を受け取れるようにする
+            move.spawner = this; // ボス撃破の通知を受け取れるようにする
         }
 
         BossEnemy bossScript = boss.GetComponent<BossEnemy>();
@@ -194,10 +195,10 @@ public class EnemySpawner : MonoBehaviour
             bossHPBar.AttachBoss(bossHP);
         }
 
-        bossTimer = 0f;
+        // 次回のボス出現判定に備えてフラグをリセット
         bossWarningShown = false;
 
-        Debug.Log("ボス出現！");
+        Debug.Log("ボス出現！（コンボ" + bossComboThreshold + "到達）");
     }
 
     public void BossDefeated()
@@ -206,6 +207,10 @@ public class EnemySpawner : MonoBehaviour
 
         if (bossHPBar != null)
             bossHPBar.Hide();
+
+        // ボス撃破時にコンボをリセットし、次のボスまた0からコンボを貯める形にする
+        if (ComboManager.instance != null)
+            ComboManager.instance.ResetCombo();
 
         Debug.Log("ボス撃破！");
     }
@@ -340,13 +345,14 @@ public class EnemySpawner : MonoBehaviour
         // 通常敵スポーンタイマー
         timer = 0f;
 
-        // ボスタイマー
-        bossTimer = 0f;
-
         // ボス状態
         bossAlive = false;
         bossWarningShown = false;
         waitingForBossSpawn = false;
+
+        // コンボもリセット（次周回でまた0から50を目指す形にする）
+        if (ComboManager.instance != null)
+            ComboManager.instance.ResetCombo();
 
         Debug.Log("敵のHP成長をリセットしました");
     }
