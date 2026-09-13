@@ -501,10 +501,9 @@ public class EnemyHP : MonoBehaviour
             rabitMove.HideShadow();
         }
 
-
         HideHPBar();
 
-        // ★変更：コンボ表示位置を「player」ではなく「倒したこの敵の位置」にするため、
+        // コンボ表示位置を「player」ではなく「倒したこの敵の位置」にするため、
         //   transform.position を引数として渡すように変更
         if (ComboManager.instance != null)
         {
