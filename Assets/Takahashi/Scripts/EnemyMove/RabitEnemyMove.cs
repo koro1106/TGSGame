@@ -28,9 +28,6 @@
 ///        sortingOrderBase〜sortingOrderBase+sortingOrderRange の範囲に
 ///        収めるように変更。これで常に一定範囲（デフォルト100〜200）に収まり、
 ///        マイナスや異常値には絶対にならない。
-///   ・★追加：フレーム（コマ）ごとにCollider2D（BoxCollider2D）の
-///     サイズ・オフセットを切り替えられるようにした。
-///     例：ジャンプの一番高いフレームだけ当たり判定を小さく／上に、など。
 /// </summary>
 [RequireComponent(typeof(SpriteRenderer))]
 public class RabitEnemyMove : MonoBehaviour, IHitSlowable
@@ -57,43 +54,6 @@ public class RabitEnemyMove : MonoBehaviour, IHitSlowable
     public float bodyTiltAngle = 12f;
     public float bodyTiltSpeed = 12f;
     private float currentBodyTilt = 0f;
-
-    // =========================================================
-    // ★追加：フレームごとの当たり判定
-    // =========================================================
-    [System.Serializable]
-    public class FrameColliderData
-    {
-        [Tooltip("何番目のフレームに適用するか（framesのインデックス、0始まり）")]
-        public int frameIndex;
-
-        [Tooltip("そのフレームでのCollider2Dのサイズ")]
-        public Vector2 size = Vector2.one;
-
-        [Tooltip("そのフレームでのCollider2Dのオフセット（中心位置のズレ）。反転時のX自動反転はinvertOffsetXOnFlipの設定に従う")]
-        public Vector2 offset = Vector2.zero;
-    }
-
-    [Header("── フレームごとの当たり判定 ──────────")]
-    [Tooltip("特定のフレーム番号のときだけColliderのサイズ・位置を変える設定。ここに無いフレームはdefaultColliderSize/defaultColliderOffsetのままになる")]
-    public FrameColliderData[] frameColliders;
-
-    [Tooltip("frameCollidersに該当が無いフレームで使う、通常時のCollider設定")]
-    
-    public Vector2 defaultColliderOffset = Vector2.zero;
-    public Vector2 defaultColliderSize = new Vector2(1f, 1f);
-
-    [Tooltip("ONにすると、スプライトが左右反転（flipX）しているときにColliderのoffset.xも自動で反転させる。見た目とColliderのズレを防ぐ")]
-    public bool invertOffsetXOnFlip = true;
-
-    private BoxCollider2D col;
-
-    // frameIndex検索を毎フレームループしなくて済むように、Startで辞書化しておく
-    private System.Collections.Generic.Dictionary<int, FrameColliderData> colliderMap;
-
-    // 直前に適用したフレーム番号と反転状態（無駄な再適用を防ぐため）
-    private int lastAppliedFrameIndex = -1;
-    private bool lastAppliedFlipX = false;
 
     // =========================================================
     // 重なり順（点滅対策）
@@ -162,7 +122,7 @@ public class RabitEnemyMove : MonoBehaviour, IHitSlowable
     private float currentAlertDuration = 0f; // Enter Alert時に計算される、今回実際に使う待ち時間
 
     // =========================================================
-    // 突進攻撃(狙い演出なし・検知した瞬間に即突進)
+    // 突進攻撃（狙い演出なし・検知した瞬間に即突進）
     // =========================================================
     [Header("── 突進攻撃（検知円に入ったらビックリマーク→突進） ──")]
     [Tooltip("未設定ならStartでPlayerMovement(優先)/Playerのシングルトンから自動取得")]
@@ -241,25 +201,9 @@ public class RabitEnemyMove : MonoBehaviour, IHitSlowable
         enemyHP = GetComponent<EnemyHP>();
         target = Vector2.zero;
 
-        // ★追加：Collider取得とフレーム対応表（辞書）の作成
-        col = GetComponent<BoxCollider2D>();
-        colliderMap = new System.Collections.Generic.Dictionary<int, FrameColliderData>();
-        if (frameColliders != null)
-        {
-            foreach (var data in frameColliders)
-            {
-                // 同じframeIndexが複数登録されていた場合は最初のものを優先
-                if (!colliderMap.ContainsKey(data.frameIndex))
-                {
-                    colliderMap.Add(data.frameIndex, data);
-                }
-            }
-        }
-
         if (frames != null && frames.Length > 0)
         {
             sr.sprite = frames[0];
-            ApplyColliderForFrame(0); // ★追加：最初のフレームのColliderを反映
         }
 
         CalcAreaBounds();
@@ -666,9 +610,6 @@ public class RabitEnemyMove : MonoBehaviour, IHitSlowable
             frameTimer -= frameDuration;
             frameIndex = (frameIndex + 1) % frames.Length;
             sr.sprite = frames[frameIndex];
-
-            // ★追加：フレームが切り替わったタイミングでColliderも更新
-            ApplyColliderForFrame(frameIndex);
         }
     }
 
@@ -697,46 +638,6 @@ public class RabitEnemyMove : MonoBehaviour, IHitSlowable
         float targetTilt = tiltDir * bodyTiltAngle;
         currentBodyTilt = Mathf.LerpAngle(currentBodyTilt, targetTilt, Time.deltaTime * bodyTiltSpeed);
         transform.eulerAngles = new Vector3(0f, 0f, currentBodyTilt);
-    }
-
-    // =========================================================
-    // ★追加：フレームごとのCollider適用
-    // =========================================================
-    void ApplyColliderForFrame(int index)
-    {
-        if (col == null) return;
-
-        // 現在の反転状態（flipX）も見て、フレーム番号・反転状態のどちらも
-        // 前回と同じなら何もしない（毎フレームの無駄な代入を防ぐ）
-        bool currentFlip = sr != null && sr.flipX;
-        if (index == lastAppliedFrameIndex && currentFlip == lastAppliedFlipX) return;
-
-        lastAppliedFrameIndex = index;
-        lastAppliedFlipX = currentFlip;
-
-        Vector2 size;
-        Vector2 offset;
-
-        if (colliderMap != null && colliderMap.TryGetValue(index, out FrameColliderData data))
-        {
-            size = data.size;
-            offset = data.offset;
-        }
-        else
-        {
-            // 該当設定が無いフレームはデフォルトに戻す
-            size = defaultColliderSize;
-            offset = defaultColliderOffset;
-        }
-
-        // ★左右反転時にoffset.xを反転させ、見た目とColliderのズレを防ぐ
-        if (invertOffsetXOnFlip && currentFlip)
-        {
-            offset.x = -offset.x;
-        }
-
-        col.size = size;
-        col.offset = offset;
     }
 
     // =========================================================
@@ -770,14 +671,7 @@ public class RabitEnemyMove : MonoBehaviour, IHitSlowable
     void FlipSprite()
     {
         if (direction == Vector2.zero) return;
-
-        bool newFlip = direction.x > 0f;
-        if (sr.flipX != newFlip)
-        {
-            sr.flipX = newFlip;
-            // ★追加：反転状態が変わったらCollider側も反映（offset.xの反転のため）
-            ApplyColliderForFrame(frameIndex);
-        }
+        sr.flipX = direction.x > 0f;
     }
 
     // =========================================================

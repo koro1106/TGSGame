@@ -78,7 +78,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 5.06, y: 18.4}
+  m_Size: {x: 5.06, y: 7.86}
   m_EdgeRadius: 0
 --- !u!212 &2638344483942418606
 SpriteRenderer:
@@ -224,7 +224,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 100
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 7a0a964663c4272458058c6feb84674d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3b4573a02a5028e49b46b9455d1d2f1d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -257,7 +257,7 @@ MonoBehaviour:
   rotationSpeed: 1080
   dropItems:
   - prefab: {fileID: 4247095691041555197, guid: 26d748848edfdd6449eec78b67fa87f4, type: 3}
-    chance: 0
+    chance: 100
   dropCount: 1
   damageText: {fileID: 6182524599874962511, guid: 35a301f99d5236d4f946df56d56148bd, type: 3}
   normalDamageColor: {r: 1, g: 1, b: 1, a: 1}
@@ -321,73 +321,6 @@ MonoBehaviour:
   chargeFps: 25
   bodyTiltAngle: 0
   bodyTiltSpeed: 0
-  frameColliders:
-  - frameIndex: 1
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: -0.72}
-  - frameIndex: 3
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: 0.3}
-  - frameIndex: 4
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: 2.5}
-  - frameIndex: 5
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: 3}
-  - frameIndex: 6
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: 3}
-  - frameIndex: 7
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: 3}
-  - frameIndex: 8
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: 3}
-  - frameIndex: 9
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: 3}
-  - frameIndex: 9
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: 3}
-  - frameIndex: 10
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: 3}
-  - frameIndex: 11
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: 2.3}
-  - frameIndex: 12
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: 2.3}
-  - frameIndex: 13
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: 1.75}
-  - frameIndex: 14
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: 1.31}
-  - frameIndex: 15
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: 1}
-  - frameIndex: 16
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: 0.5}
-  - frameIndex: 17
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: 0.5}
-  - frameIndex: 18
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: 0.5}
-  - frameIndex: 19
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: -0.02}
-  - frameIndex: 20
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: -0.02}
-  - frameIndex: 21
-    size: {x: 5.4, y: 8}
-    offset: {x: -0.14, y: -0.02}
-  defaultColliderOffset: {x: 0, y: 0}
-  defaultColliderSize: {x: 1, y: 1}
-  invertOffsetXOnFlip: 1
   autoSortByY: 1
   sortingOrderBase: 100
   sortingOrderRange: 100
@@ -465,17 +398,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.14, y: -0.02}
+  m_Offset: {x: -0.14, y: -2.7}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 10.8, y: 19.2}
+    oldSize: {x: 9.5, y: 13.6}
     newSize: {x: 9.5, y: 13.6}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 5.4, y: 8}
+  m_Size: {x: 5.37, y: 7.86}
   m_EdgeRadius: 0
 --- !u!1001 &1468092371139414184
 PrefabInstance:
@@ -563,7 +496,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2788937149780402964, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -5.19
+      value: -7.37
       objectReference: {fileID: 0}
     - target: {fileID: 2788937149780402964, guid: 05265e369df4b4747977dc49ad411d9e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

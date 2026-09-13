@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AttributeBullet_36
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillName: "\u4EBA\u5F62\u9928_\u89E3\u653E"
-  level: 1
+  level: 0
   maxLevel: 1
   requiredExps:
   - expType: 0
@@ -21,10 +21,10 @@ MonoBehaviour:
     needExp: 30
     addNeedExp: 0
   - expType: 1
-    initialNeedExp: 22
-    needExp: 22
+    initialNeedExp: 20
+    needExp: 20
     addNeedExp: 0
-  isUnlocked: 1
+  isUnlocked: 0
   isLevelUp: 0
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   effectType: 37
@@ -33,4 +33,5 @@ MonoBehaviour:
   description: 
   isShopUnlocked: 0
   isShopButton: 0
+  dollSilhouette: {fileID: 0}
   dollImage: {fileID: 0}

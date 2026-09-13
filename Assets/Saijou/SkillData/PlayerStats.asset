@@ -51,9 +51,9 @@ MonoBehaviour:
   rapidFire: 0
   targetingRangeUP: 0
   increasedUP: 0
-  shopOpen: 0
-  shopEffectBulletDamage: 0
-  shopElementalBulletChance: 0
+  shopOpen: 1
+  shopEffectBulletDamage: 1
+  shopElementalBulletChance: 1
   shopExpChange: 0
   shopButtonClicked: 0
   prestigeButtonClicked: 0
