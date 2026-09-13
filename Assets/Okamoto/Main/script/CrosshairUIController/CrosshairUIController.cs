@@ -861,16 +861,25 @@ public class CrosshairUIController : MonoBehaviour
 
     // =====================================================
     // リザルト画面のButtonを取得
+    // Canvas内のButtonをクロスヘア位置から直接取得
     // =====================================================
 
     private Button GetResultButtonAtCrosshair(
         Vector2 screenPosition)
     {
+        // =================================================
+        // GraphicRaycaster確認
+        // =================================================
+
         if (graphicRaycaster == null)
         {
             return null;
         }
 
+
+        // =================================================
+        // Canvas取得
+        // =================================================
 
         Canvas canvas =
             graphicRaycaster.GetComponent<Canvas>();
@@ -889,6 +898,10 @@ public class CrosshairUIController : MonoBehaviour
         }
 
 
+        // =================================================
+        // Canvas内のButtonをすべて取得
+        // =================================================
+
         Button[] buttons =
             canvas.GetComponentsInChildren<Button>(
                 true
@@ -901,6 +914,10 @@ public class CrosshairUIController : MonoBehaviour
             float.MaxValue;
 
 
+        // =================================================
+        // Buttonを1つずつ確認
+        // =================================================
+
         foreach (Button button in buttons)
         {
             if (button == null)
@@ -909,11 +926,19 @@ public class CrosshairUIController : MonoBehaviour
             }
 
 
+            // =================================================
+            // 非表示なら対象外
+            // =================================================
+
             if (!button.gameObject.activeInHierarchy)
             {
                 continue;
             }
 
+
+            // =================================================
+            // 操作不能なら対象外
+            // =================================================
 
             if (!button.interactable)
             {
@@ -931,12 +956,20 @@ public class CrosshairUIController : MonoBehaviour
             }
 
 
+            // =================================================
+            // ButtonのCanvas
+            // =================================================
+
+            Canvas buttonCanvas =
+                button.GetComponentInParent<Canvas>();
+
+
             Camera buttonCamera =
-                GetCanvasCamera(canvas);
+                GetCanvasCamera(buttonCanvas);
 
 
             // =================================================
-            // クロスヘアがButtonの範囲内か
+            // クロスヘアがButton内にあるか
             // =================================================
 
             bool inside =
@@ -970,6 +1003,10 @@ public class CrosshairUIController : MonoBehaviour
                     buttonCenter
                 );
 
+
+            // =================================================
+            // 一番近いButtonを採用
+            // =================================================
 
             if (distance < nearestDistance)
             {

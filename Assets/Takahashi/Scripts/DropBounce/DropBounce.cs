@@ -30,24 +30,48 @@ public class DropBounce : MonoBehaviour
 
     public int resultItemAmount = 1;
 
-    // =========================================================
-    // 回収設定
-    // =========================================================
+// =========================================================
+// 回収設定
+// =========================================================
 
-    [Header("回収")]
+[Header("回収")]
 
-    public float collectDistance = 1f;
+public float collectDistance = 1f;
     [SerializeField] float collectDisTotal = 0f;
+
     public PlayerStats stats;
+
     private RectTransform crosshair;
 
     private Camera cam;
+
+
+    // =========================================================
+    // ドロップ引き寄せ設定
+    // =========================================================
+
+    [Header("クロスヘア引き寄せ")]
+
+    [Tooltip("この距離以内にクロスヘアが入ると引き寄せ開始")]
+    public float attractDistance = 3f;
+
+    [Tooltip("クロスヘアへ引っ張る速度")]
+    public float attractSpeed = 10f;
+
+    [Tooltip("引き寄せ中に加速する倍率")]
+    public float attractForce = 5f;
+
+
+    // =========================================================
+    // 回収演出
+    // =========================================================
 
     [Header("回収演出")]
 
     public float collectMoveSpeed = 15f;
 
     private bool isCollecting;
+
 
     // =========================================================
     // 移動設定
@@ -139,6 +163,10 @@ public class DropBounce : MonoBehaviour
 
     private bool finished;
 
+    private GunController gunController;
+
+    private bool isAttracting;
+
     [Header("素材の価値")]
     public bool isValuable = false;
     [SerializeField] private GameObject valuableChild;
@@ -152,13 +180,14 @@ public class DropBounce : MonoBehaviour
         cam = Camera.main;
 
         // GunController取得
-        GunController gun =
+        gunController =
             FindObjectOfType<GunController>();
 
         // クロスヘア取得
-        if (gun != null)
+        if (gunController != null)
         {
-            crosshair = gun.crosshair;
+            crosshair =
+                gunController.crosshair;
         }
 
         // 初期位置保存
@@ -257,20 +286,58 @@ public class DropBounce : MonoBehaviour
 
     void Update()
     {
+        // =====================================================
+        // リザルト・ポーズ中は新しい回収・引き寄せをしない
+        // =====================================================
+
+        if (ResultManager.IsResultActive ||
+            PauseMenu.IsPaused)
+        {
+            isAttracting = false;
+
+            // すでに回収中のものはそのまま処理
+            if (isCollecting)
+            {
+                MoveCollect();
+            }
+
+            return;
+        }
+
+        // =====================================================
         // 回収中
+        // =====================================================
+
         if (isCollecting)
         {
             MoveCollect();
             return;
         }
 
+        // =====================================================
         // 回収判定
+        // =====================================================
+
         CheckCollect();
 
+        // =====================================================
+        // クロスヘアが近い場合は引き寄せる
+        // =====================================================
+
+        CheckAttract();
+
+        // =====================================================
         // バウンド終了後
+        // =====================================================
+
         if (finished)
         {
-            FixShadow();
+            // 引き寄せ範囲外なら通常の影固定
+            if (!IsAttracting())
+            {
+                FixShadow();
+            }
+
             return;
         }
 
@@ -371,43 +438,104 @@ public class DropBounce : MonoBehaviour
 
     void CheckCollect()
     {
-        // =====================================================
-        // Playerを基準に回収する
-        // =====================================================
-
-        collectDisTotal =
-            collectDistance +
-            stats.collectionRange;
-
-        // Playerの位置を回収中心にする
-        Vector2 playerPosition =
-            PlayerMovement.Instance.transform.position;
+        // GunControllerが取得できていない場合
+        if (gunController == null)
+            return;
 
         // =====================================================
-        // Player周辺のColliderを取得
+        // クロスヘアのワールド座標を取得
         // =====================================================
 
-        Collider2D[] hits =
-            Physics2D.OverlapCircleAll(
-                playerPosition,
-                collectDisTotal
+        Vector3 crosshairPosition =
+            gunController.GetCrosshairWorldPosition();
+
+        // =====================================================
+        // クロスヘアとドロップ品の距離
+        // =====================================================
+
+        float distance =
+            Vector3.Distance(
+                transform.position,
+                crosshairPosition
             );
 
         // =====================================================
-        // ドロップ回収
+        // クロスヘアがドロップ品に重なったら回収
         // =====================================================
 
-        foreach (Collider2D hit in hits)
+        if (distance <= collectDistance)
         {
-            DropBounce drop =
-                hit.GetComponent<DropBounce>();
+            Collect();
+        }
+    }
 
-            if (drop != null)
+    // =========================================================
+    // クロスヘアへの引き寄せ判定
+    // =========================================================
+
+    void CheckAttract()
+    {
+        isAttracting = false;
+
+        if (gunController == null) return;
+        if (isCollecting) return;
+        if (!finished) return;
+
+        Vector3 crosshairPosition =
+            gunController.GetCrosshairWorldPosition();
+
+        float distance =
+            Vector3.Distance(
+                transform.position,
+                crosshairPosition
+            );
+
+        if (distance <= attractDistance)
+        {
+            // 引き寄せ中
+            isAttracting = true;
+
+            float distanceRate =
+                1f - Mathf.Clamp01(
+                    distance / attractDistance
+                );
+
+            float currentSpeed =
+                attractSpeed +
+                attractForce * distanceRate;
+
+            // 本体をクロスヘアへ移動
+            transform.position =
+                Vector3.MoveTowards(
+                    transform.position,
+                    crosshairPosition,
+                    currentSpeed * Time.deltaTime
+                );
+
+            // =====================================================
+            // 影も本体と同じX位置へ移動
+            // =====================================================
+
+            if (shadow != null)
             {
-                drop.Collect();
+                shadow.position = new Vector3(
+                    transform.position.x,
+                    startPos.y - 15f,
+                    0
+                );
+
+                shadow.rotation =
+                    Quaternion.identity;
+            }
+
+            // 一定距離まで近づいたら回収
+            if (distance <= collectDistance)
+            {
+                Collect();
             }
         }
     }
+
 
     // =========================================================
     // 回収開始
@@ -455,11 +583,11 @@ public class DropBounce : MonoBehaviour
 
     }
 
-// =========================================================
-// 回収完了
-// =========================================================
+    // =========================================================
+    // 回収完了
+    // =========================================================
 
-void FinishCollect()
+    void FinishCollect()
     {
         Debug.Log("経験値回収");
 
@@ -674,5 +802,25 @@ void FinishCollect()
         {
             valuableChild.SetActive(isValuable);
         }
+    }
+
+    // =========================================================
+    // リザルト突入時の即時回収
+    // =========================================================
+    public void CollectImmediately()
+    {
+        // すでに回収済みなら何もしない
+        if (isCollecting)
+            return;
+
+        // 回収中状態
+        isCollecting = true;
+
+        // 即座に回収完了
+        FinishCollect();
+    }
+    bool IsAttracting()
+    {
+        return isAttracting;
     }
 }

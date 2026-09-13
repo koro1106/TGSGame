@@ -63,6 +63,23 @@ public class SceneTransition : MonoBehaviour
 
         yield return new WaitForSeconds(waitTime);
 
+        yield return new WaitForSeconds(waitTime);
+
+        // =====================================================
+        // シーン移動前にゲーム状態をリセット
+        // =====================================================
+
+        Time.timeScale = 1f;
+
+        PauseMenu.IsPaused = false;
+        ResultManager.IsResultActive = false;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
+
+        Physics2D.simulationMode =
+            SimulationMode2D.FixedUpdate;
+
         SceneManager.LoadScene(sceneName);
     }
 }
