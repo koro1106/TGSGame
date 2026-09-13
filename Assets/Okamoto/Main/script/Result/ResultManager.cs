@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -32,6 +33,9 @@ public class ResultManager : MonoBehaviour
     [Header("ポーズUI")]
     public GameObject pauseUI;
 
+    [Header("ポーズ管理")]
+    public PauseMenu pauseMenu;
+
     // Exp1
     public Image exp1Image;
     public TMP_Text exp1Text;
@@ -51,6 +55,9 @@ public class ResultManager : MonoBehaviour
     [Header("ボタン")]
     public Button continueButton;
     public Button skillTreeButton;
+
+    // 新しく追加するボタン
+    public Button newSceneButton;
 
     [Header("弾")]
     public GunController gunController;
@@ -79,6 +86,11 @@ public class ResultManager : MonoBehaviour
     public float resultStartScale = 0.1f;
     public float resultScaleDuration = 0.25f;
 
+    [Header("続行後に移動するScene")]
+    public string nextSceneName = "TitleScene";
+
+
+
     public SkillData[] allSkills;
 
     private Vector3 animationPanelOriginalScale;
@@ -88,6 +100,8 @@ public class ResultManager : MonoBehaviour
     private Vector2 transitionOriginalPosition;
 
     public static bool IsResultActive = false;
+
+
 
     // =========================================================
     // ★追加：リザルトによる削除かどうか
@@ -145,6 +159,8 @@ public class ResultManager : MonoBehaviour
             );
         }
 
+       
+
         if (continueTransition != null)
         {
             transitionOriginalPosition =
@@ -185,6 +201,12 @@ public class ResultManager : MonoBehaviour
 
         // リザルト中はポーズ画面を開けない
         IsResultActive = true;
+
+        // =====================================================
+        // フィールド上に残っているドロップをすべて回収
+        // =====================================================
+
+        CollectAllDropItems();
 
         // =====================================================
         // ポーズUIを閉じる
@@ -441,6 +463,21 @@ public class ResultManager : MonoBehaviour
         Cursor.visible = false;
 
         // =====================================================
+        // Result中は通常カーソルによるUI判定を無効化
+        //
+        // ボタン判定はCrosshairUIControllerだけで行う
+        // =====================================================
+
+        EventSystem eventSystem =
+            EventSystem.current;
+
+        if (eventSystem != null)
+        {
+            eventSystem.SetSelectedGameObject(null);
+            eventSystem.enabled = false;
+        }
+
+        // =====================================================
         // クロスヘア
         // リザルト中も動かす
         // =====================================================
@@ -495,6 +532,24 @@ public class ResultManager : MonoBehaviour
         StartCoroutine(
             AnimateOwnedItemUI()
         );
+        // =====================================================
+        // クロスヘアUI操作状態をリセット
+        //
+        // ポーズ画面から強制リザルトへ移った場合でも
+        // 通常の弾切れリザルトと同じ状態にする
+        // =====================================================
+
+        CrosshairUIController crosshairUI =
+            FindFirstObjectByType<CrosshairUIController>();
+
+        if (crosshairUI != null)
+        {
+            // クロスヘアUI操作を有効化
+            crosshairUI.enabled = true;
+
+            // リザルトモードへ切り替え
+            crosshairUI.SetPauseMode(false);
+        }
     }
 
     // =========================================================
@@ -1250,6 +1305,19 @@ public class ResultManager : MonoBehaviour
             Time.timeScale = 1f;
 
             // =====================================================
+            // 通常のUI操作へ戻す
+            // =====================================================
+
+            EventSystem eventSystem =
+                EventSystem.current;
+
+            if (eventSystem != null)
+            {
+                eventSystem.enabled = true;
+                eventSystem.SetSelectedGameObject(null);
+            }
+
+            // =====================================================
             // ポーズUIを使用可能にする
             // =====================================================
 
@@ -1328,7 +1396,18 @@ public class ResultManager : MonoBehaviour
 
         resultPanel.SetActive(true);
 
+        // =====================================================
+        // リザルトUI表示後にクロスヘア判定をリセット
+        // =====================================================
 
+        CrosshairUIController crosshairUI =
+            FindFirstObjectByType<CrosshairUIController>();
+
+        if (crosshairUI != null)
+        {
+            crosshairUI.enabled = true;
+            crosshairUI.SetPauseMode(false);
+        }
         // =====================================================
         // アニメーションPanelが未設定なら
         // リザルトだけ表示して終了
@@ -1463,6 +1542,28 @@ public class ResultManager : MonoBehaviour
         playerObject.transform.rotation =
             playerFixedRotation;
     }
+
+    // =========================================================
+    // リザルト突入時にフィールド上の
+    // ドロップアイテムをすべて回収
+    // =========================================================
+
+    private void CollectAllDropItems()
+    {
+        DropBounce[] drops =
+            FindObjectsOfType<DropBounce>();
+
+        foreach (DropBounce drop in drops)
+        {
+            if (drop != null)
+            {
+                // その場で回収処理を実行
+                drop.CollectImmediately();
+            }
+        }
+    }
+
+
     private void ClearAllDropItems()
     {
         DropBounce[] drops =
@@ -1763,10 +1864,17 @@ public class ResultManager : MonoBehaviour
     /// セーブしてから続行
     private void OnContinueButtonClicked()
     {
-        // セーブ
         SaveManager.Save(playerData, allSkills);
 
-        // 探索続行
+        // =====================================================
+        // リザルト終了時にポーズ状態を完全解除
+        // =====================================================
+
+        if (pauseMenu != null)
+        {
+            pauseMenu.CloseAfterResult();
+        }
+
         ContinueExploration();
     }
 
@@ -1781,5 +1889,155 @@ public class ResultManager : MonoBehaviour
         GoToSkillTree();
     }
 
-   
+    // =========================================================
+    // 強制リザルト表示
+    // =========================================================
+    public void OnResultButtonClicked()
+    {
+        // すでにリザルト中なら何もしない
+        if (resultShowing)
+            return;
+
+        // =====================================================
+        // ポーズ画面を終了
+        // =====================================================
+
+        if (pauseMenu != null)
+        {
+            pauseMenu.CloseForResult();
+        }
+
+        // =====================================================
+        // ポーズUIを閉じる
+        // =====================================================
+
+        if (pauseUI != null)
+        {
+            pauseUI.SetActive(false);
+        }
+
+        // =====================================================
+        // 次のフレームで通常のShowResult()を呼ぶ
+        //
+        // PauseMenuの状態を完全に解除してから
+        // 通常のリザルト処理に入る
+        // =====================================================
+
+        StartCoroutine(
+            ShowResultAfterPauseClose()
+        );
+    }
+
+
+    // =========================================================
+    // ポーズ終了後にリザルト表示
+    // =========================================================
+    private IEnumerator ShowResultAfterPauseClose()
+    {
+        // =====================================================
+        // 1フレーム待つ
+        // =====================================================
+
+        yield return null;
+
+        // =====================================================
+        // 通常のリザルト表示
+        //
+        // 弾切れ時とまったく同じShowResult()を使用
+        // =====================================================
+
+        ShowResult();
+    }
+    // =========================================================
+    // 新しいボタン
+    // スライドしてScene変更
+    // =========================================================
+
+    public void OnNewSceneButtonClicked()
+    {
+        StartCoroutine(
+            NewSceneChangeCoroutine()
+        );
+    }
+
+
+    // =========================================================
+    // 新しいボタン用Scene変更処理
+    // =========================================================
+
+    private IEnumerator NewSceneChangeCoroutine()
+    {
+        resultShowing = false;
+
+        if (continueTransition != null)
+        {
+            Vector2 startPos = transitionOriginalPosition;
+            Vector2 endPos = startPos + new Vector2(20000f, 0f);
+
+            continueTransition.anchoredPosition = startPos;
+            continueTransition.gameObject.SetActive(true);
+
+            yield return null;
+
+            float timer = 0f;
+
+            while (timer < transitionDuration)
+            {
+                timer += Time.unscaledDeltaTime;
+
+                float t =
+                    Mathf.Clamp01(
+                        timer / transitionDuration
+                    );
+
+                float smoothT =
+                    Mathf.SmoothStep(
+                        0f,
+                        1f,
+                        t
+                    );
+
+                continueTransition.anchoredPosition =
+                    Vector2.Lerp(
+                        startPos,
+                        endPos,
+                        smoothT
+                    );
+
+                // ★ スライド途中でシーン移動
+                if (timer >= 0.25f)
+                {
+                    // リザルト解除
+                    IsResultActive = false;
+
+                    // TimeScaleを通常に戻す
+                    Time.timeScale = 1f;
+
+                    // ★ Physics2Dを通常状態に戻す
+                    Physics2D.simulationMode =
+                        SimulationMode2D.FixedUpdate;
+
+                    // ★ ここではPlayerやGunControllerを触らない
+                    // 新しいシーン側で通常状態になる
+
+                    SceneManager.LoadScene(
+                        "TitleScene"
+                    );
+
+                    yield break;
+                }
+
+                yield return null;
+            }
+
+            continueTransition.anchoredPosition = endPos;
+        }
+
+        IsResultActive = false;
+
+        Time.timeScale = 1f;
+
+        Physics2D.simulationMode =
+            SimulationMode2D.FixedUpdate;
+    }
 }

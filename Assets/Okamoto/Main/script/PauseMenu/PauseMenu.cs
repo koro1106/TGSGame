@@ -482,4 +482,176 @@ public class PauseMenu : MonoBehaviour
     {
         ShowPanel(panels[2]);
     }
+
+    // =====================================================
+    // リザルトへ移行するときのポーズ終了
+    //
+    // 通常のCloseAll()とは違い、
+    // Time.timeScaleは変更しない
+    // =====================================================
+
+    public void CloseForResult()
+    {
+        // =================================================
+        // アニメーション停止
+        // =================================================
+
+        if (currentAnim != null)
+        {
+            StopCoroutine(currentAnim);
+            currentAnim = null;
+        }
+
+
+        // =================================================
+        // ポーズ内のPanelをすべて閉じる
+        // =================================================
+
+        foreach (var panel in panels)
+        {
+            if (panel != null)
+            {
+                panel.SetActive(false);
+                panel.transform.localScale = Vector3.zero;
+            }
+        }
+
+        currentPanel = null;
+
+
+        // =================================================
+        // ポーズ用クロスヘア操作を終了
+        // =================================================
+
+        if (crosshairUIController != null)
+        {
+            crosshairUIController.SetPauseMode(false);
+        }
+
+
+        // =================================================
+        // EventSystemを元に戻す
+        //
+        // ここが重要
+        // ポーズ中はEventSystemをOFFにしているため、
+        // Resultボタンを押せるように戻す
+        // =================================================
+
+        if (eventSystem != null)
+        {
+            eventSystem.enabled =
+                originalEventSystemEnabled;
+        }
+        else
+        {
+            // EventSystemがまだ取得されていない場合
+            eventSystem = EventSystem.current;
+
+            if (eventSystem != null)
+            {
+                eventSystem.enabled = true;
+            }
+        }
+
+
+        // =================================================
+        // ポーズ状態を解除
+        // =================================================
+
+        isOpen = false;
+        IsPaused = false;
+
+
+        // =================================================
+        // ポーズUIを閉じる
+        // =================================================
+
+        if (gameObject != null)
+        {
+            // PauseMenu自身がポーズUIなら閉じる
+            // ※ ResultPanelが別オブジェクトなら問題なし
+        }
+
+
+        // =================================================
+        // マウスカーソル
+        //
+        // リザルト側で改めて設定する
+        // =================================================
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
+
+
+        // =================================================
+        // Time.timeScaleは変更しない
+        //
+        // ShowResult()側で0にする
+        // =================================================
+
+        isOpen = false;
+        IsPaused = false;
+
+        // =====================================================
+        // 物理演算を通常状態へ戻す
+        // =====================================================
+
+        Physics2D.simulationMode =
+            SimulationMode2D.FixedUpdate;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
+
+        // Time.timeScaleは変更しない
+    }
+    // =====================================================
+    // リザルトから戦闘へ戻るときのポーズ完全解除
+    // =====================================================
+
+    public void CloseAfterResult()
+    {
+        if (currentAnim != null)
+        {
+            StopCoroutine(currentAnim);
+            currentAnim = null;
+        }
+
+        foreach (var panel in panels)
+        {
+            if (panel != null)
+            {
+                panel.SetActive(false);
+                panel.transform.localScale = Vector3.zero;
+            }
+        }
+
+        currentPanel = null;
+
+        if (crosshairUIController != null)
+        {
+            crosshairUIController.SetPauseMode(false);
+        }
+
+        if (eventSystem != null)
+        {
+            eventSystem.enabled = true;
+        }
+
+        // =====================================================
+        // ポーズ状態を解除
+        // =====================================================
+
+        isOpen = false;
+        IsPaused = false;
+
+        // =====================================================
+        // 物理演算を通常状態へ戻す
+        // =====================================================
+
+        Physics2D.simulationMode =
+            SimulationMode2D.FixedUpdate;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
 }

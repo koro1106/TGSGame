@@ -242,10 +242,18 @@ public class GunController : MonoBehaviour
 
         //    ammoSlots[i].image.transform.parent.gameObject.SetActive(active);
         //}
+
+        // =====================================================
+        // シーン再入場時の射撃状態リセット
+        // =====================================================
+
+        isReloading = false;
+        fireTimer = fireRate;
     }
 
     void Awake()
     {
+        isCrosshairOverPlayer = false;
 
         // PlayerDataから感度を読み込む
         if (playerData != null)
@@ -298,18 +306,22 @@ public class GunController : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(
+            "GUN UPDATE / enabled=" + enabled +
+            " / Pause=" + PauseMenu.IsPaused +
+            " / Result=" + ResultManager.IsResultActive
+        );
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("★ GunControllerで左クリックを検出");
+        }
+
         if (PauseMenu.IsPaused)
             return;
 
-        // =====================================================
-        // リザルト中
-        // クロスヘアだけ動かして、それ以外は停止
-        // =====================================================
-
         if (ResultManager.IsResultActive)
-        {
             return;
-        }
 
         Aim();
 
@@ -320,6 +332,7 @@ public class GunController : MonoBehaviour
             Shoot();
         }
 
+        // 以下は現在の処理をそのまま
         if (Input.GetKeyDown(KeyCode.R))
         {
             StartReload();
@@ -390,27 +403,31 @@ public class GunController : MonoBehaviour
         // Playerと重なっている
         isCrosshairOverPlayer =
             distance <= crosshairPlayerOverlapDistance;
-
-        // クロスヘアのImage表示切り替え
-        Image crosshairImage =
-            crosshair.GetComponent<Image>();
-
-        if (crosshairImage != null)
-        {
-            crosshairImage.enabled =
-                !isCrosshairOverPlayer;
-        }
     }
 
     void Shoot()
     {
+        Debug.Log(
+     "INPUT CHECK / MouseButton=" +
+     Input.GetMouseButton(0) +
+     " / MouseButtonDown=" +
+     Input.GetMouseButtonDown(0)
+ );
+
         // クロスヘアがPlayerと重なっている間は撃てない
         if (isCrosshairOverPlayer)
         {
+            Debug.Log("★ Playerと重なっているため発射停止");
             return;
         }
 
         fireTimer += Time.deltaTime;
+
+        // =====================================================
+        // ここから下は今のShoot()をそのまま
+        // =====================================================
+
+        // 以下そのまま
 
         bool shouldShoot = false;
 
@@ -440,6 +457,14 @@ public class GunController : MonoBehaviour
 
         if (shouldShoot)
         {
+
+            Debug.Log(
+    "shouldShoot = " + shouldShoot +
+    " / fireTimer = " + fireTimer +
+    " / fireRate = " + fireRate +
+    " / currentAmmo = " + currentAmmo +
+    " / rapidFire = " + stats.rapidFire
+);
             // =========================
             // 弾切れチェック
             // =========================
@@ -2522,5 +2547,7 @@ public class GunController : MonoBehaviour
 
         RefreshAmmoUIImmediate();
     }
+
+
 
 }
