@@ -15,7 +15,7 @@ public class EnemyHP : MonoBehaviour
         public int chance; // ドロップ確率
     }
 
-    // ★追加：ダメージの属性（見た目の色分けに使用）
+    // ダメージの属性（見た目の色分けに使用）
     public enum DamageAttribute
     {
         Normal,    // 通常（物理弾など）
@@ -58,7 +58,7 @@ public class EnemyHP : MonoBehaviour
     public Color explosionDamageColor = new Color(1f, 0.15f, 0.15f); // 赤（仮）
 
     [Header("HPバー")]
-    public Slider hpSlider; //hpバー
+    public Slider hpSlider; //hpばー
     public Slider hpDelaySlider; //ダメージを受けた時のhpばー
 
     [Header("HPバー：時計回りの減り方")]
@@ -115,7 +115,7 @@ public class EnemyHP : MonoBehaviour
 
     private bool hasTakenDamage = false; // 一度でも被弾したか（HPバー表示用）
 
-    // ★追加：この敵が死亡した瞬間に発火するイベント。
+    // この敵が死亡した瞬間に発火するイベント。
     // 誰でも `enemyHP.OnDeath += 処理;` の形で購読できる。
     // ボスの場合はBossMove側でこれを購読し、EnemySpawner.BossDefeated()を呼ぶのに使う。
     public event Action OnDeath;
@@ -302,7 +302,7 @@ public class EnemyHP : MonoBehaviour
 
         foreach (DropItem item in dropItems)
         {
-            float finalChance = item.chance ;
+            float finalChance = item.chance;
             total += finalChance;
 
             Debug.Log("トータル経験値ドロップ率" + total);
@@ -504,9 +504,11 @@ public class EnemyHP : MonoBehaviour
 
         HideHPBar();
 
+        // ★変更：コンボ表示位置を「player」ではなく「倒したこの敵の位置」にするため、
+        //   transform.position を引数として渡すように変更
         if (ComboManager.instance != null)
         {
-            ComboManager.instance.AddCombo();
+            ComboManager.instance.AddCombo(transform.position);
         }
 
         GunController gun = FindFirstObjectByType<GunController>();
@@ -518,85 +520,85 @@ public class EnemyHP : MonoBehaviour
             gun.AddAmmo(gun.recoverAmmoAmount);
         }
 
-            GameObject drop = GetRandomDrop();
+        GameObject drop = GetRandomDrop();
 
-            if (drop != null)
+        if (drop != null)
+        {
+            // --------------------------------
+            // ドロップする総数を決める
+            // --------------------------------
+            int count = stats.expDroprate;
+
+            // expDroprateDoubleが0より大きい場合だけ抽選
+            if (stats.expDroprateDouble > 0 &&
+                Random.Range(0f, 100f) < 50f)
             {
-                // --------------------------------
-                // ドロップする総数を決める
-                // --------------------------------
-                int count = stats.expDroprate;
+                count = stats.expDroprate;
+            }
 
-                // expDroprateDoubleが0より大きい場合だけ抽選
-                if (stats.expDroprateDouble > 0 &&
-                    Random.Range(0f, 100f) < 50f)
+            // --------------------------------
+            // 10個分の価値を持つ素材
+            // --------------------------------
+            int valuableCount = count / 10;
+
+            // 10未満の余り
+            int normalCount = count % 10;
+
+
+            // --------------------------------
+            // 高価値素材を生成
+            // --------------------------------
+            for (int j = 0; j < valuableCount; j++)
+            {
+                Vector3 offset = new Vector3(
+                    Random.Range(-50f, 50f),
+                    Random.Range(-50f, 50f),
+                    0
+                );
+
+                GameObject spawnedDrop = Instantiate(
+                    drop,
+                    transform.position + offset,
+                    Quaternion.identity
+                );
+
+                DropBounce dropBounce =
+                    spawnedDrop.GetComponent<DropBounce>();
+
+                if (dropBounce != null)
                 {
-                    count = stats.expDroprate;
-                }
-
-                // --------------------------------
-                // 10個分の価値を持つ素材
-                // --------------------------------
-                int valuableCount = count / 10;
-
-                // 10未満の余り
-                int normalCount = count % 10;
-
-
-                // --------------------------------
-                // 高価値素材を生成
-                // --------------------------------
-                for (int j = 0; j < valuableCount; j++)
-                {
-                    Vector3 offset = new Vector3(
-                        Random.Range(-50f, 50f),
-                        Random.Range(-50f, 50f),
-                        0
-                    );
-
-                    GameObject spawnedDrop = Instantiate(
-                        drop,
-                        transform.position + offset,
-                        Quaternion.identity
-                    );
-
-                    DropBounce dropBounce =
-                        spawnedDrop.GetComponent<DropBounce>();
-
-                    if (dropBounce != null)
-                    {
-                        dropBounce.SetValuable(true);
-                    }
-                }
-
-
-                // --------------------------------
-                // 普通素材を生成
-                // --------------------------------
-                for (int j = 0; j < normalCount; j++)
-                {
-                    Vector3 offset = new Vector3(
-                        Random.Range(-50f, 50f),
-                        Random.Range(-50f, 50f),
-                        0
-                    );
-
-                    GameObject spawnedDrop = Instantiate(
-                        drop,
-                        transform.position + offset,
-                        Quaternion.identity
-                    );
-
-                    DropBounce dropBounce =
-                        spawnedDrop.GetComponent<DropBounce>();
-
-                    if (dropBounce != null)
-                    {
-                        dropBounce.SetValuable(false);
-                    }
+                    dropBounce.SetValuable(true);
                 }
             }
-        
+
+
+            // --------------------------------
+            // 普通素材を生成
+            // --------------------------------
+            for (int j = 0; j < normalCount; j++)
+            {
+                Vector3 offset = new Vector3(
+                    Random.Range(-50f, 50f),
+                    Random.Range(-50f, 50f),
+                    0
+                );
+
+                GameObject spawnedDrop = Instantiate(
+                    drop,
+                    transform.position + offset,
+                    Quaternion.identity
+                );
+
+                DropBounce dropBounce =
+                    spawnedDrop.GetComponent<DropBounce>();
+
+                if (dropBounce != null)
+                {
+                    dropBounce.SetValuable(false);
+                }
+            }
+        }
+
         Vector3 startScale = transform.localScale;
 
         float timer = 0f;
