@@ -298,11 +298,21 @@ public class GunController : MonoBehaviour
 
     void Update()
     {
-        if (PauseMenu.IsPaused) return;
+        if (PauseMenu.IsPaused)
+            return;
+
+        // =====================================================
+        // リザルト中
+        // クロスヘアだけ動かして、それ以外は停止
+        // =====================================================
+
+        if (ResultManager.IsResultActive)
+        {
+            return;
+        }
 
         Aim();
 
-        // クロスヘアとPlayerが重なっているかチェック
         CheckCrosshairOverPlayer();
 
         if (!isReloading)
@@ -314,6 +324,7 @@ public class GunController : MonoBehaviour
         {
             StartReload();
         }
+
         if (Input.GetKeyDown(KeyCode.K))
         {
             IncreaseMaxAmmo(1);
@@ -896,18 +907,30 @@ public class GunController : MonoBehaviour
 
     void LateUpdate()
     {
-        if (PauseMenu.IsPaused) return;
+        //if (PauseMenu.IsPaused)
+        //    return;
+
+        // =====================================================
+        // クロスヘアはリザルト中でも動かす
+        // =====================================================
 
         float mouseX = Input.GetAxisRaw("Mouse X");
         float mouseY = Input.GetAxisRaw("Mouse Y");
 
-        crosshairPos += new Vector3(mouseX, mouseY, 0f) * sensitivity * 2f;
+        crosshairPos +=
+            new Vector3(mouseX, mouseY, 0f)
+            * sensitivity
+            * 2f;
+
+        // =====================================================
+        // 画面内に制限
+        // =====================================================
 
         crosshairPos.x = Mathf.Clamp(
-     crosshairPos.x,
-     0,
-     Screen.width
- );
+            crosshairPos.x,
+            0,
+            Screen.width
+        );
 
         crosshairPos.y = Mathf.Clamp(
             crosshairPos.y,
@@ -915,11 +938,29 @@ public class GunController : MonoBehaviour
             Screen.height - crosshairTopLimit
         );
 
-        UpdateCrosshairPosition(); // ★ World/Overlay両対応の反映処理に変更
+        // =====================================================
+        // クロスヘア位置更新
+        // =====================================================
 
-        // 追加
-        Quaternion targetRot = Quaternion.Euler(0, 0, crosshairTargetRotation);
-        crosshair.rotation = Quaternion.Lerp(crosshair.rotation, targetRot, Time.deltaTime * 30f);
+        UpdateCrosshairPosition();
+
+        // =====================================================
+        // クロスヘア回転
+        // =====================================================
+
+        Quaternion targetRot =
+            Quaternion.Euler(
+                0,
+                0,
+                crosshairTargetRotation
+            );
+
+        crosshair.rotation =
+            Quaternion.Lerp(
+                crosshair.rotation,
+                targetRot,
+                Time.unscaledDeltaTime * 30f
+            );
     }
 
     /// <summary>
