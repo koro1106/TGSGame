@@ -413,10 +413,10 @@ public class ResultManager : MonoBehaviour
             playerMovement.enabled = false;
         }
 
-        if (gunController != null)
-        {
-            gunController.enabled = false;
-        }
+        //if (gunController != null)
+        //{
+        //    gunController.enabled = false;
+        //}
 
         // =================================================
         // 敵の強さ・スポーン時間をリセット
@@ -431,40 +431,32 @@ public class ResultManager : MonoBehaviour
         // Playerの向き変更も停止
         // =====================================================
 
-        if (gunController != null)
-        {
-            gunController.enabled = false;
-        }
+        // GunControllerは停止しない
+        // リザルト中もクロスヘアを動かすため
+        //if (gunController != null)
+        //{
+        //    gunController.enabled = false;
+        //}
 
+        Cursor.visible = false;
 
         // =====================================================
-        // クロスヘアの移動停止
+        // クロスヘア
+        // リザルト中も動かす
         // =====================================================
 
         if (crosshairController != null)
         {
-            crosshairController.enabled = false;
+            crosshairController.enabled = true;
         }
-
-
-        // =====================================================
-        // クロスヘア非表示
-        // =====================================================
 
         if (crosshairObject != null)
         {
-            crosshairObject.SetActive(false);
+            crosshairObject.SetActive(true);
         }
 
-
-        // =====================================================
-        // 本物のマウスカーソルを表示
-        // =====================================================
-
-        Cursor.visible = true;
-
         Cursor.lockState =
-            CursorLockMode.None;
+            CursorLockMode.Confined;
 
 
         // =====================================================
