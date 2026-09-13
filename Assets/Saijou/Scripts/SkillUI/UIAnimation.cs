@@ -23,14 +23,17 @@ public class UIAnimation : MonoBehaviour
         // 現在のScaleをそのまま元サイズとして保存
         Vector3 original = rt.localScale;
 
-        // 押した瞬間
-        Vector3 press = new Vector3(1.08f, 0.72f, 1f) * 0.8f;
+        //// 押した瞬間
+        //Vector3 press = new Vector3(1.08f, 0.72f, 1f) * 0.8f;
 
-        // ポンッと大きく
-        Vector3 big = new Vector3(0.92f, 1.18f, 1f) * 0.8f;
+        //// ポンッと大きく
+        //Vector3 big = new Vector3(0.92f, 1.18f, 1f) * 0.8f;
 
-        // 少しだけオーバー
-        Vector3 overshoot = new Vector3(1.04f, 0.96f, 1f) * 0.8f;
+        //// 少しだけオーバー
+        //Vector3 overshoot = new Vector3(1.04f, 0.96f, 1f) * 0.8f;
+        Vector3 press = original * 0.98f;
+        Vector3 big = original * 1.02f;
+        Vector3 overshoot = original * 1.01f;
 
         // 回転
         Quaternion rot0 = Quaternion.identity;
