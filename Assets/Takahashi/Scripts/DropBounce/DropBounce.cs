@@ -170,6 +170,20 @@ public float collectDistance = 1f;
     [Header("素材の価値")]
     public bool isValuable = false;
     [SerializeField] private GameObject valuableChild;
+
+    // =========================================================
+    // 回収演出用
+    // =========================================================
+
+    [SerializeField] private float collectShrinkSpeed = 8f;
+
+    private bool collectFinished;
+
+    [Header("回収SE")]
+    [SerializeField] private AudioClip collectSE;
+    [SerializeField] private float collectSEVolume = 1f;
+
+
     // =========================================================
     // Start
     // =========================================================
@@ -541,46 +555,80 @@ public float collectDistance = 1f;
     // 回収開始
     // =========================================================
 
-    public void Collect()
+    void Collect()
     {
-        if (isCollecting) return;
+        // 回収SE
+        if (collectSE != null)
+        {
+            AudioSource.PlayClipAtPoint(
+                collectSE,
+                Camera.main.transform.position,
+                collectSEVolume
+            );
+        }
 
         isCollecting = true;
     }
 
+   
     // =========================================================
     // 回収演出
     // =========================================================
 
     void MoveCollect()
     {
-        // 下方向へ移動
-        transform.position +=
-            Vector3.down *
-            collectMoveSpeed *
-            Time.deltaTime;
+        // =====================================================
+        // クロスヘア方向へ移動
+        // =====================================================
 
-        // 少し縮小
+        if (gunController != null)
+        {
+            Vector3 crosshairPosition =
+                gunController.GetCrosshairWorldPosition();
+
+            transform.position =
+                Vector3.MoveTowards(
+                    transform.position,
+                    crosshairPosition,
+                    collectMoveSpeed * Time.deltaTime
+                );
+        }
+
+        // =====================================================
+        // 少しずつ縮小
+        // =====================================================
+
         transform.localScale =
             Vector3.Lerp(
                 transform.localScale,
                 Vector3.zero,
-                10f * Time.deltaTime
+                collectShrinkSpeed * Time.deltaTime
             );
 
+        // =====================================================
         // 回転
+        // =====================================================
+
         transform.Rotate(
             0,
             0,
             720f * Time.deltaTime
         );
 
-        // 一定位置で回収完了
-        //if (transform.position.y < -10f)
-        //{
-        //}
-        FinishCollect();
+        // =====================================================
+        // 十分小さくなったら回収完了
+        // =====================================================
 
+        if (transform.localScale.magnitude <= 0.05f)
+        {
+            transform.localScale = Vector3.zero;
+
+            if (!collectFinished)
+            {
+                collectFinished = true;
+                FinishCollect();
+            }
+        }
     }
 
     // =========================================================

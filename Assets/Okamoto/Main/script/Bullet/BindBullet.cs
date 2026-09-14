@@ -105,6 +105,12 @@ public class BindBullet : MonoBehaviour
 
         hasHit = true;
 
+        // çΩíeíÖíeSE
+        if (SEManager.Instance != null)
+        {
+            SEManager.Instance.PlayBindHitSE();
+        }
+
         EnemyHP firstEnemy =
             other.GetComponent<EnemyHP>();
 

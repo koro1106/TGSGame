@@ -77,6 +77,12 @@ public class Bullet : MonoBehaviour
         // ★変更：クリティカル情報も一緒に渡す
         enemy.TakeDamage(damage, isCritical);
 
+        // 敵着弾SE
+        if (SEManager.Instance != null)
+        {
+            SEManager.Instance.PlayEnemyHitSE();
+        }
+
         Debug.Log(
             enemy.name +
             " に " +
