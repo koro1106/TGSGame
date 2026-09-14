@@ -8,6 +8,9 @@ public class Bullet : MonoBehaviour
 
     [SerializeField] private int damage;
 
+    // ★追加：クリティカルかどうか
+    private bool isCritical = false;
+
     private Vector2 direction;
 
     public GameObject ammoDropPrefab;
@@ -71,13 +74,15 @@ public class Bullet : MonoBehaviour
             return;
 
         // ダメージ
-        enemy.TakeDamage(damage);
+        // ★変更：クリティカル情報も一緒に渡す
+        enemy.TakeDamage(damage, isCritical);
 
         Debug.Log(
             enemy.name +
             " に " +
             damage +
-            " ダメージ"
+            " ダメージ" +
+            (isCritical ? "（クリティカル！）" : "")
         );
 
         // 弾消滅
@@ -88,8 +93,10 @@ public class Bullet : MonoBehaviour
     // ダメージ設定
     //========================
 
-    public void SetDamage(int value)
+    // ★変更：クリティカルかどうかも受け取れるように引数追加（省略時はfalse）
+    public void SetDamage(int value, bool critical = false)
     {
         damage = value;
+        isCritical = critical;
     }
 }

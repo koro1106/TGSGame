@@ -33,6 +33,11 @@ public class EyeEnemy : MonoBehaviour
     public float spawnAreaBottomRatio = 1.0f;
     // ===== ここまで追加 =====
 
+    // ★追加：画面外消滅
+    [Header("画面外消滅")]
+    [Tooltip("画面端からこの距離だけ離れたら自動的に消える")]
+    public float despawnDistance = 5f;
+
     private Vector2 moveDirection;
 
     private EnemyHP hp;
@@ -71,7 +76,7 @@ public class EyeEnemy : MonoBehaviour
         ResetBlinkTimer();
     }
 
-void Update()
+    void Update()
     {
         // =====================================================
         // ポーズ中・リザルト中は完全停止
@@ -107,6 +112,9 @@ void Update()
 
         // 手の開閉
         UpdateHandSway();
+
+        // ★追加：画面外へ一定距離離れたら消える
+        CheckDespawn();
     }
 
 
@@ -218,5 +226,36 @@ void Update()
         if (headSR != null) headSR.flipX = flip;
         if (leftHandSR != null) leftHandSR.flipX = flip;
         if (rightHandSR != null) rightHandSR.flipX = flip;
+    }
+
+    // =========================================================
+    // ★追加：画面外へ一定距離離れたら自動で消える
+    // =========================================================
+    void CheckDespawn()
+    {
+        Camera cam = Camera.main;
+        if (cam == null) return;
+
+        float h = cam.orthographicSize;
+        float w = h * cam.aspect;
+
+        float camX = cam.transform.position.x;
+        float camY = cam.transform.position.y;
+
+        float left = camX - w - despawnDistance;
+        float right = camX + w + despawnDistance;
+        float top = camY + h + despawnDistance;
+        float bottom = camY - h - despawnDistance;
+
+        Vector3 pos = transform.position;
+
+        bool outside =
+            pos.x < left || pos.x > right ||
+            pos.y < bottom || pos.y > top;
+
+        if (outside)
+        {
+            Destroy(gameObject);
+        }
     }
 }

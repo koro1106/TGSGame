@@ -567,7 +567,20 @@ public class GunController : MonoBehaviour
 
             if (bulletScript != null)
             {
-                bulletScript.SetDamage(stats.bulletDamage);
+                // ★変更：PlayerStatsのクリティカル値を使用（スキルツリー連動）
+                bool isCritical =
+                    Random.Range(0, 100) < stats.criticalrate;
+
+                int finalDamage = stats.bulletDamage;
+
+                if (isCritical)
+                {
+                    // criticalDamageは上乗せ%として扱う（例：50なら1.5倍）
+                    float multiplier = 1f + (stats.criticalDamage / 100f);
+                    finalDamage = Mathf.RoundToInt(stats.bulletDamage * multiplier);
+                }
+
+                bulletScript.SetDamage(finalDamage, isCritical);
             }
 
             // 爆発弾
