@@ -898,6 +898,18 @@ public class ResultManager : MonoBehaviour
             displayItems.Add(item);
         }
 
+        // =====================================================
+        // 表示順を固定
+        // 左 → 右
+        // Exp1 → Exp2 → Exp3 → PreExp
+        // =====================================================
+
+        displayItems.Sort((a, b) =>
+        {
+            return GetDropItemOrder(a.Key)
+                .CompareTo(GetDropItemOrder(b.Key));
+        });
+
 
         // =====================================================
         // アイテムの数
@@ -2048,5 +2060,29 @@ public class ResultManager : MonoBehaviour
 
         Physics2D.simulationMode =
             SimulationMode2D.FixedUpdate;
+    }
+    // =========================================================
+    // ドロップアイテムの表示順
+    // =========================================================
+
+    private int GetDropItemOrder(DropItemType type)
+    {
+        switch (type)
+        {
+            case DropItemType.Exp1:
+                return 0;
+
+            case DropItemType.Exp2:
+                return 1;
+
+            case DropItemType.Exp3:
+                return 2;
+
+            case DropItemType.PreExp:
+                return 3;
+
+            default:
+                return 99;
+        }
     }
 }

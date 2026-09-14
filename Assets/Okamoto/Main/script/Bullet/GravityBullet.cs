@@ -61,6 +61,12 @@ public class GravityBullet : MonoBehaviour
         // ’…’e‚µ‚½“G‚Éƒ_ƒ[ƒW
         centerEnemy.TakeDamage(totalDamage);
 
+        // d—Í’e’…’eSE
+        if (SEManager.Instance != null)
+        {
+            SEManager.Instance.PlayGravityHitSE();
+        }
+
         // d—Í”­¶
         StartCoroutine(
             GravityPull(centerEnemy.transform)

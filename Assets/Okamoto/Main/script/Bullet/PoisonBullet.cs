@@ -137,6 +137,12 @@ public class PoisonBullet : Bullet
 
         enemy.TakeDamage(totalDamage, false, EnemyHP.DamageAttribute.Poison);
 
+        // 毒弾着弾SE
+        if (SEManager.Instance != null)
+        {
+            SEManager.Instance.PlayPoisonHitSE();
+        }
+
         // ========================
         // 毒エリア開始
         // ========================

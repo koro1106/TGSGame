@@ -15,7 +15,7 @@ public class ChainBullet : MonoBehaviour
     public GameObject lightningPrefab;
     public GameObject hitEffectPrefab;
 
-    public AudioClip hitSound;
+    //public AudioClip hitSound;
 
     private LineRenderer lr;
 
@@ -72,12 +72,10 @@ public class ChainBullet : MonoBehaviour
         if (firstEnemy == null)
             return;
 
-        if (hitSound != null)
+        // —‹‘®«’e’…’eSE
+        if (SEManager.Instance != null)
         {
-            AudioSource.PlayClipAtPoint(
-                hitSound,
-                transform.position
-            );
+            SEManager.Instance.PlayChainHitSE();
         }
 
         ChainDamage(firstEnemy);

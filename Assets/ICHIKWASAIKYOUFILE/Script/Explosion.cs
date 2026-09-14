@@ -79,6 +79,12 @@ public class Bulletxplosion : MonoBehaviour
 
         enemy.TakeDamage(damage);
 
+        // ”š”­’e’…’eSE
+        if (SEManager.Instance != null)
+        {
+            SEManager.Instance.PlayExplosionHitSE();
+        }
+
         Debug.Log(
             enemy.name +
             " ‚É " +
