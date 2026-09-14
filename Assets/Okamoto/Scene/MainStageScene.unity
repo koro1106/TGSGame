@@ -17828,8 +17828,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7384646960275457490, guid: 7bce92ffa8315aa4cae0e0a34f0b17e5, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.40000004
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384646960275457490, guid: 7bce92ffa8315aa4cae0e0a34f0b17e5, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.40000004
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384646960275457490, guid: 7bce92ffa8315aa4cae0e0a34f0b17e5, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.40000004
+      objectReference: {fileID: 0}
+    - target: {fileID: 7384646960275457490, guid: 7bce92ffa8315aa4cae0e0a34f0b17e5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 345
+      value: 404.44
       objectReference: {fileID: 0}
     - target: {fileID: 7384646960275457490, guid: 7bce92ffa8315aa4cae0e0a34f0b17e5, type: 3}
       propertyPath: m_LocalPosition.y
@@ -27426,13 +27438,13 @@ MonoBehaviour:
     weight: 0
   spawnList: []
   player: {fileID: 173762202}
-  spawnInterval: 5
+  spawnInterval: 3.5
   s: 0
   hpGrowInterval: 5
   hpGrowMultiplier: 1.1
   playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   bossPrefab: {fileID: 1535677997056505620, guid: 38e0c4e553ed7874584eba5a894cc60f, type: 3}
-  bossComboThreshold: 50
+  bossComboThreshold: 100
   bossHPBar: {fileID: 2125588650}
   spawnAreaTopRatio: 0.45
   spawnAreaBottomRatio: 1

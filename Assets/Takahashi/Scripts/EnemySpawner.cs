@@ -119,10 +119,10 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    // ★変更：ゲーム開始時の初期配置。
+    //   ゲーム開始時の初期配置。
     //   出現位置はプレイヤーから離れた場所（GetRandomPositionAwayFromPlayer）に戻し、
     //   敵の選ばれ方（GetRandomEnemy経由）は通常スポーンと完全に同じSpawnEnemyAtを使う。
-    void SpawnInitialEnemies()
+    public void SpawnInitialEnemies()
     {
         for (int i = 0; i < initialEnemyCount; i++)
         {
