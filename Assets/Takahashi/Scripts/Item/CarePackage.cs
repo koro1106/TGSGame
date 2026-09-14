@@ -97,6 +97,11 @@ public class CarePackage : MonoBehaviour
     [Header("報酬テーブル")]
     [SerializeField] private RewardData[] rewards;
 
+    // ★追加：敵全滅報酬でボスに与えるダメージ量
+    [Header("boss")]
+    [Tooltip("通常敵は999999固定（即死）。ボスにはこのダメージ量だけ与える")]
+    [SerializeField] private int bossKillAllDamage = 100;
+
     // =========================
     // 初期化
     // =========================
@@ -307,8 +312,19 @@ public class CarePackage : MonoBehaviour
 
             if (!onScreen) continue;
 
-            // 100%確実に倒す
-            enemy.TakeDamage(999999);
+            // ★変更：ボスかどうかで与えるダメージ量を分ける
+            bool isBoss = enemy.GetComponent<BossMove>() != null;
+
+            if (isBoss)
+            {
+                // ボスには指定した量だけダメージを与える（即死させない）
+                enemy.TakeDamage(bossKillAllDamage);
+            }
+            else
+            {
+                // 通常敵は今まで通り100%確実に倒す
+                enemy.TakeDamage(999999);
+            }
         }
     }
 
