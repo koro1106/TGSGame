@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class ExpChangeManager : MonoBehaviour
 {
     [SerializeField] PlayerStats playerStats;
+    [SerializeField] SEManager seManager;
 
     [SerializeField] GameObject expChangeButton;
     [SerializeField] GameObject expChangeWindow;
@@ -62,6 +63,7 @@ public class ExpChangeManager : MonoBehaviour
         if (windowAnimationCoroutine != null)
             StopCoroutine(windowAnimationCoroutine);
 
+        seManager.PlayClickSE();
         expChangeOpening = false;
 
         Color color = BlackImage.color;
@@ -77,6 +79,7 @@ public class ExpChangeManager : MonoBehaviour
         if (windowAnimationCoroutine != null)
             StopCoroutine(windowAnimationCoroutine);
 
+        seManager.PlayClickSE();
         expChangeWindow.SetActive(true);
         expChangeOpening = true;
 
@@ -104,6 +107,7 @@ public class ExpChangeManager : MonoBehaviour
 
         ResetGetExpText();
         needExpText.text = getExp.ToString();
+        seManager.PlayClickSE();
         Debug.Log("Exp01を使用");
     }
     // Exp02を使用
@@ -117,6 +121,7 @@ public class ExpChangeManager : MonoBehaviour
         blackImage02.SetActive(false); // 黒画像
         blackImage01.SetActive(true);
 
+        seManager.PlayClickSE();
         ResetGetExpText();
         needExpText.text = getExp.ToString();
         Debug.Log("Exp02を使用");
@@ -132,6 +137,7 @@ public class ExpChangeManager : MonoBehaviour
         if (useExp01)
         {
             int nextGetExp = getExp + 1;
+            seManager.PlayClickSE();
 
             if (playerData.currentExp_1 < needExp01 * nextGetExp)
             {
@@ -142,6 +148,7 @@ public class ExpChangeManager : MonoBehaviour
         else if (useExp02)
         {
             int nextGetExp = getExp + 1;
+            seManager.PlayClickSE();
 
             if (playerData.currentExp_2 < needExp02* nextGetExp)
             {
@@ -188,7 +195,7 @@ public class ExpChangeManager : MonoBehaviour
             int needExp = getExp * -10;
             needExpText.text = needExp.ToString();
         }
-
+        seManager.PlayClickSE();
         UpdateGetExpText();
     }
 
@@ -225,6 +232,7 @@ public class ExpChangeManager : MonoBehaviour
                 PlayerData.MaxExp);
         }
 
+        seManager.PlayClickSE();
         normalExpText.UpdateNormalExpText();
         shopExpText.UpdateNormalExpText();
     }
@@ -254,6 +262,7 @@ public class ExpChangeManager : MonoBehaviour
             return;
         }
 
+        seManager.PlayClickSE();
         // 獲得数を表示
         UpdateGetExpText();
     }

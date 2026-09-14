@@ -1889,7 +1889,7 @@ GameObject:
   - component: {fileID: 180050922}
   - component: {fileID: 180050921}
   m_Layer: 0
-  m_Name: SoundManager
+  m_Name: SEManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26545,6 +26545,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExpChangeManager
   playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
+  seManager: {fileID: 180050921}
   expChangeButton: {fileID: 1513956996}
   expChangeWindow: {fileID: 1996476176}
   BlackImage: {fileID: 1631757966}

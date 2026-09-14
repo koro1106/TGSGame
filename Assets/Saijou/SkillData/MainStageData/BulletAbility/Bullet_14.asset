@@ -17,8 +17,8 @@ MonoBehaviour:
   maxLevel: 5
   requiredExps:
   - expType: 0
-    initialNeedExp: 70
-    needExp: 70
+    initialNeedExp: 100
+    needExp: 100
     addNeedExp: 20
   - expType: 1
     initialNeedExp: 40
@@ -37,4 +37,5 @@ MonoBehaviour:
   description: 
   isShopUnlocked: 0
   isShopButton: 0
+  dollSilhouette: {fileID: 0}
   dollImage: {fileID: 0}
