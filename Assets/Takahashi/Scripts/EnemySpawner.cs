@@ -145,21 +145,26 @@ public class EnemySpawner : MonoBehaviour
 
         GameObject enemy = Instantiate(prefab, spawnPos, Quaternion.identity);
 
-        EnemyHP hp = enemy.GetComponent<EnemyHP>();
+        // ★変更：GetComponent → GetComponentInChildren
+        // 一部の敵（nezumiなど）はEnemyHPがルートではなく子オブジェクトに付いているため、
+        // 子階層も検索するGetComponentInChildrenに変更
+        EnemyHP hp = enemy.GetComponentInChildren<EnemyHP>();
         if (hp != null)
         {
             hp.maxHP = Mathf.CeilToInt(hp.maxHP * hpMultiplier);
             hp.currentHP = hp.maxHP;
         }
 
-        RushEnemy rush = enemy.GetComponent<RushEnemy>();
+        // ★変更：同上の理由でGetComponentInChildrenに変更
+        RushEnemy rush = enemy.GetComponentInChildren<RushEnemy>();
         if (rush != null)
         {
             rush.player = player;
         }
 
         // WarpEnemy（プレイヤーへ向かって移動する敵）にもプレイヤーを渡す
-        WarpEnemyMove warp = enemy.GetComponent<WarpEnemyMove>();
+        // ★変更：同上の理由でGetComponentInChildrenに変更
+        WarpEnemyMove warp = enemy.GetComponentInChildren<WarpEnemyMove>();
         if (warp != null)
         {
             warp.player = player;
