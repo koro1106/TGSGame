@@ -117,7 +117,7 @@ public class GunController : MonoBehaviour
 
 
     [Range(0f, 100f)]
-    public float recoverAmmoChance = 50f; // ‰ñ•œŠm—¦ %
+    public float recoverAmmoChance = 5f; // ‰ñ•œŠm—¦ %
 
     public int recoverAmmoAmount = 1;
     public GameObject ammoRecoverEffectPrefab;
@@ -227,6 +227,8 @@ public class GunController : MonoBehaviour
         if (stats.recoveryBullet)
             recoverAmmoOnKill = true;
 
+        // ‰ñ•œŠm—¦‘‰Á
+        recoverAmmoChance += stats.recoveryBulletChance;
         // ‰ñ•œ’e”‘‰Á
         recoverAmmoAmount += stats.recoveryBulletCount;
 

@@ -20,6 +20,7 @@ public class PlayerStats : ScriptableObject
     public int poisonRangeUP = 0;        // 毒の範囲UP
     public float explosionRangeUP = 0;   // 爆発の範囲UP
     public int recoveryBulletCount = 0;  // 回復弾数UP
+    public int recoveryBulletChance = 0; // 回復確率UP
     public int bulletSize = 0;           // 弾の大きさUP
 
     // 解放した属性弾リスト
@@ -75,6 +76,7 @@ public class PlayerStats : ScriptableObject
         poisonRangeUP = 0;
         explosionRangeUP = 0;
         recoveryBulletCount = 0;
+        recoveryBulletChance = 0;
         bulletSize = 0;
 
         elementalBulletChance = 0.2f;

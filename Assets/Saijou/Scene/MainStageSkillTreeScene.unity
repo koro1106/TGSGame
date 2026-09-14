@@ -603,6 +603,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d76f90785d292b141b1928a551bd15a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIDrag
+  seManager: {fileID: 471783206}
   target: {fileID: 2058398392}
   skillTreeButon: {fileID: 812543374}
   prestigeButon: {fileID: 20106983}
@@ -4597,7 +4598,7 @@ GameObject:
   - component: {fileID: 471783204}
   - component: {fileID: 471783206}
   m_Layer: 0
-  m_Name: SoundManager
+  m_Name: SEManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4731,6 +4732,7 @@ MonoBehaviour:
   levelUpSE: {fileID: 8300000, guid: 7ae72a1fd5a731143912df5154ed9c86, type: 3}
   shootSE: {fileID: 0}
   backSE: {fileID: 0}
+  clickSE: {fileID: 8300000, guid: e8fb5cefd45e61d418d53e92ee024b7b, type: 3}
 --- !u!1 &481096540
 GameObject:
   m_ObjectHideFlags: 0
@@ -9960,7 +9962,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -14256,6 +14258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cadaad25504ebe94e82ae24aa7bd52d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkillTreeChange
+  seManager: {fileID: 471783206}
   uiAnimation: {fileID: 26492057}
   targetButton: {fileID: 1182972330}
   sceneName: MainStageScene
@@ -25674,6 +25677,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cadaad25504ebe94e82ae24aa7bd52d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkillTreeChange
+  seManager: {fileID: 0}
   uiAnimation: {fileID: 26492057}
   targetButton: {fileID: 2055902817}
   sceneName: ShopScene

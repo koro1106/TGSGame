@@ -1675,6 +1675,7 @@ RectTransform:
   m_Children:
   - {fileID: 1955994029}
   - {fileID: 875441900}
+  - {fileID: 157241527}
   - {fileID: 104283590}
   m_Father: {fileID: 698565572}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1727,10 +1728,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 1200489675}
   m_HandleRect: {fileID: 1089470748}
   m_Direction: 0
-  m_MinValue: 5
+  m_MinValue: 0
   m_MaxValue: 50
   m_WholeNumbers: 0
-  m_Value: 40
+  m_Value: 30
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -2557,12 +2558,12 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1089470748}
-  m_Father: {fileID: 875441900}
+  m_Father: {fileID: 121585001}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -38, y: -9}
-  m_SizeDelta: {x: 0, y: 20}
+  m_AnchoredPosition: {x: -33.500015, y: -0.00001335144}
+  m_SizeDelta: {x: 9, y: -1.0063}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &158524889
 GameObject:
@@ -3113,8 +3114,8 @@ MonoBehaviour:
   uiEffectParent: {fileID: 0}
   outOfAmmoUIImage: {fileID: 248278258}
   recoverAmmoOnKill: 0
-  recoverAmmoChance: 10
-  recoverAmmoAmount: 3
+  recoverAmmoChance: 5
+  recoverAmmoAmount: 1
   ammoRecoverEffectPrefab: {fileID: 5431272660784949491, guid: e273b6025358baa40b4af473c09b58bb, type: 3}
   ammoSlots:
   - emptyImage: {fileID: 0}
@@ -12535,7 +12536,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &698565572
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14948,7 +14949,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1200489675}
-  - {fileID: 157241527}
   m_Father: {fileID: 121585001}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.25}
@@ -18050,10 +18050,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 157241527}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.7777778, y: 0}
-  m_AnchorMax: {x: 0.7777778, y: 1}
-  m_AnchoredPosition: {x: -4.200012, y: 0}
-  m_SizeDelta: {x: 40, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -8.069916, y: 0}
+  m_SizeDelta: {x: 45.4892, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1089470749
 MonoBehaviour:
@@ -20127,7 +20127,7 @@ RectTransform:
   m_Father: {fileID: 875441900}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0.7777778, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: -58.333984, y: -9}
   m_SizeDelta: {x: 19.332, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -20353,7 +20353,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 922, y: 486.6}
+  m_AnchoredPosition: {x: 899, y: 486.6}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1212407996
@@ -20376,7 +20376,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 5/5
+  m_text: 10/10
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7b415174ae3e07645b0eb4b0521433fa, type: 2}
   m_sharedMaterial: {fileID: 4318125024461342036, guid: 7b415174ae3e07645b0eb4b0521433fa, type: 2}
@@ -20410,7 +20410,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -20442,7 +20442,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -113.758095, y: 0, z: 0, w: 0}
+  m_margin: {x: -125.57691, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -25490,8 +25490,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -452, y: -574}
-  m_SizeDelta: {x: 900, y: 220}
+  m_AnchoredPosition: {x: -393.21, y: -574}
+  m_SizeDelta: {x: 634.4119, y: 149.9224}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1548528207
 MonoBehaviour:

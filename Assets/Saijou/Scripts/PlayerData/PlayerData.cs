@@ -17,8 +17,8 @@ public class PlayerData : ScriptableObject
     public int currentPoint; // 現在のポイント
 
     // 感度
-    [Range(0.1f, 4f)]
-    public float sensitivity = 1f;
+    [Range(0.1f, 30f)]
+    public float sensitivity = 30f;
 
     /// <summary>
     /// 経験値をすべて初期化
@@ -33,6 +33,6 @@ public class PlayerData : ScriptableObject
         currentPoint = 0;
 
         // 感度も初期化
-        sensitivity = 1f;
+        sensitivity = 30f;
     }
 }
