@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class ResultManager : MonoBehaviour
 {
+    [SerializeField] private SEManager seManager;
     public static ResultManager Instance;
 
     [Header("リザルトUI")]
@@ -1904,6 +1905,7 @@ public class ResultManager : MonoBehaviour
         if (resultShowing)
             return;
 
+        seManager.PlayClickSE();
         // =====================================================
         // ポーズ画面を終了
         // =====================================================
@@ -1964,6 +1966,7 @@ public class ResultManager : MonoBehaviour
         StartCoroutine(
             NewSceneChangeCoroutine()
         );
+        seManager.PlayClickSE();
     }
 
 

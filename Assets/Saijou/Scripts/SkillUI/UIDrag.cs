@@ -6,6 +6,7 @@ using UnityEngine.UI;
 /// </summary>
 public class UIDrag : MonoBehaviour
 {
+    [SerializeField] private SEManager seManager;
     public RectTransform target;     // スキルツリーの親オブジェクト
     private Vector2 lastMousePos;    // マウスがどのぐらい動いたかを出すための
     private bool isDragging = false; // ドラッグ中か
@@ -37,6 +38,7 @@ public class UIDrag : MonoBehaviour
         prestigeButon.SetActive(false);
         // プレステージボタンを一度押したことにする
         playerStats.prestigeButtonClicked = true;
+        seManager.PlayClickSE();
     }
 
     // 通常位置へ移動
@@ -46,6 +48,7 @@ public class UIDrag : MonoBehaviour
         isPrestige = true;
         skillTreeButon.SetActive(false);
         prestigeButon.SetActive(true);
+        seManager.PlayClickSE();
     }
 
     void Start()

@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class SkillTreeChange : MonoBehaviour
 {
+    [SerializeField] private SEManager seManager;
     public UIAnimation uiAnimation;
     public RectTransform targetButton; // 対象ボタン
     public string sceneName;           // 遷移先シーン名
@@ -22,6 +23,7 @@ public class SkillTreeChange : MonoBehaviour
         SaveManager.Save(playerData, allSkills);
         // シーン移動
         SceneManager.LoadScene(sceneName);
+        seManager.PlayClickSE();
     }
 
     // ショップに移動
@@ -38,5 +40,6 @@ public class SkillTreeChange : MonoBehaviour
         SceneManager.LoadScene(sceneName);
               
         isShop = true;
+        seManager.PlayClickSE();
     }
 }

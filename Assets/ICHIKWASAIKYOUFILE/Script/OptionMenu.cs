@@ -12,6 +12,7 @@ public class OptionMenu : MonoBehaviour
     public void OpenOption()
     {
         animator.SetTrigger("Open");
+        seManager.PlayClickSE();
     }
 
     public void CloseOption()
