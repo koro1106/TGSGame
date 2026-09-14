@@ -1248,6 +1248,12 @@ public class ResultManager : MonoBehaviour
                         enemySpawner.ResetEnemyHPGrowth();
                     }
 
+                    // 追戦闘続行時も最初の3体を再スポーンする
+                    if (enemySpawner != null)
+                    {
+                        enemySpawner.SpawnInitialEnemies();
+                    }
+
                     // Player全体を復帰
                     UnfreezePlayer();
 
