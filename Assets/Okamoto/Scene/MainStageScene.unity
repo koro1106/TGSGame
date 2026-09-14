@@ -2295,8 +2295,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -234}
-  m_SizeDelta: {x: 300, y: 100}
+  m_AnchoredPosition: {x: 0, y: -234.00002}
+  m_SizeDelta: {x: 300, y: 86.719}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &153556866
 MonoBehaviour:
@@ -2823,6 +2823,7 @@ MonoBehaviour:
   levelUpSE: {fileID: 0}
   shootSE: {fileID: 8300000, guid: 2cfb7de65a70e024f959c29f2b6a8264, type: 3}
   backSE: {fileID: 0}
+  clickSE: {fileID: 8300000, guid: e8fb5cefd45e61d418d53e92ee024b7b, type: 3}
 --- !u!82 &165127803
 AudioSource:
   m_ObjectHideFlags: 0
@@ -10547,8 +10548,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1, y: 60}
-  m_SizeDelta: {x: 900, y: 220}
+  m_AnchoredPosition: {x: -1, y: 56}
+  m_SizeDelta: {x: 643.8656, y: 130.0653}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &594634741
 MonoBehaviour:
@@ -13448,8 +13449,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000017166, y: 210}
-  m_SizeDelta: {x: 381.3553, y: 132.42}
+  m_AnchoredPosition: {x: 0.000022888, y: 204.99997}
+  m_SizeDelta: {x: 262.8174, y: 80.366}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &770057462
 MonoBehaviour:
@@ -19481,6 +19482,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86b4ad6b7e2ff0840885f2a9a26639f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResultManager
+  seManager: {fileID: 165127802}
   resultPanel: {fileID: 567273470}
   itemContent: {fileID: 1572651381}
   resultItemPrefab: {fileID: 4464669709999409012, guid: 8182c547901bfe146abb4aeccf53d04c, type: 3}
@@ -20068,6 +20070,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69aaecd92b8abca409e1c4e010597161, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PauseMenu
+  seManager: {fileID: 165127802}
   panels:
   - {fileID: 1757153040}
   - {fileID: 698565571}
@@ -29235,8 +29238,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1, y: -90}
-  m_SizeDelta: {x: 900, y: 220}
+  m_AnchoredPosition: {x: -0.99999, y: -95}
+  m_SizeDelta: {x: 647.2358, y: 131.33}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1809566360
 MonoBehaviour:

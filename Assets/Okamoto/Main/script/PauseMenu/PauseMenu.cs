@@ -7,6 +7,7 @@ using static UnityEngine.Rendering.DebugUI;
 
 public class PauseMenu : MonoBehaviour
 {
+    [SerializeField] private SEManager seManager;
     public GameObject[] panels;
     public GameObject startPanel; // © Å‰‚Éo‚·UI
     public float animTime = 0.2f;
@@ -263,7 +264,7 @@ public class PauseMenu : MonoBehaviour
             eventSystem.enabled =
                 originalEventSystemEnabled;
         }
-
+        seManager.PlayClickSE();
 
         // =========================
         // ƒQ[ƒ€ÄŠJ
@@ -299,6 +300,7 @@ public class PauseMenu : MonoBehaviour
             currentPanel.SetActive(false);
         }
 
+        seManager.PlayClickSE();
 
         currentPanel = panel;
         currentPanel.SetActive(true);

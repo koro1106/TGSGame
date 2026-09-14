@@ -5158,7 +5158,8 @@ MonoBehaviour:
   audioSource: {fileID: 1320447525}
   levelUpSE: {fileID: 0}
   shootSE: {fileID: 0}
-  backSE: {fileID: 8300000, guid: 7ae72a1fd5a731143912df5154ed9c86, type: 3}
+  backSE: {fileID: 8300000, guid: e8fb5cefd45e61d418d53e92ee024b7b, type: 3}
+  clickSE: {fileID: 8300000, guid: e8fb5cefd45e61d418d53e92ee024b7b, type: 3}
 --- !u!82 &1320447525
 AudioSource:
   m_ObjectHideFlags: 0
@@ -7358,6 +7359,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SceneTransition
   fadeImage: {fileID: 434504257}
   loadingEnemy: {fileID: 733006853}
+  seManager: {fileID: 0}
   endPos: {x: 210, y: 0}
   startPos: {x: -1500, y: 0}
   slideTime: 0.3

@@ -10,6 +10,7 @@ public class SEManager : MonoBehaviour
     [SerializeField] private AudioClip levelUpSE;
     [SerializeField] private AudioClip shootSE;
     [SerializeField] private AudioClip backSE;
+    [SerializeField] private AudioClip clickSE;
     private void Awake()
     {
         Instance = this;
@@ -35,6 +36,10 @@ public class SEManager : MonoBehaviour
     public void PlayBackSE()
     {
         audioSource.PlayOneShot(backSE);
+    }
+    public void PlayClickSE()
+    {
+        audioSource.PlayOneShot(clickSE);
     }
 }
 

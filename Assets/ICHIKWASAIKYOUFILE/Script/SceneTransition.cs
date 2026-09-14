@@ -7,6 +7,7 @@ public class SceneTransition : MonoBehaviour
     [SerializeField] private RectTransform fadeImage;
 
     [SerializeField] private GameObject loadingEnemy;
+    [SerializeField] private SEManager seManager;
 
     // ‰E’[‚ÌˆÊ’u
     [SerializeField] private Vector2 endPos = Vector2.zero;
@@ -32,7 +33,7 @@ public class SceneTransition : MonoBehaviour
 
         }
 
-
+        seManager.PlayClickSE();
         StartCoroutine(Transition("MainStageScene"));
     }
    
