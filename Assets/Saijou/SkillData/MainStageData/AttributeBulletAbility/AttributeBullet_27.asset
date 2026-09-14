@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273875e9515bae4469b58e69f7b82692, type: 3}
   m_Name: AttributeBullet_27
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "\u30C0\u30C3\u30B7\u30E5_\u89E3\u653E"
+  skillName: "\u30C0\u30C3\u30B7\u30E5\u89E3\u653E[\u53F3\u30AF\u30EA\u3067\u30C0\u30C3\u30B7\u30E5]"
   level: 0
   maxLevel: 1
   requiredExps:
@@ -24,7 +24,7 @@ MonoBehaviour:
     initialNeedExp: 10
     needExp: 10
     addNeedExp: 0
-  isUnlocked: 0
+  isUnlocked: 1
   isLevelUp: 0
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   effectType: 31
@@ -33,3 +33,5 @@ MonoBehaviour:
   description: 
   isShopUnlocked: 0
   isShopButton: 0
+  dollSilhouette: {fileID: 0}
+  dollImage: {fileID: 0}

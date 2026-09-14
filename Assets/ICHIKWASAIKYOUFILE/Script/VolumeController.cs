@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class VolumeController : MonoBehaviour
 {
-    public Slider sensiSlider;
     public Slider volumeSlider;
     public Slider seSlider;
 
@@ -23,6 +22,7 @@ public class VolumeController : MonoBehaviour
             seSlider.onValueChanged.AddListener(ChangeSEVolume);
         }
     }
+   
     void ChangeBGMVolume(float value)
     {
         BGMManager.Instance.SetBGMVolume(value);
