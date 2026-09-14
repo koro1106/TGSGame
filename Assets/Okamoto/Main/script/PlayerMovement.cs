@@ -227,9 +227,13 @@ public class PlayerMovement : MonoBehaviour
         // =========================================================
         // 右クリックでブリンク開始
         // =========================================================
+        if(playerStats.dash)
+        {
+            enableBlink = true;
+            Debug.Log("部リンクON");
+        }
 
-        if (
-            enableBlink &&
+        if (enableBlink &&
             Input.GetMouseButtonDown(1) &&
             blinkCooldownTimer <= 0f &&
             !isDead &&
@@ -237,6 +241,7 @@ public class PlayerMovement : MonoBehaviour
             !playerMoveLocked
         )
         {
+            Debug.Log("部リンク開始");
             StartBlink();
         }
     }
