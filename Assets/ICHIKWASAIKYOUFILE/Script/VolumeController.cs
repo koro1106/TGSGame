@@ -4,17 +4,34 @@ using UnityEngine.UI;
 
 public class VolumeController : MonoBehaviour
 {
-    public AudioSource audioSource;
+    public Slider sensiSlider;
     public Slider volumeSlider;
+    public Slider seSlider;
 
     void Start()
     {
-        volumeSlider.value = audioSource.volume;
-        volumeSlider.onValueChanged.AddListener(ChangeVolume);
+        // BGM
+        if (BGMManager.Instance != null)
+        {
+            volumeSlider.value = BGMManager.Instance.GetBGMVolume();
+            volumeSlider.onValueChanged.AddListener(ChangeBGMVolume);
+        }
+        // SE‰¹—Ê
+        if (SEManager.Instance != null)
+        {
+            seSlider.value = SEManager.Instance.GetSEVolume();
+            seSlider.onValueChanged.AddListener(ChangeSEVolume);
+        }
     }
-
-    void ChangeVolume(float value)
+    void ChangeBGMVolume(float value)
     {
-        audioSource.volume = value;
+        BGMManager.Instance.SetBGMVolume(value);
+    }
+    void ChangeSEVolume(float value)
+    {
+        if (SEManager.Instance != null)
+        {
+            SEManager.Instance.SetSEVolume(value);
+        }
     }
 }

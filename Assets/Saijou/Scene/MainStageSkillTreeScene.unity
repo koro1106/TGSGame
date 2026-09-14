@@ -4610,7 +4610,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 471783203}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
@@ -4730,6 +4730,7 @@ MonoBehaviour:
   audioSource: {fileID: 471783204}
   levelUpSE: {fileID: 8300000, guid: 7ae72a1fd5a731143912df5154ed9c86, type: 3}
   shootSE: {fileID: 0}
+  backSE: {fileID: 0}
 --- !u!1 &481096540
 GameObject:
   m_ObjectHideFlags: 0

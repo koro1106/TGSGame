@@ -9,9 +9,20 @@ public class SEManager : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip levelUpSE;
     [SerializeField] private AudioClip shootSE;
+    [SerializeField] private AudioClip backSE;
     private void Awake()
     {
         Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+    public void SetSEVolume(float value)
+    {
+        audioSource.volume = value;
+    }
+
+    public float GetSEVolume()
+    {
+        return audioSource.volume;
     }
     public void PlayLevelUpSE()
     {
@@ -20,6 +31,10 @@ public class SEManager : MonoBehaviour
     public void PlayShootSE()
     {
         audioSource.PlayOneShot(shootSE);
+    }
+    public void PlayBackSE()
+    {
+        audioSource.PlayOneShot(backSE);
     }
 }
 
