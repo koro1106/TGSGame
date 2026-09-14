@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using TMPro;
 
@@ -6,51 +6,64 @@ public class DamageText : MonoBehaviour
 {
     private TextMeshPro text;
 
-    [Header("‰æ–ÊƒXƒP[ƒ‹’²®")]
-    [Tooltip("ƒvƒƒWƒFƒNƒg‚ÌÀ•WƒXƒP[ƒ‹Šî€’lB‰æ–ÊƒTƒCƒY‚ª500‘z’è‚È‚Ì‚Å500‚ªƒfƒtƒHƒ‹ƒgB" +
-             "ƒXƒP[ƒ‹‚ª•Ï‚í‚Á‚½‚ç‚±‚±‚¾‚¯•Ï‚¦‚ê‚Î‰º‚Ì‹——£‚ª©“®‚Å”ä—á’²®‚³‚ê‚é")]
+    [Header("ç”»é¢ã‚¹ã‚±ãƒ¼ãƒ«èª¿æ•´")]
+    [Tooltip("ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã®åº§æ¨™ã‚¹ã‚±ãƒ¼ãƒ«åŸºæº–å€¤ã€‚ç”»é¢ã‚µã‚¤ã‚ºãŒ500æƒ³å®šãªã®ã§500ãŒãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã€‚" +
+             "ã‚¹ã‚±ãƒ¼ãƒ«ãŒå¤‰ã‚ã£ãŸã‚‰ã“ã“ã ã‘å¤‰ãˆã‚Œã°ä¸‹ã®è·é›¢ãŒè‡ªå‹•ã§æ¯”ä¾‹èª¿æ•´ã•ã‚Œã‚‹")]
     public float screenScale = 500f;
     private float ScaleFactor => screenScale / 500f;
 
-    [Header("Œ©‚½–Ú")]
+    [Header("è¦‹ãŸç›®")]
     public int baseFontSize = 100;
     [Range(0f, 1f)]
-    public float baseAlpha = 0.85f; // ‚Ù‚ñ‚Ì­‚µ”¼“§–¾‚É‚·‚é
+    public float baseAlpha = 0.85f; // ã»ã‚“ã®å°‘ã—åŠé€æ˜ã«ã™ã‚‹
 
-    [Header("oŒ»ˆÊ’ui–{—ˆ‚ÌTransform‚æ‚è‚Ç‚ê‚¾‚¯ã‚Éo‚·‚©j")]
-    public float spawnHeightOffset = 80f; // ¦screenScale=500Šî€‚Ì’l
+    [Header("ãƒ€ãƒ¡ãƒ¼ã‚¸é‡ã«ã‚ˆã‚‹ã‚µã‚¤ã‚ºå¤‰åŒ–")]
+    [Tooltip("ã“ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ä»¥ä¸Šã§å°‘ã—å¤§ããè¡¨ç¤º")]
+    public int mediumDamageThreshold = 50;
+    [Tooltip("ã“ã®ãƒ€ãƒ¡ãƒ¼ã‚¸ä»¥ä¸Šã§ã•ã‚‰ã«å¤§ããè¡¨ç¤º")]
+    public int highDamageThreshold = 100;
+    [Tooltip("50ã€œ99ãƒ€ãƒ¡ãƒ¼ã‚¸æ™‚ã®ã‚µã‚¤ã‚ºå€ç‡ï¼ˆãƒ•ã‚©ãƒ³ãƒˆãƒ»ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å…¨ä½“ï¼‰")]
+    public float mediumDamageSizeMultiplier = 1.2f;
+    [Tooltip("100ãƒ€ãƒ¡ãƒ¼ã‚¸ä»¥ä¸Šã®ã‚µã‚¤ã‚ºå€ç‡ï¼ˆãƒ•ã‚©ãƒ³ãƒˆãƒ»ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å…¨ä½“ï¼‰")]
+    public float highDamageSizeMultiplier = 1.5f;
 
-    [Header("oŒ»•ûŒüi¶Î‚ßã^ã^‰EÎ‚ßã‚©‚çƒ‰ƒ“ƒ_ƒ€j")]
-    [Tooltip("Î‚ß•ûŒü‚Ì‰¡‚ÌƒuƒŒ•‚Ì”ä—¦B0‚¾‚Æ^ã‚Æ‚Ì·‚ª–³‚­‚È‚é")]
+    // SetDamage()ã§æ±ºå®šã—ã€ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚ºãƒ»ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚¹ã‚±ãƒ¼ãƒ«ä¸¡æ–¹ã«ä½¿ã†å€ç‡
+    private float damageSizeMultiplier = 1f;
+
+    [Header("å‡ºç¾ä½ç½®ï¼ˆæœ¬æ¥ã®Transformã‚ˆã‚Šã©ã‚Œã ã‘ä¸Šã«å‡ºã™ã‹ï¼‰")]
+    public float spawnHeightOffset = 80f; // â€»screenScale=500åŸºæº–ã®å€¤
+
+    [Header("å‡ºç¾æ–¹å‘ï¼ˆå·¦æ–œã‚ä¸Šï¼ä¸Šï¼å³æ–œã‚ä¸Šã‹ã‚‰ãƒ©ãƒ³ãƒ€ãƒ ï¼‰")]
+    [Tooltip("æ–œã‚æ–¹å‘ã®æ¨ªã®ãƒ–ãƒ¬å¹…ã®æ¯”ç‡ã€‚0ã ã¨çœŸä¸Šã¨ã®å·®ãŒç„¡ããªã‚‹")]
     public float diagonalSpread = 0.6f;
 
-    [Header("‡@ ‰º‚©‚ço‚ÄiƒXƒ|[ƒ“ˆÊ’u‚Í–{—ˆ‚ÌˆÊ’u‚æ‚è­‚µ‰ºj")]
-    public float spawnDropDistance = 15f; // ¦screenScale=500Šî€‚Ì’l
-    public float spawnScale = 0.3f;       // on‚ß‚Ì¬‚³‚³
+    [Header("â‘  ä¸‹ã‹ã‚‰å‡ºã¦ï¼ˆã‚¹ãƒãƒ¼ãƒ³ä½ç½®ã¯æœ¬æ¥ã®ä½ç½®ã‚ˆã‚Šå°‘ã—ä¸‹ï¼‰")]
+    public float spawnDropDistance = 15f; // â€»screenScale=500åŸºæº–ã®å€¤
+    public float spawnScale = 0.3f;       // å‡ºå§‹ã‚ã®å°ã•ã•
 
-    [Header("‡A ­‚µã‚ª‚Á‚ÄA‘å‚«‚³Å‘å")]
+    [Header("â‘¡ å°‘ã—ä¸ŠãŒã£ã¦ã€å¤§ãã•æœ€å¤§")]
     public float riseUpDuration = 0.10f;
-    public float riseUpDistance = 20f;    // ¦screenScale=500Šî€‚Ì’l
-    public float overshootScale = 1.3f;   // ˆê”Ô‘å‚«‚­‚È‚é‚Æ‚«‚ÌƒXƒP[ƒ‹
+    public float riseUpDistance = 20f;    // â€»screenScale=500åŸºæº–ã®å€¤
+    public float overshootScale = 1.3f;   // ä¸€ç•ªå¤§ãããªã‚‹ã¨ãã®ã‚¹ã‚±ãƒ¼ãƒ«
 
-    [Header("‡B ­‚µ¬‚³‚­‚È‚Á‚Äi—‚¿’…‚­j")]
+    [Header("â‘¢ å°‘ã—å°ã•ããªã£ã¦ï¼ˆè½ã¡ç€ãï¼‰")]
     public float settleDuration = 0.12f;
-    public float settleDistance = 8f;     // ¦screenScale=500Šî€‚Ì’l
-    public float settleScale = 1.05f;     // —‚¿’…‚¢‚½Œã‚ÌƒXƒP[ƒ‹
+    public float settleDistance = 8f;     // â€»screenScale=500åŸºæº–ã®å€¤
+    public float settleScale = 1.05f;     // è½ã¡ç€ã„ãŸå¾Œã®ã‚¹ã‚±ãƒ¼ãƒ«
 
-    [Header("‡C ŠÉ‹}‚Å‘‚­‚È‚èA¬‚³‚­‚È‚èÁ‚¦‚é")]
+    [Header("â‘£ ç·©æ€¥ã§æ—©ããªã‚Šã€å°ã•ããªã‚Šæ¶ˆãˆã‚‹")]
     public float finalDuration = 0.35f;
-    public float finalMoveDistance = 60f; // ¦screenScale=500Šî€‚Ì’l
+    public float finalMoveDistance = 60f; // â€»screenScale=500åŸºæº–ã®å€¤
 
-    [Header("ƒNƒŠƒeƒBƒJƒ‹")]
+    [Header("ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«")]
     public float criticalScaleMultiplier = 1.4f;
-    public float criticalFontSizeMultiplier = 1.5f; // ƒtƒHƒ“ƒgƒTƒCƒY©‘Ì‚Ì”{—¦
+    public float criticalFontSizeMultiplier = 1.5f; // ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚ºè‡ªä½“ã®å€ç‡
 
-    [Header("ƒNƒŠƒeƒBƒJƒ‹‰æ‘œiˆÊ’uŒÅ’èj")]
-    public GameObject criticalIconPrefab;   // ƒNƒŠƒeƒBƒJƒ‹‚Éo‚·‰æ‘œiPrefabj
-    public Vector2 criticalIconOffset = new Vector2(-80f, 0f); // –{—ˆ‚ÌTransformˆÊ’u‚©‚ç‚ÌƒYƒŒiscreenScaleŠî€j
-    public float criticalIconScale = 1f;    // ƒAƒCƒRƒ“‚Ì‘å‚«‚³”{—¦
-    public float criticalIconLifetime = 0.6f; // ƒAƒCƒRƒ“‚ªo‚Ä‚©‚çÁ‚¦‚é‚Ü‚Å‚ÌŠÔi•bj
+    [Header("ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç”»åƒï¼ˆä½ç½®å›ºå®šï¼‰")]
+    public GameObject criticalIconPrefab;   // ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«æ™‚ã«å‡ºã™ç”»åƒï¼ˆPrefabï¼‰
+    public Vector2 criticalIconOffset = new Vector2(-80f, 0f); // æœ¬æ¥ã®Transformä½ç½®ã‹ã‚‰ã®ã‚ºãƒ¬ï¼ˆscreenScaleåŸºæº–ï¼‰
+    public float criticalIconScale = 1f;    // ã‚¢ã‚¤ã‚³ãƒ³ã®å¤§ãã•å€ç‡
+    public float criticalIconLifetime = 0.6f; // ã‚¢ã‚¤ã‚³ãƒ³ãŒå‡ºã¦ã‹ã‚‰æ¶ˆãˆã‚‹ã¾ã§ã®æ™‚é–“ï¼ˆç§’ï¼‰
 
     private bool isCritical = false;
     private Vector2 direction;
@@ -64,46 +77,61 @@ public class DamageText : MonoBehaviour
     {
         text.text = damage.ToString();
 
-        // ’ÊíFi­‚µ”¼“§–¾j
+        // é€šå¸¸è‰²ï¼ˆå°‘ã—åŠé€æ˜ï¼‰
         Color c = Color.white;
         c.a = baseAlpha;
         text.color = c;
 
-        text.fontSize = baseFontSize;
-        text.fontStyle = FontStyles.Bold; // í‚É‘¾š
+        text.fontStyle = FontStyles.Bold; // å¸¸ã«å¤ªå­—
 
-        /* ƒ_ƒ[ƒW‚²‚Æ‚ÉF•ÏX
-        if (damage < 11)
+        // â˜…è¿½åŠ ï¼šãƒ€ãƒ¡ãƒ¼ã‚¸é‡ã«å¿œã˜ã¦ã‚µã‚¤ã‚ºå€ç‡ã‚’æ±ºå®šï¼ˆãƒ•ã‚©ãƒ³ãƒˆãƒ»ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³å…¨ä½“ã§å…±é€šåˆ©ç”¨ï¼‰
+        if (damage >= highDamageThreshold)
         {
-            text.color = Color.white; // ¬ƒ_ƒ[ƒW
+            damageSizeMultiplier = highDamageSizeMultiplier;
         }
-        else if (damage < 30)
+        else if (damage >= mediumDamageThreshold)
         {
-            text.color = Color.yellow; // ’†ƒ_ƒ[ƒW
+            damageSizeMultiplier = mediumDamageSizeMultiplier;
         }
         else
         {
-            text.color = Color.red; // ‘åƒ_ƒ[ƒW
+            damageSizeMultiplier = 1f; // 10ã€œ49ï¼ˆã¾ãŸã¯ãã‚Œæœªæº€ï¼‰ã¯ä»Šã¾ã§é€šã‚Š
+        }
+
+        text.fontSize = baseFontSize * damageSizeMultiplier;
+
+        /* ãƒ€ãƒ¡ãƒ¼ã‚¸ã”ã¨ã«è‰²å¤‰æ›´
+        if (damage < 11)
+        {
+            text.color = Color.white; // å°ãƒ€ãƒ¡ãƒ¼ã‚¸
+        }
+        else if (damage < 30)
+        {
+            text.color = Color.yellow; // ä¸­ãƒ€ãƒ¡ãƒ¼ã‚¸
+        }
+        else
+        {
+            text.color = Color.red; // å¤§ãƒ€ãƒ¡ãƒ¼ã‚¸
         }*/
     }
 
-    // ƒNƒŠƒeƒBƒJƒ‹•\¦
+    // ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«è¡¨ç¤º
     public void SetCritical()
     {
         isCritical = true;
 
-        Color c = new Color(1f, 0.5f, 0f); // š•ÏXF‰©F¨ƒIƒŒƒ“ƒW
+        Color c = new Color(1f, 0.5f, 0f); // ã‚ªãƒ¬ãƒ³ã‚¸
         c.a = baseAlpha;
         text.color = c;
 
         text.fontStyle = FontStyles.Bold;
 
-        // ƒtƒHƒ“ƒgƒTƒCƒY©‘Ì‚à‘å‚«‚­‚·‚éiƒAƒjƒ[ƒVƒ‡ƒ“’†‚ÌƒXƒP[ƒ‹”{—¦‚Æ‚Í•Êj
-        text.fontSize = baseFontSize * criticalFontSizeMultiplier;
+        // â˜…å¤‰æ›´ï¼šãƒ€ãƒ¡ãƒ¼ã‚¸é‡ã‚µã‚¤ã‚ºã¨ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«å€ç‡ã‚’æ›ã‘åˆã‚ã›ã‚‹
+        text.fontSize = baseFontSize * damageSizeMultiplier * criticalFontSizeMultiplier;
 
-        // ƒNƒŠƒeƒBƒJƒ‹‰æ‘œ‚ğuˆÊ’uŒÅ’èv‚Å¶¬
-        // ”šitransformj‚Ìq‚É‚Í‚¹‚¸A“Æ—§‚µ‚½ƒIƒuƒWƒFƒNƒg‚Æ‚µ‚Ä
-        // –{—ˆ‚ÌƒXƒ|[ƒ“ˆÊ’u{ƒIƒtƒZƒbƒg‚ÌêŠ‚Éo‚µA‚»‚±‚©‚ç“®‚©‚³‚È‚¢
+        // ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ç”»åƒã‚’ã€Œä½ç½®å›ºå®šã€ã§ç”Ÿæˆ
+        // æ•°å­—ï¼ˆtransformï¼‰ã®å­ã«ã¯ã›ãšã€ç‹¬ç«‹ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨ã—ã¦
+        // æœ¬æ¥ã®ã‚¹ãƒãƒ¼ãƒ³ä½ç½®ï¼‹ã‚ªãƒ•ã‚»ãƒƒãƒˆã®å ´æ‰€ã«å‡ºã—ã€ãã“ã‹ã‚‰å‹•ã‹ã•ãªã„
         if (criticalIconPrefab != null)
         {
             float scale = ScaleFactor;
@@ -118,7 +146,7 @@ public class DamageText : MonoBehaviour
                 criticalIconPrefab,
                 transform.position + offset,
                 Quaternion.identity
-            // e‚ğw’è‚µ‚È‚¢”š‚ÌˆÚ“®EŠgk‚ÉŠª‚«‚Ü‚ê‚È‚¢
+            // è¦ªã‚’æŒ‡å®šã—ãªã„ï¼æ•°å­—ã®ç§»å‹•ãƒ»æ‹¡ç¸®ã«å·»ãè¾¼ã¾ã‚Œãªã„
             );
 
             icon.transform.localScale = Vector3.one * criticalIconScale;
@@ -127,23 +155,23 @@ public class DamageText : MonoBehaviour
         }
     }
 
-    // ‘®«‚²‚Æ‚ÌF‚ğİ’èiEnemyHP‚©‚çŒÄ‚Î‚ê‚éj
-    // ’Êíƒ_ƒ[ƒW‚ÌF•ª‚¯—pBƒNƒŠƒeƒBƒJƒ‹‚ÍSetCritical()‚Ì‰©F‚ğ—Dæ‚µ‚½‚¢‚Ì‚ÅA
-    // EnemyHP‘¤‚ÅuƒNƒŠƒeƒBƒJƒ‹‚Å‚È‚¢‚¾‚¯vŒÄ‚Ô‘z’èB
+    // å±æ€§ã”ã¨ã®è‰²ã‚’è¨­å®šï¼ˆEnemyHPã‹ã‚‰å‘¼ã°ã‚Œã‚‹ï¼‰
+    // é€šå¸¸ãƒ€ãƒ¡ãƒ¼ã‚¸æ™‚ã®è‰²åˆ†ã‘ç”¨ã€‚ã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«æ™‚ã¯SetCritical()ã®é»„è‰²ã‚’å„ªå…ˆã—ãŸã„ã®ã§ã€
+    // EnemyHPå´ã§ã€Œã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«ã§ãªã„æ™‚ã ã‘ã€å‘¼ã¶æƒ³å®šã€‚
     public void SetColor(Color color)
     {
         Color c = color;
-        c.a = baseAlpha; // ”¼“§–¾‚Ì“§–¾“x‚Í“ˆê‚·‚é
+        c.a = baseAlpha; // åŠé€æ˜ã®é€æ˜åº¦ã¯çµ±ä¸€ã™ã‚‹
         text.color = c;
     }
 
     void Start()
     {
-        // ¶Î‚ßã^^ã^‰EÎ‚ßã‚©‚çƒ‰ƒ“ƒ_ƒ€‚É1‚Â‘I‚Ô
+        // å·¦æ–œã‚ä¸Šï¼çœŸä¸Šï¼å³æ–œã‚ä¸Šã‹ã‚‰ãƒ©ãƒ³ãƒ€ãƒ ã«1ã¤é¸ã¶
         int r = Random.Range(0, 3);
-        if (r == 0) direction = new Vector2(-diagonalSpread, 1f).normalized;      // ¶Î‚ßã
-        else if (r == 1) direction = Vector2.up;                                  // ^ã
-        else direction = new Vector2(diagonalSpread, 1f).normalized;              // ‰EÎ‚ßã
+        if (r == 0) direction = new Vector2(-diagonalSpread, 1f).normalized;      // å·¦æ–œã‚ä¸Š
+        else if (r == 1) direction = Vector2.up;                                  // çœŸä¸Š
+        else direction = new Vector2(diagonalSpread, 1f).normalized;              // å³æ–œã‚ä¸Š
 
         StartCoroutine(PlayAnimation());
     }
@@ -152,25 +180,26 @@ public class DamageText : MonoBehaviour
     {
         float scale = ScaleFactor;
 
-        // –{—ˆo‚µ‚½‚¢ˆÊ’ui“G‚ÌˆÊ’u‚æ‚è­‚µãj
+        // æœ¬æ¥å‡ºã—ãŸã„ä½ç½®ï¼ˆæ•µã®ä½ç½®ã‚ˆã‚Šå°‘ã—ä¸Šï¼‰
         Vector3 finalPosition = transform.position + new Vector3(0f, spawnHeightOffset * scale, 0f);
 
-        float critMul = isCritical ? criticalScaleMultiplier : 1f;
+        // â˜…å¤‰æ›´ï¼šã‚¯ãƒªãƒ†ã‚£ã‚«ãƒ«å€ç‡ã«ãƒ€ãƒ¡ãƒ¼ã‚¸é‡ã‚µã‚¤ã‚ºå€ç‡ã‚‚æ›ã‘åˆã‚ã›ã‚‹
+        float critMul = (isCritical ? criticalScaleMultiplier : 1f) * damageSizeMultiplier;
         float t;
 
-        // --- ‡@ ‰º‚©‚ço‚ÄiŠJnˆÊ’u–{—ˆ‚ÌˆÊ’u‚æ‚è­‚µ‰ºA¬‚³‚¢ƒTƒCƒYj ---
+        // --- â‘  ä¸‹ã‹ã‚‰å‡ºã¦ï¼ˆé–‹å§‹ä½ç½®ï¼æœ¬æ¥ã®ä½ç½®ã‚ˆã‚Šå°‘ã—ä¸‹ã€å°ã•ã„ã‚µã‚¤ã‚ºï¼‰ ---
         Vector3 startPos = finalPosition - (Vector3)(direction * (spawnDropDistance * scale));
         transform.position = startPos;
         transform.localScale = Vector3.one * (spawnScale * critMul);
 
-        // --- ‡A ­‚µã‚ª‚Á‚ÄA‘å‚«‚³Å‘åiƒI[ƒo[ƒVƒ…[ƒgj ---
+        // --- â‘¡ å°‘ã—ä¸ŠãŒã£ã¦ã€å¤§ãã•æœ€å¤§ï¼ˆã‚ªãƒ¼ãƒãƒ¼ã‚·ãƒ¥ãƒ¼ãƒˆï¼‰ ---
         Vector3 peakPos = startPos + (Vector3)(direction * (riseUpDistance * scale));
         t = 0f;
         while (t < riseUpDuration)
         {
             t += Time.deltaTime;
             float p = Mathf.Clamp01(t / riseUpDuration);
-            // ƒC[ƒYƒAƒEƒg‚Å¨‚¢‚æ‚­”ò‚Ño‚·Š´‚¶‚É
+            // ã‚¤ãƒ¼ã‚ºã‚¢ã‚¦ãƒˆã§å‹¢ã„ã‚ˆãé£›ã³å‡ºã™æ„Ÿã˜ã«
             float eased = 1f - (1f - p) * (1f - p);
 
             transform.position = Vector3.Lerp(startPos, peakPos, eased);
@@ -182,7 +211,7 @@ public class DamageText : MonoBehaviour
         transform.position = peakPos;
         transform.localScale = Vector3.one * (overshootScale * critMul);
 
-        // --- ‡B ­‚µ¬‚³‚­‚È‚Á‚Ä—‚¿’…‚­ ---
+        // å°‘ã—å°ã•ããªã£ã¦è½ã¡ç€ã 
         Vector3 settlePos = peakPos + (Vector3)(direction * (settleDistance * scale));
         t = 0f;
         while (t < settleDuration)
@@ -199,7 +228,7 @@ public class DamageText : MonoBehaviour
         transform.position = settlePos;
         transform.localScale = Vector3.one * (settleScale * critMul);
 
-        // --- ‡C ŠÉ‹}‚Å‘‚­‚È‚èA¬‚³‚­‚È‚èÁ‚¦‚éiƒC[ƒYƒCƒ“‚Å‰Á‘¬j ---
+        // ç·©æ€¥ã§æ—©ããªã‚Šã€å°ã•ããªã‚Šæ¶ˆãˆã‚‹ï¼ˆã‚¤ãƒ¼ã‚ºã‚¤ãƒ³ã§åŠ é€Ÿï¼‰ 
         Vector3 endPos = settlePos + (Vector3)(direction * (finalMoveDistance * scale));
         Color startColor = text.color;
         t = 0f;
@@ -207,7 +236,7 @@ public class DamageText : MonoBehaviour
         {
             t += Time.deltaTime;
             float p = Mathf.Clamp01(t / finalDuration);
-            // ƒC[ƒYƒCƒ“‚ÅÅ‰‚ä‚Á‚­‚èA‚¾‚ñ‚¾‚ñ‘¬‚­
+            // ã‚¤ãƒ¼ã‚ºã‚¤ãƒ³ã§æœ€åˆã‚†ã£ãã‚Šã€ã ã‚“ã ã‚“é€Ÿã
             float eased = p * p;
 
             transform.position = Vector3.Lerp(settlePos, endPos, eased);

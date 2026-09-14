@@ -197,6 +197,10 @@ MonoBehaviour:
   screenScale: 550
   baseFontSize: 400
   baseAlpha: 0.661
+  mediumDamageThreshold: 50
+  highDamageThreshold: 100
+  mediumDamageSizeMultiplier: 1.2
+  highDamageSizeMultiplier: 1.35
   spawnHeightOffset: 80
   diagonalSpread: 0.6
   spawnDropDistance: 0.15

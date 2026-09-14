@@ -48,6 +48,10 @@ public class EnemyHP : MonoBehaviour
     public DropItem[] dropItems;
     public int dropCount = 1;
 
+    // この敵ごとのドロップ量倍率（1=通常、2=2倍、0.5=半分など）
+    [Tooltip("この敵からのドロップ量倍率。プレイヤー共通のexpDroprateにこの倍率を掛けて最終的な排出数を決める")]
+    public float dropAmountMultiplier = 1f;
+
     [Header("ダメージ表示")]
     public GameObject damageText; // ダメージUI
 
@@ -525,14 +529,17 @@ public class EnemyHP : MonoBehaviour
         {
             // --------------------------------
             // ドロップする総数を決める
+            // ★変更：敵ごとの倍率(dropAmountMultiplier)を反映
             // --------------------------------
-            int count = stats.expDroprate;
+            int count = Mathf.RoundToInt(stats.expDroprate * dropAmountMultiplier);
 
             // expDroprateDoubleが0より大きい場合だけ抽選
+            // ★変更：元のコードは同じ値の再代入で無効化していたため、
+            //   本来の意図通り「2倍にする」処理に修正
             if (stats.expDroprateDouble > 0 &&
                 Random.Range(0f, 100f) < 50f)
             {
-                count = stats.expDroprate;
+                count *= 2;
             }
 
             // --------------------------------

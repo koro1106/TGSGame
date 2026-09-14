@@ -132,6 +132,7 @@ MonoBehaviour:
     chance: 0
   - rewardType: 2
     chance: 100
+  bossKillAllDamage: 500
 --- !u!61 &4737241381771015983
 BoxCollider2D:
   m_ObjectHideFlags: 0
