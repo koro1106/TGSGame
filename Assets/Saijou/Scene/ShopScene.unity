@@ -1911,6 +1911,7 @@ MonoBehaviour:
   levelUpSE: {fileID: 8300000, guid: 7ae72a1fd5a731143912df5154ed9c86, type: 3}
   shootSE: {fileID: 0}
   backSE: {fileID: 0}
+  clickSE: {fileID: 8300000, guid: 08ccb571f21f92e43a3b87c9c993f335, type: 3}
 --- !u!82 &180050922
 AudioSource:
   m_ObjectHideFlags: 0
@@ -6095,6 +6096,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cadaad25504ebe94e82ae24aa7bd52d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkillTreeChange
+  seManager: {fileID: 0}
   uiAnimation: {fileID: 2102264109}
   targetButton: {fileID: 521492876}
   sceneName: MainStageSkillTreeScene
@@ -11753,6 +11755,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cadaad25504ebe94e82ae24aa7bd52d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SkillTreeChange
+  seManager: {fileID: 0}
   uiAnimation: {fileID: 2102264109}
   targetButton: {fileID: 887848043}
   sceneName: MainStageScene
