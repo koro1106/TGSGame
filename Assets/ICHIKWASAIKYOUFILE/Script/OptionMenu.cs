@@ -7,6 +7,7 @@ public class OptionMenu : MonoBehaviour
 {
     [SerializeField] private Animator animator;
     [SerializeField] private MenuSelector menuSelector;
+    [SerializeField] private SEManager seManager;
 
     public void OpenOption()
     {
@@ -16,5 +17,6 @@ public class OptionMenu : MonoBehaviour
     public void CloseOption()
     {
         animator.SetTrigger("Close");
+        seManager.PlayBackSE();
     }
 }
