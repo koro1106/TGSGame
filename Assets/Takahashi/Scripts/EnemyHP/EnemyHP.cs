@@ -52,6 +52,13 @@ public class EnemyHP : MonoBehaviour
     [Tooltip("この敵からのドロップ量倍率。プレイヤー共通のexpDroprateにこの倍率を掛けて最終的な排出数を決める")]
     public float dropAmountMultiplier = 1f;
 
+    // ★変更：個数を直接指定できる方式に統一（雑魚敵は2個、ボスは1個、などに使う）
+    [Tooltip("ONにすると、通常のドロップ量計算（expDroprate等）を無視して、fixedDropCountの個数だけドロップする")]
+    public bool useFixedDropCount = false;
+
+    [Tooltip("useFixedDropCountがONの時にドロップする個数")]
+    public int fixedDropCount = 2;
+
     [Header("ダメージ表示")]
     public GameObject damageText; // ダメージUI
 
@@ -523,23 +530,29 @@ public class EnemyHP : MonoBehaviour
             gun.AddAmmo(gun.recoverAmmoAmount);
         }
 
-        GameObject drop = GetRandomDrop();
-
-        if (drop != null)
+        // ドロップの有無判定を「dropItemsが存在するか」で行う
+        if (dropItems != null && dropItems.Length > 0)
         {
             // --------------------------------
             // ドロップする総数を決める
-            // ★変更：敵ごとの倍率(dropAmountMultiplier)を反映
+            // ★変更：useFixedDropCountがONなら固定個数を使う（ボス=1個、雑魚=2個、など）
             // --------------------------------
-            int count = Mathf.RoundToInt(stats.expDroprate * dropAmountMultiplier);
+            int count;
 
-            // expDroprateDoubleが0より大きい場合だけ抽選
-            // ★変更：元のコードは同じ値の再代入で無効化していたため、
-            //   本来の意図通り「2倍にする」処理に修正
-            if (stats.expDroprateDouble > 0 &&
-                Random.Range(0f, 100f) < 50f)
+            if (useFixedDropCount)
             {
-                count *= 2;
+                count = fixedDropCount;
+            }
+            else
+            {
+                count = Mathf.RoundToInt(stats.expDroprate * dropAmountMultiplier);
+
+                // expDroprateDoubleが0より大きい場合だけ抽選
+                if (stats.expDroprateDouble > 0 &&
+                    Random.Range(0f, 100f) < 50f)
+                {
+                    count *= 1;
+                }
             }
 
             // --------------------------------
@@ -553,9 +566,14 @@ public class EnemyHP : MonoBehaviour
 
             // --------------------------------
             // 高価値素材を生成
+            // ★1個ごとにGetRandomDrop()を呼んで抽選する
             // --------------------------------
             for (int j = 0; j < valuableCount; j++)
             {
+                GameObject drop = GetRandomDrop();
+
+                if (drop == null) continue;
+
                 Vector3 offset = new Vector3(
                     Random.Range(-50f, 50f),
                     Random.Range(-50f, 50f),
@@ -580,9 +598,14 @@ public class EnemyHP : MonoBehaviour
 
             // --------------------------------
             // 普通素材を生成
+            // ★1個ごとにGetRandomDrop()を呼んで抽選する
             // --------------------------------
             for (int j = 0; j < normalCount; j++)
             {
+                GameObject drop = GetRandomDrop();
+
+                if (drop == null) continue;
+
                 Vector3 offset = new Vector3(
                     Random.Range(-50f, 50f),
                     Random.Range(-50f, 50f),
