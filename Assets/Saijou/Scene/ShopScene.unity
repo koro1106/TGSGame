@@ -19003,7 +19003,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u9396\u306E\u4EBA\u5F62"
+  m_text: "\u7206\u767A\u306E\u4EBA\u5F62"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 71ebe8027e9fda6498aee40479378a63, type: 2}
   m_sharedMaterial: {fileID: -6000078369905658297, guid: 71ebe8027e9fda6498aee40479378a63, type: 2}

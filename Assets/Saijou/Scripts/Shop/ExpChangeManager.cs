@@ -244,7 +244,12 @@ public class ExpChangeManager : MonoBehaviour
         {
             // Exp01を100個使ってExp02を1個作る
             getExp = playerData.currentExp_1 / needExp01;
-
+            // 変換できる素材がない場合は何もしない
+            if (getExp <= 0)
+            {
+                Debug.Log("Exp01が足りません");
+                return;
+            }
             // 必要Expを表示
             needExpText.text = (getExp * -needExp01).ToString();
         }
@@ -252,7 +257,12 @@ public class ExpChangeManager : MonoBehaviour
         {
             // Exp02を10個使ってExp03を1個作る
             getExp = playerData.currentExp_2 / needExp02;
-
+            // 変換できる素材がない場合は何もしない
+            if (getExp <= 0)
+            {
+                Debug.Log("Exp02が足りません");
+                return;
+            }
             // 必要Expを表示
             needExpText.text = (getExp * -needExp02).ToString();
         }

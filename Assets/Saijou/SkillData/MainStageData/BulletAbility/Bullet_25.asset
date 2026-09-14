@@ -12,23 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273875e9515bae4469b58e69f7b82692, type: 3}
   m_Name: Bullet_25
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "\u6575\u6483\u7834\u6642\u5F3E\u56DE\u5FA9\u78BA\u7387 +10%"
-  level: 5
+  skillName: "\u6575\u6483\u7834\u6642\u5F3E\u56DE\u5FA9\u78BA\u7387 +5%"
+  level: 0
   maxLevel: 5
   requiredExps:
   - expType: 0
     initialNeedExp: 50
-    needExp: 125
+    needExp: 50
     addNeedExp: 15
   - expType: 1
     initialNeedExp: 30
-    needExp: 55
+    needExp: 30
     addNeedExp: 5
-  isUnlocked: 1
+  isUnlocked: 0
   isLevelUp: 0
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   effectType: 29
-  effectValue: 10
+  effectValue: 5
   elementalBulletPrefab: {fileID: 0}
   description: 
   isShopUnlocked: 0
