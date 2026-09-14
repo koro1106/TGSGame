@@ -135,7 +135,7 @@ public class PoisonBullet : Bullet
         // 着弾ダメージ
         // ========================
 
-        enemy.TakeDamage(totalDamage);
+        enemy.TakeDamage(totalDamage, false, EnemyHP.DamageAttribute.Poison);
 
         // ========================
         // 毒エリア開始
@@ -255,8 +255,7 @@ public class PoisonBullet : Bullet
                     continue;
 
                 enemy.TakeDamage(
-                    poisonDamage
-                );
+                    poisonDamage, false, EnemyHP.DamageAttribute.Poison);
             }
 
             yield return new WaitForSeconds(

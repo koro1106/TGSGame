@@ -95,7 +95,7 @@ public class ChainBullet : MonoBehaviour
         // Å‰‚Ì“G
         hitEnemies.Add(startEnemy);
 
-        startEnemy.TakeDamage(totalDamage);
+        startEnemy.TakeDamage(totalDamage, false, EnemyHP.DamageAttribute.Thunder);
 
         // Å‰‚Ì—‹
         SpawnLightning(
@@ -133,7 +133,7 @@ public class ChainBullet : MonoBehaviour
             if (count >= chainCount)
                 break;
 
-            enemy.TakeDamage(totalDamage);
+            enemy.TakeDamage(totalDamage, false, EnemyHP.DamageAttribute.Thunder);
 
             hitEnemies.Add(enemy);
 
