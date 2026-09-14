@@ -8183,6 +8183,11 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &432573701 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5937342157237649409, guid: 7bce92ffa8315aa4cae0e0a34f0b17e5, type: 3}
+  m_PrefabInstance: {fileID: 1059929013}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &441481805
 GameObject:
   m_ObjectHideFlags: 0
@@ -17803,6 +17808,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 18159525311348676, guid: 7bce92ffa8315aa4cae0e0a34f0b17e5, type: 3}
+      propertyPath: m_Value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 18159525311348676, guid: 7bce92ffa8315aa4cae0e0a34f0b17e5, type: 3}
+      propertyPath: m_MaxValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 142668574784420161, guid: 7bce92ffa8315aa4cae0e0a34f0b17e5, type: 3}
+      propertyPath: m_Value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 142668574784420161, guid: 7bce92ffa8315aa4cae0e0a34f0b17e5, type: 3}
+      propertyPath: m_MaxValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1454097836927600559, guid: 7bce92ffa8315aa4cae0e0a34f0b17e5, type: 3}
+      propertyPath: barRoot
+      value: 
+      objectReference: {fileID: 432573701}
     - target: {fileID: 3599685186096162977, guid: 7bce92ffa8315aa4cae0e0a34f0b17e5, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -27444,7 +27469,7 @@ MonoBehaviour:
   hpGrowMultiplier: 1.1
   playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   bossPrefab: {fileID: 1535677997056505620, guid: 38e0c4e553ed7874584eba5a894cc60f, type: 3}
-  bossComboThreshold: 100
+  bossComboThreshold: 50
   bossHPBar: {fileID: 2125588650}
   spawnAreaTopRatio: 0.45
   spawnAreaBottomRatio: 1
