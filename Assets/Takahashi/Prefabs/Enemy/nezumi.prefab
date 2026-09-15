@@ -153,7 +153,7 @@ MonoBehaviour:
   currentHP: 0
   isRareEnemy: 0
   scaleSmooth: 12
-  growInterval: 10
+  growInterval: 5
   growMultiplier: 1.5
   deathDuration: 1.2
   spiralSpeed: 20
