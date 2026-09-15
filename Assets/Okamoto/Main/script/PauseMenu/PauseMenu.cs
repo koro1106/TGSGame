@@ -111,6 +111,15 @@ public class PauseMenu : MonoBehaviour
 
     public void OpenMenu()
     {
+        // =====================================================
+        // MainSceneImageUI表示中はPauseを開かない
+        // =====================================================
+
+        if (MainSceneImageUI.IsShowing)
+        {
+            return;
+        }
+
         // リザルト中はポーズを開かない
         if (ResultManager.IsResultActive)
             return;

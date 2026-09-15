@@ -204,6 +204,28 @@ public class ResultManager : MonoBehaviour
         IsResultActive = true;
 
         // =====================================================
+        // コンボ・ダメージ表示をリセット
+        // リザルト画面に入った時点で画面上から消す
+        // =====================================================
+
+        if (ComboManager.instance != null)
+        {
+            ComboManager.instance.ResetCombo();
+        }
+
+        // ダメージ表示をすべて削除
+        DamageText[] damageTexts =
+            FindObjectsOfType<DamageText>();
+
+        foreach (DamageText damageText in damageTexts)
+        {
+            if (damageText != null)
+            {
+                Destroy(damageText.gameObject);
+            }
+        }
+
+        // =====================================================
         // フィールド上に残っているドロップをすべて回収
         // =====================================================
 

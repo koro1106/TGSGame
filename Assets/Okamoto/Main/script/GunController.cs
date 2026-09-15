@@ -329,7 +329,7 @@ public class GunController : MonoBehaviour
 
         CheckCrosshairOverPlayer();
 
-        if (!isReloading)
+        if (!isReloading && !isTimelinePlaying)
         {
             Shoot();
         }
@@ -689,8 +689,12 @@ public class GunController : MonoBehaviour
             // 演出
             // =========================
 
-            CameraShake.Instance.Shake();
-            PlayerHP.Instance.TakeDamage(1);
+            // Timeline中はカメラ揺れ・被ダメージを発生させない
+            if (!isTimelinePlaying)
+            {
+                CameraShake.Instance.Shake();
+                PlayerHP.Instance.TakeDamage(1);
+            }
 
             // =========================
             // UIアニメーションをキューに追加
@@ -2563,6 +2567,15 @@ public class GunController : MonoBehaviour
         RefreshAmmoUIImmediate();
     }
 
+    // =====================================================
+    // Timeline中の射撃禁止
+    // =====================================================
 
+    private bool isTimelinePlaying = false;
+
+    public void SetTimelinePlaying(bool playing)
+    {
+        isTimelinePlaying = playing;
+    }
 
 }

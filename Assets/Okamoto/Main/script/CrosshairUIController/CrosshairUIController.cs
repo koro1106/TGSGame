@@ -35,6 +35,12 @@ public class CrosshairUIController : MonoBehaviour
     // ポーズ画面操作中か
     private bool isPauseMode = false;
 
+    // MainScene説明UI操作中か
+    private bool isMainSceneImageMode = false;
+
+    // MainScene説明UIの対象Canvas
+    [SerializeField] private GraphicRaycaster mainSceneImageGraphicRaycaster;
+
     // 次にクリックできる時間
     private float nextClickTime = 0f;
 
@@ -113,6 +119,38 @@ public class CrosshairUIController : MonoBehaviour
         nextClickTime = 0f;
     }
 
+    // =====================================================
+    // MainScene説明UIモード切り替え
+    // =====================================================
+
+    public void SetMainSceneImageMode(bool enabled)
+    {
+        isMainSceneImageMode = enabled;
+
+        if (eventSystem == null)
+        {
+            eventSystem = EventSystem.current;
+        }
+
+        if (eventSystem != null)
+        {
+            pointerData =
+                new PointerEventData(eventSystem);
+        }
+
+        // 前回のButton状態を完全解除
+        ClearCurrentButton();
+
+        // Slider状態を解除
+        currentSlider = null;
+
+        isDraggingSlider = false;
+        draggingSlider = null;
+
+        forceRefreshButton = false;
+        nextClickTime = 0f;
+    }
+
 
     private void Update()
     {
@@ -161,10 +199,13 @@ public class CrosshairUIController : MonoBehaviour
 
 
         // =====================================================
-        // リザルトでもポーズでもない
+        // リザルト・ポーズ・MainScene説明UI
+        // のどれでもない場合は何もしない
         // =====================================================
 
-        if (!resultMode && !pauseMode)
+        if (!resultMode &&
+            !pauseMode &&
+            !isMainSceneImageMode)
         {
             return;
         }
@@ -240,14 +281,6 @@ public class CrosshairUIController : MonoBehaviour
                     screenPosition
                 );
         }
-
-
-        // =====================================================
-        // リザルト中
-        //
-        // Canvas内のUIを見る
-        // =====================================================
-
         else if (resultMode)
         {
             hitButton =
@@ -259,6 +292,15 @@ public class CrosshairUIController : MonoBehaviour
                 GetResultSliderAtCrosshair(
                     screenPosition
                 );
+        }
+        else if (isMainSceneImageMode)
+        {
+            hitButton =
+                GetMainSceneImageButtonAtCrosshair(
+                    screenPosition
+                );
+
+            hitSlider = null;
         }
 
 
@@ -462,15 +504,17 @@ public class CrosshairUIController : MonoBehaviour
                             screenPosition
                         );
                 }
-
-                // =================================================
-                // リザルト中
-                // =================================================
-
                 else if (resultMode)
                 {
                     clickButton =
                         GetResultButtonAtCrosshair(
+                            screenPosition
+                        );
+                }
+                else if (isMainSceneImageMode)
+                {
+                    clickButton =
+                        GetMainSceneImageButtonAtCrosshair(
                             screenPosition
                         );
                 }
@@ -1514,5 +1558,162 @@ public class CrosshairUIController : MonoBehaviour
 
         // 強制再判定フラグも解除
         forceRefreshButton = false;
+    }
+
+    // =====================================================
+    // MainScene説明UIのButtonを取得
+    // クロスヘア位置から直接取得
+    // =====================================================
+
+    private Button GetMainSceneImageButtonAtCrosshair(
+        Vector2 screenPosition)
+    {
+        if (mainSceneImageGraphicRaycaster == null)
+        {
+            return null;
+        }
+
+
+        // =================================================
+        // Canvas取得
+        // =================================================
+
+        Canvas canvas =
+            mainSceneImageGraphicRaycaster.GetComponent<Canvas>();
+
+
+        if (canvas == null)
+        {
+            canvas =
+                mainSceneImageGraphicRaycaster.GetComponentInParent<Canvas>();
+        }
+
+
+        if (canvas == null)
+        {
+            return null;
+        }
+
+
+        // =================================================
+        // Canvas内のButtonをすべて取得
+        // =================================================
+
+        Button[] buttons =
+            canvas.GetComponentsInChildren<Button>(true);
+
+
+        Button nearestButton = null;
+
+        float nearestDistance =
+            float.MaxValue;
+
+
+        // =================================================
+        // Buttonを1つずつ確認
+        // =================================================
+
+        foreach (Button button in buttons)
+        {
+            if (button == null)
+            {
+                continue;
+            }
+
+
+            // =================================================
+            // 非表示なら対象外
+            // =================================================
+
+            if (!button.gameObject.activeInHierarchy)
+            {
+                continue;
+            }
+
+
+            // =================================================
+            // 操作不能なら対象外
+            // =================================================
+
+            if (!button.interactable)
+            {
+                continue;
+            }
+
+
+            RectTransform buttonRect =
+                button.GetComponent<RectTransform>();
+
+
+            if (buttonRect == null)
+            {
+                continue;
+            }
+
+
+            // =================================================
+            // ButtonのCanvas
+            // =================================================
+
+            Canvas buttonCanvas =
+                button.GetComponentInParent<Canvas>();
+
+
+            Camera buttonCamera =
+                GetCanvasCamera(buttonCanvas);
+
+
+            // =================================================
+            // クロスヘアがButton内にあるか
+            // =================================================
+
+            bool inside =
+                RectTransformUtility.RectangleContainsScreenPoint(
+                    buttonRect,
+                    screenPosition,
+                    buttonCamera
+                );
+
+
+            if (!inside)
+            {
+                continue;
+            }
+
+
+            // =================================================
+            // Button中央との距離
+            // =================================================
+
+            Vector2 buttonCenter =
+                RectTransformUtility.WorldToScreenPoint(
+                    buttonCamera,
+                    buttonRect.position
+                );
+
+
+            float distance =
+                Vector2.Distance(
+                    screenPosition,
+                    buttonCenter
+                );
+
+
+            // =================================================
+            // 一番近いButtonを採用
+            // =================================================
+
+            if (distance < nearestDistance)
+            {
+                nearestDistance =
+                    distance;
+
+                nearestButton =
+                    button;
+            }
+        }
+
+
+        return nearestButton;
     }
 }
