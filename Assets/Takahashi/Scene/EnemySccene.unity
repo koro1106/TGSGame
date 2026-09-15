@@ -486,13 +486,13 @@ MonoBehaviour:
   - prefab: {fileID: 5658466300848699742, guid: 4451329126ffa93498ccea07ae4d06a7, type: 3}
     weight: 100
     useCustomGrowth: 1
-    growInterval: 2
-    growMultiplier: 100
+    growInterval: 5
+    growMultiplier: 2
   - prefab: {fileID: 6737240972690251372, guid: 7322b40b35c85b0478ffa94edeb4b561, type: 3}
     weight: 100
-    useCustomGrowth: 0
-    growInterval: 2
-    growMultiplier: 100
+    useCustomGrowth: 1
+    growInterval: 5
+    growMultiplier: 2
   - prefab: {fileID: 5100497116774911822, guid: 6b6f368167eaea047a26e7c3744d25c9, type: 3}
     weight: 0
     useCustomGrowth: 0
@@ -521,7 +521,7 @@ MonoBehaviour:
   spawnInterval: 1.5
   s: 0
   hpGrowInterval: 5
-  hpGrowMultiplier: 200
+  hpGrowMultiplier: 1
   playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   bossPrefab: {fileID: 1535677997056505620, guid: 38e0c4e553ed7874584eba5a894cc60f, type: 3}
   bossComboThreshold: 50

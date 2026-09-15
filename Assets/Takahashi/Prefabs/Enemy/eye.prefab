@@ -514,6 +514,11 @@ MonoBehaviour:
   spawnAreaTopRatio: 0.45
   spawnAreaBottomRatio: 1
   despawnDistance: 100
+  trackPlayer: 1
+  retargetInterval: 3
+  aimRandomness: 500
+  wanderNoiseAngle: 100
+  noiseSpeed: 0.4
 --- !u!114 &6318681889434942323
 MonoBehaviour:
   m_ObjectHideFlags: 0
