@@ -208,7 +208,10 @@ public class EnemySpawner : MonoBehaviour
 
         GameObject enemy = Instantiate(prefab, spawnPos, Quaternion.identity);
 
-        EnemyHP hp = enemy.GetComponent<EnemyHP>();
+        // ★修正：EnemyHPがPrefabのルートではなく子（孫）階層についているケースがあるため、
+        //   GetComponent → GetComponentInChildren に変更（Animation付き敵など階層が深いPrefabで
+        //   HP増加が適用されなかった原因）
+        EnemyHP hp = enemy.GetComponentInChildren<EnemyHP>();
         if (hp != null)
         {
             // ★変更：全体共通のhpMultiplierではなく、選ばれた敵タイプ専用のhpMultiplierを使う
@@ -216,14 +219,14 @@ public class EnemySpawner : MonoBehaviour
             hp.currentHP = hp.maxHP;
         }
 
-        RushEnemy rush = enemy.GetComponent<RushEnemy>();
+        RushEnemy rush = enemy.GetComponentInChildren<RushEnemy>();
         if (rush != null)
         {
             rush.player = player;
         }
 
         // WarpEnemy（プレイヤーへ向かって移動する敵）にもプレイヤーを渡す
-        WarpEnemyMove warp = enemy.GetComponent<WarpEnemyMove>();
+        WarpEnemyMove warp = enemy.GetComponentInChildren<WarpEnemyMove>();
         if (warp != null)
         {
             warp.player = player;
@@ -241,18 +244,18 @@ public class EnemySpawner : MonoBehaviour
 
         bossAlive = true;
 
-        BossMove move = boss.GetComponent<BossMove>();
+        BossMove move = boss.GetComponentInChildren<BossMove>();
         if (move != null)
         {
             move.player = player;
             move.spawner = this; // ボス撃破の通知を受け取れるようにする
         }
 
-        BossEnemy bossScript = boss.GetComponent<BossEnemy>();
+        BossEnemy bossScript = boss.GetComponentInChildren<BossEnemy>();
         if (bossScript != null)
             bossScript.spawner = this;
 
-        EnemyHP bossHP = boss.GetComponent<EnemyHP>();
+        EnemyHP bossHP = boss.GetComponentInChildren<EnemyHP>();
         if (bossHP != null)
         {
             // ★変更：出現回数×固定量をHPに加算する（1体目=基準HP、2体目=+500、3体目=+1000...）
