@@ -27,16 +27,32 @@ public class EyeEnemy : MonoBehaviour
     public float leftHandUpAngle = 25f;     // 左手: 上に行っている時(右手と逆)
     public float leftHandDownAngle = -25f;  // 左手: 下に行っている時(右手と逆)
 
-    // ===== ここから追加：スポーン範囲（赤い床の高さ）を他の敵と揃える =====
+    // ===== スポーン範囲（赤い床の高さ）を他の敵と揃える =====
     [Header("スポーンY範囲（赤い床の高さ）")]
     public float spawnAreaTopRatio = 0.45f;
     public float spawnAreaBottomRatio = 1.0f;
-    // ===== ここまで追加 =====
 
-    // ★追加：画面外消滅
+    // ★画面外消滅
     [Header("画面外消滅")]
     [Tooltip("画面端からこの距離だけ離れたら自動的に消える")]
     public float despawnDistance = 5f;
+
+    // ★追加：追尾(ふわふわ迷走)
+    [Header("追尾(ふわふわ迷走)")]
+    [Tooltip("trueならプレイヤーを狙いつつ漂うように動く")]
+    public bool trackPlayer = true;
+    [Tooltip("この間隔で狙いをカクッと更新し直す")]
+    public float retargetInterval = 1.2f;
+    [Tooltip("プレイヤー周辺のどのくらいブレて狙うか")]
+    public float aimRandomness = 1.5f;
+    [Tooltip("進行方向に加える揺らぎの強さ(度)")]
+    public float wanderNoiseAngle = 45f;
+    [Tooltip("揺らぎの速さ")]
+    public float noiseSpeed = 0.4f;
+
+    private float retargetTimer;
+    private float noiseSeed;
+    private Vector2 currentAimDir;
 
     private Vector2 moveDirection;
 
@@ -67,6 +83,9 @@ public class EyeEnemy : MonoBehaviour
         if (leftHand != null) leftHandSR = leftHand.GetComponent<SpriteRenderer>();
         if (rightHand != null) rightHandSR = rightHand.GetComponent<SpriteRenderer>();
 
+        noiseSeed = Random.Range(0f, 100f);
+        retargetTimer = 0f; // 出現直後に1回すぐ狙いを決める
+
         // ← 一番最後に呼ぶ
         SetSpawnAndDirection();
 
@@ -95,6 +114,9 @@ public class EyeEnemy : MonoBehaviour
 
         float hpRate = (float)hp.currentHP / hp.maxHP;
 
+        // ★追尾(ふわふわ迷走)の方向更新
+        UpdateWanderDirection();
+
         // 移動
         transform.Translate(
             moveDirection * moveSpeed * Time.deltaTime,
@@ -113,7 +135,7 @@ public class EyeEnemy : MonoBehaviour
         // 手の開閉
         UpdateHandSway();
 
-        // ★追加：画面外へ一定距離離れたら消える
+        // ★画面外へ一定距離離れたら消える
         CheckDespawn();
     }
 
@@ -167,9 +189,57 @@ public class EyeEnemy : MonoBehaviour
     }
 
     // =========================================================
-    // スポーン位置・進行方向決定
+    // ★追加：プレイヤーを狙いつつ、間隔を空けてカクッと狙い直す
+    // ノイズで常時ふらつかせることで「漂いながら迫る」動きにする
+    // =========================================================
+    void UpdateWanderDirection()
+    {
+        if (!trackPlayer)
+        {
+            // 追尾しない場合はノイズだけ加えて緩やかに揺らす
+            float n = (Mathf.PerlinNoise(Time.time * noiseSpeed, noiseSeed) - 0.5f) * 2f * wanderNoiseAngle;
+            moveDirection = Quaternion.Euler(0f, 0f, n) * moveDirection;
+            UpdateFacing();
+            return;
+        }
+
+        retargetTimer -= Time.deltaTime;
+        if (retargetTimer <= 0f)
+        {
+            retargetTimer = retargetInterval;
+
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                Vector2 aimPoint = (Vector2)player.transform.position
+                    + Random.insideUnitCircle * aimRandomness;
+                currentAimDir = (aimPoint - (Vector2)transform.position).normalized;
+            }
+        }
+
+        // 直進方向(currentAimDir)に対してノイズで揺らぎを加える
+        float noise = (Mathf.PerlinNoise(Time.time * noiseSpeed, noiseSeed) - 0.5f) * 2f * wanderNoiseAngle;
+        moveDirection = Quaternion.Euler(0f, 0f, noise) * currentAimDir;
+
+        UpdateFacing();
+    }
+
+    void UpdateFacing()
+    {
+        bool flip = moveDirection.x > 0f;
+        if (bodySR != null) bodySR.flipX = flip;
+        if (tailSR != null) tailSR.flipX = flip;
+        if (headSR != null) headSR.flipX = flip;
+        if (leftHandSR != null) leftHandSR.flipX = flip;
+        if (rightHandSR != null) rightHandSR.flipX = flip;
+    }
+
+    // =========================================================
+    // スポーン位置決定
     // EnemySpawner.GetSpawnPosition() / EnemyMove.CalcAreaBounds() と
     // 同じ考え方（カメラ位置基準＋赤い床エリア比率で範囲を絞る）に統一
+    // 進行方向は UpdateWanderDirection() に任せるため、ここでは
+    // スポーン位置だけ決めて初回の狙いをセットする
     // =========================================================
     void SetSpawnAndDirection()
     {
@@ -212,24 +282,30 @@ public class EyeEnemy : MonoBehaviour
 
         transform.position = spawnPos;
 
-        // 赤い床エリア内のランダム地点へ向かう
-        Vector2 target = new Vector2(
-            Random.Range(left, right),
-            Random.Range(areaBottom, areaTop)
-        );
-        moveDirection = (target - spawnPos).normalized;
+        // 初回の狙い方向を決める（追尾ONならプレイヤー、OFFなら赤い床のランダム点）
+        GameObject player = trackPlayer ? GameObject.FindGameObjectWithTag("Player") : null;
+        Vector2 target;
+        if (player != null)
+        {
+            target = (Vector2)player.transform.position
+                + Random.insideUnitCircle * aimRandomness;
+        }
+        else
+        {
+            target = new Vector2(
+                Random.Range(left, right),
+                Random.Range(areaBottom, areaTop)
+            );
+        }
 
-        bool flip = moveDirection.x > 0f;
+        currentAimDir = (target - spawnPos).normalized;
+        moveDirection = currentAimDir;
 
-        if (bodySR != null) bodySR.flipX = flip;
-        if (tailSR != null) tailSR.flipX = flip;
-        if (headSR != null) headSR.flipX = flip;
-        if (leftHandSR != null) leftHandSR.flipX = flip;
-        if (rightHandSR != null) rightHandSR.flipX = flip;
+        UpdateFacing();
     }
 
     // =========================================================
-    // ★追加：画面外へ一定距離離れたら自動で消える
+    // ★画面外へ一定距離離れたら自動で消える
     // =========================================================
     void CheckDespawn()
     {
