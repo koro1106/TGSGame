@@ -62,7 +62,20 @@ public class ComboManager : MonoBehaviour
     // コンボ数をリセットする（ボス出現時・撃破時などに使用）
     public void ResetCombo()
     {
+        // コンボ数を0に戻す
         combo = 0;
+
+        // 現在表示されているコンボ表示もすべて削除
+        ComboPopup[] popups =
+            FindObjectsOfType<ComboPopup>();
+
+        foreach (ComboPopup popup in popups)
+        {
+            if (popup != null)
+            {
+                Destroy(popup.gameObject);
+            }
+        }
     }
 
     // =========================================================

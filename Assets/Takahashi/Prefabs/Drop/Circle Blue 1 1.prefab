@@ -218,7 +218,7 @@ MonoBehaviour:
   isValuable: 0
   valuableChild: {fileID: 8122681451792077171}
   collectShrinkSpeed: 8
-  collectSE: {fileID: 8300000, guid: 8ac89ac20f8c1fd428144e835a51b97d, type: 3}
+  collectSE: {fileID: 8300000, guid: 7d885dc17e3888348971a1355a6c1871, type: 3}
   collectSEVolume: 1
 --- !u!58 &-6454711437644961287
 CircleCollider2D:
