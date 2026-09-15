@@ -186,15 +186,25 @@ MonoBehaviour:
   backgroundRect: {fileID: 8520099764850093855}
   comboNumber: {fileID: 5760544933464755073}
   comboLabel: {fileID: 4107169856143280359}
-  bgPosLeft: {x: 25, y: 85}
-  bgPosRight: {x: -25, y: 85}
-  bgPosUp: {x: 3, y: 0}
-  numberPosLeft: {x: 20, y: 115}
-  numberPosRight: {x: -30, y: 115}
-  numberPosUp: {x: 0, y: 30}
-  labelPosLeft: {x: 20, y: 90}
-  labelPosRight: {x: -30, y: 90}
-  labelPosUp: {x: 0, y: 5}
+  bgPosLeft: {x: 0, y: 85}
+  bgPosRight: {x: 0, y: 85}
+  bgPosUp: {x: 0, y: 0}
+  numberPosLeft: {x: -98, y: 82}
+  numberPosRight: {x: 98, y: 82}
+  numberPosUp: {x: 0, y: 142}
+  labelPosLeft: {x: -98, y: 42}
+  labelPosRight: {x: 98, y: 42}
+  labelPosUp: {x: 0, y: 102}
+  minNumberScale: 1
+  maxNumberScale: 1.8
+  maxScaleComboCount: 50
+  numberMaxYOffset: 10
+  lockBackgroundPosition: 1
+  fixedBackgroundPosition: {x: 4, y: 80}
+  lockBackgroundRotation: 1
+  fixedBackgroundRotationZ: -60
+  lockDirection: 1
+  fixedDirectionType: 2
   displayDuration: 1
   scaleDuration: 0.12
   floatDistance: 30
@@ -463,7 +473,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7768279742677031135}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 15, y: 15, z: 15}
   m_ConstrainProportionsScale: 0
@@ -472,7 +482,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 23, y: 0}
   m_SizeDelta: {x: 10, y: 10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!212 &2799890806724081598

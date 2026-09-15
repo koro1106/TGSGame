@@ -1,39 +1,65 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 using System.Collections;
 
 public class ComboPopup : MonoBehaviour
 {
-    [Header("�w�i�摜")]
+    [Header("背景画像")]
     public RectTransform backgroundRect;
 
-    [Header("�R���{�e�L�X�g")]
+    [Header("コンボテキスト")]
     public TextMeshProUGUI comboNumber;
     public TextMeshProUGUI comboLabel;
 
-    [Header("�w�i�̈ʒu�ݒ�")]
+    [Header("背景の位置設定")]
     public Vector2 bgPosLeft = new Vector2(0f, 85f);
     public Vector2 bgPosRight = new Vector2(0f, 85f);
     public Vector2 bgPosUp = new Vector2(0f, 0f);
 
-    [Header("�����e�L�X�g�̈ʒu�ݒ�")]
+    [Header("数字テキストの位置設定")]
     public Vector2 numberPosLeft = new Vector2(-98f, 82f);
     public Vector2 numberPosRight = new Vector2(98f, 82f);
     public Vector2 numberPosUp = new Vector2(0f, 142f);
 
-    [Header("COMBO���x���̈ʒu�ݒ�")]
+    [Header("COMBOラベルの位置設定")]
     public Vector2 labelPosLeft = new Vector2(-98f, 42f);
     public Vector2 labelPosRight = new Vector2(98f, 42f);
     public Vector2 labelPosUp = new Vector2(0f, 102f);
 
-    [Header("�A�j���[�V�����ݒ�")]
-    // ���v�\�����ԁi�b�j
+    [Header("コンボ数値サイズ設定")]
+    // コンボ数値の最小スケール（コンボ数が小さいとき）
+    public float minNumberScale = 1f;
+    // コンボ数値の最大スケール（コンボ数が maxScaleComboCount に達したとき）
+    public float maxNumberScale = 1.8f;
+    // このコンボ数で最大スケールに到達する（それ以上は頭打ち）
+    public int maxScaleComboCount = 50;
+    // 数値が最大スケールになったとき、基準位置からどれだけ上にずらすか（Y座標オフセット）
+    public float numberMaxYOffset = 30f;
+
+    [Header("背景位置固定設定")]
+    // ONにすると背景の位置を direction に関わらず fixedBackgroundPosition に固定する
+    public bool lockBackgroundPosition = false;
+    public Vector2 fixedBackgroundPosition = new Vector2(0f, 85f);
+
+    [Header("背景向き（回転）固定設定")]
+    // ONにすると背景の向きを渡された bgRotation に関わらず fixedBackgroundRotationZ に固定する
+    public bool lockBackgroundRotation = false;
+    public float fixedBackgroundRotationZ = 0f;
+
+    [Header("方向固定設定")]
+    // ONにすると direction の指定を無視して常に fixedDirectionType の向きで表示する
+    public bool lockDirection = false;
+    public enum FixedDirection { Left = 0, Right = 1, Up = 2 }
+    public FixedDirection fixedDirectionType = FixedDirection.Up;
+
+    [Header("アニメーション設定")]
+    // 合計表示時間（秒）
     public float displayDuration = 1.0f;
-    // �o��E���ł̃X�P�[���A�j���[�V�������ԁi�b�j
+    // 登場・消滅のスケールアニメーション時間（秒）
     public float scaleDuration = 0.12f;
-    // �����オ�鋗���i���[���h�P�ʁj
+    // 浮き上がる距離（ワールド単位）
     public float floatDistance = 0.5f;
-    // �o�ꎞ�̃I�[�o�[�V���[�g�{���i1.0 = �Ȃ��A1.25 = 25%�c��ށj
+    // 登場時のオーバーシュート倍率（1.0 = なし、1.25 = 25%膨らむ）
     public float overshootScale = 1.25f;
 
     Transform cachedTransform;
@@ -52,11 +78,20 @@ public class ComboPopup : MonoBehaviour
 
     public void SetCombo(int comboCount, float bgRotation, int direction)
     {
+        // インスペクターで方向固定がONなら、渡された direction を無視する
+        if (lockDirection)
+        {
+            direction = (int)fixedDirectionType;
+        }
+
         if (comboNumber != null) comboNumber.text = comboCount.ToString();
         if (comboLabel != null) comboLabel.text = "COMBO";
 
         if (backgroundRect != null)
-            backgroundRect.localRotation = Quaternion.Euler(0f, 0f, bgRotation);
+        {
+            float rotZ = lockBackgroundRotation ? fixedBackgroundRotationZ : bgRotation;
+            backgroundRect.localRotation = Quaternion.Euler(0f, 0f, rotZ);
+        }
 
         Vector2 numPos, lblPos, bgPos;
         switch (direction)
@@ -69,21 +104,42 @@ public class ComboPopup : MonoBehaviour
                 numPos = numberPosUp; lblPos = labelPosUp; bgPos = bgPosUp; break;
         }
 
+        // 背景位置固定がONなら、direction に関わらず固定位置を使う
+        if (lockBackgroundPosition)
+        {
+            bgPos = fixedBackgroundPosition;
+        }
+
+        // コンボ数に応じた成長率（0〜1、maxScaleComboCountで頭打ち）
+        float t = maxScaleComboCount > 0
+            ? Mathf.Clamp01((float)comboCount / maxScaleComboCount)
+            : 1f;
+
+        // 数値が大きくなるほど、数値テキストの位置を上にずらす
+        numPos.y += Mathf.Lerp(0f, numberMaxYOffset, t);
+
         if (comboNumber != null) comboNumber.GetComponent<RectTransform>().anchoredPosition = numPos;
         if (comboLabel != null) comboLabel.GetComponent<RectTransform>().anchoredPosition = lblPos;
         if (backgroundRect != null) backgroundRect.anchoredPosition = bgPos;
+
+        // コンボ数に応じて数値テキストだけの大きさを変える（maxScaleComboCountで頭打ち）
+        if (comboNumber != null)
+        {
+            float numberScale = Mathf.Lerp(minNumberScale, maxNumberScale, t);
+            comboNumber.GetComponent<RectTransform>().localScale = Vector3.one * numberScale;
+        }
 
         StartCoroutine(PlayAnimation());
     }
 
     IEnumerator PlayAnimation()
     {
-        // Canvas �� Render Mode �� World Space �ɐ؂�ւ���
-        // �e Transform �ɒǏ]������
+        // Canvas の Render Mode を World Space に切り替えて
+        // 親 Transform に追従させる
         if (childCanvas != null)
         {
             childCanvas.renderMode = RenderMode.WorldSpace;
-            // localPosition �����_�ɌŒ�i�e=COMBO�̍��W�n�œ����j
+            // localPosition を原点に固定（親=COMBOの座標系で動く）
             childCanvas.transform.localPosition = Vector3.zero;
             childCanvas.transform.localRotation = Quaternion.identity;
         }
@@ -91,7 +147,7 @@ public class ComboPopup : MonoBehaviour
         float elapsed = 0f;
         Vector3 originPos = cachedTransform.localPosition;
 
-        // Canvas �̏��� localScale ���L��
+        // Canvas の初期 localScale を記憶
         Vector3 canvasOriginScale = childCanvas != null
             ? childCanvas.transform.localScale
             : Vector3.one;
@@ -100,7 +156,7 @@ public class ComboPopup : MonoBehaviour
         cachedTransform.localScale = Vector3.zero;
         if (childCanvas != null) childCanvas.transform.localScale = Vector3.zero;
 
-        // ���� 1. �o��i�X�P�[���|�b�v�j
+        // ── 1. 登場（スケールポップ）
         while (elapsed < scaleDuration)
         {
             elapsed += Time.deltaTime;
@@ -112,8 +168,8 @@ public class ComboPopup : MonoBehaviour
         cachedTransform.localScale = Vector3.one;
         if (childCanvas != null) childCanvas.transform.localScale = canvasOriginScale;
 
-        // ���� 2. �؍݁i�����オ��j
-        // ���[�g�� localPosition ������������ Canvas ���ꏏ�ɒǏ]����
+        // ── 2. 滞在（浮き上がる）
+        // ルートの localPosition だけ動かせば Canvas も一緒に追従する
         float holdTime = Mathf.Max(0f, displayDuration - scaleDuration * 2f);
         elapsed = 0f;
         while (elapsed < holdTime)
@@ -124,7 +180,7 @@ public class ComboPopup : MonoBehaviour
             yield return null;
         }
 
-        // ���� 3. ���Łi�k���{�t�F�[�h�j
+        // ── 3. 消滅（縮小＋フェード）
         elapsed = 0f;
         Vector3 holdPos = cachedTransform.localPosition;
         while (elapsed < scaleDuration)

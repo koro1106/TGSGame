@@ -17,8 +17,8 @@ MonoBehaviour:
   maxLevel: 1
   requiredExps:
   - expType: 0
-    initialNeedExp: 30
-    needExp: 30
+    initialNeedExp: 50
+    needExp: 50
     addNeedExp: 0
   - expType: 1
     initialNeedExp: 10
