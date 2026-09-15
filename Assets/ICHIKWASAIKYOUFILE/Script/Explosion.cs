@@ -21,7 +21,7 @@ public class Bulletxplosion : MonoBehaviour
     public float totalExplosionSize = 0f;
 
     public PlayerStats playerStats;
-    private Vector3 defaultScale = new Vector3(210.7f, 95.8f, 144.1f);
+    private Vector3 defaultScale = new Vector3(40f, 50f, 144.1f);
 
     void Start()
     {

@@ -28049,19 +28049,19 @@ MonoBehaviour:
     weight: 100
     useCustomGrowth: 1
     growInterval: 5
-    growMultiplier: 1.4
+    growMultiplier: 2
   enemyA:
     prefab: {fileID: 5658466300848699742, guid: 4451329126ffa93498ccea07ae4d06a7, type: 3}
     weight: 80
     useCustomGrowth: 1
     growInterval: 5
-    growMultiplier: 1.1
+    growMultiplier: 1.5
   enemyB:
     prefab: {fileID: 6737240972690251372, guid: 7322b40b35c85b0478ffa94edeb4b561, type: 3}
     weight: 70
     useCustomGrowth: 1
     growInterval: 15
-    growMultiplier: 1.1
+    growMultiplier: 1.5
   enemyC:
     prefab: {fileID: 0}
     weight: 0
@@ -28077,7 +28077,7 @@ MonoBehaviour:
   playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   bossPrefab: {fileID: 1535677997056505620, guid: 38e0c4e553ed7874584eba5a894cc60f, type: 3}
   bossComboThreshold: 50
-  bossHpGrowAmount: 500
+  bossHpGrowAmount: 5000
   bossHPBar: {fileID: 2125588650}
   spawnAreaTopRatio: 0.45
   spawnAreaBottomRatio: 1
@@ -29412,7 +29412,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1757153041
 RectTransform:
   m_ObjectHideFlags: 0
@@ -30080,7 +30080,7 @@ GameObject:
   - component: {fileID: 1809566361}
   - component: {fileID: 1809566360}
   m_Layer: 5
-  m_Name: Skill tree (1)
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30095,7 +30095,7 @@ RectTransform:
   m_GameObject: {fileID: 1809566358}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.60000074, y: 0.81720227, z: -1.4900017}
+  m_LocalScale: {x: 0.60000074, y: 0.73, z: -1.4900017}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1612057863}
@@ -30103,7 +30103,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.99999, y: -95}
+  m_AnchoredPosition: {x: -0.99999, y: -93}
   m_SizeDelta: {x: 647.2358, y: 131.33}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1809566360
@@ -30182,7 +30182,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 39df11ed917015745887ac2a8d51d2cf, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4d8bc4e843e2e0144b0a5d20ca224fab, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -31524,7 +31524,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 41792c4124a813b47871cc1c1cd5db3a, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0
+  m_Volume: 1
   m_Pitch: 1
   Loop: 1
   Mute: 0

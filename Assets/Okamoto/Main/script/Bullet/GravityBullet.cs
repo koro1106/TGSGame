@@ -19,7 +19,7 @@ public class GravityBullet : MonoBehaviour
     public GameObject gravityEffect;
 
     public PlayerStats stats;
-    private Vector3 defaultScale = new Vector3(210.7f, 95.8f, 144.1f);
+    private Vector3 defaultScale = new Vector3(40f, 50f, 144.1f);
 
     void Start()
     {
