@@ -235,6 +235,12 @@ public class ExpChangeManager : MonoBehaviour
         seManager.PlayClickSE();
         normalExpText.UpdateNormalExpText();
         shopExpText.UpdateNormalExpText();
+
+        // 変換後、獲得数を0に戻す
+        ResetGetExpText();
+
+        // 必要素材表示も0に戻す
+        needExpText.text = "0";
     }
 
     // 最大獲得数にする

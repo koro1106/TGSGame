@@ -31,8 +31,9 @@ MonoBehaviour:
   bulletSize: 20
   unlockedElementalBullets:
   - {fileID: 2218497407943198192, guid: 2943e97c84661314baf0a600180bff0d, type: 3}
+  - {fileID: 6812141048282945842, guid: 422d710f4cfeb084d880cf1fcecc60f9, type: 3}
   defaultBulletPrefab: {fileID: 2218497407943198192, guid: 2943e97c84661314baf0a600180bff0d, type: 3}
-  elementalBulletChance: 0.2
+  elementalBulletChance: 2.1000001
   preExpDeviceUnlocked: 0
   carePackageUnlocked: 0
   handgunUnlocked: 0
@@ -52,9 +53,9 @@ MonoBehaviour:
   rapidFire: 0
   targetingRangeUP: 0
   increasedUP: 0
-  shopOpen: 0
-  shopEffectBulletDamage: 0
-  shopElementalBulletChance: 0
+  shopOpen: 1
+  shopEffectBulletDamage: 1
+  shopElementalBulletChance: 1
   shopExpChange: 1
   shopButtonClicked: 0
   prestigeButtonClicked: 0
