@@ -12,6 +12,7 @@ public class SEManager : MonoBehaviour
     [SerializeField] private AudioClip backSE;
     [SerializeField] private AudioClip clickSE;
     [SerializeField] private AudioClip collectSE;
+    [SerializeField] private AudioClip openSE;
 
     //íe
     [SerializeField] private AudioClip bindHitSE;//çΩ
@@ -62,6 +63,11 @@ public class SEManager : MonoBehaviour
     public void PlayCollectSE()
     {
         audioSource.PlayOneShot(collectSE);
+    }
+
+    public void PlayOpenSE()
+    {
+        audioSource.PlayOneShot(openSE);
     }
 
     // ìGíÖíeSE
