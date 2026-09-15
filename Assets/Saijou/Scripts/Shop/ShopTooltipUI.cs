@@ -44,16 +44,17 @@ public class ShopTooltipUI : MonoBehaviour
         if (currentSkill == null)
             return;
 
-        //最大レベルなら素材テキストを非表示
-        if (currentSkill.level >= currentSkill.maxLevel)
+        // 最大レベルかどうか
+        bool isMax = currentSkill.IsMaxLevel();
+
+        if (isMax)
         {
-            //SetMaxLevelTextVisible(false);
-            //dollImage.gameObject.SetActive(false);
-            needImages.SetActive(false);
+            // 最大レベル
+            SetMaxLevelTextVisible(false);
             return;
         }
 
-        // 最大レベルではない場合は表示
+        // 最大レベルではない
         SetMaxLevelTextVisible(true);
 
         // 素材数を毎フレーム更新

@@ -25,7 +25,7 @@ public class ShopUPButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     [SerializeField] private SkillData[] allSkills;
 
     [Header("最大レベル表示")]
-    //[SerializeField] private GameObject maxLevelText;
+    [SerializeField] private GameObject maxLevelText;
 
     [Header("レベル表示")]
     [SerializeField] private Image[] levelImages;
@@ -79,6 +79,10 @@ public class ShopUPButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     /// </summary>
     public void OnClick()
     {
+        // 最大レベルなら何もしない
+        if (data.IsMaxLevel())
+            return;
+
         // 必要経験値が足りなければ何もしない
         if (!data.CanLevelUp())
             return;
