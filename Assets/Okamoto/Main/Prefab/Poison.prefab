@@ -54,14 +54,14 @@ MonoBehaviour:
   ammoUISprite: {fileID: 0}
   stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   hitDamage: 0
-  poisonRadius: 130
+  poisonRadius: 170
   totalPoisonRadius: 0
   poisonDamage: 5
   poisonInterval: 0.5
   poisonDuration: 5
   poisonEffectPrefab: {fileID: 7685418010954426004, guid: d8f330f468ff8f94e8ac39d12e412461, type: 3}
-  effectSize: 50
-  effectOffset: {x: 100, y: -100, z: 0}
+  effectSize: 130
+  effectOffset: {x: 150, y: -270, z: 0}
   effectSimulationSpeed: 0.5
   stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
 --- !u!212 &6253829430372542568

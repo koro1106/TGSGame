@@ -270,18 +270,29 @@ public class BossMove : MonoBehaviour, IHitSlowable
         state = State.Enter;
     }
 
-    void HandleBossDeath()
+void HandleBossDeath()
     {
         // 死亡した瞬間に赤いチャージ（狙いビーム）が残らないよう即座に非表示にする
-        //   Telegraph状態の途中で死亡すると、Update()がenemyHP.IsDying()で
-        //   即returnしてしまいUpdateTelegraph()側の非表示処理が実行されないため、
-        //   ここで確実に消す。
         if (telegraphVisual != null)
         {
             telegraphVisual.gameObject.SetActive(false);
         }
 
-        // 二重通知を防ぐガードを追加
+        // =====================================================
+        // Resultでリセットされた場合
+        //
+        // ResultManagerによってボスが削除された場合は
+        // 「ボス撃破」として扱わない。
+        // BossDefeated()を呼ぶと通常敵のスポーン状態まで
+        // 変わってしまうため、ここで止める。
+        // =====================================================
+
+        if (ResultManager.IsResultActive)
+        {
+            return;
+        }
+
+        // 二重通知を防ぐガード
         if (hasNotifiedDefeat) return;
         hasNotifiedDefeat = true;
 

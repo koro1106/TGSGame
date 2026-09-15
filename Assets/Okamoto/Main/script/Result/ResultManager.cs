@@ -175,16 +175,24 @@ public class ResultManager : MonoBehaviour
     // =========================================================
 
     public void AddCollectedItem(
-        DropItemType type,
-        int amount)
+    DropItemType type,
+    int amount)
     {
         if (collectedItems.ContainsKey(type))
         {
-            collectedItems[type] += amount;
+            collectedItems[type] =
+                Mathf.Clamp(
+                    collectedItems[type] + amount,
+                    0,
+                    9999
+                );
         }
         else
         {
-            collectedItems.Add(type, amount);
+            collectedItems.Add(
+                type,
+                Mathf.Clamp(amount, 0, 9999)
+            );
         }
     }
 
@@ -316,6 +324,11 @@ public class ResultManager : MonoBehaviour
                 Destroy(bullet.gameObject);
             }
         }
+        // =====================================================
+        // 雷などの残っているエフェクトを即削除
+        // =====================================================
+
+        ClearAllBulletEffects();
 
         // 貫通弾
         penetratingbullet[] penetratingBullets =
@@ -431,8 +444,38 @@ public class ResultManager : MonoBehaviour
             }
         }
 
+// =====================================================
+// BossMoveも削除
+// =====================================================
 
+BossMove[] bossEnemies =
+    FindObjectsOfType<BossMove>();
 
+        foreach (BossMove boss in bossEnemies)
+        {
+            if (boss != null)
+            {
+                // 影・チャージビームなどを先に削除
+                boss.HideShadow();
+
+                // ボス本体を削除
+                Destroy(boss.gameObject);
+            }
+        }
+
+        // =====================================================
+        // BossHPBarも非表示にする
+        // =====================================================
+
+        BossHPBar[] bossHPBars = FindObjectsOfType<BossHPBar>();
+
+        foreach (BossHPBar bossHPBar in bossHPBars)
+        {
+            if (bossHPBar != null)
+            {
+                bossHPBar.Hide();
+            }
+        }
 
         // =====================================================
         // 現在のTimeScaleを保存
@@ -601,10 +644,10 @@ public class ResultManager : MonoBehaviour
 
         if (playerData != null)
         {
-            targetExp1 = playerData.currentExp_1;
-            targetExp2 = playerData.currentExp_2;
-            targetExp3 = playerData.currentExp_3;
-            targetPreExp = playerData.currentPreExp;
+            targetExp1 = Mathf.Clamp(playerData.currentExp_1, 0, 9999);
+            targetExp2 = Mathf.Clamp(playerData.currentExp_2, 0, 9999);
+            targetExp3 = Mathf.Clamp(playerData.currentExp_3, 0, 9999);
+            targetPreExp = Mathf.Clamp(playerData.currentPreExp, 0, 9999);
         }
 
 
@@ -944,7 +987,7 @@ public class ResultManager : MonoBehaviour
         // アイテム同士の間隔
         // =====================================================
 
-        float spacing = 400f;
+        float spacing = 300f;
 
 
         // =====================================================
@@ -1890,6 +1933,10 @@ public class ResultManager : MonoBehaviour
 
     private void ClearAllBulletEffects()
     {
+        // =====================================================
+        // 登録されている弾エフェクトを削除
+        // =====================================================
+
         for (int i = activeEffects.Count - 1; i >= 0; i--)
         {
             if (activeEffects[i] != null)
@@ -1899,6 +1946,22 @@ public class ResultManager : MonoBehaviour
         }
 
         activeEffects.Clear();
+
+
+        // =====================================================
+        // 雷エフェクトを即削除
+        // =====================================================
+
+        LightningLineEffect[] lightningEffects =
+            FindObjectsOfType<LightningLineEffect>();
+
+        foreach (LightningLineEffect lightning in lightningEffects)
+        {
+            if (lightning != null)
+            {
+                Destroy(lightning.gameObject);
+            }
+        }
     }
 
     /// 探索続行ボタン

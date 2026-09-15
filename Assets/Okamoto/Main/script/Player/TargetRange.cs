@@ -165,6 +165,7 @@ public class TargetRange : MonoBehaviour
 
     private bool isLockAnimationFinished = false;
 
+    private float aimingStartTime = 0f;
 
     // =========================================================
     // Start
@@ -463,7 +464,6 @@ public class TargetRange : MonoBehaviour
 
             if (isInRange)
             {
-                // ’Êí‚Í130ˆÈ“à
                 if (distanceFromCrosshair >
                     crosshairRange)
                 {
@@ -478,7 +478,6 @@ public class TargetRange : MonoBehaviour
 
             else
             {
-                // ”ÍˆÍŠO‚Í‚©‚È‚è¸“x‚ğ‰º‚°‚é
                 if (distanceFromCrosshair >
                     outOfRangeCrosshairRange)
                 {
@@ -518,21 +517,88 @@ public class TargetRange : MonoBehaviour
 
 
         // =====================================================
-        // “¯‚¶“G‚ğ‘_‚Á‚Ä‚¢‚é
+        // ‚·‚Å‚É‘_‚¢n‚ß‚Ä‚¢‚é“G‚ğ—Dæ
         // =====================================================
 
-        if (aimingEnemy ==
-            closestToCrosshair)
+        if (aimingEnemy != null)
         {
-            aimingTimer +=
-                Time.deltaTime;
+            // ‘_‚Á‚Ä‚¢‚é“G‚ª‚Ü‚¾¶‚«‚Ä‚¢‚é‚È‚ç
+            // •Ê‚Ì“G‚ÖŠÈ’P‚ÉØ‚è‘Ö‚¦‚È‚¢
+            if (!aimingEnemy.IsDying())
+            {
+                float aimingDistanceFromPlayer =
+                    Vector2.Distance(
+                        transform.position,
+                        aimingEnemy.transform.position
+                    );
+
+
+                bool aimingEnemyIsInRange =
+                    aimingDistanceFromPlayer <=
+                    targetRange;
+
+
+                float aimingDistanceFromCrosshair =
+                    Vector2.Distance(
+                        crosshair.position,
+                        aimingEnemy.transform.position
+                    );
+
+
+                bool stillAimingEnemy =
+                    aimingEnemyIsInRange
+                        ? aimingDistanceFromCrosshair <=
+                          crosshairRange
+                        : aimingDistanceFromCrosshair <=
+                          outOfRangeCrosshairRange;
+
+
+                if (stillAimingEnemy)
+                {
+                    // ¡‘_‚Á‚Ä‚¢‚é“G‚ğˆÛ
+                    closestToCrosshair =
+                        aimingEnemy;
+                }
+                else
+                {
+                    // –{“–‚É”ÍˆÍ‚©‚çŠO‚ê‚½‚¾‚¯‰ğœ
+                    aimingEnemy = null;
+
+                    aimingTimer = 0f;
+                }
+            }
+            else
+            {
+                aimingEnemy = null;
+
+                aimingTimer = 0f;
+            }
         }
-        else
+
+
+        // =====================================================
+        // V‚µ‚­‘_‚¢n‚ß‚½
+        // =====================================================
+
+        if (aimingEnemy != closestToCrosshair)
         {
             aimingEnemy =
                 closestToCrosshair;
 
+            aimingStartTime =
+                Time.time;
+
             aimingTimer = 0f;
+        }
+        else
+        {
+            // =================================================
+            // Œo‰ßŠÔ‚ğ’¼ÚŒvZ
+            // =================================================
+
+            aimingTimer =
+                Time.time -
+                aimingStartTime;
         }
 
 
