@@ -436,6 +436,38 @@ public class CarePackage : MonoBehaviour
         shadow.rotation = Quaternion.identity;
     }
 
+    // =========================
+    // リザルト時リセット
+    // =========================
+
+    public void ResetForResult()
+    {
+        // HPを初期状態へ戻す
+        currentHP = maxHP;
+
+        // 落下状態を初期化
+        landed = false;
+
+        // スカッシュ状態を初期化
+        squashing = false;
+        squashPhaseDone = false;
+        squashTimer = 0f;
+
+        // スケールを初期状態へ戻す
+        transform.localScale = baseScale;
+
+        // 影が残っていたら削除
+        if (shadow != null)
+        {
+            Destroy(shadow.gameObject);
+            shadow = null;
+            shadowRenderer = null;
+        }
+
+        // 影を作り直す
+        CreateShadow();
+    }
+
     private void OnDestroy()
     {
         if (shadow != null)

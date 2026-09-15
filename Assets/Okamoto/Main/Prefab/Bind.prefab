@@ -50,6 +50,7 @@ MonoBehaviour:
   stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   lifeTime: 3
   bindTime: 3
+  damage: 130
   searchRadius: 5000
   bindCount: 3
   chainPrefab: {fileID: 7630586307687527792, guid: 944212acaa5ff2049970955f4576f618, type: 3}

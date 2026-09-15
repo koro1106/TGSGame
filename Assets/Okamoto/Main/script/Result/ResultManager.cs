@@ -248,6 +248,20 @@ public class ResultManager : MonoBehaviour
             pauseUI.SetActive(false);
         }
 
+        // =====================================================
+// CarePackageを全て削除
+// =====================================================
+
+CarePackage[] carePackages = FindObjectsOfType<CarePackage>();
+
+foreach (CarePackage carePackage in carePackages)
+{
+    if (carePackage != null)
+    {
+        Destroy(carePackage.gameObject);
+    }
+}
+
 
         // =====================================================
         // すでに飛んでいる弾を全部削除
@@ -1319,6 +1333,21 @@ BossMove[] bossEnemies =
                     // ★ スライド中にフィールド上の全弾を削除
                     ClearAllBullets();
                     ClearAllBulletEffects();
+
+                    // =====================================================
+                    // CarePackageをリセット
+                    // =====================================================
+
+                    CarePackage[] carePackages =
+                        FindObjectsOfType<CarePackage>();
+
+                    foreach (CarePackage carePackage in carePackages)
+                    {
+                        if (carePackage != null)
+                        {
+                            carePackage.ResetForResult();
+                        }
+                    }
 
                     // 敵のHP増加をリセット
                     if (enemySpawner != null)

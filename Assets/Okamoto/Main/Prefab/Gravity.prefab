@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GravityBullet
   lifeTime: 5
-  damage: 0
+  damage: 100
   gravityRadius: 500
   pullForce: 700
   gravityDuration: 4

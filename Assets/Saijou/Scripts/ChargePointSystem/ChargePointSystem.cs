@@ -28,7 +28,7 @@ public class ChargePointSystem : MonoBehaviour
         // PlayerDataのExp3を取得してポイントとして読み込む
         if (playerData != null)
         {
-            point = playerData.currentExp_3;
+            point = playerData.currentExp_2;
         }
 
         // ゲージ初期化
@@ -63,7 +63,7 @@ public class ChargePointSystem : MonoBehaviour
             currentGauge = 0f;
 
             // Exp3を1個取得
-            AddPoint(1);
+            AddPoint(15);
         }
     }
 
@@ -80,10 +80,10 @@ public class ChargePointSystem : MonoBehaviour
         // PlayerDataにExp3として保持
         if (playerData != null)
         {
-            playerData.currentExp_3 += amount;
+            playerData.currentExp_2 += amount;
 
             // pointもExp3と同期
-            point = playerData.currentExp_3;
+            point = playerData.currentExp_2;
         }
 
 
@@ -91,7 +91,7 @@ public class ChargePointSystem : MonoBehaviour
         if (DropPickupLog.Instance != null)
         {
             DropPickupLog.Instance.ShowPickup(
-                DropItemType.Exp3,
+                DropItemType.Exp2,
                 amount
             );
         }

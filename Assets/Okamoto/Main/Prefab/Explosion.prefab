@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BulletXplosion
   speed: 15
   lifeTime: 5
-  damage: 20
+  damage: 500
   ammoDropPrefab: {fileID: 0}
   ammoUISprite: {fileID: 0}
   hitEffectPrefab: {fileID: 1589372725528616123, guid: a0fa4379c4236e641834abdb60659844, type: 3}
