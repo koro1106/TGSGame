@@ -49,14 +49,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PoisonBullet
   speed: 15
   lifeTime: 5
-  damage: 11
+  damage: 30
   ammoDropPrefab: {fileID: 0}
   ammoUISprite: {fileID: 0}
   stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
-  hitDamage: 0
+  hitDamage: 15
   poisonRadius: 170
   totalPoisonRadius: 0
-  poisonDamage: 5
+  poisonDamage: 15
   poisonInterval: 0.5
   poisonDuration: 5
   poisonEffectPrefab: {fileID: 7685418010954426004, guid: d8f330f468ff8f94e8ac39d12e412461, type: 3}

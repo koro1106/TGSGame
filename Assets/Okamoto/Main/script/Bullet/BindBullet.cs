@@ -19,6 +19,8 @@ public class BindBullet : MonoBehaviour
     public float lifeTime = 3f;
     public float bindTime = 3f;
 
+    [SerializeField] private int damage;
+
     //==============================
     // S‘©İ’è
     //==============================
@@ -26,6 +28,8 @@ public class BindBullet : MonoBehaviour
     [Header("S‘©İ’è")]
     public float searchRadius = 5f;
     public int bindCount = 3;
+
+
 
     //==============================
     // ½İ’è
@@ -105,17 +109,27 @@ public class BindBullet : MonoBehaviour
 
         hasHit = true;
 
-        // ½’e’…’eSE
-        if (SEManager.Instance != null)
-        {
-            SEManager.Instance.PlayBindHitSE();
-        }
+        //==============================
+        // EnemyHPæ“¾
+        //==============================
 
         EnemyHP firstEnemy =
             other.GetComponent<EnemyHP>();
 
         if (firstEnemy == null)
             return;
+
+        //==============================
+        // ƒ_ƒ[ƒW
+        //==============================
+
+        firstEnemy.TakeDamage(damage);
+
+        // ½’e’…’eSE
+        if (SEManager.Instance != null)
+        {
+            SEManager.Instance.PlayBindHitSE();
+        }
 
         Collider2D col =
             GetComponent<Collider2D>();
@@ -236,6 +250,9 @@ public class BindBullet : MonoBehaviour
         foreach (EnemyHP enemy in targets)
         {
             enemy.StartBind(bindTime);
+
+            // ƒ_ƒ[ƒW
+            enemy.TakeDamage(damage);
 
             if (enemy == firstEnemy)
                 continue;
@@ -573,5 +590,13 @@ public class BindBullet : MonoBehaviour
             // Œ»İ‚Ìó‘Ô‚Å’â~
             particle.Pause(true);
         }
+    }
+    //==============================
+    // ƒ_ƒ[ƒWİ’è
+    //==============================
+
+    public void SetDamage(int value)
+    {
+        damage = value;
     }
 }

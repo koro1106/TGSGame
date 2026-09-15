@@ -1947,14 +1947,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 74df801901b12d44c8087b6bd772724a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 41bdf89b83ae8f64292946428987f554, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5446,14 +5446,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.10938978, g: 0, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5ee2ff397632f31498520177718e12d4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5dd9485b77ecea7458e091feb65cc84b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8294,14 +8294,14 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 430704318}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.75, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1393036618}
   m_Father: {fileID: 1808084534}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 840.2051, y: 6.1374}
@@ -8371,8 +8371,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 6d497d26b5ab16b4baf1555b9def02d8, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -8796,7 +8796,7 @@ Transform:
   m_GameObject: {fileID: 472724069}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 541.2001, y: 175.79999, z: 0}
+  m_LocalPosition: {x: 224, y: 175.79999, z: 0}
   m_LocalScale: {x: 0.66, y: 0.66, z: 0.66}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -8859,7 +8859,7 @@ MonoBehaviour:
   blinkCooldown: 2
   playerImage: {fileID: 173762202}
   playerDisplayImage: {fileID: 173762203}
-  idleSprite: {fileID: 21300000, guid: 686cf9fe808a0164e9b3df73855c634b, type: 3}
+  idleSprite: {fileID: 21300000, guid: 8a8783bc9a62ed04fb45a302cff9b0a8, type: 3}
   walkFrames:
   - {fileID: 21300000, guid: e0c7b5399a217784aac255e095d32325, type: 3}
   - {fileID: 21300000, guid: c1758df2d5b14cd448474f261cc41248, type: 3}
@@ -12944,7 +12944,6 @@ MonoBehaviour:
   - {fileID: 6812141048282945842, guid: 422d710f4cfeb084d880cf1fcecc60f9, type: 3}
   - {fileID: 2218497407943198192, guid: ba778a25b26603e488f2f6370e8852bd, type: 3}
   - {fileID: 2218497407943198192, guid: 182642bc087fe684ba133f2131c0527e, type: 3}
-  - {fileID: 2218497407943198192, guid: d1d06472924c4cb469288fe6d48b1a23, type: 3}
   muzzle: {fileID: 887336086}
   bulletSpeed: 2000
   spreadAngle: 15
@@ -14955,7 +14954,7 @@ RectTransform:
   m_GameObject: {fileID: 860758117}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.75, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1813507738}
@@ -15030,8 +15029,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 6d497d26b5ab16b4baf1555b9def02d8, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -21211,14 +21210,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.05057144, g: 1, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1781104195001140493, guid: 7f5b58fc3575f864ea7a5af013b47b0e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fc42b3ecaff01464eb2b17aa94c8000f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -23859,7 +23858,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1393036618
 RectTransform:
   m_ObjectHideFlags: 0
@@ -28057,13 +28056,13 @@ MonoBehaviour:
     weight: 80
     useCustomGrowth: 1
     growInterval: 5
-    growMultiplier: 1.5
+    growMultiplier: 1.25
   enemyB:
     prefab: {fileID: 6737240972690251372, guid: 7322b40b35c85b0478ffa94edeb4b561, type: 3}
     weight: 70
     useCustomGrowth: 1
     growInterval: 5
-    growMultiplier: 1.5
+    growMultiplier: 1.25
   enemyC:
     prefab: {fileID: 0}
     weight: 0
@@ -28079,7 +28078,7 @@ MonoBehaviour:
   playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   bossPrefab: {fileID: 1535677997056505620, guid: 38e0c4e553ed7874584eba5a894cc60f, type: 3}
   bossComboThreshold: 50
-  bossHpGrowAmount: 5000
+  bossHpGrowAmount: 1250
   bossHPBar: {fileID: 2125588650}
   spawnAreaTopRatio: 0.45
   spawnAreaBottomRatio: 1
@@ -29414,7 +29413,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1757153041
 RectTransform:
   m_ObjectHideFlags: 0
@@ -30309,7 +30308,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1813507738
 RectTransform:
   m_ObjectHideFlags: 0
@@ -31340,7 +31339,6 @@ MonoBehaviour:
   - {fileID: 6812141048282945842, guid: 422d710f4cfeb084d880cf1fcecc60f9, type: 3}
   - {fileID: 2218497407943198192, guid: 8396620abd9e9264dbcc7ec0b14d6671, type: 3}
   - {fileID: 2218497407943198192, guid: 182642bc087fe684ba133f2131c0527e, type: 3}
-  - {fileID: 2218497407943198192, guid: d1d06472924c4cb469288fe6d48b1a23, type: 3}
   bulletSpeed: 3500
   muzzle: {fileID: 554859124}
   targetRange: {fileID: 1485909830}
@@ -31526,7 +31524,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 41792c4124a813b47871cc1c1cd5db3a, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -32968,7 +32966,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 41.799927, y: 131.19998}
+  m_AnchoredPosition: {x: 65, y: 125}
   m_SizeDelta: {x: 196.3, y: 211}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1964341957
@@ -33036,7 +33034,6 @@ MonoBehaviour:
   - {fileID: 6812141048282945842, guid: 422d710f4cfeb084d880cf1fcecc60f9, type: 3}
   - {fileID: 2218497407943198192, guid: ba778a25b26603e488f2f6370e8852bd, type: 3}
   - {fileID: 2218497407943198192, guid: 182642bc087fe684ba133f2131c0527e, type: 3}
-  - {fileID: 2218497407943198192, guid: d1d06472924c4cb469288fe6d48b1a23, type: 3}
   unlockBullet: 0
   stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   shootInterval: 0.7

@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChainBullet
   lifeTime: 3
-  damage: 20
+  damage: 200
   chainCount: 2
   chainRadius: 2000
   lightningPrefab: {fileID: 4514482655411187178, guid: 70492705cbd050b45b3492ec316dddbd, type: 3}

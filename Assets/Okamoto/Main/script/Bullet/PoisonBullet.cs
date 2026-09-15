@@ -260,8 +260,13 @@ public class PoisonBullet : Bullet
                 if (enemy == null)
                     continue;
 
+                // É_ÉÅÅ[ÉW
+                int totalDamage =
+                    hitDamage +
+                    stats.bulletDamage +
+                    stats.effectBulletDamage;
                 enemy.TakeDamage(
-                    poisonDamage, false, EnemyHP.DamageAttribute.Poison);
+                    totalDamage, false, EnemyHP.DamageAttribute.Poison);
             }
 
             yield return new WaitForSeconds(
