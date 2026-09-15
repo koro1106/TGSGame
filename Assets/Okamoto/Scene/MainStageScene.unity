@@ -28060,7 +28060,7 @@ MonoBehaviour:
     prefab: {fileID: 6737240972690251372, guid: 7322b40b35c85b0478ffa94edeb4b561, type: 3}
     weight: 70
     useCustomGrowth: 1
-    growInterval: 5
+    growInterval: 15
     growMultiplier: 1.1
   enemyC:
     prefab: {fileID: 0}
@@ -28082,7 +28082,7 @@ MonoBehaviour:
   spawnAreaTopRatio: 0.45
   spawnAreaBottomRatio: 1
   initialEnemyCount: 3
-  initialEnemyMinDistanceFromPlayer: 1200
+  initialEnemyMinDistanceFromPlayer: 1000
 --- !u!4 &1683393130
 Transform:
   m_ObjectHideFlags: 0
