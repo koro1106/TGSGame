@@ -16,7 +16,7 @@ public class Bullet : MonoBehaviour
     public GameObject ammoDropPrefab;
     public Sprite ammoUISprite;
 
-    private Vector3 defaultScale = new Vector3(210.7f, 95.8f, 144.1f);
+    private Vector3 defaultScale = new Vector3(40f, 50f, 144.1f);
     public PlayerStats stats;
 
     void Start()

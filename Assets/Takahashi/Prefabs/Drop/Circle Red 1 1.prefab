@@ -217,6 +217,9 @@ MonoBehaviour:
   shadowPrefab: {fileID: 1354215260935572172, guid: 536db39859af53a47928bcbe00400608, type: 3}
   isValuable: 0
   valuableChild: {fileID: 7208537397599038965}
+  collectShrinkSpeed: 8
+  collectSE: {fileID: 8300000, guid: 7d885dc17e3888348971a1355a6c1871, type: 3}
+  collectSEVolume: 1
 --- !u!58 &-7901242330271830453
 CircleCollider2D:
   m_ObjectHideFlags: 0

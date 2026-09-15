@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1119.1451, y: 469.2324, z: 50}
-  m_LocalScale: {x: 210.7, y: 95.8, z: 144.1}
+  m_LocalScale: {x: 20, y: 30, z: 46.49226}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -55,7 +55,6 @@ MonoBehaviour:
   chainRadius: 2000
   lightningPrefab: {fileID: 4514482655411187178, guid: 70492705cbd050b45b3492ec316dddbd, type: 3}
   hitEffectPrefab: {fileID: 1023961267518418972, guid: 18b7573f855935149aebb63cf62be200, type: 3}
-  hitSound: {fileID: 8300000, guid: 92202c2a4fa23c445820a27fcf2f61f4, type: 3}
   ammoDropPrefab: {fileID: 5431272660784949491, guid: 59c1a1cf82a32ed419e3dafc1bfda765, type: 3}
   ammoUISprite: {fileID: 8450537012972342862, guid: bcdad1804b565a0489879a3791651db1, type: 3}
   stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
@@ -108,7 +107,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 115
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 4087d00fb50b02942b854933f412cc84, type: 3}
   m_Color: {r: 0, g: 0.55981636, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
