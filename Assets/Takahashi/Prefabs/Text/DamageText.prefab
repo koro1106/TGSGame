@@ -216,6 +216,6 @@ MonoBehaviour:
   criticalScaleMultiplier: 1
   criticalFontSizeMultiplier: 1.5
   criticalIconPrefab: {fileID: 4773665319421822162, guid: 958eab8ebabc2694dae6e550c841970d, type: 3}
-  criticalIconOffset: {x: 0, y: 100}
+  criticalIconOffset: {x: 0, y: 75}
   criticalIconScale: 30
   criticalIconLifetime: 0.4
