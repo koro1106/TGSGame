@@ -113,6 +113,9 @@ MonoBehaviour:
   - prefab: {fileID: 5214269435395224199, guid: 804cf549acb99c949910006ff076e73f, type: 3}
     dropRate: 33
   maxHP: 50
+  requireLandedForDamage: 1
+  requireLandedForPlayerContact: 1
+  playerTag: Player
   fallSpeed: 300
   groundY: 0
   fallSquashScaleX: 0.9

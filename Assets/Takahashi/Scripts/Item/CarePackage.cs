@@ -27,6 +27,20 @@ public class CarePackage : MonoBehaviour
     private bool landed;
 
     // =========================
+    // 破壊条件
+    // =========================
+
+    [Header("── 破壊条件 ──────────")]
+    [Tooltip("ONの場合、着地するまでダメージを受け付けない。OFFの場合、落下中でもダメージで壊せる")]
+    [SerializeField] private bool requireLandedForDamage = true;
+
+    [Tooltip("ONの場合、着地するまでプレイヤー接触では壊れない。OFFの場合、落下中でも接触で壊せる")]
+    [SerializeField] private bool requireLandedForPlayerContact = true;
+
+    [Tooltip("プレイヤーのタグ名")]
+    [SerializeField] private string playerTag = "Player";
+
+    // =========================
     // 落下
     // =========================
 
@@ -208,12 +222,36 @@ public class CarePackage : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (!landed) return;
+        if (requireLandedForDamage && !landed) return;
 
         currentHP -= damage;
 
         if (currentHP <= 0)
             BreakBox();
+    }
+
+    // =========================
+    // プレイヤー接触
+    // =========================
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        HandlePlayerContact(other.gameObject);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        HandlePlayerContact(collision.gameObject);
+    }
+
+    private void HandlePlayerContact(GameObject other)
+    {
+        if (requireLandedForPlayerContact && !landed) return;
+
+        if (other.CompareTag(playerTag))
+        {
+            BreakBox();
+        }
     }
 
     // =========================
