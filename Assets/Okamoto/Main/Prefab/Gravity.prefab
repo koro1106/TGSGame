@@ -49,10 +49,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GravityBullet
   lifeTime: 5
   damage: 0
-  gravityRadius: 1000
+  gravityRadius: 500
   pullForce: 700
   gravityDuration: 4
-  gravityEffect: {fileID: 0}
+  gravityEffect: {fileID: 7813041853216502333, guid: 2d9748627d73b81499a2706165f9ed54, type: 3}
   stats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
 --- !u!212 &6253829430372542568
 SpriteRenderer:
