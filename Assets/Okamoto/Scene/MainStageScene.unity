@@ -2901,6 +2901,7 @@ MonoBehaviour:
   backSE: {fileID: 0}
   clickSE: {fileID: 8300000, guid: 08ccb571f21f92e43a3b87c9c993f335, type: 3}
   collectSE: {fileID: 8300000, guid: 7d885dc17e3888348971a1355a6c1871, type: 3}
+  openSE: {fileID: 0}
   bindHitSE: {fileID: 8300000, guid: f2c2730a9d8429a48b680cc5bbac982c, type: 3}
   explosionHitSE: {fileID: 8300000, guid: e5c3e8118b50cc24896b752dd3e2fefa, type: 3}
   poisonHitSE: {fileID: 8300000, guid: 46e00676b4ec2864f8be57f6d6c0f821, type: 3}
@@ -28046,24 +28047,37 @@ MonoBehaviour:
   enemies:
   - prefab: {fileID: 5100497116774911822, guid: 6b6f368167eaea047a26e7c3744d25c9, type: 3}
     weight: 100
+    useCustomGrowth: 1
+    growInterval: 5
+    growMultiplier: 1.4
   enemyA:
     prefab: {fileID: 5658466300848699742, guid: 4451329126ffa93498ccea07ae4d06a7, type: 3}
     weight: 80
+    useCustomGrowth: 1
+    growInterval: 5
+    growMultiplier: 1.1
   enemyB:
     prefab: {fileID: 6737240972690251372, guid: 7322b40b35c85b0478ffa94edeb4b561, type: 3}
     weight: 70
+    useCustomGrowth: 1
+    growInterval: 15
+    growMultiplier: 1.1
   enemyC:
     prefab: {fileID: 0}
     weight: 0
+    useCustomGrowth: 0
+    growInterval: 15
+    growMultiplier: 1.2
   spawnList: []
   player: {fileID: 173762202}
-  spawnInterval: 3.5
+  spawnInterval: 2.5
   s: 0
   hpGrowInterval: 5
   hpGrowMultiplier: 1.1
   playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   bossPrefab: {fileID: 1535677997056505620, guid: 38e0c4e553ed7874584eba5a894cc60f, type: 3}
   bossComboThreshold: 50
+  bossHpGrowAmount: 500
   bossHPBar: {fileID: 2125588650}
   spawnAreaTopRatio: 0.45
   spawnAreaBottomRatio: 1
