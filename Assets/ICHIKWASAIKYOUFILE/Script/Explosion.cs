@@ -13,7 +13,7 @@ public class Bulletxplosion : MonoBehaviour
     public Sprite ammoUISprite;
 
     [Header("Hit Effect")]
-    public ParticleSystem hitEffectPrefab;
+    public GameObject hitEffectPrefab;
 
     // ▼追加
     [Header("Explosion Size")]
@@ -25,7 +25,9 @@ public class Bulletxplosion : MonoBehaviour
 
     void Start()
     {
-        transform.localScale = defaultScale + Vector3.one * playerStats.bulletSize;
+        transform.localScale =
+            defaultScale + Vector3.one * playerStats.bulletSize;
+
         Destroy(gameObject, lifeTime);
     }
 
@@ -62,8 +64,6 @@ public class Bulletxplosion : MonoBehaviour
                 package.TakeDamage(damage);
             }
 
-            // エフェクトを出したい場合はここにも追加可能
-
             Destroy(gameObject);
             return;
         }
@@ -93,23 +93,28 @@ public class Bulletxplosion : MonoBehaviour
         );
 
         // ========================
-        // 爆発エフェクト
+        // 爆発エフェクトPrefab生成
         // ========================
         if (hitEffectPrefab != null)
         {
-            ParticleSystem effect = Instantiate(
+            totalExplosionSize =
+                explosionSize +
+                playerStats.explosionRangeUP;
+
+            GameObject effect = Instantiate(
                 hitEffectPrefab,
                 transform.position,
                 Quaternion.identity
             );
 
-            totalExplosionSize =
-                explosionSize +
-                playerStats.explosionRangeUP;
-
             effect.transform.localScale =
-                Vector3.one *
-                totalExplosionSize;
+                Vector3.one * totalExplosionSize;
+
+            // =====================================================
+            // リザルト時に爆発エフェクトも削除できるよう登録
+            // =====================================================
+
+            ResultManager.RegisterEffect(effect);
         }
 
         Destroy(gameObject);

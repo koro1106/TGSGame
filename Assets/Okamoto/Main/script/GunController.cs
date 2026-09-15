@@ -1209,6 +1209,13 @@ public class GunController : MonoBehaviour
 
         int recoverCount = targetAmmo - oldAmmo;
 
+        if (recoverCount <= 0)
+            return;
+
+        // =========================================
+        // ★ currentAmmoはここで確定
+        // =========================================
+
         currentAmmo = targetAmmo;
 
         for (int index = oldAmmo; index < targetAmmo; index++)
@@ -1220,8 +1227,6 @@ public class GunController : MonoBehaviour
                 continue;
             }
 
-            // ★重要
-            // for文のindexをそのままラムダ式で使わない
             int slotIndex = index;
 
             AmmoSlot slot = ammoSlots[slotIndex];
@@ -1232,85 +1237,21 @@ public class GunController : MonoBehaviour
             slot.isRecovering = true;
 
             // =========================================
-            // 回復する弾
+            // 回復する弾のデータを決定
             // =========================================
 
-            AmmoType recoveredType = AmmoType.Normal;
-            Sprite recoveredSprite = normalAmmoSprite;
+            AmmoType recoveredType;
+            Sprite recoveredSprite;
+            GameObject recoveredPrefab;
 
-            GameObject recoveredPrefab = null;
-
-            if (bulletPrefabs != null &&
-                bulletPrefabs.Length > 0)
-            {
-                recoveredPrefab = bulletPrefabs[0];
-            }
-
-            // =========================================
-            // ★回復する弾にも属性弾を抽選
-            // =========================================
-
-            bool canElement =
-                stats != null &&
-                stats.unlockedElementalBullets != null &&
-                stats.unlockedElementalBullets.Length > 0;
-
-            if (canElement &&
-                Random.value < stats.elementalBulletChance)
-            {
-                GameObject randomPrefab =
-                    stats.unlockedElementalBullets[
-                        Random.Range(
-                            0,
-                            stats.unlockedElementalBullets.Length
-                        )
-                    ];
-
-                if (randomPrefab != null)
-                {
-                    string bulletName = randomPrefab.name;
-
-                    if (bulletName.Contains("Lightning"))
-                    {
-                        recoveredType = AmmoType.Lightning;
-                        recoveredSprite = lightningAmmoSprite;
-                        recoveredPrefab = randomPrefab;
-                    }
-                    else if (bulletName.Contains("Gravity"))
-                    {
-                        recoveredType = AmmoType.Gravity;
-                        recoveredSprite = GravityAmmoSprite;
-                        recoveredPrefab = randomPrefab;
-                    }
-                    else if (bulletName.Contains("Bind"))
-                    {
-                        recoveredType = AmmoType.Bind;
-                        recoveredSprite = BindAmmoSprite;
-                        recoveredPrefab = randomPrefab;
-                    }
-                    else if (bulletName.Contains("Poison"))
-                    {
-                        recoveredType = AmmoType.Poison;
-                        recoveredSprite = PoisonAmmoSprite;
-                        recoveredPrefab = randomPrefab;
-                    }
-                    else if (bulletName.Contains("Explosion"))
-                    {
-                        recoveredType = AmmoType.Explosion;
-                        recoveredSprite = ExplosionAmmoSprite;
-                        recoveredPrefab = randomPrefab;
-                    }
-                    else if (bulletName.Contains("Penetrating"))
-                    {
-                        recoveredType = AmmoType.Penetrating;
-                        recoveredSprite = penetratingAmmoSprite;
-                        recoveredPrefab = randomPrefab;
-                    }
-                }
-            }
+            GetRandomAmmoData(
+                out recoveredType,
+                out recoveredSprite,
+                out recoveredPrefab
+            );
 
             // =========================================
-            // ★回復する弾のデータを先に入れる
+            // ★実弾データを先に保存
             // =========================================
 
             ammoTypes[slotIndex] = recoveredType;
@@ -1329,7 +1270,7 @@ public class GunController : MonoBehaviour
             }
 
             // =========================================
-            // 回復演出
+            // 回復演出あり
             // =========================================
 
             if (ammoRecoverEffectPrefab != null &&
@@ -1348,7 +1289,6 @@ public class GunController : MonoBehaviour
 
                 if (effect != null)
                 {
-                    // ★ここでもslotIndexを使う
                     effect.Init(
                         recoveredSprite,
                         slot.image.transform.position,
@@ -1361,24 +1301,24 @@ public class GunController : MonoBehaviour
 
                             slot.isRecovering = false;
 
-                            // UI
                             if (slot.image != null)
                             {
+                                // ★属性弾Spriteを確実に設定
                                 slot.image.sprite = recoveredSprite;
                                 slot.image.enabled = true;
                             }
 
                             slot.ammoType = recoveredType;
 
-                            // 実弾データ
+                            // ★実弾データももう一度確定
                             ammoTypes[slotIndex] = recoveredType;
                             ammoSprites[slotIndex] = recoveredSprite;
                             ammoPrefabs[slotIndex] = recoveredPrefab;
 
                             slot.recoverEffectObject = null;
 
-                            // 弾数
-                            //currentAmmo++;
+                            // ★currentAmmo++ は絶対にしない
+                            // AddAmmo()ですでに増加済み
 
                             UpdateAmmoUI();
                         }
@@ -1390,7 +1330,10 @@ public class GunController : MonoBehaviour
                         "AmmoRecoverEffectPrefab に AmmoRecoverEffect が付いていません。"
                     );
 
-                    // 演出がない扱いにして回復完了
+                    // =========================================
+                    // 演出がない扱い
+                    // =========================================
+
                     slot.isRecovering = false;
 
                     if (slot.image != null)
@@ -1403,8 +1346,9 @@ public class GunController : MonoBehaviour
                     ammoSprites[slotIndex] = recoveredSprite;
                     ammoPrefabs[slotIndex] = recoveredPrefab;
 
-                    currentAmmo++;
+                    slot.recoverEffectObject = null;
 
+                    // ★currentAmmo++ はしない
                     UpdateAmmoUI();
                 }
             }
@@ -1426,10 +1370,112 @@ public class GunController : MonoBehaviour
                 ammoSprites[slotIndex] = recoveredSprite;
                 ammoPrefabs[slotIndex] = recoveredPrefab;
 
-                currentAmmo++;
-
+                // ★currentAmmo++ はしない
                 UpdateAmmoUI();
             }
+        }
+
+        // =========================================
+        // ★最終的にUIを現在の弾データと同期
+        // =========================================
+
+        RefreshAmmoUIImmediate();
+    }
+
+    /// <summary>
+    /// 回復する弾の種類・Sprite・Prefabをまとめて決定する
+    /// </summary>
+    private void GetRandomAmmoData(
+        out AmmoType type,
+        out Sprite sprite,
+        out GameObject prefab)
+    {
+        // =========================================
+        // 初期値は通常弾
+        // =========================================
+
+        type = AmmoType.Normal;
+        sprite = normalAmmoSprite;
+        prefab = null;
+
+        if (bulletPrefabs != null &&
+            bulletPrefabs.Length > 0)
+        {
+            prefab = bulletPrefabs[0];
+        }
+
+        // =========================================
+        // 属性弾が存在するか
+        // =========================================
+
+        bool canElement =
+            stats != null &&
+            stats.unlockedElementalBullets != null &&
+            stats.unlockedElementalBullets.Length > 0;
+
+        if (!canElement)
+            return;
+
+        // =========================================
+        // 属性弾抽選
+        // =========================================
+
+        if (Random.value >= stats.elementalBulletChance)
+            return;
+
+        GameObject randomPrefab =
+            stats.unlockedElementalBullets[
+                Random.Range(
+                    0,
+                    stats.unlockedElementalBullets.Length
+                )
+            ];
+
+        if (randomPrefab == null)
+            return;
+
+        string bulletName =
+            randomPrefab.name;
+
+        // =========================================
+        // 属性判定
+        // =========================================
+
+        if (bulletName.Contains("Lightning"))
+        {
+            type = AmmoType.Lightning;
+            sprite = lightningAmmoSprite;
+            prefab = randomPrefab;
+        }
+        else if (bulletName.Contains("Gravity"))
+        {
+            type = AmmoType.Gravity;
+            sprite = GravityAmmoSprite;
+            prefab = randomPrefab;
+        }
+        else if (bulletName.Contains("Bind"))
+        {
+            type = AmmoType.Bind;
+            sprite = BindAmmoSprite;
+            prefab = randomPrefab;
+        }
+        else if (bulletName.Contains("Poison"))
+        {
+            type = AmmoType.Poison;
+            sprite = PoisonAmmoSprite;
+            prefab = randomPrefab;
+        }
+        else if (bulletName.Contains("Explosion"))
+        {
+            type = AmmoType.Explosion;
+            sprite = ExplosionAmmoSprite;
+            prefab = randomPrefab;
+        }
+        else if (bulletName.Contains("Penetrating"))
+        {
+            type = AmmoType.Penetrating;
+            sprite = penetratingAmmoSprite;
+            prefab = randomPrefab;
         }
     }
 
