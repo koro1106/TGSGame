@@ -12,28 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273875e9515bae4469b58e69f7b82692, type: 3}
   m_Name: OthersAbility_22
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "\u56DE\u53CE\u7BC4\u56F2 +100%"
+  skillName: "\u56DE\u53CE\u7BC4\u56F2 +2500%"
   level: 0
   maxLevel: 1
   requiredExps:
   - expType: 0
-    initialNeedExp: 50
-    needExp: 50
+    initialNeedExp: 100
+    needExp: 100
     addNeedExp: 50
   - expType: 1
     initialNeedExp: 50
     needExp: 50
     addNeedExp: 30
   - expType: 2
-    initialNeedExp: 15
-    needExp: 15
+    initialNeedExp: 20
+    needExp: 20
     addNeedExp: 15
   isUnlocked: 0
   isLevelUp: 0
   playerData: {fileID: 11400000, guid: 164f6e5742176024a85bfa4209c45c70, type: 2}
   effectType: 10
-  effectValue: 100
+  effectValue: 2500
   elementalBulletPrefab: {fileID: 0}
   description: 
   isShopUnlocked: 0
   isShopButton: 0
+  dollSilhouette: {fileID: 0}
+  dollImage: {fileID: 0}

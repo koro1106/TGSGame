@@ -17,16 +17,16 @@ MonoBehaviour:
   maxLevel: 1
   requiredExps:
   - expType: 0
-    initialNeedExp: 50
-    needExp: 50
+    initialNeedExp: 100
+    needExp: 100
     addNeedExp: 50
   - expType: 1
-    initialNeedExp: 50
-    needExp: 50
+    initialNeedExp: 80
+    needExp: 80
     addNeedExp: 30
   - expType: 2
-    initialNeedExp: 10
-    needExp: 10
+    initialNeedExp: 50
+    needExp: 50
     addNeedExp: 15
   isUnlocked: 0
   isLevelUp: 0
