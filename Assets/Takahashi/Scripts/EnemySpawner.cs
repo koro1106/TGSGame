@@ -7,6 +7,20 @@ public class EnemyData
 {
     public GameObject prefab;
     public int weight;
+
+    [Header("── この敵専用の時間経過HP増加 ──────────")]
+    [Tooltip("ONにすると、この敵はスポナー全体設定(HP Grow Interval / HP Grow Multiplier)ではなく、下記の専用設定でHPが増えていく")]
+    public bool useCustomGrowth = false;
+
+    [Tooltip("専用のHP増加間隔（秒）。useCustomGrowthがONの時だけ使われる")]
+    public float growInterval = 15f;
+
+    [Tooltip("専用のHP増加倍率。useCustomGrowthがONの時だけ使われる")]
+    public float growMultiplier = 1.2f;
+
+    // 実行時に使う内部状態（インスペクターには表示しない）
+    [System.NonSerialized] public float growTimer = 0f;
+    [System.NonSerialized] public float hpMultiplier = 1f;
 }
 
 public class EnemySpawner : MonoBehaviour
@@ -24,11 +38,10 @@ public class EnemySpawner : MonoBehaviour
     public float spawnInterval = 2f;
     public float s = 0;
 
-    [Header("時間経過でスポーン時HPが増える設定")]
+    [Header("時間経過でスポーン時HPが増える設定（全体デフォルト）")]
+    [Tooltip("EnemyDataのuseCustomGrowthがOFFの敵はこの設定に従う")]
     public float hpGrowInterval = 15f;
     public float hpGrowMultiplier = 1.2f;
-    private float hpTimer;
-    private float hpMultiplier = 1f;
 
     public PlayerStats playerStats;
 
@@ -40,6 +53,13 @@ public class EnemySpawner : MonoBehaviour
     public int bossComboThreshold = 50;
 
     private bool bossAlive = false;
+
+    [Header("ボス出現回数によるHP増加")]
+    [Tooltip("ボスが出現するたびにHPをどれだけ増やすか（固定値の加算）。例：500なら2体目は+500、3体目は+1000...")]
+    public int bossHpGrowAmount = 500;
+
+    // ボスが今までに何回出現したか（0=まだ一度も出現していない）
+    private int bossAppearCount = 0;
 
     [Header("ボスHPバー")]
     public BossHPBar bossHPBar;
@@ -70,13 +90,7 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
-        hpTimer += Time.deltaTime;
-
-        if (hpTimer >= hpGrowInterval)
-        {
-            hpTimer = 0f;
-            hpMultiplier *= hpGrowMultiplier;
-        }
+        UpdateAllGrowth();
 
         // ===== ボス管理（コンボ数トリガー） =====
         // waitingForBossSpawn 中は判定を止めておく
@@ -119,9 +133,57 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    // =========================================
+    // 敵タイプごとの時間経過HP増加
+    // =========================================
+
+    void UpdateAllGrowth()
+    {
+        foreach (var e in enemies)
+            UpdateGrowth(e);
+
+        UpdateGrowth(enemyA);
+        UpdateGrowth(enemyB);
+        UpdateGrowth(enemyC);
+    }
+
+    void UpdateGrowth(EnemyData data)
+    {
+        if (data == null) return;
+
+        float interval = data.useCustomGrowth ? data.growInterval : hpGrowInterval;
+        float multiplier = data.useCustomGrowth ? data.growMultiplier : hpGrowMultiplier;
+
+        data.growTimer += Time.deltaTime;
+
+        if (data.growTimer >= interval)
+        {
+            data.growTimer = 0f;
+            data.hpMultiplier *= multiplier;
+        }
+    }
+
+    void ResetGrowth(EnemyData data)
+    {
+        if (data == null) return;
+
+        data.growTimer = 0f;
+        data.hpMultiplier = 1f;
+    }
+
+    void ResetAllGrowth()
+    {
+        foreach (var e in enemies)
+            ResetGrowth(e);
+
+        ResetGrowth(enemyA);
+        ResetGrowth(enemyB);
+        ResetGrowth(enemyC);
+    }
+
     //   ゲーム開始時の初期配置。
     //   出現位置はプレイヤーから離れた場所（GetRandomPositionAwayFromPlayer）に戻し、
-    //   敵の選ばれ方（GetRandomEnemy経由）は通常スポーンと完全に同じSpawnEnemyAtを使う。
+    //   敵の選ばれ方（GetRandomEnemyData経由）は通常スポーンと完全に同じSpawnEnemyAtを使う。
     public void SpawnInitialEnemies()
     {
         for (int i = 0; i < initialEnemyCount; i++)
@@ -138,33 +200,30 @@ public class EnemySpawner : MonoBehaviour
     }
 
     // 指定した座標に敵を1体生成する（通常スポーン・初期配置の両方から呼ばれる共通処理）
-    // ★ここで使われるGetRandomEnemy()は初期配置・通常スポーンどちらも完全に同じロジック
+    // ★ここで使われるGetRandomEnemyData()は初期配置・通常スポーンどちらも完全に同じロジック
     void SpawnEnemyAt(Vector2 spawnPos)
     {
-        GameObject prefab = GetRandomEnemy();
+        EnemyData data = GetRandomEnemyData();
+        GameObject prefab = data.prefab;
 
         GameObject enemy = Instantiate(prefab, spawnPos, Quaternion.identity);
 
-        // ★変更：GetComponent → GetComponentInChildren
-        // 一部の敵（nezumiなど）はEnemyHPがルートではなく子オブジェクトに付いているため、
-        // 子階層も検索するGetComponentInChildrenに変更
-        EnemyHP hp = enemy.GetComponentInChildren<EnemyHP>();
+        EnemyHP hp = enemy.GetComponent<EnemyHP>();
         if (hp != null)
         {
-            hp.maxHP = Mathf.CeilToInt(hp.maxHP * hpMultiplier);
+            // ★変更：全体共通のhpMultiplierではなく、選ばれた敵タイプ専用のhpMultiplierを使う
+            hp.maxHP = Mathf.CeilToInt(hp.maxHP * data.hpMultiplier);
             hp.currentHP = hp.maxHP;
         }
 
-        // ★変更：同上の理由でGetComponentInChildrenに変更
-        RushEnemy rush = enemy.GetComponentInChildren<RushEnemy>();
+        RushEnemy rush = enemy.GetComponent<RushEnemy>();
         if (rush != null)
         {
             rush.player = player;
         }
 
         // WarpEnemy（プレイヤーへ向かって移動する敵）にもプレイヤーを渡す
-        // ★変更：同上の理由でGetComponentInChildrenに変更
-        WarpEnemyMove warp = enemy.GetComponentInChildren<WarpEnemyMove>();
+        WarpEnemyMove warp = enemy.GetComponent<WarpEnemyMove>();
         if (warp != null)
         {
             warp.player = player;
@@ -194,6 +253,15 @@ public class EnemySpawner : MonoBehaviour
             bossScript.spawner = this;
 
         EnemyHP bossHP = boss.GetComponent<EnemyHP>();
+        if (bossHP != null)
+        {
+            // ★変更：出現回数×固定量をHPに加算する（1体目=基準HP、2体目=+500、3体目=+1000...）
+            bossHP.maxHP += bossHpGrowAmount * bossAppearCount;
+            bossHP.currentHP = bossHP.maxHP;
+        }
+
+        bossAppearCount++; // 出現回数を加算（次回出現時の倍率に反映される）
+
         if (bossHPBar != null && bossHP != null)
         {
             // HPバーは既に満タン表示済み・待機中なので、HPを紐付けて追従を始めるだけ
@@ -226,15 +294,17 @@ public class EnemySpawner : MonoBehaviour
     // =========================================
     public void ResetEnemyHPGrowth()
     {
-        hpTimer = 0f;
-        hpMultiplier = 1f;
+        ResetAllGrowth();
 
         Debug.Log("敵のHP増加をリセットしました");
     }
 
 
 
-    GameObject GetRandomEnemy()
+    // 敵タイプ（EnemyData）を抽選して返す。
+    // ★変更：以前はGameObjectだけを返していたが、選ばれた敵タイプ専用のhpMultiplierを
+    //   スポーン時に参照する必要があるため、EnemyDataそのものを返すようにした
+    EnemyData GetRandomEnemyData()
     {
         spawnList.Clear();
 
@@ -255,10 +325,10 @@ public class EnemySpawner : MonoBehaviour
         foreach (var e in spawnList)
         {
             sum += e.weight - playerStats.enemySpawnWeightBonus;
-            if (r < sum) return e.prefab;
+            if (r < sum) return e;
         }
 
-        return spawnList[0].prefab;
+        return spawnList[0];
     }
 
     Vector2 GetSpawnPosition()
@@ -341,11 +411,10 @@ public class EnemySpawner : MonoBehaviour
     public void ResetEnemyGrowth()
     {
         // =========================================
-        // 敵HP成長を完全リセット
+        // 敵HP成長を完全リセット（敵タイプごとの成長も含む）
         // =========================================
 
-        hpTimer = 0f;
-        hpMultiplier = 1f;
+        ResetAllGrowth();
 
         // 通常敵スポーンタイマー
         timer = 0f;
@@ -354,6 +423,7 @@ public class EnemySpawner : MonoBehaviour
         bossAlive = false;
         bossWarningShown = false;
         waitingForBossSpawn = false;
+        bossAppearCount = 0; // ボス出現回数によるHP増加もリセット
 
         // コンボもリセット（次周回でまた0から50を目指す形にする）
         if (ComboManager.instance != null)
