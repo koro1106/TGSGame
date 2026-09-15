@@ -389,6 +389,7 @@ GameObject:
   - component: {fileID: 26492060}
   - component: {fileID: 26492061}
   - component: {fileID: 26492062}
+  - component: {fileID: 26492063}
   m_Layer: 0
   m_Name: SkillTreeManager
   m_TagString: Untagged
@@ -846,6 +847,76 @@ MonoBehaviour:
   popScale: 1.1
   popDuration: 0.05
   prestigeImage: {fileID: 20106987}
+--- !u!114 &26492063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 26492052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8242ac8029347a84c9e1de9ebf170829, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SkillTreeUI
+  nodes:
+  - {fileID: 1623859187}
+  - {fileID: 1252081151}
+  - {fileID: 1220820724}
+  - {fileID: 1806012793}
+  - {fileID: 1709242295}
+  - {fileID: 1538181960}
+  - {fileID: 1734065122}
+  - {fileID: 687403048}
+  - {fileID: 39791667}
+  - {fileID: 1347545090}
+  - {fileID: 552354535}
+  - {fileID: 1596663726}
+  - {fileID: 513240899}
+  - {fileID: 1396807289}
+  - {fileID: 1065405968}
+  - {fileID: 2020399871}
+  - {fileID: 625565299}
+  - {fileID: 1720306581}
+  - {fileID: 1076251553}
+  - {fileID: 795802952}
+  - {fileID: 1079252121}
+  - {fileID: 2128135944}
+  - {fileID: 2072155298}
+  - {fileID: 2033376513}
+  - {fileID: 541318710}
+  - {fileID: 701614897}
+  - {fileID: 222075476}
+  - {fileID: 1870279646}
+  - {fileID: 874824915}
+  - {fileID: 337357661}
+  - {fileID: 943439311}
+  - {fileID: 1103903341}
+  - {fileID: 1804670628}
+  - {fileID: 2101759437}
+  - {fileID: 193212031}
+  - {fileID: 1339585117}
+  - {fileID: 252361085}
+  - {fileID: 361241491}
+  - {fileID: 576310877}
+  - {fileID: 1947635867}
+  - {fileID: 1134239845}
+  - {fileID: 1809549240}
+  - {fileID: 1106168477}
+  - {fileID: 1912287870}
+  - {fileID: 1103163691}
+  - {fileID: 639104483}
+  - {fileID: 630158886}
+  - {fileID: 1823567916}
+  - {fileID: 1951778251}
+  - {fileID: 1861234665}
+  - {fileID: 528828622}
+  - {fileID: 1767625394}
+  - {fileID: 2126975403}
+  - {fileID: 341834691}
+  - {fileID: 2143044262}
+  - {fileID: 1575967691}
+  - {fileID: 1924070757}
 --- !u!1 &26498240
 GameObject:
   m_ObjectHideFlags: 0
@@ -1127,6 +1198,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &39791668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1764,6 +1836,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &193212032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2456,6 +2529,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &222075477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2903,6 +2977,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &252361086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3451,6 +3526,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &337357662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3743,6 +3819,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &341834692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4009,6 +4086,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &361241492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4734,6 +4812,7 @@ MonoBehaviour:
   backSE: {fileID: 0}
   clickSE: {fileID: 8300000, guid: 08ccb571f21f92e43a3b87c9c993f335, type: 3}
   collectSE: {fileID: 0}
+  openSE: {fileID: 0}
   bindHitSE: {fileID: 0}
   explosionHitSE: {fileID: 0}
   poisonHitSE: {fileID: 0}
@@ -5258,6 +5337,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &513240900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5831,6 +5911,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &528828623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6191,6 +6272,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &541318711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6558,6 +6640,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &552354536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6880,6 +6963,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &576310878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7491,6 +7575,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &625565300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7896,6 +7981,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &630158887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8340,6 +8426,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &639104484
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8707,6 +8794,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &687403049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8973,6 +9061,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &701614898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9608,6 +9697,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &795802953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10480,6 +10570,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &874824916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11121,6 +11212,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &943439312
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11988,6 +12080,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1065405969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12260,6 +12353,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1076251554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12541,6 +12635,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1079252122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12820,6 +12915,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1103163692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13101,6 +13197,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1103903342
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13380,6 +13477,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1106168478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13839,6 +13937,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1134239846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14662,6 +14761,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1220820725
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15084,6 +15184,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!1 &1253994519
 GameObject:
   m_ObjectHideFlags: 0
@@ -15622,6 +15723,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1339585118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15918,6 +16020,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1347545091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16501,6 +16604,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1396807290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17582,6 +17686,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1538181961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18065,6 +18170,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1575967692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18492,6 +18598,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1596663727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18811,6 +18918,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1623859188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19367,6 +19475,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1709242296
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19710,6 +19819,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1720306582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20113,6 +20223,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1734065123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20696,6 +20807,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1767625395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21052,6 +21164,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1804670629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21425,6 +21538,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1806012794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21616,6 +21730,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1809549241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21901,6 +22016,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1823567917
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22324,6 +22440,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1861234666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22794,6 +22911,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1870279647
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23163,6 +23281,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1912287871
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23532,6 +23651,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1924070758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23892,6 +24012,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1947635868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24171,6 +24292,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &1951778252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25096,6 +25218,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &2020399872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25416,6 +25539,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &2033376514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26022,6 +26146,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &2072155299
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26360,6 +26485,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &2101759438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26652,6 +26778,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &2126975404
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26969,6 +27096,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &2128135945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27261,6 +27389,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d983024338c1cae439c688aebb1a65b1, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
+  skillTreeUI: {fileID: 26492063}
 --- !u!114 &2143044263
 MonoBehaviour:
   m_ObjectHideFlags: 0
