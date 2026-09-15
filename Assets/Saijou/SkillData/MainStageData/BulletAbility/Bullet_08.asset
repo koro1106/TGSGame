@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273875e9515bae4469b58e69f7b82692, type: 3}
   m_Name: Bullet_08
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
-  skillName: "\u30AF\u30EA\u30C6\u30A3\u30AB\u30EB\u767A\u751F\u78BA\u7387 +6%"
+  skillName: "\u30AF\u30EA\u30C6\u30A3\u30AB\u30EB\u767A\u751F\u78BA\u7387 +3%"
   level: 0
   maxLevel: 5
   requiredExps:
@@ -37,4 +37,5 @@ MonoBehaviour:
   description: 
   isShopUnlocked: 0
   isShopButton: 0
+  dollSilhouette: {fileID: 0}
   dollImage: {fileID: 0}

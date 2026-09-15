@@ -3705,7 +3705,7 @@ MonoBehaviour:
   nextLines: []
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 0
-  redSprite: {fileID: -8618904994476612244, guid: b7ccca8262e5ff948b7ff8920523ce5f, type: 3}
+  redSprite: {fileID: -8618904994476612244, guid: a07135f37ad9d1e48817d0da50a59271, type: 3}
   greenSprite: {fileID: 1842275861596665463, guid: 740a6eade838cab46bbbbd8df2394774, type: 3}
   yellowSprite: {fileID: -8618904994476612244, guid: e59221c665c79094ba2ce1d70c94127d, type: 3}
   effectManager: {fileID: 1593656332}
@@ -5797,7 +5797,7 @@ MonoBehaviour:
   - {fileID: 26498241}
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 1
-  redSprite: {fileID: -8618904994476612244, guid: b7ccca8262e5ff948b7ff8920523ce5f, type: 3}
+  redSprite: {fileID: -8618904994476612244, guid: a07135f37ad9d1e48817d0da50a59271, type: 3}
   greenSprite: {fileID: 1842275861596665463, guid: 740a6eade838cab46bbbbd8df2394774, type: 3}
   yellowSprite: {fileID: -8618904994476612244, guid: e59221c665c79094ba2ce1d70c94127d, type: 3}
   effectManager: {fileID: 1593656332}
@@ -18056,7 +18056,7 @@ MonoBehaviour:
   nextLines: []
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 1
-  redSprite: {fileID: -459005332961936502, guid: 7da85e20a30cc394b93ec8bcca3845aa, type: 3}
+  redSprite: {fileID: -1889345932455265348, guid: 2541d1c0268209f439dfc2f2acd445d2, type: 3}
   greenSprite: {fileID: -5631436554363626817, guid: 1644268e9950785489026d5d84855057, type: 3}
   yellowSprite: {fileID: 7083997562302928155, guid: 1b25dc537bc871f41b99d5935ffcdbac, type: 3}
   effectManager: {fileID: 1593656332}
@@ -20693,7 +20693,7 @@ MonoBehaviour:
   - {fileID: 1550026294}
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 1
-  redSprite: {fileID: -8430320212138548317, guid: a33e8fe5969024248b07eedb7df8db0e, type: 3}
+  redSprite: {fileID: -8430320212138548317, guid: 9849b9dd4895ae94aad126f477f7eb34, type: 3}
   greenSprite: {fileID: -8430320212138548317, guid: 0c10fd3b38a3b9447be6d4f0df80e3e0, type: 3}
   yellowSprite: {fileID: -8430320212138548317, guid: ddbf90b86a26c2844a679e67037f1a76, type: 3}
   effectManager: {fileID: 1593656332}
@@ -22326,7 +22326,7 @@ MonoBehaviour:
   - {fileID: 101112379}
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 1
-  redSprite: {fileID: -7490340542585144753, guid: b138e161dff5a724a8ba49357f5c28b5, type: 3}
+  redSprite: {fileID: -7490340542585144753, guid: 2909bdc205b92174ebc49611caa59af5, type: 3}
   greenSprite: {fileID: -7490340542585144753, guid: 608b899d4c6449c42b0491fc615c01b1, type: 3}
   yellowSprite: {fileID: -7490340542585144753, guid: c0fdb830bf661ec48897cc3e3cc992da, type: 3}
   effectManager: {fileID: 1593656332}
@@ -23537,7 +23537,7 @@ MonoBehaviour:
   nextLines: []
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 1
-  redSprite: {fileID: -459005332961936502, guid: 1f52c0ba54ea0a249ab4070a853f4b6f, type: 3}
+  redSprite: {fileID: -1889345932455265348, guid: bf5932ce71ea5394eb2241a4a2774b5b, type: 3}
   greenSprite: {fileID: -5631436554363626817, guid: 4a9770bc62640a74a9f28d6e6c143bc5, type: 3}
   yellowSprite: {fileID: 7083997562302928155, guid: 307b46d850a904e49818b632311a2977, type: 3}
   effectManager: {fileID: 1593656332}
@@ -26664,7 +26664,7 @@ MonoBehaviour:
   nextLines: []
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 0
-  redSprite: {fileID: -7490340542585144753, guid: b138e161dff5a724a8ba49357f5c28b5, type: 3}
+  redSprite: {fileID: -7490340542585144753, guid: 2909bdc205b92174ebc49611caa59af5, type: 3}
   greenSprite: {fileID: -7490340542585144753, guid: 608b899d4c6449c42b0491fc615c01b1, type: 3}
   yellowSprite: {fileID: -7490340542585144753, guid: c0fdb830bf661ec48897cc3e3cc992da, type: 3}
   effectManager: {fileID: 1593656332}
@@ -27275,7 +27275,7 @@ MonoBehaviour:
   nextLines: []
   unlockEffectPrefab: {fileID: 5847500700040901020, guid: cfcfb6c7e8f1c964cac2d807d8edb8c4, type: 3}
   isStartNode: 0
-  redSprite: {fileID: -8430320212138548317, guid: a33e8fe5969024248b07eedb7df8db0e, type: 3}
+  redSprite: {fileID: -8430320212138548317, guid: 9849b9dd4895ae94aad126f477f7eb34, type: 3}
   greenSprite: {fileID: -8430320212138548317, guid: 0c10fd3b38a3b9447be6d4f0df80e3e0, type: 3}
   yellowSprite: {fileID: -8430320212138548317, guid: ddbf90b86a26c2844a679e67037f1a76, type: 3}
   effectManager: {fileID: 1593656332}
