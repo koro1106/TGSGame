@@ -52,6 +52,7 @@ public class ShopSkillButton : MonoBehaviour
 
     [SerializeField]  private bool fadeFinished = false;
 
+    [SerializeField] private SEManager seManager;
     void Start()
     {
         // すでに購入済みなら、
@@ -101,6 +102,7 @@ public class ShopSkillButton : MonoBehaviour
             normalExpText.UpdateNormalExpText();
         }
 
+        seManager.PlayOpenSE();
     }
 
     /// <summary>

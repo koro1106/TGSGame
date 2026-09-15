@@ -2629,7 +2629,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -100
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -5498781396396588889, guid: b8c880a40cf1a154c8abdfcd90d31bbe, type: 3}
+  m_Sprite: {fileID: -5663627519318241419, guid: d4042a7c84d19da4a819121ef30ea4c2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -2648,8 +2648,8 @@ Transform:
   m_GameObject: {fileID: 229777660}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0082, y: -0.034, z: 0}
-  m_LocalScale: {x: 0.94, y: 0.9764296, z: 0.94}
+  m_LocalPosition: {x: 0.1488, y: -0.0026, z: 0}
+  m_LocalScale: {x: 0.8594132, y: 0.6853429, z: 0.94}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -4733,6 +4733,13 @@ MonoBehaviour:
   shootSE: {fileID: 0}
   backSE: {fileID: 0}
   clickSE: {fileID: 8300000, guid: 08ccb571f21f92e43a3b87c9c993f335, type: 3}
+  collectSE: {fileID: 0}
+  bindHitSE: {fileID: 0}
+  explosionHitSE: {fileID: 0}
+  poisonHitSE: {fileID: 0}
+  gravityHitSE: {fileID: 0}
+  chainHitSE: {fileID: 0}
+  enemyHitSE: {fileID: 0}
 --- !u!1 &481096540
 GameObject:
   m_ObjectHideFlags: 0

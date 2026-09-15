@@ -42,6 +42,8 @@ public class SkillNodeUI : MonoBehaviour
     public PlayerData playerData;
     public SkillData[] allSkills;
 
+    [SerializeField] private SkillTreeUI skillTreeUI;
+
     void Start()
     {
         // 最初のノードなら「解放可能状態」にする
@@ -85,8 +87,8 @@ public class SkillNodeUI : MonoBehaviour
             }
         }
 
-        UpdateVisual();
-
+        // UpdateVisual();
+        RefreshVisual();
     }
     // スキル解放
     public void Unlock()
@@ -98,10 +100,11 @@ public class SkillNodeUI : MonoBehaviour
         state = SkillState.Unlocked;
         data.isUnlocked = true;
 
-        UpdateVisual();
+        //UpdateVisual();
+        RefreshVisual();
 
         // 次のスキルを「解放可能状態」にする（透明度30）
-       foreach (var node in nextButtons) // ボタン
+        foreach (var node in nextButtons) // ボタン
        {
            node.SetButtonAvailable();
            SpawnEffect(node.transform); // パーティクル生成
@@ -110,7 +113,7 @@ public class SkillNodeUI : MonoBehaviour
        {
            line.SetState(SkillState.Unlocked);
        }
-   }
+    }
 
     // スキルを「解放可能(うっすら表示)」状態にする(ボタン)
     public void SetButtonAvailable()
@@ -119,59 +122,118 @@ public class SkillNodeUI : MonoBehaviour
         if (state != SkillState.Locked) return;
 
         state = SkillState.Available;
-        UpdateVisual();
+        //UpdateVisual();
+        RefreshVisual();
     }
 
     // 状況に応じて見た目更新
-    void UpdateVisual()
-    {
-        Color c = icon.color;
+    //void UpdateVisual()
+    //{
+    //    Color c = icon.color;
 
-        // 必要経験値をすべて満たしているか
+    //    // 必要経験値をすべて満たしているか
+    //    bool hasExp = data.CanLevelUp();
+    //    bool isMax = data.IsMaxLevel(); // MAXレベルかどうか
+
+    //    if (data.isUnlocked)
+    //    {
+    //        state = SkillState.Unlocked; // 解放済みに
+    //    }
+    //    switch (state)
+    //    {
+    //        case SkillState.Locked:// 完全非表示
+    //            icon.enabled = false; 
+    //            break;
+
+    //        case SkillState.Available:
+    //            icon.enabled = true; // 解放可能状態
+
+    //            icon.sprite = greenSprite;
+
+    //            if (hasExp)
+    //            {
+    //                // 経験値足りてる → 少し暗い
+    //                c = new Color(0.6f, 0.6f, 0.6f, 1f);
+    //            }
+    //            else
+    //            {
+    //                // 経験値足りない → 赤＋暗い
+    //                icon.sprite = redSprite;
+    //                c = new Color(0.4f, 0.4f, 0.4f, 1f);
+    //            }
+    //            break;
+
+    //        case SkillState.Unlocked:
+    //            icon.enabled = true;
+    //            c = Color.white;   // 元の明るさ
+    //            if (isMax)
+    //                // 最大レベル → 黄色
+    //                icon.sprite = yellowSprite;
+    //            else
+    //                // 通常解放 → 緑
+    //                icon.sprite = greenSprite;
+    //            break;
+    //    }
+
+    //    icon.color = c;
+    //}
+    public void RefreshVisual()
+    {
         bool hasExp = data.CanLevelUp();
-        bool isMax = data.IsMaxLevel(); // MAXレベルかどうか
+        bool isMax = data.IsMaxLevel();
 
         if (data.isUnlocked)
         {
-            state = SkillState.Unlocked; // 解放済みに
+            state = SkillState.Unlocked;
         }
+
         switch (state)
         {
-            case SkillState.Locked:// 完全非表示
-                icon.enabled = false; 
+            case SkillState.Locked:
+                icon.enabled = false;
                 break;
 
             case SkillState.Available:
-                icon.enabled = true; // 解放可能状態
-
-                icon.sprite = greenSprite;
+                icon.enabled = true;
 
                 if (hasExp)
                 {
-                    // 経験値足りてる → 少し暗い
-                    c = new Color(0.6f, 0.6f, 0.6f, 1f);
+                    // 未解放 ＋ 経験値足りている
+                    icon.sprite = greenSprite;
+                    icon.color = new Color(0.6f, 0.6f, 0.6f, 1f);
                 }
                 else
                 {
-                    // 経験値足りない → 赤＋暗い
+                    // 未解放 ＋ 経験値不足
                     icon.sprite = redSprite;
-                    c = new Color(0.4f, 0.4f, 0.4f, 1f);
+                    icon.color = new Color(0.4f, 0.4f, 0.4f, 1f);
                 }
                 break;
 
             case SkillState.Unlocked:
                 icon.enabled = true;
-                c = Color.white;   // 元の明るさ
+
                 if (isMax)
-                    // 最大レベル → 黄色
+                {
+                    // 最大レベルなら黄色
                     icon.sprite = yellowSprite;
-                else
-                    // 通常解放 → 緑
+                    icon.color = Color.white;
+                }
+                else if (hasExp)
+                {
+                    // 解放済み ＋ 次のレベルに必要な経験値あり
                     icon.sprite = greenSprite;
+                    icon.color = Color.white;
+                }
+                else
+                {
+                    // 解放済み ＋ 次のレベルに必要な経験値不足
+                    icon.sprite = redSprite;
+                    icon.color = Color.white;
+                }
+
                 break;
         }
-
-        icon.color = c;
     }
 
     // Click処理
@@ -188,9 +250,7 @@ public class SkillNodeUI : MonoBehaviour
         effectManager.ApplySkill(data);// スキル効果適用
         SEManager.Instance.PlayLevelUpSE(); // SE再生
         Unlock();                      // 解放
-        UpdateVisual();                // 見た目更新
-
-        SaveManager.Save(playerData, allSkills); // セーブ
+        //UpdateVisual();                // 見た目更新
 
         // 経験値UIアップデート
         if (normalExpText != null)
@@ -204,6 +264,14 @@ public class SkillNodeUI : MonoBehaviour
         }
 
         PlayExpAnimation(); // 経験値UIアニメーション
+
+        // ★スキルツリー全体を更新
+        if (skillTreeUI != null)
+        {
+            skillTreeUI.RefreshAllNodes();
+        }
+
+        SaveManager.Save(playerData, allSkills); // セーブ
     }
 
     // 経験値UIアニメーション
