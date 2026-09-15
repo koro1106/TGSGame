@@ -34,7 +34,7 @@ public class ExpChangeManager : MonoBehaviour
     private int getExp = 1;
 
     // 変換に必要な素材数
-    private int needExp01 = 100;
+    private int needExp01 = 10;
     private int needExp02 = 10;
 
     // 変換に使用するExp
@@ -166,7 +166,7 @@ public class ExpChangeManager : MonoBehaviour
 
         if (useExp01)
         {
-           int needExp = getExp * -100;
+           int needExp = getExp * -10;
            needExpText.text = needExp.ToString();
         }
         else if (useExp02)
@@ -187,7 +187,7 @@ public class ExpChangeManager : MonoBehaviour
 
         if (useExp01)
         {
-            int needExp = getExp * -100;
+            int needExp = getExp * -10;
             needExpText.text = needExp.ToString();
         }
         else if (useExp02)
@@ -215,7 +215,7 @@ public class ExpChangeManager : MonoBehaviour
     {
         if (useExp01)
         {
-            playerData.currentExp_1 -= getExp * 100;
+            playerData.currentExp_1 -= getExp * 10;
 
             // Exp02は9999を上限にする
             playerData.currentExp_2 = Mathf.Min(
