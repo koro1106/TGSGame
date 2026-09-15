@@ -17044,7 +17044,7 @@ MonoBehaviour:
   expUIAnimation: {fileID: 2102264111}
   uiAnimation: {fileID: 2102264109}
   normalExpText: {fileID: 126132241}
-  exp3Image: {fileID: 0}
+  exp3Image: {fileID: 1197744709}
 --- !u!1 &1289028387
 GameObject:
   m_ObjectHideFlags: 0
