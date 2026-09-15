@@ -23,6 +23,8 @@ public class ImageHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private Coroutine outlineCoroutine;
 
+    [SerializeField] private GameObject exp3Image;
+
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -49,7 +51,8 @@ public class ImageHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         outlineCoroutine = StartCoroutine(OutlinePulse());
 
         ShopTooltipUI.Instance.ShowText(skillData, true);
-        
+
+        exp3Image.SetActive(false);
     }
 
     // マウスカーソルがImageから離れたとき

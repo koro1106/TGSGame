@@ -4750,6 +4750,7 @@ MonoBehaviour:
   originalScale: {x: 1.15, y: 1.15, z: 1.15}
   hoverScale: 1.1
   outlineSpeed: 1.25
+  exp3Image: {fileID: 1197744709}
 --- !u!1 &383900883
 GameObject:
   m_ObjectHideFlags: 0
@@ -7520,6 +7521,7 @@ MonoBehaviour:
   expUIAnimation: {fileID: 2102264111}
   uiAnimation: {fileID: 2102264109}
   normalExpText: {fileID: 126132241}
+  exp3Image: {fileID: 1197744709}
 --- !u!1 &642182620
 GameObject:
   m_ObjectHideFlags: 0
@@ -7803,6 +7805,7 @@ MonoBehaviour:
   originalScale: {x: 1.15, y: 1.15, z: 1.15}
   hoverScale: 1.1
   outlineSpeed: 1.25
+  exp3Image: {fileID: 1197744709}
 --- !u!114 &663263527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8439,6 +8442,7 @@ MonoBehaviour:
   originalScale: {x: 1.15, y: 1.15, z: 1.15}
   hoverScale: 1.1
   outlineSpeed: 1.25
+  exp3Image: {fileID: 1197744709}
 --- !u!1 &719878885
 GameObject:
   m_ObjectHideFlags: 0
@@ -11711,6 +11715,7 @@ MonoBehaviour:
   expUIAnimation: {fileID: 2102264111}
   uiAnimation: {fileID: 2102264109}
   normalExpText: {fileID: 126132241}
+  exp3Image: {fileID: 1197744709}
 --- !u!1 &887848042
 GameObject:
   m_ObjectHideFlags: 0
@@ -12613,6 +12618,7 @@ MonoBehaviour:
   originalScale: {x: 1.15, y: 1.15, z: 1.15}
   hoverScale: 1.1
   outlineSpeed: 1.25
+  exp3Image: {fileID: 1197744709}
 --- !u!1 &933292611
 GameObject:
   m_ObjectHideFlags: 0
@@ -15449,6 +15455,7 @@ MonoBehaviour:
   expUIAnimation: {fileID: 2102264111}
   uiAnimation: {fileID: 2102264109}
   normalExpText: {fileID: 126132241}
+  exp3Image: {fileID: 1197744709}
 --- !u!1 &1150750957
 GameObject:
   m_ObjectHideFlags: 0
@@ -15821,6 +15828,7 @@ MonoBehaviour:
   expUIAnimation: {fileID: 2102264111}
   uiAnimation: {fileID: 2102264109}
   normalExpText: {fileID: 126132241}
+  exp3Image: {fileID: 1197744709}
 --- !u!1 &1197744709
 GameObject:
   m_ObjectHideFlags: 0
@@ -17023,7 +17031,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 92039174e1cbd2348b24805394535c42, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
-  maxLevelText: {fileID: 0}
+  maxLevelText: {fileID: 1710156668}
   levelImages:
   - {fileID: 1467225600}
   - {fileID: 863830759}
@@ -17036,6 +17044,7 @@ MonoBehaviour:
   expUIAnimation: {fileID: 2102264111}
   uiAnimation: {fileID: 2102264109}
   normalExpText: {fileID: 126132241}
+  exp3Image: {fileID: 0}
 --- !u!1 &1289028387
 GameObject:
   m_ObjectHideFlags: 0
@@ -19732,7 +19741,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3df914e848c3dad4dabfd87295df0bf3, type: 2}
   - {fileID: 11400000, guid: cd480e1a5bed9614f9a6a930bf9a5093, type: 2}
   - {fileID: 11400000, guid: 531b67f078c10934da5d484e2df5dce5, type: 2}
-  maxLevelText: {fileID: 0}
+  maxLevelText: {fileID: 1710156668}
   levelImages:
   - {fileID: 1075490676}
   - {fileID: 1035222752}
@@ -19745,6 +19754,7 @@ MonoBehaviour:
   expUIAnimation: {fileID: 2102264111}
   uiAnimation: {fileID: 2102264109}
   normalExpText: {fileID: 126132241}
+  exp3Image: {fileID: 1197744709}
 --- !u!1 &1560505746
 GameObject:
   m_ObjectHideFlags: 0
@@ -21802,6 +21812,7 @@ MonoBehaviour:
   expUIAnimation: {fileID: 2102264111}
   uiAnimation: {fileID: 2102264109}
   normalExpText: {fileID: 126132241}
+  exp3Image: {fileID: 1197744709}
 --- !u!1 &1672785390
 GameObject:
   m_ObjectHideFlags: 0
@@ -22570,6 +22581,7 @@ MonoBehaviour:
   expUIAnimation: {fileID: 2102264111}
   uiAnimation: {fileID: 2102264109}
   normalExpText: {fileID: 126132241}
+  exp3Image: {fileID: 1197744709}
 --- !u!1 &1715567340
 GameObject:
   m_ObjectHideFlags: 0
@@ -24567,6 +24579,7 @@ MonoBehaviour:
   expUIAnimation: {fileID: 2102264111}
   uiAnimation: {fileID: 2102264109}
   normalExpText: {fileID: 126132241}
+  exp3Image: {fileID: 1197744709}
 --- !u!1 &1889704654
 GameObject:
   m_ObjectHideFlags: 0
@@ -24896,6 +24909,7 @@ MonoBehaviour:
   originalScale: {x: 1.15, y: 1.15, z: 1.15}
   hoverScale: 1.1
   outlineSpeed: 1.25
+  exp3Image: {fileID: 1197744709}
 --- !u!1 &1899356497
 GameObject:
   m_ObjectHideFlags: 0
@@ -26007,6 +26021,7 @@ MonoBehaviour:
   expUIAnimation: {fileID: 2102264111}
   uiAnimation: {fileID: 2102264109}
   normalExpText: {fileID: 126132241}
+  exp3Image: {fileID: 1197744709}
 --- !u!1 &2073329157
 GameObject:
   m_ObjectHideFlags: 0

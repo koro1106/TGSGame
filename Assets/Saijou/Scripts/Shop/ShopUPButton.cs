@@ -43,6 +43,7 @@ public class ShopUPButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     [SerializeField] UIAnimation uiAnimation;
     [SerializeField] NormalExpText normalExpText;
 
+    [SerializeField] private GameObject exp3Image;
     private void Start()
     {
         UpdateLevelImages();
@@ -59,6 +60,7 @@ public class ShopUPButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         if (ShopTooltipUI.Instance != null)
         {
             ShopTooltipUI.Instance.ShowText(data, true);
+            exp3Image.SetActive(true);
         }
     }
 

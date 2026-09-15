@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Pre_07
   m_EditorClassIdentifier: Assembly-CSharp::SkillData
   skillName: "\u901A\u5E38\u5F3E\u30C0\u30E1\u30FC\u30B8 +50"
-  level: 1
+  level: 0
   maxLevel: 10
   requiredExps:
   - expType: 3
-    initialNeedExp: 10
-    needExp: 10
+    initialNeedExp: 2
+    needExp: 2
     addNeedExp: 1
   isUnlocked: 0
   isLevelUp: 0
