@@ -131,11 +131,14 @@ public class GravityBullet : MonoBehaviour
         // エフェクト
         if (gravityEffect != null)
         {
-            Instantiate(
+            GameObject effect = Instantiate(
                 gravityEffect,
                 centerTarget.position,
                 Quaternion.identity
             );
+
+            // ▼追加：リザルト時にこのエフェクトも削除できるよう登録
+            ResultManager.RegisterEffect(effect);
         }
 
         float timer = 0f;

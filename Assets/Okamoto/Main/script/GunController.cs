@@ -112,6 +112,11 @@ public class GunController : MonoBehaviour
     [Header("弾切れUI")]
     public GameObject outOfAmmoUIImage;
 
+    [SerializeField] private float outOfAmmoUIDelay = 1f;
+    [SerializeField] private float outOfAmmoUIFadeDuration = 0.3f;
+
+    private Coroutine outOfAmmoUIRoutine;
+
     [Header("敵撃破時の弾回復")]
     public bool recoverAmmoOnKill = false;
 
@@ -759,6 +764,16 @@ public class GunController : MonoBehaviour
         // =========================================
 
         currentAmmo--;
+
+        if (currentAmmo <= 0)
+        {
+            if (outOfAmmoUIRoutine != null)
+            {
+                StopCoroutine(outOfAmmoUIRoutine);
+            }
+
+            outOfAmmoUIRoutine = StartCoroutine(ShowOutOfAmmoUI());
+        }
 
         // =========================================
         // UIの開始位置
@@ -2622,6 +2637,105 @@ public class GunController : MonoBehaviour
     public void SetTimelinePlaying(bool playing)
     {
         isTimelinePlaying = playing;
+    }
+
+    /// <summary>
+    /// 弾が0発になってから1秒後に
+    /// 透明 → 濃くなる → 透明
+    /// の弾切れUI演出を行う。
+    /// </summary>
+    private IEnumerator ShowOutOfAmmoUI()
+    {
+        if (outOfAmmoUIImage == null)
+            yield break;
+
+        Image image = outOfAmmoUIImage.GetComponent<Image>();
+
+        if (image == null)
+        {
+            Debug.LogWarning("outOfAmmoUIImage に Image コンポーネントがありません。");
+            yield break;
+        }
+
+        // 最初は非表示
+        outOfAmmoUIImage.SetActive(false);
+
+        Color color = image.color;
+        color.a = 0f;
+        image.color = color;
+
+        // 弾が0発になってから1秒待つ
+        yield return new WaitForSecondsRealtime(outOfAmmoUIDelay);
+
+        // UI表示開始
+        outOfAmmoUIImage.SetActive(true);
+
+        // =========================================================
+        // リザルトが出るまで点滅を繰り返す
+        // =========================================================
+        while (!ResultManager.IsResultActive)
+        {
+            // -----------------------------------------------------
+            // 薄い → 濃い
+            // -----------------------------------------------------
+            float timer = 0f;
+
+            while (timer < outOfAmmoUIFadeDuration)
+            {
+                // リザルトが出たらすぐ終了
+                if (ResultManager.IsResultActive)
+                    break;
+
+                timer += Time.unscaledDeltaTime;
+
+                float t = Mathf.Clamp01(timer / outOfAmmoUIFadeDuration);
+
+                // なめらかに濃くする
+                t = Mathf.SmoothStep(0f, 1f, t);
+
+                color.a = t;
+                image.color = color;
+
+                yield return null;
+            }
+
+            // -----------------------------------------------------
+            // 濃い → 薄い
+            // -----------------------------------------------------
+            timer = 0f;
+
+            while (timer < outOfAmmoUIFadeDuration)
+            {
+                // リザルトが出たらすぐ終了
+                if (ResultManager.IsResultActive)
+                    break;
+
+                timer += Time.unscaledDeltaTime;
+
+                float t = Mathf.Clamp01(timer / outOfAmmoUIFadeDuration);
+
+                // なめらかに薄くする
+                t = Mathf.SmoothStep(0f, 1f, t);
+
+                color.a = 1f - t;
+                image.color = color;
+
+                yield return null;
+            }
+
+            color.a = 0f;
+            image.color = color;
+        }
+
+        // =========================================================
+        // リザルトが出たら弾切れUIを消す
+        // =========================================================
+        color.a = 0f;
+        image.color = color;
+
+        outOfAmmoUIImage.SetActive(false);
+
+        outOfAmmoUIRoutine = null;
     }
 
 }
