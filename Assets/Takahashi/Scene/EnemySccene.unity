@@ -485,19 +485,37 @@ MonoBehaviour:
   enemies:
   - prefab: {fileID: 5658466300848699742, guid: 4451329126ffa93498ccea07ae4d06a7, type: 3}
     weight: 0
+    useCustomGrowth: 0
+    growInterval: 15
+    growMultiplier: 1.2
   - prefab: {fileID: 6737240972690251372, guid: 7322b40b35c85b0478ffa94edeb4b561, type: 3}
     weight: 0
+    useCustomGrowth: 0
+    growInterval: 15
+    growMultiplier: 1.2
   - prefab: {fileID: 5100497116774911822, guid: 6b6f368167eaea047a26e7c3744d25c9, type: 3}
     weight: 100
+    useCustomGrowth: 0
+    growInterval: 15
+    growMultiplier: 1.2
   enemyA:
     prefab: {fileID: 0}
     weight: 0
+    useCustomGrowth: 0
+    growInterval: 15
+    growMultiplier: 1.2
   enemyB:
     prefab: {fileID: 0}
     weight: 0
+    useCustomGrowth: 0
+    growInterval: 15
+    growMultiplier: 1.2
   enemyC:
     prefab: {fileID: 0}
     weight: 0
+    useCustomGrowth: 0
+    growInterval: 15
+    growMultiplier: 1.2
   spawnList: []
   player: {fileID: 6779116533678230233, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
   spawnInterval: 3
@@ -507,6 +525,7 @@ MonoBehaviour:
   playerStats: {fileID: 11400000, guid: 2b2e6ef4aa97721459fc776ef0c52d29, type: 2}
   bossPrefab: {fileID: 1535677997056505620, guid: 38e0c4e553ed7874584eba5a894cc60f, type: 3}
   bossComboThreshold: 10
+  bossHpGrowAmount: 500
   bossHPBar: {fileID: 1164858314}
   spawnAreaTopRatio: 0.55
   spawnAreaBottomRatio: 1
@@ -906,6 +925,9 @@ MonoBehaviour:
   shadowPrefab: {fileID: 0}
   isValuable: 0
   valuableChild: {fileID: 0}
+  collectShrinkSpeed: 8
+  collectSE: {fileID: 0}
+  collectSEVolume: 1
 --- !u!114 &1164858314 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1454097836927600559, guid: 7bce92ffa8315aa4cae0e0a34f0b17e5, type: 3}
@@ -1278,6 +1300,9 @@ MonoBehaviour:
   shadowPrefab: {fileID: 0}
   isValuable: 0
   valuableChild: {fileID: 0}
+  collectShrinkSpeed: 8
+  collectSE: {fileID: 0}
+  collectSEVolume: 1
 --- !u!1001 &1591813833
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1349,7 +1374,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 285269543843597987, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2018347303}
   m_SourcePrefab: {fileID: 100100000, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
 --- !u!1 &1609810719
 GameObject:
@@ -1504,6 +1532,8 @@ MonoBehaviour:
   dropItems: []
   dropCount: 1
   dropAmountMultiplier: 1
+  useFixedDropCount: 0
+  fixedDropCount: 2
   damageText: {fileID: 0}
   normalDamageColor: {r: 1, g: 1, b: 1, a: 1}
   poisonDamageColor: {r: 0.6, g: 0.2, b: 0.8, a: 1}
@@ -1707,6 +1737,57 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2018347300 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 285269543843597987, guid: f869301574c78e94db87ec2d5a10f068, type: 3}
+  m_PrefabInstance: {fileID: 1591813833}
+  m_PrefabAsset: {fileID: 0}
+--- !u!61 &2018347303
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2018347300}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 2}
+    newSize: {x: 1, y: 2}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1, y: 2}
+  m_EdgeRadius: 0
 --- !u!1 &2043214435
 GameObject:
   m_ObjectHideFlags: 0
@@ -1831,6 +1912,9 @@ MonoBehaviour:
   shadowPrefab: {fileID: 0}
   isValuable: 0
   valuableChild: {fileID: 0}
+  collectShrinkSpeed: 8
+  collectSE: {fileID: 0}
+  collectSEVolume: 1
 --- !u!212 &2099353091
 SpriteRenderer:
   serializedVersion: 2
@@ -1927,7 +2011,7 @@ MonoBehaviour:
   carePackagePrefab: {fileID: 4164928430599087363, guid: aa70d1370b94b0c46aceee4fb666d5f4, type: 3}
   player: {fileID: 1051430376}
   safeRadius: 200
-  spawnInterval: 100
+  spawnInterval: 10
   spawnChance: 100
   spawnOffsetY: 50
   minGroundY: -400
