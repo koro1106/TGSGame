@@ -203,6 +203,21 @@ public class ResultManager : MonoBehaviour
 
     public void ShowResult()
     {
+        // =====================================================
+        // リザルト表示時にダメージテキストを全削除
+        // =====================================================
+
+        DamageText[] damageTexts =
+            FindObjectsOfType<DamageText>();
+
+        foreach (DamageText damageText in damageTexts)
+        {
+            if (damageText != null)
+            {
+                damageText.ResetDamageText();
+            }
+        }
+
         if (resultShowing)
             return;
 
@@ -221,15 +236,18 @@ public class ResultManager : MonoBehaviour
             ComboManager.instance.ResetCombo();
         }
 
-        // ダメージ表示をすべて削除
-        DamageText[] damageTexts =
+        // =====================================================
+        // リザルト表示時にダメージテキストを全削除
+        // =====================================================
+
+        DamageText[] resultDamageTexts =
             FindObjectsOfType<DamageText>();
 
-        foreach (DamageText damageText in damageTexts)
+        foreach (DamageText damageText in resultDamageTexts)
         {
             if (damageText != null)
             {
-                Destroy(damageText.gameObject);
+                damageText.ResetDamageText();
             }
         }
 
@@ -1335,6 +1353,21 @@ BossMove[] bossEnemies =
                     ClearAllBulletEffects();
 
                     // =====================================================
+                    // フィールド上のダメージ表示を全削除
+                    // =====================================================
+
+                    DamageText[] damageTexts =
+                        FindObjectsOfType<DamageText>();
+
+                    foreach (DamageText damageText in damageTexts)
+                    {
+                        if (damageText != null)
+                        {
+                            damageText.ResetDamageText();
+                        }
+                    }
+
+                    // =====================================================
                     // CarePackageをリセット
                     // =====================================================
 
@@ -1370,6 +1403,9 @@ BossMove[] bossEnemies =
                         playerMovement.enabled = false;
 
                         playerMovement.ResetPlayerPosition();
+
+                        // 1回だけ耐える能力をリセット
+                        playerMovement.ResetSurvivalDamage();
 
                         playerMovement.ResumeAfterResult();
                     }

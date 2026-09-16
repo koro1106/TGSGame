@@ -577,6 +577,21 @@ public class PlayerMovement : MonoBehaviour
         skipNextMove = true;
     }
 
+    // =========================================================
+    // 1回だけ耐える処理をリセット
+    // =========================================================
+
+    public void ResetSurvivalDamage()
+    {
+        hasSurvivedDamage = false;
+        isDamageBlinking = false;
+
+        // 点滅Objectも必ず表示状態に戻す
+        if (damageBlinkObject != null)
+        {
+            damageBlinkObject.SetActive(true);
+        }
+    }
 
     // =========================================================
     // ブリンクの残りクールダウン取得

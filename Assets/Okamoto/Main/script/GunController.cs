@@ -1233,6 +1233,12 @@ public class GunController : MonoBehaviour
 
         currentAmmo = targetAmmo;
 
+        // š‚±‚±‚É’Ç‰Á
+        if (currentAmmo > 0)
+        {
+            HideOutOfAmmoUI();
+        }
+
         for (int index = oldAmmo; index < targetAmmo; index++)
         {
             if (index < 0 ||
@@ -2737,5 +2743,32 @@ public class GunController : MonoBehaviour
 
         outOfAmmoUIRoutine = null;
     }
+    /// <summary>
+    /// ’e‚ª‰ñ•œ‚µ‚½‚É’eØ‚êUI‚ğ‘¦À‚ÉÁ‚·
+    /// </summary>
+    private void HideOutOfAmmoUI()
+    {
+        // ’eØ‚êUI‚ÌCoroutine‚ğ’â~
+        if (outOfAmmoUIRoutine != null)
+        {
+            StopCoroutine(outOfAmmoUIRoutine);
+            outOfAmmoUIRoutine = null;
+        }
 
+        // UI‚ğŠ®‘S‚É”ñ•\¦
+        if (outOfAmmoUIImage != null)
+        {
+            Image image =
+                outOfAmmoUIImage.GetComponent<Image>();
+
+            if (image != null)
+            {
+                Color color = image.color;
+                color.a = 0f;
+                image.color = color;
+            }
+
+            outOfAmmoUIImage.SetActive(false);
+        }
+    }
 }
