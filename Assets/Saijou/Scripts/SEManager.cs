@@ -26,6 +26,8 @@ public class SEManager : MonoBehaviour
 
     private void Awake()
     {
+      
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }

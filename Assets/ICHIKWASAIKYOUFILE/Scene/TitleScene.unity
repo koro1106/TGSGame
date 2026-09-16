@@ -4902,12 +4902,13 @@ MonoBehaviour:
   shootSE: {fileID: 0}
   backSE: {fileID: 8300000, guid: 08ccb571f21f92e43a3b87c9c993f335, type: 3}
   clickSE: {fileID: 8300000, guid: 08ccb571f21f92e43a3b87c9c993f335, type: 3}
-  collectSE: {fileID: 0}
-  bindHitSE: {fileID: 0}
-  explosionHitSE: {fileID: 0}
-  poisonHitSE: {fileID: 0}
-  gravityHitSE: {fileID: 0}
-  chainHitSE: {fileID: 0}
+  collectSE: {fileID: 8300000, guid: 7d885dc17e3888348971a1355a6c1871, type: 3}
+  openSE: {fileID: 0}
+  bindHitSE: {fileID: 8300000, guid: f2c2730a9d8429a48b680cc5bbac982c, type: 3}
+  explosionHitSE: {fileID: 8300000, guid: e5c3e8118b50cc24896b752dd3e2fefa, type: 3}
+  poisonHitSE: {fileID: 8300000, guid: 46e00676b4ec2864f8be57f6d6c0f821, type: 3}
+  gravityHitSE: {fileID: 8300000, guid: 061833ba2f2729247a7d9f0597d949d9, type: 3}
+  chainHitSE: {fileID: 8300000, guid: 0045b22721e9f804fadca6603739789f, type: 3}
   enemyHitSE: {fileID: 0}
 --- !u!82 &1320447525
 AudioSource:
@@ -4922,7 +4923,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
