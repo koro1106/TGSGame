@@ -68,6 +68,9 @@ public class DamageText : MonoBehaviour
     private bool isCritical = false;
     private Vector2 direction;
 
+    private GameObject criticalIcon;
+
+
     void Awake()
     {
         text = GetComponent<TextMeshPro>();
@@ -142,16 +145,17 @@ public class DamageText : MonoBehaviour
                 0f
             );
 
-            GameObject icon = Instantiate(
-                criticalIconPrefab,
-                transform.position + offset,
-                Quaternion.identity
-            // 親を指定しない＝数字の移動・拡縮に巻き込まれない
-            );
+            criticalIcon = Instantiate(
+    criticalIconPrefab,
+    transform.position + offset,
+    Quaternion.identity
+// 親を指定しない＝数字の移動・拡縮に巻き込まれない
+);
 
-            icon.transform.localScale = Vector3.one * criticalIconScale;
+            criticalIcon.transform.localScale =
+                Vector3.one * criticalIconScale;
 
-            Destroy(icon, criticalIconLifetime);
+            Destroy(criticalIcon, criticalIconLifetime);
         }
     }
 
@@ -251,6 +255,23 @@ public class DamageText : MonoBehaviour
             yield return null;
         }
 
+        Destroy(gameObject);
+    }
+
+    // =========================================================
+    // リザルト表示時に強制削除
+    // =========================================================
+
+    public void ResetDamageText()
+    {
+        // クリティカル画像も削除
+        if (criticalIcon != null)
+        {
+            Destroy(criticalIcon);
+            criticalIcon = null;
+        }
+
+        // ダメージテキスト本体を削除
         Destroy(gameObject);
     }
 }
