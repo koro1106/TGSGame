@@ -41,6 +41,11 @@ public class PlayerMovement : MonoBehaviour
     public GunController gunController;
 
 
+    [Header("移動範囲")]
+    [SerializeField] private Camera mainCamera;
+    // 上方向の移動だけ制限
+    [SerializeField] private float maxMoveY = 2f;
+
     // =========================================================
     // ブリンク設定
     // =========================================================
@@ -291,6 +296,8 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+
+        Debug.Log("FixedUpdateが呼ばれています");
         if (skipNextMove)
         {
             skipNextMove = false;
@@ -339,8 +346,7 @@ public class PlayerMovement : MonoBehaviour
         // 通常移動
         // =========================================================
 
-        MoveToCrosshair();
-
+        MoveWithWASD();
 
     }
 
@@ -395,62 +401,84 @@ public class PlayerMovement : MonoBehaviour
 
 
     // =========================================================
-    // クロスヘアへ移動
+    // WASDでPlayerを移動
     // =========================================================
 
-    void MoveToCrosshair()
+
+    void MoveWithWASD()
     {
-        if (gunController == null)
+        float moveX = Input.GetAxisRaw("Horizontal");
+        float moveY = Input.GetAxisRaw("Vertical");
+
+        Vector2 moveDirection =
+            new Vector2(moveX, moveY).normalized;
+
+        // 移動先を計算
+        Vector2 nextPosition =
+            rb.position +
+            moveDirection * moveSpeed * Time.fixedDeltaTime;
+
+        // カメラの表示範囲を取得
+        Camera cameraToUse = mainCamera != null
+            ? mainCamera
+            : Camera.main;
+
+        if (cameraToUse == null)
             return;
 
-        Vector3 targetPos =
-            gunController.GetCrosshairWorldPosition();
-
-        targetPos.z =
-            transform.position.z;
-
-        // プレイヤーからクロスヘアへの方向
-        Vector2 difference =
-            (Vector2)targetPos - rb.position;
-
-        // 移動しているか
-        bool isMoving =
-            difference.sqrMagnitude > 0.001f;
-
-        // 移動方向
-        Vector2 moveDirection =
-            difference.normalized;
-
-        // 移動速度
-        float currentMoveSpeed =
-     moveSpeed + playerStats.moveSpeed;
-
-        float moveDistance =
-            currentMoveSpeed *
-            Time.fixedDeltaTime;
-
-        // 移動
-        rb.MovePosition(
-            Vector2.MoveTowards(
-                rb.position,
-                targetPos,
-                moveDistance
-            )
+        Vector3 min = cameraToUse.ViewportToWorldPoint(
+            new Vector3(0, 0, 0)
         );
 
-        // 左右の向きを変更
-        if (isMoving)
+        Vector3 max = cameraToUse.ViewportToWorldPoint(
+            new Vector3(1, 1, 0)
+        );
+
+        // Playerの大きさを考慮
+        Collider2D playerCollider = GetComponent<Collider2D>();
+
+        float halfWidth = 0f;
+        float halfHeight = 0f;
+
+        if (playerCollider != null)
         {
-            UpdatePlayerImageDirection(
-                moveDirection
-            );
+            halfWidth = playerCollider.bounds.extents.x;
+            halfHeight = playerCollider.bounds.extents.y;
         }
 
-        // 動いている間だけアニメーション
+        // カメラの範囲内に制限
+        nextPosition.x = Mathf.Clamp(
+            nextPosition.x,
+            min.x + halfWidth,
+            max.x - halfWidth
+        );
+
+        // Yの下限はカメラの下端
+        // Yの上限はInspectorで指定
+        nextPosition.y = Mathf.Clamp(
+            nextPosition.y,
+            min.y + halfHeight,
+            maxMoveY
+        );
+
+        // 移動
+        rb.MovePosition(nextPosition);
+
+        // 左右の向きを変更
+        if (moveX < 0)
+        {
+            UpdatePlayerImageDirection(Vector2.left);
+        }
+        else if (moveX > 0)
+        {
+            UpdatePlayerImageDirection(Vector2.right);
+        }
+
+        // 移動アニメーション
         UpdatePlayerAnimation(
-    isMoving,
-    currentMoveSpeed
-);
+            moveDirection.sqrMagnitude > 0f,
+            moveSpeed
+        );
     }
 
 
@@ -607,24 +635,21 @@ public class PlayerMovement : MonoBehaviour
         if (!enableBlink)
             return;
 
-        if (gunController == null)
-            return;
-
         if (rb == null)
             return;
 
-        // ブリンク開始時のクロスヘア位置
-        Vector3 crosshairPos =
-            gunController.GetCrosshairWorldPosition();
+        // WASDの入力からブリンク方向を取得
+        float moveX = Input.GetAxisRaw("Horizontal");
+        float moveY = Input.GetAxisRaw("Vertical");
 
-        // 右クリックした瞬間の方向を保存
-        blinkDirection =
-            ((Vector2)crosshairPos - rb.position)
-            .normalized;
+        blinkDirection = new Vector2(moveX, moveY);
 
-        // クロスヘアとプレイヤーが完全に同じ位置の場合はブリンクしない
-        if (blinkDirection == Vector2.zero)
+        // 入力がない場合はブリンクしない
+        if (blinkDirection.sqrMagnitude == 0f)
             return;
+
+        // 斜め移動が速くならないようにする
+        blinkDirection.Normalize();
 
         isBlinking = true;
 
@@ -639,34 +664,29 @@ public class PlayerMovement : MonoBehaviour
             );
     }
 
-    void UpdatePlayerImageDirection(
-    Vector2 moveDirection
-)
+    void UpdatePlayerImageDirection(Vector2 moveDirection)
     {
         if (playerImage == null)
             return;
 
-        // 横方向の移動がほとんどない場合は
-        // 左右の向きを変えない
-        if (Mathf.Abs(moveDirection.x) < 0.01f)
-            return;
-
-        Vector3 scale = originalImageScale;
-
-        // 右方向
-        if (moveDirection.x > 0f)
+        // 移動方向が右なら右向き
+        if (moveDirection.x > 0.01f)
         {
-            scale.x =
-                Mathf.Abs(originalImageScale.x);
+            playerImage.localScale = new Vector3(
+                Mathf.Abs(originalImageScale.x),
+                originalImageScale.y,
+                originalImageScale.z
+            );
         }
-        // 左方向
-        else if (moveDirection.x < 0f)
+        // 移動方向が左なら左向き
+        else if (moveDirection.x < -0.01f)
         {
-            scale.x =
-                -Mathf.Abs(originalImageScale.x);
+            playerImage.localScale = new Vector3(
+                -Mathf.Abs(originalImageScale.x),
+                originalImageScale.y,
+                originalImageScale.z
+            );
         }
-
-        playerImage.localScale = scale;
     }
 
     void UpdatePlayerAnimation(
