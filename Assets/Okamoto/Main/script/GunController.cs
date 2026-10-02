@@ -330,7 +330,7 @@ public class GunController : MonoBehaviour
         if (ResultManager.IsResultActive)
             return;
 
-        Aim();
+        //Aim();
 
         CheckCrosshairOverPlayer();
 
